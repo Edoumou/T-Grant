@@ -6,7 +6,7 @@ import "./IIdentityRegistry.sol";
 import "./RegistryData.sol";
 
 /**
-* @title A Identity Registry
+* @title An Identity Registry for stakeholders
 * @author @Edoumou
 * @notice The purpose of this contract is to simulates an identity registry.
 */
