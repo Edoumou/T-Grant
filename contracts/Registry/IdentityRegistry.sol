@@ -6,7 +6,9 @@ import "./IIdentityRegistry.sol";
 import "./RegistryData.sol";
 
 /**
-* @notice manages stakeholders identity
+* @title A Identity Registry
+* @author @Edoumou
+* @notice The purpose of this contract is to simulates an identity registry.
 */
 contract IdentityRegistrty is IIdentityRegistry, Ownable {
     mapping(address => RegistryData.Stakeholder) private _stakeholders;
@@ -18,6 +20,12 @@ contract IdentityRegistrty is IIdentityRegistry, Ownable {
     error InvalidAddress(address caller);
     error RegistrationAlreadyRequested();
 
+    /**
+    * @title Submits a identity registration request.
+    * @notice It is assumed that the KWC is done through a third party that deliver
+    *         the identity ID to the caller
+    * @param _stakeholder stakeholder struct. Check RegistryData.sol
+    */
     function submitRegistrationRequest(
         RegistryData.Stakeholder calldata _stakeholder
     ) external {
@@ -29,6 +37,11 @@ contract IdentityRegistrty is IIdentityRegistry, Ownable {
         _stakeholders[msg.sender] = _stakeholder;
     }
 
+    /**
+    * @title Registers a stakeholder.
+    * @notice Changes the status to VERIFIED. Can only be called by the contract owner
+    * @param _stakeholderAddress the stakeholder account address
+    */
     function register(
         address _stakeholderAddress
     ) external onlyOwner {
@@ -37,6 +50,11 @@ contract IdentityRegistrty is IIdentityRegistry, Ownable {
         _status[_stakeholderAddress] = RegistrationStatus.VERIFIED;
     }
 
+    /**
+    * @title Rejects a stakeholder registration.
+    * @notice Changes the status to REJECTED. Can only be called by the contract owner
+    * @param _stakeholderAddress the stakeholder account address
+    */
     function reject(
         address _stakeholderAddress
     ) external onlyOwner {
@@ -45,12 +63,21 @@ contract IdentityRegistrty is IIdentityRegistry, Ownable {
         _status[_stakeholderAddress] = RegistrationStatus.REJECTED;
     }
 
+    /**
+    * @title Check if an account has been approved
+    * @notice Returns true if approved, false otherwise
+    * @param _stakeholderAddress the stakeholder account address
+    */
     function isVerified(
         address _stakeHolderAddress
     ) external view returns(bool) {
         return _status[_stakeholderAddress] == RegistrationStatus.VERIFIED ? true : false;
     }
 
+    /**
+    * @title Returns a stakeholder struct. Check RegistryData.sol
+    * @param _stakeholderAddress the stakeholder account address
+    */
     function getStakeHolder(
         address _stakeHolderAddress
     ) external view returns(RegistryData.Stakeholder memory) {
