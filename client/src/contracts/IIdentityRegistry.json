@@ -1,0 +1,195 @@
+{
+  "contractName": "IIdentityRegistry",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_stakeHolderAddress",
+          "type": "address"
+        }
+      ],
+      "name": "isVerified",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.19+commit.7dd6d404\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_stakeHolderAddress\",\"type\":\"address\"}],\"name\":\"isVerified\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/Registry/IIdentityRegistry.sol\":\"IIdentityRegistry\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/Registry/IIdentityRegistry.sol\":{\"keccak256\":\"0xcd24349b2b8ac1c9726ea30ab6d18fb7fc017cc62a6defc41adbc4d18b910633\",\"license\":\"CC0-1.0\",\"urls\":[\"bzz-raw://6e86c88bb9b2f4498500987e6373a79612c86e48cd8dfc1a4bea48deb253b181\",\"dweb:/ipfs/QmVn2swhkCg6SdmnXoY4J8fBLByFXCru8RK9mJmoovMePN\"]},\"project:/contracts/Registry/RegistryData.sol\":{\"keccak256\":\"0x79577033607df38865be8e5d5b5ca9fd9d5fec75eec0493fe3426445a69c035c\",\"license\":\"CC0-1.0\",\"urls\":[\"bzz-raw://2f9616c46deceb5b87965fb37d296f338c6c6fd6bc2108324d5a9aad817f3fac\",\"dweb:/ipfs/Qmdd53HoAU7WZQ6sQN6RXvKCCehQ9ctoyA5XMHjJ17cq1L\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "// SPDX-License-Identifier: CC0-1.0\npragma solidity ^0.8.0;\n\nimport \"./RegistryData.sol\";\n\ninterface IIdentityRegistry {\n    function isVerified(address _stakeHolderAddress) external view returns(bool);\n}",
+  "sourcePath": "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/contracts/Registry/IIdentityRegistry.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/Registry/IIdentityRegistry.sol",
+    "exportedSymbols": {
+      "IIdentityRegistry": [
+        960
+      ],
+      "RegistryData": [
+        1085
+      ]
+    },
+    "id": 961,
+    "license": "CC0-1.0",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 951,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "36:23:3"
+      },
+      {
+        "absolutePath": "project:/contracts/Registry/RegistryData.sol",
+        "file": "./RegistryData.sol",
+        "id": 952,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 961,
+        "sourceUnit": 1086,
+        "src": "61:28:3",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "IIdentityRegistry",
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "fullyImplemented": false,
+        "id": 960,
+        "linearizedBaseContracts": [
+          960
+        ],
+        "name": "IIdentityRegistry",
+        "nameLocation": "101:17:3",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "functionSelector": "b9209e33",
+            "id": 959,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "isVerified",
+            "nameLocation": "134:10:3",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 955,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 954,
+                  "mutability": "mutable",
+                  "name": "_stakeHolderAddress",
+                  "nameLocation": "153:19:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 959,
+                  "src": "145:27:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 953,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "145:7:3",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "144:29:3"
+            },
+            "returnParameters": {
+              "id": 958,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 957,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 959,
+                  "src": "196:4:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 956,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "196:4:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "195:6:3"
+            },
+            "scope": 960,
+            "src": "125:77:3",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 961,
+        "src": "91:113:3",
+        "usedErrors": []
+      }
+    ],
+    "src": "36:168:3"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.19+commit.7dd6d404.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.9",
+  "updatedAt": "2023-10-30T04:39:00.014Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}
