@@ -7,3 +7,4 @@ This project showcases the issuance and management of Financial Bonds through ER
 - Bond Contract: Bond contract
 - Bond Contracts Deployer: Contract used to deploy bond contracts
 - Bond Call Contract: Contract used to make call to bond contracts
+- Exchange Contract: Contract used to exchange bonds between two parties
