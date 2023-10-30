@@ -35,18 +35,18 @@
     "absolutePath": "project:/contracts/Registry/IIdentityRegistry.sol",
     "exportedSymbols": {
       "IIdentityRegistry": [
-        960
+        10
       ],
       "RegistryData": [
-        1085
+        135
       ]
     },
-    "id": 961,
+    "id": 11,
     "license": "CC0-1.0",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 951,
+        "id": 1,
         "literals": [
           "solidity",
           "^",
@@ -54,17 +54,17 @@
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "36:23:3"
+        "src": "36:23:0"
       },
       {
         "absolutePath": "project:/contracts/Registry/RegistryData.sol",
         "file": "./RegistryData.sol",
-        "id": 952,
+        "id": 2,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 961,
-        "sourceUnit": 1086,
-        "src": "61:28:3",
+        "scope": 11,
+        "sourceUnit": 136,
+        "src": "61:28:0",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -75,36 +75,36 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "fullyImplemented": false,
-        "id": 960,
+        "id": 10,
         "linearizedBaseContracts": [
-          960
+          10
         ],
         "name": "IIdentityRegistry",
-        "nameLocation": "101:17:3",
+        "nameLocation": "101:17:0",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "functionSelector": "b9209e33",
-            "id": 959,
+            "id": 9,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "isVerified",
-            "nameLocation": "134:10:3",
+            "nameLocation": "134:10:0",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 955,
+              "id": 5,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 954,
+                  "id": 4,
                   "mutability": "mutable",
                   "name": "_stakeHolderAddress",
-                  "nameLocation": "153:19:3",
+                  "nameLocation": "153:19:0",
                   "nodeType": "VariableDeclaration",
-                  "scope": 959,
-                  "src": "145:27:3",
+                  "scope": 9,
+                  "src": "145:27:0",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -112,10 +112,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 953,
+                    "id": 3,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "145:7:3",
+                    "src": "145:7:0",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -125,21 +125,21 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "144:29:3"
+              "src": "144:29:0"
             },
             "returnParameters": {
-              "id": 958,
+              "id": 8,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 957,
+                  "id": 7,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 959,
-                  "src": "196:4:3",
+                  "scope": 9,
+                  "src": "196:4:0",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -147,10 +147,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 956,
+                    "id": 6,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "196:4:3",
+                    "src": "196:4:0",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -159,21 +159,21 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "195:6:3"
+              "src": "195:6:0"
             },
-            "scope": 960,
-            "src": "125:77:3",
+            "scope": 10,
+            "src": "125:77:0",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 961,
-        "src": "91:113:3",
+        "scope": 11,
+        "src": "91:113:0",
         "usedErrors": []
       }
     ],
-    "src": "36:168:3"
+    "src": "36:168:0"
   },
   "compiler": {
     "name": "solc",
@@ -181,7 +181,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.9",
-  "updatedAt": "2023-10-30T04:39:00.014Z",
+  "updatedAt": "2023-10-30T14:26:34.385Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},
