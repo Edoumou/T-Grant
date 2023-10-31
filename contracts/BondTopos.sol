@@ -10,13 +10,15 @@ contract BondTopos is IERC7092, BondStorage {
         address _bondManager,
         address _issuerWalletAddress,
         string memory _countryOfIssuance,
-        address _bondCallContractAddress
+        address _bondCallContractAddress,
+        address _identiRegistryContract
     ) {
         dealID = _dealID;
         bondManager = _bondManager;
         issueData[_dealID].issuerWalletAddress = _issuerWalletAddress;
         issueData[_dealID].countryOfIssuance = _countryOfIssuance;
         issueData[_dealID].bondCallContract = _bondCallContractAddress;
+        issueData[_dealID].identiRegistryContract = _identiRegistryContract;
     }
 
     function isin() external view returns(string memory) {
@@ -79,7 +81,10 @@ contract BondTopos is IERC7092, BondStorage {
         return approvals[_owner][_spender];
     }
 
-    function approve(address _spender, uint256 _amount) external returns(bool) {
+    function approve(
+        address _spender,
+        uint256 _amount
+    ) external mustBeApproved(_spender) returns(bool) {
         address _owner = tx.origin;
 
         _approve(_owner, _spender, _amount);
@@ -87,13 +92,20 @@ contract BondTopos is IERC7092, BondStorage {
         return true;
     }
 
-    function decreaseAllowance(address _spender, uint256 _amount) external {
+    function decreaseAllowance(
+        address _spender,
+        uint256 _amount
+    ) external {
         address _owner = tx.origin;
 
         _decreaseAllowance(_owner, _spender, _amount);
     }
 
-    function transfer(address _to, uint256 _amount, bytes calldata _data) external returns(bool) {
+    function transfer(
+        address _to,
+        uint256 _amount,
+        bytes calldata _data
+    ) external mustBeApproved(_to) returns(bool) {
         address _from = tx.origin;
 
         _transfer(_from, _to, _amount, _data);
@@ -101,7 +113,12 @@ contract BondTopos is IERC7092, BondStorage {
         return true;
     }
 
-    function transferFrom(address _from, address _to, uint256 _amount, bytes calldata _data) external returns(bool) {
+    function transferFrom(
+        address _from,
+        address _to,
+        uint256 _amount,
+        bytes calldata _data
+    ) external mustBeApproved(_to) returns(bool) {
         address _spender = tx.origin;
 
         _spendAllowance(_from, _spender, _amount);
