@@ -36,7 +36,13 @@ abstract contract BondData {
         string issuerType;
         string creditRating;
         uint256 carbonCredit;
-        address walletAccount;
+        address walletAddress;
+    }
+
+    struct IssueData {
+        address issuerWalletAddress;
+        string countryOfIssuance;
+        address bondCallContract;
     }
 
     struct Investment {

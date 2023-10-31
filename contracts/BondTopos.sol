@@ -5,6 +5,20 @@ import "./IERC7092.sol";
 import "./BondStorage.sol";
 
 contract BondTopos is IERC7092, BondStorage {
+    constructor(
+        string memory _dealID,
+        address _bondManager,
+        address _issuerWalletAddress,
+        string memory _countryOfIssuance,
+        address _bondCallContractAddress
+    ) {
+        dealID = _dealID;
+        bondManager = _bondManager;
+        issueData[_dealID].issuerWalletAddress = _issuerWalletAddress;
+        issueData[_dealID].countryOfIssuance = _countryOfIssuance;
+        issueData[_dealID].bondCallContract = _bondCallContractAddress;
+    }
+
     function isin() external view returns(string memory) {
         return bonds[dealID].isin;
     }
