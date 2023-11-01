@@ -39,6 +39,13 @@ abstract contract BondData {
         address walletAddress;
     }
 
+    struct Investor {
+        string name;
+        string country;
+        string investorType;
+        address walletAddress;
+    }
+
     struct IssueData {
         address issuerWalletAddress;
         string countryOfIssuance;
@@ -52,4 +59,6 @@ abstract contract BondData {
     }
 
     enum BondStatus {UNREGISTERED, SUBMITTED, ISSUED, REDEEMED}
+    enum DealStatus {SUBMITTED, APPROVED, REJECTED, ISSUED, REDEEMED}
+    enum StakeHolderStatus {UNKNOWN, SUBMITTED, APPROVED, REJECTED}
 }
