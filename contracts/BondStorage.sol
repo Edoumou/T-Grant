@@ -16,7 +16,7 @@ contract BondStorage {
     BondData.BondStatus public bondStatus;
 
     modifier mustBeApproved(address _user) {
-        address registry = issueData[dealID].identiRegistryContract;
+        address registry = issueData[dealID].identyRegistryContract;
         require(
             IIdentityRegistry(registry).isVerified(_user),
             "ACCOUNT_NOT_AAPROVED"

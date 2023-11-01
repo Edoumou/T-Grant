@@ -23,4 +23,8 @@ contract Roles is IRoles {
     function setRole(string memory _role, address _user) external onlyToposBank {
         roles[_user] = _role;
     }
+
+    function getRole(address _user) external view returns(string memory) {
+        return roles[_user];
+    }
 }

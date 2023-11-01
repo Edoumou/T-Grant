@@ -26,7 +26,7 @@ abstract contract BondData {
         uint256 maturityDate;
         address currency;
         uint8 couponType;
-        uint8 status;
+        DealStatus status;
     }
 
     struct Issuer {
@@ -50,7 +50,7 @@ abstract contract BondData {
         address issuerWalletAddress;
         string countryOfIssuance;
         address bondCallContract;
-        address identiRegistryContract;
+        address identyRegistryContract;
     }
 
     struct Investment {
@@ -58,7 +58,7 @@ abstract contract BondData {
         uint256 amount;
     }
 
-    enum BondStatus {UNREGISTERED, SUBMITTED, ISSUED, REDEEMED}
-    enum DealStatus {SUBMITTED, APPROVED, REJECTED, ISSUED, REDEEMED}
+    enum BondStatus {UNKNOWN, SUBMITTED, ISSUED, REDEEMED}
+    enum DealStatus {UNKNOWN, SUBMITTED, APPROVED, REJECTED, ISSUED, REDEEMED}
     enum StakeHolderStatus {UNKNOWN, SUBMITTED, APPROVED, REJECTED}
 }

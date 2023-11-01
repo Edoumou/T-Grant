@@ -6,17 +6,20 @@ import "./ToposBankStorage.sol";
 import "../interfaces/IRoles.sol";
 
 contract ToposBank is IToposBank, ToposBankStorage {
-    constructor(address _toposManager) {
+    constructor(
+        address _toposManager,
+        address _rolesContract,
+        address _identityRegistryContract
+    ) {
         toposManager = _toposManager;
-        roles[_toposManager] = "MANAGER";
-    }
-
-    function setRolesContract(address _rolesContract) external onlyToposManager {
         rolesContract = _rolesContract;
+        IRoles(_rolesContract).setRole("MANAGER", _toposManager);
+        identityRegistryContract = _identityRegistryContract;
     }
 
-
-    function requestRegistrationIssuer(BondData.Issuer calldata _issuer) external {
+    function requestRegistrationIssuer(
+        BondData.Issuer calldata _issuer
+    ) external mustBeApproved(_issuer.walletAddress) {
         require(msg.sender == _issuer.walletAddress, "INVALID_ADDRESS");
         require(
             issuerStatus[msg.sender] == BondData.StakeHolderStatus.UNKNOWN,
@@ -27,7 +30,9 @@ contract ToposBank is IToposBank, ToposBankStorage {
         issuerStatus[msg.sender] = BondData.StakeHolderStatus.SUBMITTED;
     }
 
-    function requestRegistrationInvestor(BondData.Investor calldata _investor) external {
+    function requestRegistrationInvestor(
+        BondData.Investor calldata _investor
+    ) external mustBeApproved(_investor.walletAddress) {
         require(msg.sender == _investor.walletAddress, "INVALID_ADDRESS");
         require(
             investorStatus[msg.sender] == BondData.StakeHolderStatus.UNKNOWN,
@@ -44,7 +49,7 @@ contract ToposBank is IToposBank, ToposBankStorage {
             "CHECK_YOUR_STATUS"
         );
 
-        issuerStatus[_issuer] == BondData.StakeHolderStatus.APPROVED;
+        issuerStatus[_issuer] = BondData.StakeHolderStatus.APPROVED;
         IRoles(rolesContract).setRole("ISSUER", _issuer);
     }
 
@@ -54,7 +59,7 @@ contract ToposBank is IToposBank, ToposBankStorage {
             "CHECK_YOUR_STATUS"
         );
 
-        investorStatus[_investor] == BondData.StakeHolderStatus.APPROVED;
+        investorStatus[_investor] = BondData.StakeHolderStatus.APPROVED;
         IRoles(rolesContract).setRole("INVESTOR", _investor);
     }
 
@@ -64,7 +69,7 @@ contract ToposBank is IToposBank, ToposBankStorage {
             "CHECK_YOUR_STATUS"
         );
 
-        issuerStatus[_issuer] == BondData.StakeHolderStatus.REJECTED;
+        issuerStatus[_issuer] = BondData.StakeHolderStatus.REJECTED;
     }
 
     function rejectInvestor(address _investor) external view onlyToposManager {
@@ -73,22 +78,53 @@ contract ToposBank is IToposBank, ToposBankStorage {
             "CHECK_YOUR_STATUS"
         );
 
-        investorStatus[_investor] == BondData.StakeHolderStatus.REJECTED;
+        investorStatus[_investor] = BondData.StakeHolderStatus.REJECTED;
     }
 
-    function submitDeal() external {
+    function submitDeal(
+        string calldata _delaID,
+        BondData.Deal calldata _deal
+    ) external {
+        require(
+            IRoles(rolesContract).getRole(msg.sender) == "ISSUER",
+            "ONLY_ISSUERS"
+        );
+        require(
+            msg.sender == _deal.issuerAddress,
+            "INVALID_ISSUER_ADDRESS"
+        );
+        require(
+            deals[_delaID].status == DealStatus.UNKNOWN,
+            "INVALID_DEAL_STATUS"
+        );
 
+        deals[_delaID] = _deal;
+        deals[_delaID].status = DealStatus.SUBMITTED;
+        deals[_delaID].index = listOfDeals.length;
+
+        listOfDeals.push(deals[_delaID]);
+        issuerDeals.push(deals[_delaID]);
+        issuerDealStatus[msg.sender].push(DealStatus.SUBMITTED);
     }
 
-    function approveDeal() external onlyToposManager {
+    function approveDeal(
+        string calldata _delaID
+    ) external onlyToposManager {
+        require(
+            deals[_delaID].status == DealStatus.SUBMITTED,
+            "INVALID_DEAL_STATUS"
+        );
 
+        deals[_delaID].status = DealStatus.APPROVED;
+        listOfDeals[deals[_delaID].index].status = DealStatus.APPROVED;
+        issuerDealStatus[deals[_dealID].issuerAddress].push(DealStatus.APPROVED);
     }
 
     function rejectDeal() external onlyToposManager {
 
     }
 
-    function issue() external onlyToposManager {
+    function issue(string calldata _delaID) external onlyToposManager {
 
     }
 
