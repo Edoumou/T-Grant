@@ -103,8 +103,8 @@ contract ToposBank is IToposBank, ToposBankStorage {
         deals[_delaID].index = listOfDeals.length;
 
         listOfDeals.push(deals[_delaID]);
-        issuerDeals.push(deals[_delaID]);
-        issuerDealStatus[msg.sender].push(DealStatus.SUBMITTED);
+
+        emit DealSubmitted(_dealID, _deal);
     }
 
     function approveDeal(
@@ -117,11 +117,22 @@ contract ToposBank is IToposBank, ToposBankStorage {
 
         deals[_delaID].status = DealStatus.APPROVED;
         listOfDeals[deals[_delaID].index].status = DealStatus.APPROVED;
-        issuerDealStatus[deals[_dealID].issuerAddress].push(DealStatus.APPROVED);
+
+        emit DealAPproved(_dealID);
     }
 
-    function rejectDeal() external onlyToposManager {
+    function rejectDeal(
+        string calldata _delaID
+    ) external onlyToposManager {
+        require(
+            deals[_delaID].status == DealStatus.SUBMITTED,
+            "INVALID_DEAL_STATUS"
+        );
 
+        deals[_delaID].status = DealStatus.REJECTED;
+        listOfDeals[deals[_delaID].index].status = DealStatus.REJECTED;
+
+        emit DealARejected(_dealID);
     }
 
     function issue(string calldata _delaID) external onlyToposManager {

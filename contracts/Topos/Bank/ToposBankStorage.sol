@@ -6,14 +6,11 @@ import "../../Registry/IIdentityRegistry.sol";
 
 contract ToposBankStorage {
     mapping(string => BondData.Deal) public deals;
-    //mapping(string => BondData.DealStatus) public dealStatus;
     mapping(address => BondData.Issuer) public issuers;
     mapping(address => BondData.Investor) public investors;
     mapping(string => address) public dealBondContracts;
     mapping(address => BondData.StakeHolderStatus) public issuerStatus;
     mapping(address => BondData.StakeHolderStatus) public investorStatus;
-    mapping(address => BondData.Deal[]) public issuerDeals;
-    mapping(address => BondData.DealStatus[]) issuerDealStatus;
 
     address public toposManager;
     address public rolesContract;
@@ -39,4 +36,8 @@ contract ToposBankStorage {
         );
         _;
     }
+
+    event DealSubmitted(string dealID, BondData.Deal deal);
+    event DealAPproved(string dealID);
+    event DealARejected(string dealID);
 }
