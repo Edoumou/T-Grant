@@ -38,31 +38,61 @@ contract ToposBank is IToposBank, ToposBankStorage {
         investorStatus[msg.sender] = BondData.StakeHolderStatus.SUBMITTED;
     }
 
-    function approveIssuer() external {
-        
+    function approveIssuer(address _issuer) external onlyToposManager {
+        require(
+            issuerStatus[_issuer] == BondData.StakeHolderStatus.SUBMITTED,
+            "CHECK_YOUR_STATUS"
+        );
+
+        issuerStatus[_issuer] == BondData.StakeHolderStatus.APPROVED;
+        IRoles(rolesContract).setRole("ISSUER", _issuer);
     }
 
-    function approveInvestor() external {
+    function approveInvestor(address _investor) external onlyToposManager {
+        require(
+            investorStatus[_investor] == BondData.StakeHolderStatus.SUBMITTED,
+            "CHECK_YOUR_STATUS"
+        );
 
+        investorStatus[_investor] == BondData.StakeHolderStatus.APPROVED;
+        IRoles(rolesContract).setRole("INVESTOR", _investor);
+    }
+
+    function rejectIssuer(address _issuer) external view onlyToposManager {
+        require(
+            issuerStatus[_issuer] == BondData.StakeHolderStatus.SUBMITTED,
+            "CHECK_YOUR_STATUS"
+        );
+
+        issuerStatus[_issuer] == BondData.StakeHolderStatus.REJECTED;
+    }
+
+    function rejectInvestor(address _investor) external view onlyToposManager {
+        require(
+            investorStatus[_investor] == BondData.StakeHolderStatus.SUBMITTED,
+            "CHECK_YOUR_STATUS"
+        );
+
+        investorStatus[_investor] == BondData.StakeHolderStatus.REJECTED;
     }
 
     function submitDeal() external {
 
     }
 
-    function approveDeal() external {
+    function approveDeal() external onlyToposManager {
 
     }
 
-    function rejectDeal() external {
+    function rejectDeal() external onlyToposManager {
 
     }
 
-    function issue() external {
+    function issue() external onlyToposManager {
 
     }
 
-    function redeem() external {
+    function redeem() external onlyToposManager {
 
     }
 }
