@@ -18,7 +18,7 @@ contract IdentityRegistry is IIdentityRegistry {
         owner = _owner;
     }
 
-    enum RegistrationStatus {UKNOWN, VERIFIED}
+    enum RegistrationStatus {UNDEFINED, VERIFIED}
 
     error AlreadyVerified();
     error InvalidAddress(address caller);

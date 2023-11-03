@@ -18,7 +18,7 @@ contract BondTopos is IERC7092, BondStorage {
         issueData[_dealID].issuerWalletAddress = _issuerWalletAddress;
         issueData[_dealID].countryOfIssuance = _countryOfIssuance;
         issueData[_dealID].bondCallContract = _bondCallContractAddress;
-        issueData[_dealID].identiRegistryContract = _identiRegistryContract;
+        issueData[_dealID].identyRegistryContract = _identiRegistryContract;
     }
 
     function isin() external view returns(string memory) {

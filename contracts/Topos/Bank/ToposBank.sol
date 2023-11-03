@@ -94,7 +94,7 @@ contract ToposBank is IToposBank, ToposBankStorage {
             "INVALID_ISSUER_ADDRESS"
         );
         require(
-            deals[_delaID].status == DealStatus.UNKNOWN,
+            deals[_delaID].status == DealStatus.UNDEFINED,
             "INVALID_DEAL_STATUS"
         );
 
@@ -133,6 +133,18 @@ contract ToposBank is IToposBank, ToposBankStorage {
         listOfDeals[deals[_delaID].index].status = DealStatus.REJECTED;
 
         emit DealARejected(_dealID);
+    }
+
+    function registerForDeal(
+        string calldata _dealID,
+        BondData.Investment calldata _investment
+    ) external mustBeApproved(msg.sender) {
+        if(msg.sender != _investment.investor)
+            revert BondData.InvalidInvestorAddress(_investment.investor);
+        if(deals[_delaID].status != DealStatus.APPROVED)
+            revert BondData.IvalidDealStatus(_dealID);
+        
+        
     }
 
     function issue(string calldata _delaID) external onlyToposManager {

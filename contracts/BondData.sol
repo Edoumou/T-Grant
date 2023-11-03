@@ -24,6 +24,7 @@ abstract contract BondData {
         uint256 couponRate;
         uint256 couponFrequency;
         uint256 maturityDate;
+        uint256 index;
         address currency;
         uint8 couponType;
         DealStatus status;
@@ -58,7 +59,10 @@ abstract contract BondData {
         uint256 amount;
     }
 
-    enum BondStatus {UNKNOWN, SUBMITTED, ISSUED, REDEEMED}
-    enum DealStatus {UNKNOWN, SUBMITTED, APPROVED, REJECTED, ISSUED, REDEEMED}
-    enum StakeHolderStatus {UNKNOWN, SUBMITTED, APPROVED, REJECTED}
+    error InvalidInvestorAddress(address investor);
+    error IvalidDealStatus(string dealID);
+
+    enum BondStatus {UNDEFINED, SUBMITTED, ISSUED, REDEEMED}
+    enum DealStatus {UNDEFINED, SUBMITTED, APPROVED, REJECTED, ISSUED, REDEEMED}
+    enum StakeHolderStatus {UNDEFINED, SUBMITTED, APPROVED, REJECTED}
 }

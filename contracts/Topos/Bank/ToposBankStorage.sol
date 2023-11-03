@@ -3,6 +3,7 @@ pragma solidity ^0.8.0;
 
 import "../../BondData.sol";
 import "../../Registry/IIdentityRegistry.sol";
+import "../../tests/tokens/IERC20.sol";
 
 contract ToposBankStorage {
     mapping(string => BondData.Deal) public deals;
