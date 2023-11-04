@@ -1,12 +1,12 @@
 <div align="center">
-  <p style="font-size: calc(20px + 1.8vmin);">
+  <p style="font-size: calc(20px + 1.8vmin); font-weight: 600">
         Topos Grant - Finacial Bonds Tokenization
   </p>
   <p style="font-size: calc(10px + 0.9vmin)">
     Issue and manage financial bonds with the help of Blockchain technology
   </p>
 </div>
-
+<hr>
 <br>
 
 This project demonstrates the issuance and management of Financial Bonds through ERC7092. The following functionalities have been implemented
