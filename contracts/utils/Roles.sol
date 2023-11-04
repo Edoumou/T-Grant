@@ -27,4 +27,12 @@ contract Roles is IRoles {
     function getRole(address _user) external view returns(string memory) {
         return roles[_user];
     }
+
+    function isIssuer(address _user) external view returns(bool) {
+        return keccak256(abi.encodePacked(roles[_user])) == keccak256(abi.encodePacked("ISSUER"));
+    }
+
+    function isInvestor(address _user) external view returns(bool) {
+        return keccak256(abi.encodePacked(roles[_user])) == keccak256(abi.encodePacked("INVESTOR"));
+    }
 }

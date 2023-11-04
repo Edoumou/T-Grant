@@ -22,7 +22,7 @@ contract ToposBank is IToposBank, ToposBankStorage {
     ) external mustBeApproved(_issuer.walletAddress) {
         require(msg.sender == _issuer.walletAddress, "INVALID_ADDRESS");
         require(
-            issuerStatus[msg.sender] == BondData.StakeHolderStatus.UNKNOWN,
+            issuerStatus[msg.sender] == BondData.StakeHolderStatus.UNDEFINED,
             "CHECK_YOUR_STATUS"
         );
 
@@ -35,7 +35,7 @@ contract ToposBank is IToposBank, ToposBankStorage {
     ) external mustBeApproved(_investor.walletAddress) {
         require(msg.sender == _investor.walletAddress, "INVALID_ADDRESS");
         require(
-            investorStatus[msg.sender] == BondData.StakeHolderStatus.UNKNOWN,
+            investorStatus[msg.sender] == BondData.StakeHolderStatus.UNDEFINED,
             "CHECK_YOUR_STATUS"
         );
 
@@ -63,7 +63,7 @@ contract ToposBank is IToposBank, ToposBankStorage {
         IRoles(rolesContract).setRole("INVESTOR", _investor);
     }
 
-    function rejectIssuer(address _issuer) external view onlyToposManager {
+    function rejectIssuer(address _issuer) external onlyToposManager {
         require(
             issuerStatus[_issuer] == BondData.StakeHolderStatus.SUBMITTED,
             "CHECK_YOUR_STATUS"
@@ -72,7 +72,7 @@ contract ToposBank is IToposBank, ToposBankStorage {
         issuerStatus[_issuer] = BondData.StakeHolderStatus.REJECTED;
     }
 
-    function rejectInvestor(address _investor) external view onlyToposManager {
+    function rejectInvestor(address _investor) external onlyToposManager {
         require(
             investorStatus[_investor] == BondData.StakeHolderStatus.SUBMITTED,
             "CHECK_YOUR_STATUS"
@@ -82,11 +82,11 @@ contract ToposBank is IToposBank, ToposBankStorage {
     }
 
     function submitDeal(
-        string calldata _delaID,
+        string calldata _dealID,
         BondData.Deal calldata _deal
     ) external {
         require(
-            IRoles(rolesContract).getRole(msg.sender) == "ISSUER",
+            IRoles(rolesContract).isIssuer(msg.sender),
             "ONLY_ISSUERS"
         );
         require(
@@ -94,43 +94,43 @@ contract ToposBank is IToposBank, ToposBankStorage {
             "INVALID_ISSUER_ADDRESS"
         );
         require(
-            deals[_delaID].status == DealStatus.UNDEFINED,
+            deals[_dealID].status == BondData.DealStatus.UNDEFINED,
             "INVALID_DEAL_STATUS"
         );
 
-        deals[_delaID] = _deal;
-        deals[_delaID].status = DealStatus.SUBMITTED;
-        deals[_delaID].index = listOfDeals.length;
+        deals[_dealID] = _deal;
+        deals[_dealID].status = BondData.DealStatus.SUBMITTED;
+        deals[_dealID].index = listOfDeals.length;
 
-        listOfDeals.push(deals[_delaID]);
+        listOfDeals.push(deals[_dealID]);
 
         emit DealSubmitted(_dealID, _deal);
     }
 
     function approveDeal(
-        string calldata _delaID
+        string calldata _dealID
     ) external onlyToposManager {
         require(
-            deals[_delaID].status == DealStatus.SUBMITTED,
+            deals[_dealID].status == BondData.DealStatus.SUBMITTED,
             "INVALID_DEAL_STATUS"
         );
 
-        deals[_delaID].status = DealStatus.APPROVED;
-        listOfDeals[deals[_delaID].index].status = DealStatus.APPROVED;
+        deals[_dealID].status = BondData.DealStatus.APPROVED;
+        listOfDeals[deals[_dealID].index].status = BondData.DealStatus.APPROVED;
 
         emit DealAPproved(_dealID);
     }
 
     function rejectDeal(
-        string calldata _delaID
+        string calldata _dealID
     ) external onlyToposManager {
         require(
-            deals[_delaID].status == DealStatus.SUBMITTED,
+            deals[_dealID].status == BondData.DealStatus.SUBMITTED,
             "INVALID_DEAL_STATUS"
         );
 
-        deals[_delaID].status = DealStatus.REJECTED;
-        listOfDeals[deals[_delaID].index].status = DealStatus.REJECTED;
+        deals[_dealID].status = BondData.DealStatus.REJECTED;
+        listOfDeals[deals[_dealID].index].status = BondData.DealStatus.REJECTED;
 
         emit DealARejected(_dealID);
     }
@@ -141,7 +141,7 @@ contract ToposBank is IToposBank, ToposBankStorage {
     ) external mustBeApproved(msg.sender) {
         if(msg.sender != _investment.investor)
             revert BondData.InvalidInvestorAddress(_investment.investor);
-        if(deals[_delaID].status != DealStatus.APPROVED)
+        if(deals[_dealID].status != BondData.DealStatus.APPROVED)
             revert BondData.IvalidDealStatus(_dealID);
         
         

@@ -19,7 +19,7 @@ abstract contract BondData {
     struct Deal {
         string dealID;
         string prospectusURI;
-        string issuerAddress;
+        address issuerAddress;
         uint256 debtAmount;
         uint256 couponRate;
         uint256 couponFrequency;
