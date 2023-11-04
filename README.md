@@ -31,18 +31,47 @@ $ npm i
 
 In some cases you may need to remove the `package-lock.json` in the `/client` directory before running the command.
 
-The next step is to launch an instance of `Topos Blockchain`, and update the `truffle-config.js` file to include the `Topos Network`.
+The next step is to launch an instance of `Topos Subnet`, and update the `truffle-config.js` file to include the `Topos Subnet`.
 
-### Launching an Instance of `Topos` with Ganache
+### Launching an Instance of `Topos Subnet` with Ganache
 
-To launch the Topos blockchain we need to install [ganache-cli](https://www.npmjs.com/package/ganache-cli)
+To launch the Topos Subnet we need to install [ganache-cli](https://www.npmjs.com/package/ganache-cli)
 
 ```
 npm install -g ganache-cli
 ```
 
-After installing successfully ganache-cli, the Topos blockchain can be launched by running the following command:
+After installing successfully ganache-cli, the Topos Subnet can be launched by running the following command:
 
 ```javascript
     ganache -i 2359 --chain.chainId 2359 -p 7545 --server.rpcEndpoint "https://rpc.topos-subnet.testnet-1.topos.technology" -m "YOUR_MNEMONIC"
+```
+
+<img src="./client/assets/topos_subnet.jpeg" alt="RPC">
+
+### Include the Topos Subnet in `truffle-config.js`
+
+After launching successfully an instance of the topos subnet, we need to configure the subnet in `truffle-config.js` if that's not done already.
+
+In the `networks` section, add a new network called `topos`
+
+```javascript
+    networks: {
+    dev: {
+      host: "127.0.0.1",
+      port: 7545,
+      network_id: "*"
+    },
+    topos: {
+      provider: () =>
+        new HDWalletProvider(MNEMONIC, "https://rpc.topos-subnet.testnet-1.topos.technology"),
+        port: 7545,
+        network_id: 2359
+    }
+  }
+```
+if the truffle `HDWalletProvider` is not installed, then run the following command in the `/client` directory
+
+```
+    npm i @truffle/hdwallet-provider
 ```
