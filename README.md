@@ -1,7 +1,7 @@
 <div align="center">
-  <div style="font-size: calc(30px + 1.8vmin); font-weight: 600">
+  <p style="font-size: 2em; font-weight: bolder">
         Topos Grant - Finacial Bonds Tokenization
-  </div>
+  </p>
   <p style="font-size: calc(10px + 0.9vmin)">
     Issue and manage financial bonds with the help of Blockchain technology
   </p>
