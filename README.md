@@ -1,4 +1,4 @@
-# T Grant - Finacial Bonds
+# Topos Grant - Finacial Bonds Tokenization
 
 This project showcases the issuance and management of Financial Bonds through ERC7092. The following functionalities are implemented
 
