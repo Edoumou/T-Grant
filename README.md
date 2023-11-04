@@ -47,7 +47,7 @@ After installing successfully ganache-cli, the Topos Subnet can be launched by r
     ganache -i 2359 --chain.chainId 2359 -p 7545 --server.rpcEndpoint "https://rpc.topos-subnet.testnet-1.topos.technology" -m "YOUR_MNEMONIC"
 ```
 
-<img src="./client/assets/topos_subnet.jpeg" alt="RPC">
+![RPC](https://github.com/Edoumou/T-Grant/blob/dev/client/assets/topos_sunet.jpeg "topos subnet launced")
 
 ### Include the Topos Subnet in `truffle-config.js`
 
