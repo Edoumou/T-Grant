@@ -35,7 +35,7 @@ function App() {
     <div className='App'>
       <h2>This quasi-empty page will become a full Dapp</h2>
 
-      Stange, yeah!!! let's keep building 💪🦾💪
+      Strange, yeah!!! Let's keep building 💪🦾💪
       <p>Topos</p>
     </div>
   );

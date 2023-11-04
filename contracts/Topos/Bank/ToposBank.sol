@@ -137,14 +137,38 @@ contract ToposBank is IToposBank, ToposBankStorage {
 
     function registerForDeal(
         string calldata _dealID,
-        BondData.Investment calldata _investment
+        uint256 _amount
     ) external mustBeApproved(msg.sender) {
-        if(msg.sender != _investment.investor)
-            revert BondData.InvalidInvestorAddress(_investment.investor);
         if(deals[_dealID].status != BondData.DealStatus.APPROVED)
-            revert BondData.IvalidDealStatus(_dealID);
-        
-        
+            revert BondData.InvalidDealStatus(_dealID);
+        require(_amount != 0, "INVALID_AMOUNT");
+
+        bool hasInvested = amountInvested[msg.sender][_dealID].hasInvested;
+
+        if(hasInvested) {
+            uint256 index = amountInvested[msg.sender][_dealID].index;
+            uint256 amount  = amountInvested[msg.sender][_dealID].amount;
+
+            dealInvestment[_dealID][index].amount = amount + _amount;
+            amountInvested[msg.sender][_dealID].amount = amount + _amount;
+        } else {
+            amountInvested[msg.sender][_dealID] =  BondData.Investment(
+                {
+                    amount: _amount,
+                    hasInvested: true,
+                    index: dealInvestment[_dealID].length
+                }
+            );
+
+            dealInvestment[_dealID].push(
+                BondData.DealInvestment(
+                    {
+                        investor: msg.sender,
+                        amount: _amount
+                    }
+                )
+            );       
+        }
     }
 
     function issue(string calldata _delaID) external onlyToposManager {

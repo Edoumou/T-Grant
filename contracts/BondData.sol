@@ -55,12 +55,18 @@ abstract contract BondData {
     }
 
     struct Investment {
+        uint256 amount;
+        bool hasInvested;
+        uint256 index;
+    }
+
+    struct DealInvestment {
         address investor;
         uint256 amount;
     }
 
     error InvalidInvestorAddress(address investor);
-    error IvalidDealStatus(string dealID);
+    error InvalidDealStatus(string dealID);
 
     enum BondStatus {UNDEFINED, SUBMITTED, ISSUED, REDEEMED}
     enum DealStatus {UNDEFINED, SUBMITTED, APPROVED, REJECTED, ISSUED, REDEEMED}
