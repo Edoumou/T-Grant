@@ -47,7 +47,7 @@ After installing successfully ganache-cli, the Topos Subnet can be launched by r
     ganache -i 2359 --chain.chainId 2359 -p 7545 --server.rpcEndpoint "https://rpc.topos-subnet.testnet-1.topos.technology" -m "YOUR_MNEMONIC"
 ```
 
-Replace `YOUR_MNEMONIC` by the mnemonic or see phrase of the wallet you want to use.
+Replace `YOUR_MNEMONIC` by the mnemonic or seed phrase of the wallet you want to use.
 
 The screenshot bellow shows the result of running that command
 
