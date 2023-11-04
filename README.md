@@ -1,10 +1,20 @@
-# Topos Grant - Finacial Bonds Tokenization
+<div align="center">
+  <h1>
+  Topos Grant - Finacial Bonds Tokenization
+  </h1>
 
-This project showcases the issuance and management of Financial Bonds through ERC7092. The following functionalities are implemented
+  <h3>
+    Issue and Manage bonds with the help of Blockchain technology
+  </h3>
+</div>
 
-- Identity Registry: Simulates an identity registry
-- ERC-7092 Interface: ERC-7092 standard interface
-- Bond Contract: Bond contract
-- Bond Contracts Deployer: Contract used to deploy bond contracts
-- Bond Call Contract: Contract used to make call to bond contracts
-- Exchange Contract: Contract used to exchange bonds between two parties
+This project demonstrates the issuance and management of Financial Bonds through ERC7092. The following functionalities have been implemented
+
+- Identity Registry: This simulates an identity registry.
+- ERC-7092 Interface: This provides an implementation of the ERC-7092 standard interface.
+- Bond Contract: A contract designed for managing bonds.
+- Bond Contracts Deployer: A contract used for deploying bond contracts.
+- Bond Call Contract: A contract used for making calls to bond contracts.
+- Exchange Contract: A contract used for exchanging bonds between two parties.
+
+
