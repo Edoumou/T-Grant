@@ -1,5 +1,5 @@
 <div align="center">
-  <h3 style="font-size: 3em; font-weight: bolder">
+  <h3 style="font-size: 5em; font-weight: bolder">
         Topos Grant - Finacial Bonds Tokenization
   </h3>
   <p style="font-size: calc(10px + 0.9vmin)">
