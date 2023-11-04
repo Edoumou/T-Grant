@@ -90,7 +90,7 @@ To compile and deploy the contract on Topos Subnet, run the following command in
 
 ## Lauch the Dapp
 
-To run the Dapp, you first need to add the Topos to your Metamask, check here [check here](https://docs.topos.technology/content/module-2/1-ERC20-Messaging.html). Once Topos subnet is added to Metamask, run the following command
+To run the Dapp, you first need to add the Topos to your Metamask, [check here](https://docs.topos.technology/content/module-2/1-ERC20-Messaging.html). Once Topos subnet is added to Metamask, run the following command
 
 ```
     npm start
