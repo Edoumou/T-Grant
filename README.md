@@ -29,7 +29,7 @@ $ cd client
 $ npm i
 ```
 
-In some cases you may need to remove the `package-lock.json` in the `/client` directory before running the command.
+In some cases you may need to remove the `package-lock.json` in `/client` folder before running the command.
 
 The next step is to launch an instance of `Topos Subnet`, and update the `truffle-config.js` file to include the `Topos Subnet`.
 
@@ -71,8 +71,24 @@ In the `networks` section, add a new network called `topos`
     }
   }
 ```
-if the truffle `HDWalletProvider` is not installed, then run the following command in the `/client` directory
+if the truffle `HDWalletProvider` is not installed, then run the following command in `/client` folder
 
 ```
     npm i @truffle/hdwallet-provider
+```
+
+## Contract Compilation and Deployment
+
+To compile and deploy the contract on Topos Subnet, run the following command in `/client` folder
+
+```
+    truffle migrate --network topos --reset
+```
+
+## Lauch the Dapp
+
+To run the Dapp, you first need to add the Topos to your Metamask, check here [check here](https://docs.topos.technology/content/module-2/1-ERC20-Messaging.html). Once Topos subnet is added to Metamask, run the following command
+
+```
+    npm start
 ```
