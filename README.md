@@ -46,6 +46,7 @@ After installing successfully ganache-cli, the Topos Subnet can be launched by r
 ```javascript
     ganache -i 2359 --chain.chainId 2359 -p 7545 --server.rpcEndpoint "https://rpc.topos-subnet.testnet-1.topos.technology" -m "YOUR_MNEMONIC"
 ```
+The screenshot bellow shows the result of running that command
 
 ![RPC](https://github.com/Edoumou/T-Grant/blob/dev/client/assets/topos_sunet.jpeg "topos subnet launced")
 
