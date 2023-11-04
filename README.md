@@ -1,5 +1,5 @@
 <div align="center">
-  <p style="font-size: calc(20px + 1.8vmin); font-weight: 600">
+  <p style="font-size: calc(30px + 1.8vmin); font-weight: 600">
         Topos Grant - Finacial Bonds Tokenization
   </p>
   <p style="font-size: calc(10px + 0.9vmin)">
