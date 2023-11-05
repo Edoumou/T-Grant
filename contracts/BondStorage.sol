@@ -12,8 +12,14 @@ contract BondStorage {
 
     string public dealID;
     address public bondManager;
+    address public toposBankContract;
 
     BondData.BondStatus public bondStatus;
+
+    modifier onlyBondManager {
+        require(msg.sender == bondManager, "ONLY_BOND_MANAGER");
+        _;
+    }
 
     modifier mustBeApproved(address _user) {
         address registry = issueData[dealID].identyRegistryContract;

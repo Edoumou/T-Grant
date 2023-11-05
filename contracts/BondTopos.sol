@@ -3,6 +3,8 @@ pragma solidity ^0.8.0;
 
 import "./IERC7092.sol";
 import "./BondStorage.sol";
+import "./BondData.sol";
+import "./Topos/interfaces/IBonds.sol";
 
 contract BondTopos is IERC7092, BondStorage {
     constructor(
@@ -11,16 +13,46 @@ contract BondTopos is IERC7092, BondStorage {
         address _issuerWalletAddress,
         string memory _countryOfIssuance,
         address _bondCallContractAddress,
+        address _toposBankContract,
         address _identiRegistryContract
     ) {
         dealID = _dealID;
         bondManager = _bondManager;
         issueData[_dealID].issuerWalletAddress = _issuerWalletAddress;
         issueData[_dealID].countryOfIssuance = _countryOfIssuance;
+        toposBankContract = _toposBankContract;
         issueData[_dealID].bondCallContract = _bondCallContractAddress;
         issueData[_dealID].identyRegistryContract = _identiRegistryContract;
     }
 
+    function issue(
+        BondData.Bond calldata _bond
+    ) external onlyBondManager {
+        _issue(_bond);
+    }
+
+    function _issue(BondData.Bond calldata _bond) internal virtual {
+        uint256 volume;
+        uint256 _issueVolume = bonds[dealID].issueVolume;
+        BondData.DealInvestment[] memory _dealInvestment = IBonds(toposBankContract).getDealInvestment(dealID);
+
+        uint256 _denomination = bonds[dealID].denomination;
+
+        for(uint256 i; i < _dealInvestment.length; i++) {
+            address investor = _dealInvestment[i].investor;
+            uint256 _amount = _dealInvestment[i].amount;
+
+            volume += _amount;
+            principals[investor] = _amount;
+        }
+
+        bonds[dealID] = _bond;
+    }
+
+    function redeel() external onlyBondManager {
+
+    }
+ 
     function isin() external view returns(string memory) {
         return bonds[dealID].isin;
     }

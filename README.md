@@ -74,7 +74,10 @@ In the `networks` section, add a new network called `topos`
     }
   }
 ```
-if the truffle `HDWalletProvider` is not installed, then run the following command in `/client` folder
+
+replace `MNEMONIC` by the mnemonic or seed phrase of the wallet you want to use.
+
+If the truffle `HDWalletProvider` is not installed, then run the following command in `/client` folder
 
 ```
     npm i @truffle/hdwallet-provider
@@ -90,7 +93,7 @@ To compile and deploy the contract on Topos Subnet, run the following command in
 
 ## Lauch the Dapp
 
-To run the Dapp, you first need to add the Topos to your Metamask, [check here](https://docs.topos.technology/content/module-2/1-ERC20-Messaging.html). Once Topos subnet is added to Metamask, run the following command
+To launch the Dapp, you first need to add the Topos to your Metamask, [check here](https://docs.topos.technology/content/module-2/1-ERC20-Messaging.html). Once Topos subnet is added to Metamask, run the following command in `/client` folder
 
 ```
     npm start

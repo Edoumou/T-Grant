@@ -4,8 +4,9 @@ pragma solidity ^0.8.0;
 import "../interfaces/IToposBank.sol";
 import "./ToposBankStorage.sol";
 import "../interfaces/IRoles.sol";
+import "../interfaces/IBonds.sol";
 
-contract ToposBank is IToposBank, ToposBankStorage {
+contract ToposBank is IToposBank, ToposBankStorage, IBonds {
     constructor(
         address _toposManager,
         address _rolesContract,
@@ -151,11 +152,17 @@ contract ToposBank is IToposBank, ToposBankStorage {
         string calldata _dealID,
         uint256 _amount
     ) external mustBeApproved(msg.sender) {
+        uint256 _totalAmountInvested = totalAmountInvestedForDeal[_dealID];
+
         if(deals[_dealID].status != BondData.DealStatus.APPROVED)
             revert BondData.InvalidDealStatus(_dealID);
-        require(_amount != 0, "INVALID_AMOUNT");
+        require(
+            _amount != 0 && _amount + _totalAmountInvested <= deals[_dealID].debtAmount,
+            "INVALID_AMOUNT"
+        );
 
         bool hasInvested = amountInvested[msg.sender][_dealID].hasInvested;
+        totalAmountInvestedForDeal[_dealID] = _totalAmountInvested + _amount;
 
         if(hasInvested) {
             uint256 index = amountInvested[msg.sender][_dealID].index;
@@ -185,11 +192,32 @@ contract ToposBank is IToposBank, ToposBankStorage {
         emit RegisterForDeal(_dealID, msg.sender);
     }
 
-    function issue(string calldata _delaID) external onlyToposManager {
+    function issue(
+        string calldata _dealID,
+        BondData.Bond calldata _bond,
+        address _bondContract
+    ) external onlyToposManager {
+        if(deals[_dealID].status != BondData.DealStatus.APPROVED)
+            revert BondData.InvalidDealStatus(_dealID);
 
+        dealBondContracts[_dealID] = _bondContract;
+
+        bonds.push(_bond);
     }
 
     function redeem() external onlyToposManager {
 
+    }
+
+    function getTotalAmounInvested(
+        string calldata _dealID
+    ) external view returns(uint256) {
+        return totalAmountInvestedForDeal[_dealID];
+    }
+
+    function getDealInvestment(
+        string calldata _dealID
+    ) external view returns(BondData.DealInvestment[] memory) {
+        return dealInvestment[_dealID];
     }
 }
