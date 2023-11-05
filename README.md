@@ -85,7 +85,7 @@ If the truffle `HDWalletProvider` is not installed, then run the following comma
 
 ## Contract Compilation and Deployment
 
-To compile and deploy the contract on Topos Subnet, run the following command in `/client` folder
+To compile and deploy the contract on Topos Subnet, you first need to get some `TOPOS` tokens to pay for the gas fees [Topos Faucet](https://faucet.testnet-1.topos.technology/). Once received, run the following command in `/client` folder
 
 ```
     truffle migrate --network topos --reset
