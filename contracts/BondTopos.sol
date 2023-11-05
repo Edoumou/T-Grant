@@ -28,7 +28,7 @@ contract BondTopos is IERC7092, BondStorage, IBonds {
 
     function issue(
         BondData.Bond calldata _bond
-    ) external onlyBondManager {
+    ) external onlyToposBankContract {
         _issue(_bond);
     }
 
@@ -73,7 +73,7 @@ contract BondTopos is IERC7092, BondStorage, IBonds {
         require(volume == _totalAmountInvested, "INVALID_TOTAL_AMOUNT");
     }
 
-    function redeem() external onlyBondManager {
+    function redeem() external onlyToposBankContract {
 
     }
  

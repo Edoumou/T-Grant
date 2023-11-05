@@ -208,6 +208,7 @@ contract ToposBank is IToposBank, ToposBankStorage {
         IBonds(_bondContract).issue(_bond);
 
         bonds.push(_bond);
+        issuerDeals[deals[_dealID].issuerAddress].push(deals[_dealID]);
 
         emit BondIssue(_dealID);
     }

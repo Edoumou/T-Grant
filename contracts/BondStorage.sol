@@ -24,6 +24,14 @@ contract BondStorage {
         _;
     }
 
+    modifier onlyToposBankContract {
+        require(
+            msg.sender == toposBankContract,
+            "ONLY_TOPOS_BANK_CONTRACT"
+        );
+        _;
+    }
+
     modifier mustBeApproved(address _user) {
         address registry = issueData[dealID].identyRegistryContract;
         require(

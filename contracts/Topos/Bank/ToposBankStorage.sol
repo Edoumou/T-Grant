@@ -15,6 +15,7 @@ contract ToposBankStorage {
     mapping(address => BondData.StakeHolderStatus) public issuerStatus;
     mapping(address => BondData.StakeHolderStatus) public investorStatus;
     mapping(address => mapping(string => BondData.Investment)) public amountInvested;
+    mapping(address => BondData.Deal[]) public issuerDeals;
 
     address public toposManager;
     address public rolesContract;
