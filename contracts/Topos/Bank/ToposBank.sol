@@ -28,6 +28,8 @@ contract ToposBank is IToposBank, ToposBankStorage {
 
         issuers[_issuer.walletAddress] = _issuer;
         issuerStatus[msg.sender] = BondData.StakeHolderStatus.SUBMITTED;
+
+        emit RequestIssuerRegistration(_issuer.walletAddress);
     }
 
     function requestRegistrationInvestor(
@@ -41,6 +43,8 @@ contract ToposBank is IToposBank, ToposBankStorage {
 
         investors[_investor.walletAddress] = _investor;
         investorStatus[msg.sender] = BondData.StakeHolderStatus.SUBMITTED;
+
+        emit RequestInvestorRegistration(_investor.walletAddress);
     }
 
     function approveIssuer(address _issuer) external onlyToposManager {
@@ -51,6 +55,8 @@ contract ToposBank is IToposBank, ToposBankStorage {
 
         issuerStatus[_issuer] = BondData.StakeHolderStatus.APPROVED;
         IRoles(rolesContract).setRole("ISSUER", _issuer);
+
+        emit ApproveIssuer(_issuer);
     }
 
     function approveInvestor(address _investor) external onlyToposManager {
@@ -61,6 +67,8 @@ contract ToposBank is IToposBank, ToposBankStorage {
 
         investorStatus[_investor] = BondData.StakeHolderStatus.APPROVED;
         IRoles(rolesContract).setRole("INVESTOR", _investor);
+
+        emit ApproveInvestor(_investor);
     }
 
     function rejectIssuer(address _issuer) external onlyToposManager {
@@ -70,6 +78,8 @@ contract ToposBank is IToposBank, ToposBankStorage {
         );
 
         issuerStatus[_issuer] = BondData.StakeHolderStatus.REJECTED;
+
+        emit RejectIssuer(_issuer);
     }
 
     function rejectInvestor(address _investor) external onlyToposManager {
@@ -79,6 +89,8 @@ contract ToposBank is IToposBank, ToposBankStorage {
         );
 
         investorStatus[_investor] = BondData.StakeHolderStatus.REJECTED;
+
+        emit RejectInvestor(_investor);
     }
 
     function submitDeal(
@@ -169,6 +181,8 @@ contract ToposBank is IToposBank, ToposBankStorage {
                 )
             );       
         }
+
+        emit RegisterForDeal(_dealID, msg.sender);
     }
 
     function issue(string calldata _delaID) external onlyToposManager {

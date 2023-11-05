@@ -40,7 +40,14 @@ contract ToposBankStorage {
         _;
     }
 
+    event RequestIssuerRegistration(address issuer);
+    event RequestInvestorRegistration(address investor);
+    event ApproveIssuer(address issuer);
+    event ApproveInvestor(address investor);
+    event RejectIssuer(address issuer);
+    event RejectInvestor(address investor);
     event DealSubmitted(string dealID, BondData.Deal deal);
     event DealAPproved(string dealID);
     event DealARejected(string dealID);
+    event RegisterForDeal(string dealID, address investor);
 }

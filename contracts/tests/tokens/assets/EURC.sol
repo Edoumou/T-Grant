@@ -4,5 +4,5 @@ pragma solidity 0.8.19;
 import "../ERC20.sol";
 
 contract EURC is ERC20 {
-    constructor() ERC20('EUROC Token', 'EURC') {}
+    constructor() ERC20('EURC Token', 'EURC') {}
 }

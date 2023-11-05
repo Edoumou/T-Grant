@@ -4,6 +4,17 @@
     {
       "inputs": [
         {
+          "internalType": "string",
+          "name": "dealID",
+          "type": "string"
+        }
+      ],
+      "name": "InvalidDealStatus",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
           "internalType": "address",
           "name": "investor",
           "type": "address"
@@ -11,20 +22,9 @@
       ],
       "name": "InvalidInvestorAddress",
       "type": "error"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "string",
-          "name": "dealID",
-          "type": "string"
-        }
-      ],
-      "name": "IvalidDealStatus",
-      "type": "error"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.19+commit.7dd6d404\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"investor\",\"type\":\"address\"}],\"name\":\"InvalidInvestorAddress\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dealID\",\"type\":\"string\"}],\"name\":\"IvalidDealStatus\",\"type\":\"error\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/BondData.sol\":\"BondData\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/BondData.sol\":{\"keccak256\":\"0xff62a47bd8c8e68a16fe8bda9bb9f8fbedd9ae415342ecf43ee9b2a77a4419bc\",\"license\":\"CC0-1.0\",\"urls\":[\"bzz-raw://bb97a713a69eb87bfe684edb6651d51f4ce3fdde83929d89ed36372d25c018b9\",\"dweb:/ipfs/QmPvyF6QEgZ5Fc9dKRrbHprotRkvtHiwn9dwRSgakeqhpu\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.19+commit.7dd6d404\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dealID\",\"type\":\"string\"}],\"name\":\"InvalidDealStatus\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"investor\",\"type\":\"address\"}],\"name\":\"InvalidInvestorAddress\",\"type\":\"error\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/BondData.sol\":\"BondData\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/BondData.sol\":{\"keccak256\":\"0x711c211fc9eaebf91a9ad6a54a0bcc1edd4c49e73aa28bd1986689f28c624ec6\",\"license\":\"CC0-1.0\",\"urls\":[\"bzz-raw://de7441d0f0db7d5501cefcd8d84a032dce7edf18fc40618690dc63d4c6682fab\",\"dweb:/ipfs/QmUrEGqePHEUm7Fa7M3vix3Q5HGCcesRpRUuJSsqboFYjt\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "immutableReferences": {},
@@ -32,16 +32,16 @@
   "deployedGeneratedSources": [],
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "// SPDX-License-Identifier: CC0-1.0\npragma solidity ^0.8.0;\n\nabstract contract BondData {\n    struct Bond {\n        string isin;\n        string name;\n        string symbol;\n        address currency;\n        uint256 denomination;\n        uint256 issueVolume;\n        uint256 couponRate;\n        uint8 couponType;\n        uint256 couponFrequency;\n        uint256 issueDate;\n        uint256 maturityDate;\n    }\n\n    struct Deal {\n        string dealID;\n        string prospectusURI;\n        address issuerAddress;\n        uint256 debtAmount;\n        uint256 couponRate;\n        uint256 couponFrequency;\n        uint256 maturityDate;\n        uint256 index;\n        address currency;\n        uint8 couponType;\n        DealStatus status;\n    }\n\n    struct Issuer {\n        string documentURI;\n        string name;\n        string country;\n        string issuerType;\n        string creditRating;\n        uint256 carbonCredit;\n        address walletAddress;\n    }\n\n    struct Investor {\n        string name;\n        string country;\n        string investorType;\n        address walletAddress;\n    }\n\n    struct IssueData {\n        address issuerWalletAddress;\n        string countryOfIssuance;\n        address bondCallContract;\n        address identyRegistryContract;\n    }\n\n    struct Investment {\n        address investor;\n        uint256 amount;\n    }\n\n    error InvalidInvestorAddress(address investor);\n    error IvalidDealStatus(string dealID);\n\n    enum BondStatus {UNDEFINED, SUBMITTED, ISSUED, REDEEMED}\n    enum DealStatus {UNDEFINED, SUBMITTED, APPROVED, REJECTED, ISSUED, REDEEMED}\n    enum StakeHolderStatus {UNDEFINED, SUBMITTED, APPROVED, REJECTED}\n}",
+  "source": "// SPDX-License-Identifier: CC0-1.0\npragma solidity ^0.8.0;\n\nabstract contract BondData {\n    struct Bond {\n        string isin;\n        string name;\n        string symbol;\n        address currency;\n        uint256 denomination;\n        uint256 issueVolume;\n        uint256 couponRate;\n        uint8 couponType;\n        uint256 couponFrequency;\n        uint256 issueDate;\n        uint256 maturityDate;\n    }\n\n    struct Deal {\n        string dealID;\n        string prospectusURI;\n        address issuerAddress;\n        uint256 debtAmount;\n        uint256 couponRate;\n        uint256 couponFrequency;\n        uint256 maturityDate;\n        uint256 index;\n        address currency;\n        uint8 couponType;\n        DealStatus status;\n    }\n\n    struct Issuer {\n        string documentURI;\n        string name;\n        string country;\n        string issuerType;\n        string creditRating;\n        uint256 carbonCredit;\n        address walletAddress;\n    }\n\n    struct Investor {\n        string name;\n        string country;\n        string investorType;\n        address walletAddress;\n    }\n\n    struct IssueData {\n        address issuerWalletAddress;\n        string countryOfIssuance;\n        address bondCallContract;\n        address identyRegistryContract;\n    }\n\n    struct Investment {\n        uint256 amount;\n        bool hasInvested;\n        uint256 index;\n    }\n\n    struct DealInvestment {\n        address investor;\n        uint256 amount;\n    }\n\n    error InvalidInvestorAddress(address investor);\n    error InvalidDealStatus(string dealID);\n\n    enum BondStatus {UNDEFINED, SUBMITTED, ISSUED, REDEEMED}\n    enum DealStatus {UNDEFINED, SUBMITTED, APPROVED, REJECTED, ISSUED, REDEEMED}\n    enum StakeHolderStatus {UNDEFINED, SUBMITTED, APPROVED, REJECTED}\n}",
   "sourcePath": "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/contracts/BondData.sol",
   "ast": {
     "absolutePath": "project:/contracts/BondData.sol",
     "exportedSymbols": {
       "BondData": [
-        112
+        119
       ]
     },
-    "id": 113,
+    "id": 120,
     "license": "CC0-1.0",
     "nodeType": "SourceUnit",
     "nodes": [
@@ -63,9 +63,9 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": true,
-        "id": 112,
+        "id": 119,
         "linearizedBaseContracts": [
-          112
+          119
         ],
         "name": "BondData",
         "nameLocation": "79:8:0",
@@ -377,7 +377,7 @@
             "name": "Bond",
             "nameLocation": "101:4:0",
             "nodeType": "StructDefinition",
-            "scope": 112,
+            "scope": 119,
             "src": "94:313:0",
             "visibility": "public"
           },
@@ -669,7 +669,7 @@
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_enum$_DealStatus_$106",
+                  "typeIdentifier": "t_enum$_DealStatus_$113",
                   "typeString": "enum BondData.DealStatus"
                 },
                 "typeName": {
@@ -682,13 +682,13 @@
                       "713:10:0"
                     ],
                     "nodeType": "IdentifierPath",
-                    "referencedDeclaration": 106,
+                    "referencedDeclaration": 113,
                     "src": "713:10:0"
                   },
-                  "referencedDeclaration": 106,
+                  "referencedDeclaration": 113,
                   "src": "713:10:0",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_DealStatus_$106",
+                    "typeIdentifier": "t_enum$_DealStatus_$113",
                     "typeString": "enum BondData.DealStatus"
                   }
                 },
@@ -698,7 +698,7 @@
             "name": "Deal",
             "nameLocation": "420:4:0",
             "nodeType": "StructDefinition",
-            "scope": 112,
+            "scope": 119,
             "src": "413:324:0",
             "visibility": "public"
           },
@@ -900,7 +900,7 @@
             "name": "Issuer",
             "nameLocation": "750:6:0",
             "nodeType": "StructDefinition",
-            "scope": 112,
+            "scope": 119,
             "src": "743:211:0",
             "visibility": "public"
           },
@@ -1021,7 +1021,7 @@
             "name": "Investor",
             "nameLocation": "967:8:0",
             "nodeType": "StructDefinition",
-            "scope": 112,
+            "scope": 119,
             "src": "960:128:0",
             "visibility": "public"
           },
@@ -1144,38 +1144,37 @@
             "name": "IssueData",
             "nameLocation": "1101:9:0",
             "nodeType": "StructDefinition",
-            "scope": 112,
+            "scope": 119,
             "src": "1094:169:0",
             "visibility": "public"
           },
           {
             "canonicalName": "BondData.Investment",
-            "id": 86,
+            "id": 88,
             "members": [
               {
                 "constant": false,
                 "id": 83,
                 "mutability": "mutable",
-                "name": "investor",
-                "nameLocation": "1305:8:0",
+                "name": "amount",
+                "nameLocation": "1305:6:0",
                 "nodeType": "VariableDeclaration",
-                "scope": 86,
-                "src": "1297:16:0",
+                "scope": 88,
+                "src": "1297:14:0",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_address",
-                  "typeString": "address"
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
                 },
                 "typeName": {
                   "id": 82,
-                  "name": "address",
+                  "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "1297:7:0",
-                  "stateMutability": "nonpayable",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
                   }
                 },
                 "visibility": "internal"
@@ -1184,11 +1183,38 @@
                 "constant": false,
                 "id": 85,
                 "mutability": "mutable",
-                "name": "amount",
-                "nameLocation": "1331:6:0",
+                "name": "hasInvested",
+                "nameLocation": "1326:11:0",
                 "nodeType": "VariableDeclaration",
-                "scope": 86,
-                "src": "1323:14:0",
+                "scope": 88,
+                "src": "1321:16:0",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bool",
+                  "typeString": "bool"
+                },
+                "typeName": {
+                  "id": 84,
+                  "name": "bool",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "1321:4:0",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 87,
+                "mutability": "mutable",
+                "name": "index",
+                "nameLocation": "1355:5:0",
+                "nodeType": "VariableDeclaration",
+                "scope": 88,
+                "src": "1347:13:0",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1196,10 +1222,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 84,
+                  "id": 86,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
-                  "src": "1323:7:0",
+                  "src": "1347:7:0",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -1211,29 +1237,96 @@
             "name": "Investment",
             "nameLocation": "1276:10:0",
             "nodeType": "StructDefinition",
-            "scope": 112,
-            "src": "1269:75:0",
+            "scope": 119,
+            "src": "1269:98:0",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "BondData.DealInvestment",
+            "id": 93,
+            "members": [
+              {
+                "constant": false,
+                "id": 90,
+                "mutability": "mutable",
+                "name": "investor",
+                "nameLocation": "1413:8:0",
+                "nodeType": "VariableDeclaration",
+                "scope": 93,
+                "src": "1405:16:0",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 89,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "1405:7:0",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 92,
+                "mutability": "mutable",
+                "name": "amount",
+                "nameLocation": "1439:6:0",
+                "nodeType": "VariableDeclaration",
+                "scope": 93,
+                "src": "1431:14:0",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 91,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "1431:7:0",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "DealInvestment",
+            "nameLocation": "1380:14:0",
+            "nodeType": "StructDefinition",
+            "scope": 119,
+            "src": "1373:79:0",
             "visibility": "public"
           },
           {
             "errorSelector": "bba560a1",
-            "id": 90,
+            "id": 97,
             "name": "InvalidInvestorAddress",
-            "nameLocation": "1356:22:0",
+            "nameLocation": "1464:22:0",
             "nodeType": "ErrorDefinition",
             "parameters": {
-              "id": 89,
+              "id": 96,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 88,
+                  "id": 95,
                   "mutability": "mutable",
                   "name": "investor",
-                  "nameLocation": "1387:8:0",
+                  "nameLocation": "1495:8:0",
                   "nodeType": "VariableDeclaration",
-                  "scope": 90,
-                  "src": "1379:16:0",
+                  "scope": 97,
+                  "src": "1487:16:0",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1241,10 +1334,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 87,
+                    "id": 94,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1379:7:0",
+                    "src": "1487:7:0",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1254,29 +1347,29 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1378:18:0"
+              "src": "1486:18:0"
             },
-            "src": "1350:47:0"
+            "src": "1458:47:0"
           },
           {
-            "errorSelector": "4c249fb1",
-            "id": 94,
-            "name": "IvalidDealStatus",
-            "nameLocation": "1408:16:0",
+            "errorSelector": "b7165084",
+            "id": 101,
+            "name": "InvalidDealStatus",
+            "nameLocation": "1516:17:0",
             "nodeType": "ErrorDefinition",
             "parameters": {
-              "id": 93,
+              "id": 100,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 92,
+                  "id": 99,
                   "mutability": "mutable",
                   "name": "dealID",
-                  "nameLocation": "1432:6:0",
+                  "nameLocation": "1541:6:0",
                   "nodeType": "VariableDeclaration",
-                  "scope": 94,
-                  "src": "1425:13:0",
+                  "scope": 101,
+                  "src": "1534:13:0",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1284,10 +1377,10 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 91,
+                    "id": 98,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1425:6:0",
+                    "src": "1534:6:0",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage_ptr",
                       "typeString": "string"
@@ -1296,148 +1389,148 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1424:15:0"
+              "src": "1533:15:0"
             },
-            "src": "1402:38:0"
+            "src": "1510:39:0"
           },
           {
             "canonicalName": "BondData.BondStatus",
-            "id": 99,
-            "members": [
-              {
-                "id": 95,
-                "name": "UNDEFINED",
-                "nameLocation": "1463:9:0",
-                "nodeType": "EnumValue",
-                "src": "1463:9:0"
-              },
-              {
-                "id": 96,
-                "name": "SUBMITTED",
-                "nameLocation": "1474:9:0",
-                "nodeType": "EnumValue",
-                "src": "1474:9:0"
-              },
-              {
-                "id": 97,
-                "name": "ISSUED",
-                "nameLocation": "1485:6:0",
-                "nodeType": "EnumValue",
-                "src": "1485:6:0"
-              },
-              {
-                "id": 98,
-                "name": "REDEEMED",
-                "nameLocation": "1493:8:0",
-                "nodeType": "EnumValue",
-                "src": "1493:8:0"
-              }
-            ],
-            "name": "BondStatus",
-            "nameLocation": "1451:10:0",
-            "nodeType": "EnumDefinition",
-            "src": "1446:56:0"
-          },
-          {
-            "canonicalName": "BondData.DealStatus",
             "id": 106,
             "members": [
               {
-                "id": 100,
-                "name": "UNDEFINED",
-                "nameLocation": "1524:9:0",
-                "nodeType": "EnumValue",
-                "src": "1524:9:0"
-              },
-              {
-                "id": 101,
-                "name": "SUBMITTED",
-                "nameLocation": "1535:9:0",
-                "nodeType": "EnumValue",
-                "src": "1535:9:0"
-              },
-              {
                 "id": 102,
-                "name": "APPROVED",
-                "nameLocation": "1546:8:0",
+                "name": "UNDEFINED",
+                "nameLocation": "1572:9:0",
                 "nodeType": "EnumValue",
-                "src": "1546:8:0"
+                "src": "1572:9:0"
               },
               {
                 "id": 103,
-                "name": "REJECTED",
-                "nameLocation": "1556:8:0",
+                "name": "SUBMITTED",
+                "nameLocation": "1583:9:0",
                 "nodeType": "EnumValue",
-                "src": "1556:8:0"
+                "src": "1583:9:0"
               },
               {
                 "id": 104,
                 "name": "ISSUED",
-                "nameLocation": "1566:6:0",
+                "nameLocation": "1594:6:0",
                 "nodeType": "EnumValue",
-                "src": "1566:6:0"
+                "src": "1594:6:0"
               },
               {
                 "id": 105,
                 "name": "REDEEMED",
-                "nameLocation": "1574:8:0",
+                "nameLocation": "1602:8:0",
                 "nodeType": "EnumValue",
-                "src": "1574:8:0"
+                "src": "1602:8:0"
               }
             ],
-            "name": "DealStatus",
-            "nameLocation": "1512:10:0",
+            "name": "BondStatus",
+            "nameLocation": "1560:10:0",
             "nodeType": "EnumDefinition",
-            "src": "1507:76:0"
+            "src": "1555:56:0"
           },
           {
-            "canonicalName": "BondData.StakeHolderStatus",
-            "id": 111,
+            "canonicalName": "BondData.DealStatus",
+            "id": 113,
             "members": [
               {
                 "id": 107,
                 "name": "UNDEFINED",
-                "nameLocation": "1612:9:0",
+                "nameLocation": "1633:9:0",
                 "nodeType": "EnumValue",
-                "src": "1612:9:0"
+                "src": "1633:9:0"
               },
               {
                 "id": 108,
                 "name": "SUBMITTED",
-                "nameLocation": "1623:9:0",
+                "nameLocation": "1644:9:0",
                 "nodeType": "EnumValue",
-                "src": "1623:9:0"
+                "src": "1644:9:0"
               },
               {
                 "id": 109,
                 "name": "APPROVED",
-                "nameLocation": "1634:8:0",
+                "nameLocation": "1655:8:0",
                 "nodeType": "EnumValue",
-                "src": "1634:8:0"
+                "src": "1655:8:0"
               },
               {
                 "id": 110,
                 "name": "REJECTED",
-                "nameLocation": "1644:8:0",
+                "nameLocation": "1665:8:0",
                 "nodeType": "EnumValue",
-                "src": "1644:8:0"
+                "src": "1665:8:0"
+              },
+              {
+                "id": 111,
+                "name": "ISSUED",
+                "nameLocation": "1675:6:0",
+                "nodeType": "EnumValue",
+                "src": "1675:6:0"
+              },
+              {
+                "id": 112,
+                "name": "REDEEMED",
+                "nameLocation": "1683:8:0",
+                "nodeType": "EnumValue",
+                "src": "1683:8:0"
+              }
+            ],
+            "name": "DealStatus",
+            "nameLocation": "1621:10:0",
+            "nodeType": "EnumDefinition",
+            "src": "1616:76:0"
+          },
+          {
+            "canonicalName": "BondData.StakeHolderStatus",
+            "id": 118,
+            "members": [
+              {
+                "id": 114,
+                "name": "UNDEFINED",
+                "nameLocation": "1721:9:0",
+                "nodeType": "EnumValue",
+                "src": "1721:9:0"
+              },
+              {
+                "id": 115,
+                "name": "SUBMITTED",
+                "nameLocation": "1732:9:0",
+                "nodeType": "EnumValue",
+                "src": "1732:9:0"
+              },
+              {
+                "id": 116,
+                "name": "APPROVED",
+                "nameLocation": "1743:8:0",
+                "nodeType": "EnumValue",
+                "src": "1743:8:0"
+              },
+              {
+                "id": 117,
+                "name": "REJECTED",
+                "nameLocation": "1753:8:0",
+                "nodeType": "EnumValue",
+                "src": "1753:8:0"
               }
             ],
             "name": "StakeHolderStatus",
-            "nameLocation": "1593:17:0",
+            "nameLocation": "1702:17:0",
             "nodeType": "EnumDefinition",
-            "src": "1588:65:0"
+            "src": "1697:65:0"
           }
         ],
-        "scope": 113,
-        "src": "61:1594:0",
+        "scope": 120,
+        "src": "61:1703:0",
         "usedErrors": [
-          90,
-          94
+          97,
+          101
         ]
       }
     ],
-    "src": "36:1619:0"
+    "src": "36:1728:0"
   },
   "compiler": {
     "name": "solc",
@@ -1445,7 +1538,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.9",
-  "updatedAt": "2023-11-04T15:33:56.398Z",
+  "updatedAt": "2023-11-05T00:38:19.130Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},
