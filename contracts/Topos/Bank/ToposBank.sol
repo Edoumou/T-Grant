@@ -6,7 +6,7 @@ import "./ToposBankStorage.sol";
 import "../interfaces/IRoles.sol";
 import "../interfaces/IBonds.sol";
 
-contract ToposBank is IToposBank, ToposBankStorage, IBonds {
+contract ToposBank is IToposBank, ToposBankStorage {
     constructor(
         address _toposManager,
         address _rolesContract,
@@ -202,7 +202,14 @@ contract ToposBank is IToposBank, ToposBankStorage, IBonds {
 
         dealBondContracts[_dealID] = _bondContract;
 
+        deals[_dealID].status != BondData.DealStatus.ISSUED;
+        listOfDeals[deals[_dealID].index].status = BondData.DealStatus.ISSUED;
+
+        IBonds(_bondContract).issue(_bond);
+
         bonds.push(_bond);
+
+        emit BondIssue(_dealID);
     }
 
     function redeem() external onlyToposManager {

@@ -5,8 +5,9 @@ import "./IERC7092.sol";
 import "./BondStorage.sol";
 import "./BondData.sol";
 import "./Topos/interfaces/IBonds.sol";
+import "./Topos/interfaces/IToposBank.sol";
 
-contract BondTopos is IERC7092, BondStorage {
+contract BondTopos is IERC7092, BondStorage, IBonds {
     constructor(
         string memory _dealID,
         address _bondManager,
@@ -32,24 +33,47 @@ contract BondTopos is IERC7092, BondStorage {
     }
 
     function _issue(BondData.Bond calldata _bond) internal virtual {
-        uint256 volume;
-        uint256 _issueVolume = bonds[dealID].issueVolume;
-        BondData.DealInvestment[] memory _dealInvestment = IBonds(toposBankContract).getDealInvestment(dealID);
+        uint256 _issueVolume = _bond.issueVolume;
+        uint256 _totalAmountInvested = IToposBank(toposBankContract).getTotalAmounInvested(dealID);
+        require(_issueVolume ==  _totalAmountInvested, "INVALID_IISUE_VOLUME");
+
+        BondData.DealInvestment[] memory _dealInvestment = IToposBank(toposBankContract).getDealInvestment(dealID);
 
         uint256 _denomination = bonds[dealID].denomination;
+        uint256 volume;
 
         for(uint256 i; i < _dealInvestment.length; i++) {
             address investor = _dealInvestment[i].investor;
-            uint256 _amount = _dealInvestment[i].amount;
+            uint256 principal = _dealInvestment[i].amount;
 
-            volume += _amount;
-            principals[investor] = _amount;
+            require(investor != address(0), "INVALID_INVESTOR_ADDRESS");
+            require(
+                principal != 0 && (principal * _denomination) * _denomination == 0,
+                "INVALID_AMOUNT"
+            );
+
+            volume += principal;
+            principals[investor] = principal;
+            isInvestor[investor] = true;
+ 
+            listOfInvestors.push(
+                BondData.DealInvestment({
+                    investor: investor,
+                    amount: principal
+                })
+            );
         }
 
         bonds[dealID] = _bond;
+        bonds[dealID].issueDate = block.timestamp;
+        bondStatus = BondData.BondStatus.ISSUED;
+
+        uint256 _maturityDate = bonds[dealID].maturityDate;
+        require(_maturityDate > block.timestamp);
+        require(volume == _totalAmountInvested, "INVALID_TOTAL_AMOUNT");
     }
 
-    function redeel() external onlyBondManager {
+    function redeem() external onlyBondManager {
 
     }
  
@@ -157,6 +181,10 @@ contract BondTopos is IERC7092, BondStorage {
         _transfer(_from, _to, _amount, _data);
 
         return true;
+    }
+
+    function getListOfInvestors() external view returns(BondData.DealInvestment[] memory) {
+        return listOfInvestors;
     }
 
     function _approve(

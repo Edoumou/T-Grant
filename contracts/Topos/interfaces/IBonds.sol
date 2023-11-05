@@ -4,11 +4,7 @@ pragma solidity ^0.8.0;
 import "../../BondData.sol";
 
 interface IBonds {
-    function getTotalAmounInvested(
-        string calldata _dealID
-    ) external view returns(uint256);
+    function issue(BondData.Bond calldata _bond) external;
 
-    function getDealInvestment(
-        string calldata _dealID
-    ) external view returns(BondData.DealInvestment[] memory)
+    function redeem() external;
 }

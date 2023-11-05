@@ -68,7 +68,7 @@ abstract contract BondData {
     error InvalidInvestorAddress(address investor);
     error InvalidDealStatus(string dealID);
 
-    enum BondStatus {UNDEFINED, SUBMITTED, ISSUED, REDEEMED}
+    enum BondStatus {ISSUED, REDEEMED}
     enum DealStatus {UNDEFINED, SUBMITTED, APPROVED, REJECTED, ISSUED, REDEEMED}
     enum StakeHolderStatus {UNDEFINED, SUBMITTED, APPROVED, REJECTED}
 }

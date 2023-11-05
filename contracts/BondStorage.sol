@@ -8,6 +8,7 @@ contract BondStorage {
     mapping(string => BondData.IssueData) public issueData;
     mapping(string => BondData.Bond) public bonds;
     mapping(address => uint256) principals;
+    mapping(address => bool) public isInvestor;
     mapping(address => mapping(address => uint256)) approvals;
 
     string public dealID;
@@ -15,6 +16,8 @@ contract BondStorage {
     address public toposBankContract;
 
     BondData.BondStatus public bondStatus;
+
+    BondData.DealInvestment[] listOfInvestors;
 
     modifier onlyBondManager {
         require(msg.sender == bondManager, "ONLY_BOND_MANAGER");

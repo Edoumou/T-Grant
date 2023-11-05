@@ -51,4 +51,6 @@ contract ToposBankStorage {
     event DealAPproved(string dealID);
     event DealARejected(string dealID);
     event RegisterForDeal(string dealID, address investor);
+    event BondIssue(string _dealID);
+    event BondRedeem(string _dealID);
 }
