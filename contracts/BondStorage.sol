@@ -14,6 +14,7 @@ contract BondStorage {
     string public dealID;
     address public bondManager;
     address public toposBankContract;
+    bool public isInitialized;
 
     BondData.BondStatus public bondStatus;
 

@@ -306,14 +306,6 @@ contract ToposBank is IToposBank, ToposBankStorage {
         return dealInvestment[_dealID];
     }
 
-    function setIssuerFundContract(
-        address _issuerFundContract
-    ) external onlyToposManager {
-        require(_issuerFundContract != address(0), "INVALID_CONTRACT_ADDRESS");
-
-        issuersFundContract = _issuerFundContract;
-    }
-
     /**
     * @notice Returns the deal fees in bips
     *         1 bips = 0.01% = 0.0001
@@ -339,5 +331,20 @@ contract ToposBank is IToposBank, ToposBankStorage {
         require(tokenAddress != address(0), "INVALID_TOKEN_ADDRESS");
 
         IIssuersFund(issuersFundContract).withdrawFund(_dealID, issuer, tokenAddress);
+    }
+
+    function setBondContractAddress(
+        string memory _dealID,
+        address _bondContractAddress
+    ) external {
+        dealBondContracts[_dealID] = _bondContractAddress;
+    }
+
+    function setIssuerFundContract(
+        address _issuerFundContract
+    ) external onlyToposManager {
+        require(_issuerFundContract != address(0), "INVALID_CONTRACT_ADDRESS");
+
+        issuersFundContract = _issuerFundContract;
     }
 }

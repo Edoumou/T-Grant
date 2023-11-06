@@ -10,20 +10,34 @@ import "./Topos/interfaces/IToposBank.sol";
 contract BondTopos is IERC7092, BondStorage, IBonds {
     constructor(
         string memory _dealID,
-        address _bondManager,
         address _issuerWalletAddress,
-        string memory _countryOfIssuance,
-        address _bondCallContractAddress,
-        address _toposBankContract,
-        address _identiRegistryContract
+        string memory _countryOfIssuance
     ) {
         dealID = _dealID;
-        bondManager = _bondManager;
+        bondManager = msg.sender;
+
         issueData[_dealID].issuerWalletAddress = _issuerWalletAddress;
         issueData[_dealID].countryOfIssuance = _countryOfIssuance;
+    }
+
+    /**
+    * @notice Store contract addresses
+    * @param _toposBankContract topos Bank contract address
+    * @param _bondCallContractAddress BondCall contract address
+    * @param _identiRegistryContract Identity Registry contract address
+    */
+    function initialize(
+        address _toposBankContract,
+        address _bondCallContractAddress,
+        address _identiRegistryContract
+    ) external onlyBondManager {
+        require(!isInitialized, "ALREADY_INITIALIZED");
+
         toposBankContract = _toposBankContract;
-        issueData[_dealID].bondCallContract = _bondCallContractAddress;
-        issueData[_dealID].identyRegistryContract = _identiRegistryContract;
+        issueData[dealID].bondCallContract = _bondCallContractAddress;
+        issueData[dealID].identyRegistryContract = _identiRegistryContract;
+
+        isInitialized = true;
     }
 
     function issue(
