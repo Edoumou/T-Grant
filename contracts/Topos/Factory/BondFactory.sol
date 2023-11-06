@@ -33,7 +33,7 @@ contract BondFactory {
         string calldata _dealID,
         address _issuerWalletAddress,
         string calldata _countryOfIssuance
-    ) external {
+    ) external onlyToposManager {
         require(!isBondContract[_dealID], "CONTRACT_ALREADY_DEPLOYED");
 
         BondTopos bond = new BondTopos{salt: bytes32(abi.encodePacked(_dealID))}(
