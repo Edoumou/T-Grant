@@ -32,49 +32,8 @@ contract BondTopos is IERC7092, BondStorage, IBonds {
         _issue(_bond);
     }
 
-    function _issue(BondData.Bond calldata _bond) internal virtual {
-        uint256 _issueVolume = _bond.issueVolume;
-        uint256 _totalAmountInvested = IToposBank(toposBankContract).getTotalAmounInvested(dealID);
-        require(_issueVolume ==  _totalAmountInvested, "INVALID_IISUE_VOLUME");
-
-        BondData.DealInvestment[] memory _dealInvestment = IToposBank(toposBankContract).getDealInvestment(dealID);
-
-        uint256 _denomination = bonds[dealID].denomination;
-        uint256 volume;
-
-        for(uint256 i; i < _dealInvestment.length; i++) {
-            address investor = _dealInvestment[i].investor;
-            uint256 principal = _dealInvestment[i].amount;
-
-            require(investor != address(0), "INVALID_INVESTOR_ADDRESS");
-            require(
-                principal != 0 && (principal * _denomination) * _denomination == 0,
-                "INVALID_AMOUNT"
-            );
-
-            volume += principal;
-            principals[investor] = principal;
-            isInvestor[investor] = true;
- 
-            listOfInvestors.push(
-                BondData.DealInvestment({
-                    investor: investor,
-                    amount: principal
-                })
-            );
-        }
-
-        bonds[dealID] = _bond;
-        bonds[dealID].issueDate = block.timestamp;
-        bondStatus = BondData.BondStatus.ISSUED;
-
-        uint256 _maturityDate = bonds[dealID].maturityDate;
-        require(_maturityDate > block.timestamp);
-        require(volume == _totalAmountInvested, "INVALID_TOTAL_AMOUNT");
-    }
-
     function redeem() external onlyToposBankContract {
-
+        _redeem();
     }
  
     function isin() external view returns(string memory) {
@@ -185,6 +144,69 @@ contract BondTopos is IERC7092, BondStorage, IBonds {
 
     function getListOfInvestors() external view returns(BondData.DealInvestment[] memory) {
         return listOfInvestors;
+    }
+
+    function _issue(BondData.Bond calldata _bond) internal virtual {
+        uint256 _issueVolume = _bond.issueVolume;
+        uint256 _totalAmountInvested = IToposBank(toposBankContract).getTotalAmounInvested(dealID);
+        require(_issueVolume ==  _totalAmountInvested, "INVALID_IISUE_VOLUME");
+
+        BondData.DealInvestment[] memory _dealInvestment = IToposBank(toposBankContract).getDealInvestment(dealID);
+
+        uint256 _denomination = bonds[dealID].denomination;
+        uint256 volume;
+
+        for(uint256 i; i < _dealInvestment.length; i++) {
+            address investor = _dealInvestment[i].investor;
+            uint256 principal = _dealInvestment[i].amount;
+
+            require(investor != address(0), "INVALID_INVESTOR_ADDRESS");
+            require(
+                principal != 0 && (principal * _denomination) * _denomination == 0,
+                "INVALID_AMOUNT"
+            );
+
+            volume += principal;
+            principals[investor] = principal;
+            isInvestor[investor] = true;
+ 
+            listOfInvestors.push(
+                BondData.DealInvestment({
+                    investor: investor,
+                    amount: principal
+                })
+            );
+        }
+
+        bonds[dealID] = _bond;
+        bonds[dealID].issueDate = block.timestamp;
+        bondStatus = BondData.BondStatus.ISSUED;
+
+        uint256 _maturityDate = bonds[dealID].maturityDate;
+        require(_maturityDate > block.timestamp);
+        require(volume == _totalAmountInvested, "INVALID_TOTAL_AMOUNT");
+    }
+
+    function _redeem() internal virtual {
+        require(
+            bondStatus == BondData.BondStatus.ISSUED,
+            "BONDS_NOT_ISSUED"
+        );
+        require(
+            block.timestamp > bonds[dealID].maturityDate,
+            "WAIT_TILL_MATURITY"
+        );
+
+        bondStatus = BondData.BondStatus.REDEEMED;
+
+        BondData.DealInvestment[] memory _dealInvestment = IToposBank(toposBankContract).getDealInvestment(dealID);
+
+        for(uint256 i; i < _dealInvestment.length; i++) {
+            if(principals[_dealInvestment[i].investor] != 0) {
+                principals[_dealInvestment[i].investor] = 0;
+                listOfInvestors[i].amount = 0;
+            }
+        }
     }
 
     function _approve(

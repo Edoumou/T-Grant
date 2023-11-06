@@ -204,17 +204,29 @@ contract ToposBank is IToposBank, ToposBankStorage {
 
         deals[_dealID].status != BondData.DealStatus.ISSUED;
         listOfDeals[deals[_dealID].index].status = BondData.DealStatus.ISSUED;
+        issuerDeals[deals[_dealID].issuerAddress].push(deals[_dealID]);
 
         IBonds(_bondContract).issue(_bond);
 
         bonds.push(_bond);
-        issuerDeals[deals[_dealID].issuerAddress].push(deals[_dealID]);
 
         emit BondIssue(_dealID);
     }
 
-    function redeem() external onlyToposManager {
+    function redeem(
+        string calldata _dealID,
+        address _bondContract
+    ) external onlyToposManager {
+        if(deals[_dealID].status != BondData.DealStatus.ISSUED)
+            revert BondData.InvalidDealStatus(_dealID);
 
+        deals[_dealID].status != BondData.DealStatus.REDEEMED;
+        listOfDeals[deals[_dealID].index].status = BondData.DealStatus.REDEEMED;
+        issuerDeals[deals[_dealID].issuerAddress][deals[_dealID].index].status = BondData.DealStatus.REDEEMED;
+
+        IBonds(_bondContract).redeem();
+
+        emit BondRedeem(_dealID);
     }
 
     function getTotalAmounInvested(

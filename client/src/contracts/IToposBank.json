@@ -1,7 +1,58 @@
 {
   "contractName": "IToposBank",
-  "abi": [],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.19+commit.7dd6d404\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/Topos/interfaces/IToposBank.sol\":\"IToposBank\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/Topos/interfaces/IToposBank.sol\":{\"keccak256\":\"0x3023d8c0a7ce96617ba26e4f436d2e2e6ca76bb1a44b54c38ddfb692acbac46e\",\"license\":\"CC0-1.0\",\"urls\":[\"bzz-raw://7c4fc485c635a290ec07abee4e488dbd5b3f53fe4faad262afcb17e49525e845\",\"dweb:/ipfs/QmWVBzVsMjBktj9aLd43unaAoKWRmkUWuJZPfFeoHohvTb\"]}},\"version\":1}",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_dealID",
+          "type": "string"
+        }
+      ],
+      "name": "getTotalAmounInvested",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_dealID",
+          "type": "string"
+        }
+      ],
+      "name": "getDealInvestment",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "investor",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct BondData.DealInvestment[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.19+commit.7dd6d404\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_dealID\",\"type\":\"string\"}],\"name\":\"getDealInvestment\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"investor\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"internalType\":\"struct BondData.DealInvestment[]\",\"name\":\"\",\"type\":\"tuple[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_dealID\",\"type\":\"string\"}],\"name\":\"getTotalAmounInvested\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/Topos/interfaces/IToposBank.sol\":\"IToposBank\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/BondData.sol\":{\"keccak256\":\"0x6915fe3c22561845e3e0bd1816eb18da4391ed90f8a9e1eaea4f52b2ab797e14\",\"license\":\"CC0-1.0\",\"urls\":[\"bzz-raw://c7657fc1c5a3834b8092daef8c0ea9804dc3303c9cd75a21c6fdf03e7002f59e\",\"dweb:/ipfs/QmTnwDQCmAcVgbyHKb7GxsAPxnM5ujUyAHYH4FCWkczmuX\"]},\"project:/contracts/Topos/interfaces/IBonds.sol\":{\"keccak256\":\"0x7bcd000f6e91f579b52b160ea503015508ea0661481b611822cfb660793d50e3\",\"license\":\"CC0-1.0\",\"urls\":[\"bzz-raw://90f0096ea84d2cb0e99905ffa83419e1be78c08576e2fb152bf2c5c1b3bab002\",\"dweb:/ipfs/QmamNtzmSLDyYgoCMJEQH3m268NaUqzsx2RonfNB2Vpshc\"]},\"project:/contracts/Topos/interfaces/IToposBank.sol\":{\"keccak256\":\"0x12e5bfadcac84e37e14ce92da56dc49cd07f01ec80102dc437ea9f1cf5f88e9a\",\"license\":\"CC0-1.0\",\"urls\":[\"bzz-raw://d1e31d575380ddadfe9852061640d4ca9844bdd80cd16dd260df52f5dc4ca8e7\",\"dweb:/ipfs/QmWiugY1gqgDTpNncy8SekoBVfUFdDG4CJFHQQPriHqKLS\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "immutableReferences": {},
@@ -9,21 +60,27 @@
   "deployedGeneratedSources": [],
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "// SPDX-License-Identifier: CC0-1.0\npragma solidity ^0.8.0;\n\ninterface IToposBank {\n    \n}",
+  "source": "// SPDX-License-Identifier: CC0-1.0\npragma solidity ^0.8.0;\n\nimport \"./IBonds.sol\";\n\ninterface IToposBank {\n    function getTotalAmounInvested(\n        string calldata _dealID\n    ) external view returns(uint256);\n\n    function getDealInvestment(\n        string calldata _dealID\n    ) external view returns(BondData.DealInvestment[] memory);\n}",
   "sourcePath": "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/contracts/Topos/interfaces/IToposBank.sol",
   "ast": {
     "absolutePath": "project:/contracts/Topos/interfaces/IToposBank.sol",
     "exportedSymbols": {
+      "BondData": [
+        117
+      ],
+      "IBonds": [
+        2243
+      ],
       "IToposBank": [
-        1847
+        2294
       ]
     },
-    "id": 1848,
+    "id": 2295,
     "license": "CC0-1.0",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1846,
+        "id": 2276,
         "literals": [
           "solidity",
           "^",
@@ -31,7 +88,19 @@
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "36:23:12"
+        "src": "36:23:10"
+      },
+      {
+        "absolutePath": "project:/contracts/Topos/interfaces/IBonds.sol",
+        "file": "./IBonds.sol",
+        "id": 2277,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 2295,
+        "sourceUnit": 2244,
+        "src": "61:22:10",
+        "symbolAliases": [],
+        "unitAlias": ""
       },
       {
         "abstract": false,
@@ -39,21 +108,208 @@
         "canonicalName": "IToposBank",
         "contractDependencies": [],
         "contractKind": "interface",
-        "fullyImplemented": true,
-        "id": 1847,
+        "fullyImplemented": false,
+        "id": 2294,
         "linearizedBaseContracts": [
-          1847
+          2294
         ],
         "name": "IToposBank",
-        "nameLocation": "71:10:12",
+        "nameLocation": "95:10:10",
         "nodeType": "ContractDefinition",
-        "nodes": [],
-        "scope": 1848,
-        "src": "61:29:12",
+        "nodes": [
+          {
+            "functionSelector": "605936ea",
+            "id": 2284,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getTotalAmounInvested",
+            "nameLocation": "121:21:10",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2280,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2279,
+                  "mutability": "mutable",
+                  "name": "_dealID",
+                  "nameLocation": "168:7:10",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2284,
+                  "src": "152:23:10",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_calldata_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 2278,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "152:6:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "142:39:10"
+            },
+            "returnParameters": {
+              "id": 2283,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2282,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2284,
+                  "src": "204:7:10",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2281,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "204:7:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "203:9:10"
+            },
+            "scope": 2294,
+            "src": "112:101:10",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "c8d7f62e",
+            "id": 2293,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getDealInvestment",
+            "nameLocation": "228:17:10",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2287,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2286,
+                  "mutability": "mutable",
+                  "name": "_dealID",
+                  "nameLocation": "271:7:10",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2293,
+                  "src": "255:23:10",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_calldata_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 2285,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "255:6:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "245:39:10"
+            },
+            "returnParameters": {
+              "id": 2292,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2291,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2293,
+                  "src": "307:32:10",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_struct$_DealInvestment_$93_memory_ptr_$dyn_memory_ptr",
+                    "typeString": "struct BondData.DealInvestment[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 2289,
+                      "nodeType": "UserDefinedTypeName",
+                      "pathNode": {
+                        "id": 2288,
+                        "name": "BondData.DealInvestment",
+                        "nameLocations": [
+                          "307:8:10",
+                          "316:14:10"
+                        ],
+                        "nodeType": "IdentifierPath",
+                        "referencedDeclaration": 93,
+                        "src": "307:23:10"
+                      },
+                      "referencedDeclaration": 93,
+                      "src": "307:23:10",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_DealInvestment_$93_storage_ptr",
+                        "typeString": "struct BondData.DealInvestment"
+                      }
+                    },
+                    "id": 2290,
+                    "nodeType": "ArrayTypeName",
+                    "src": "307:25:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_struct$_DealInvestment_$93_storage_$dyn_storage_ptr",
+                      "typeString": "struct BondData.DealInvestment[]"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "306:34:10"
+            },
+            "scope": 2294,
+            "src": "219:122:10",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 2295,
+        "src": "85:258:10",
         "usedErrors": []
       }
     ],
-    "src": "36:54:12"
+    "src": "36:307:10"
   },
   "compiler": {
     "name": "solc",
@@ -61,7 +317,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.9",
-  "updatedAt": "2023-11-04T15:33:56.421Z",
+  "updatedAt": "2023-11-05T20:48:21.727Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},
