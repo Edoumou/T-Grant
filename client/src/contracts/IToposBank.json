@@ -50,9 +50,22 @@
       ],
       "stateMutability": "view",
       "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getDealFees",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.19+commit.7dd6d404\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_dealID\",\"type\":\"string\"}],\"name\":\"getDealInvestment\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"investor\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"internalType\":\"struct BondData.DealInvestment[]\",\"name\":\"\",\"type\":\"tuple[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_dealID\",\"type\":\"string\"}],\"name\":\"getTotalAmounInvested\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/Topos/interfaces/IToposBank.sol\":\"IToposBank\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/BondData.sol\":{\"keccak256\":\"0x6915fe3c22561845e3e0bd1816eb18da4391ed90f8a9e1eaea4f52b2ab797e14\",\"license\":\"CC0-1.0\",\"urls\":[\"bzz-raw://c7657fc1c5a3834b8092daef8c0ea9804dc3303c9cd75a21c6fdf03e7002f59e\",\"dweb:/ipfs/QmTnwDQCmAcVgbyHKb7GxsAPxnM5ujUyAHYH4FCWkczmuX\"]},\"project:/contracts/Topos/interfaces/IBonds.sol\":{\"keccak256\":\"0x7bcd000f6e91f579b52b160ea503015508ea0661481b611822cfb660793d50e3\",\"license\":\"CC0-1.0\",\"urls\":[\"bzz-raw://90f0096ea84d2cb0e99905ffa83419e1be78c08576e2fb152bf2c5c1b3bab002\",\"dweb:/ipfs/QmamNtzmSLDyYgoCMJEQH3m268NaUqzsx2RonfNB2Vpshc\"]},\"project:/contracts/Topos/interfaces/IToposBank.sol\":{\"keccak256\":\"0x12e5bfadcac84e37e14ce92da56dc49cd07f01ec80102dc437ea9f1cf5f88e9a\",\"license\":\"CC0-1.0\",\"urls\":[\"bzz-raw://d1e31d575380ddadfe9852061640d4ca9844bdd80cd16dd260df52f5dc4ca8e7\",\"dweb:/ipfs/QmWiugY1gqgDTpNncy8SekoBVfUFdDG4CJFHQQPriHqKLS\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.19+commit.7dd6d404\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"getDealFees\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_dealID\",\"type\":\"string\"}],\"name\":\"getDealInvestment\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"investor\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"internalType\":\"struct BondData.DealInvestment[]\",\"name\":\"\",\"type\":\"tuple[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_dealID\",\"type\":\"string\"}],\"name\":\"getTotalAmounInvested\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/Topos/interfaces/IToposBank.sol\":\"IToposBank\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/BondData.sol\":{\"keccak256\":\"0x6915fe3c22561845e3e0bd1816eb18da4391ed90f8a9e1eaea4f52b2ab797e14\",\"license\":\"CC0-1.0\",\"urls\":[\"bzz-raw://c7657fc1c5a3834b8092daef8c0ea9804dc3303c9cd75a21c6fdf03e7002f59e\",\"dweb:/ipfs/QmTnwDQCmAcVgbyHKb7GxsAPxnM5ujUyAHYH4FCWkczmuX\"]},\"project:/contracts/Topos/interfaces/IBonds.sol\":{\"keccak256\":\"0x7bcd000f6e91f579b52b160ea503015508ea0661481b611822cfb660793d50e3\",\"license\":\"CC0-1.0\",\"urls\":[\"bzz-raw://90f0096ea84d2cb0e99905ffa83419e1be78c08576e2fb152bf2c5c1b3bab002\",\"dweb:/ipfs/QmamNtzmSLDyYgoCMJEQH3m268NaUqzsx2RonfNB2Vpshc\"]},\"project:/contracts/Topos/interfaces/IToposBank.sol\":{\"keccak256\":\"0x48492a7b216bfa2ed3e8afd61be845adbed8c8617d21c0914025d6bb1b040007\",\"license\":\"CC0-1.0\",\"urls\":[\"bzz-raw://2bb414fa34c06b9714403140ebd414154e3ed2053a28b64779c73ccd710f3836\",\"dweb:/ipfs/QmSTgDKiALtMX8mzUMXyCg8W3nVQyGpaxczVnmhS9nHVKk\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "immutableReferences": {},
@@ -60,7 +73,7 @@
   "deployedGeneratedSources": [],
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "// SPDX-License-Identifier: CC0-1.0\npragma solidity ^0.8.0;\n\nimport \"./IBonds.sol\";\n\ninterface IToposBank {\n    function getTotalAmounInvested(\n        string calldata _dealID\n    ) external view returns(uint256);\n\n    function getDealInvestment(\n        string calldata _dealID\n    ) external view returns(BondData.DealInvestment[] memory);\n}",
+  "source": "// SPDX-License-Identifier: CC0-1.0\npragma solidity ^0.8.0;\n\nimport \"./IBonds.sol\";\n\ninterface IToposBank {\n    function getTotalAmounInvested(\n        string calldata _dealID\n    ) external view returns(uint256);\n\n    function getDealInvestment(\n        string calldata _dealID\n    ) external view returns(BondData.DealInvestment[] memory);\n\n    function getDealFees() external view returns(uint256);\n}",
   "sourcePath": "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/contracts/Topos/interfaces/IToposBank.sol",
   "ast": {
     "absolutePath": "project:/contracts/Topos/interfaces/IToposBank.sol",
@@ -69,18 +82,18 @@
         117
       ],
       "IBonds": [
-        2243
+        2472
       ],
       "IToposBank": [
-        2294
+        2528
       ]
     },
-    "id": 2295,
+    "id": 2529,
     "license": "CC0-1.0",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 2276,
+        "id": 2505,
         "literals": [
           "solidity",
           "^",
@@ -93,11 +106,11 @@
       {
         "absolutePath": "project:/contracts/Topos/interfaces/IBonds.sol",
         "file": "./IBonds.sol",
-        "id": 2277,
+        "id": 2506,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 2295,
-        "sourceUnit": 2244,
+        "scope": 2529,
+        "sourceUnit": 2473,
         "src": "61:22:10",
         "symbolAliases": [],
         "unitAlias": ""
@@ -109,9 +122,9 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "fullyImplemented": false,
-        "id": 2294,
+        "id": 2528,
         "linearizedBaseContracts": [
-          2294
+          2528
         ],
         "name": "IToposBank",
         "nameLocation": "95:10:10",
@@ -119,7 +132,7 @@
         "nodes": [
           {
             "functionSelector": "605936ea",
-            "id": 2284,
+            "id": 2513,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
@@ -127,17 +140,17 @@
             "nameLocation": "121:21:10",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2280,
+              "id": 2509,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2279,
+                  "id": 2508,
                   "mutability": "mutable",
                   "name": "_dealID",
                   "nameLocation": "168:7:10",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2284,
+                  "scope": 2513,
                   "src": "152:23:10",
                   "stateVariable": false,
                   "storageLocation": "calldata",
@@ -146,7 +159,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 2278,
+                    "id": 2507,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "152:6:10",
@@ -161,17 +174,17 @@
               "src": "142:39:10"
             },
             "returnParameters": {
-              "id": 2283,
+              "id": 2512,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2282,
+                  "id": 2511,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2284,
+                  "scope": 2513,
                   "src": "204:7:10",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -180,7 +193,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 2281,
+                    "id": 2510,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "204:7:10",
@@ -194,7 +207,7 @@
               ],
               "src": "203:9:10"
             },
-            "scope": 2294,
+            "scope": 2528,
             "src": "112:101:10",
             "stateMutability": "view",
             "virtual": false,
@@ -202,7 +215,7 @@
           },
           {
             "functionSelector": "c8d7f62e",
-            "id": 2293,
+            "id": 2522,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
@@ -210,17 +223,17 @@
             "nameLocation": "228:17:10",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2287,
+              "id": 2516,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2286,
+                  "id": 2515,
                   "mutability": "mutable",
                   "name": "_dealID",
                   "nameLocation": "271:7:10",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2293,
+                  "scope": 2522,
                   "src": "255:23:10",
                   "stateVariable": false,
                   "storageLocation": "calldata",
@@ -229,7 +242,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 2285,
+                    "id": 2514,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "255:6:10",
@@ -244,17 +257,17 @@
               "src": "245:39:10"
             },
             "returnParameters": {
-              "id": 2292,
+              "id": 2521,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2291,
+                  "id": 2520,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2293,
+                  "scope": 2522,
                   "src": "307:32:10",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -264,10 +277,10 @@
                   },
                   "typeName": {
                     "baseType": {
-                      "id": 2289,
+                      "id": 2518,
                       "nodeType": "UserDefinedTypeName",
                       "pathNode": {
-                        "id": 2288,
+                        "id": 2517,
                         "name": "BondData.DealInvestment",
                         "nameLocations": [
                           "307:8:10",
@@ -284,7 +297,7 @@
                         "typeString": "struct BondData.DealInvestment"
                       }
                     },
-                    "id": 2290,
+                    "id": 2519,
                     "nodeType": "ArrayTypeName",
                     "src": "307:25:10",
                     "typeDescriptions": {
@@ -297,19 +310,74 @@
               ],
               "src": "306:34:10"
             },
-            "scope": 2294,
+            "scope": 2528,
             "src": "219:122:10",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "ff6689d0",
+            "id": 2527,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getDealFees",
+            "nameLocation": "356:11:10",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2523,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "367:2:10"
+            },
+            "returnParameters": {
+              "id": 2526,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2525,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2527,
+                  "src": "392:7:10",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2524,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "392:7:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "391:9:10"
+            },
+            "scope": 2528,
+            "src": "347:54:10",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 2295,
-        "src": "85:258:10",
+        "scope": 2529,
+        "src": "85:318:10",
         "usedErrors": []
       }
     ],
-    "src": "36:307:10"
+    "src": "36:367:10"
   },
   "compiler": {
     "name": "solc",
@@ -317,7 +385,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.9",
-  "updatedAt": "2023-11-05T20:48:21.727Z",
+  "updatedAt": "2023-11-06T13:25:03.019Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

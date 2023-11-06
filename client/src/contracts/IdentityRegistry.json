@@ -5896,12 +5896,12 @@
     "1699270482660": {
       "events": {},
       "links": {},
-      "address": "0xa4544B2D9809f1fa425B803eAc25967628fd9742",
-      "transactionHash": "0x6b43e6b7e07a3f619a5abf4edd723babd025d4f32f549ab080bcf1e88bee2194"
+      "address": "0xb25a21600E92ca55C90984dD26dad573ef60950d",
+      "transactionHash": "0xf3243ac3227058e46248b75d7a1cbabec59dc054aaefb3fa38e0126836953056"
     }
   },
   "schemaVersion": "3.4.9",
-  "updatedAt": "2023-11-06T12:35:21.400Z",
+  "updatedAt": "2023-11-06T13:25:03.196Z",
   "networkType": "ethereum",
   "devdoc": {
     "author": "@Edoumou",

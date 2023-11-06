@@ -322,4 +322,22 @@ contract ToposBank is IToposBank, ToposBankStorage {
     function getDealFees() external view returns(uint256) {
         return dealFees;
     }
+
+    /**
+    * @notice Transfer deal funds to issuer. Can be called either by the issuer or by the Topos manager
+    * @param _dealID deal ID
+    */
+    function withdrawIssuerFund(
+        string memory _dealID
+    ) external {
+        address issuer = deals[_dealID].issuerAddress;
+        address tokenAddress = deals[_dealID].currency;
+
+        require(
+            msg.sender == issuer || msg.sender == toposManager, "NOT_ISSUER_NOR_TOPOS_MANAGER"
+        );
+        require(tokenAddress != address(0), "INVALID_TOKEN_ADDRESS");
+
+        IIssuersFund(issuersFundContract).withdrawFund(_dealID, issuer, tokenAddress);
+    }
 }
