@@ -11,4 +11,6 @@ interface IToposBank {
     function getDealInvestment(
         string calldata _dealID
     ) external view returns(BondData.DealInvestment[] memory);
+
+    function getDealFees() external view returns(uint256);
 }

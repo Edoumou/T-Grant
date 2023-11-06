@@ -12,14 +12,20 @@ contract ToposBank is IToposBank, ToposBankStorage {
     constructor(
         address _toposManager,
         address _rolesContract,
-        address _identityRegistryContract
+        address _identityRegistryContract,
+        uint256 _dealFees
     ) {
         toposManager = _toposManager;
         rolesContract = _rolesContract;
         IRoles(_rolesContract).setRole("MANAGER", _toposManager);
         identityRegistryContract = _identityRegistryContract;
+        dealFees = _dealFees;
     }
 
+    /**
+    * @notice Sends an registration request to become an issuer.
+    * @param _issuer Issuer struct. See BondData.sol
+    */
     function requestRegistrationIssuer(
         BondData.Issuer calldata _issuer
     ) external mustBeApproved(_issuer.walletAddress) {
@@ -35,6 +41,10 @@ contract ToposBank is IToposBank, ToposBankStorage {
         emit RequestIssuerRegistration(_issuer.walletAddress);
     }
 
+    /**
+    * @notice Sends an registration request to become an investor.
+    * @param _investor Investor struct. See BondData.sol
+    */
     function requestRegistrationInvestor(
         BondData.Investor calldata _investor
     ) external mustBeApproved(_investor.walletAddress) {
@@ -50,6 +60,10 @@ contract ToposBank is IToposBank, ToposBankStorage {
         emit RequestInvestorRegistration(_investor.walletAddress);
     }
 
+    /**
+    * @notice Approves an issuer registration request. Can be called only by Topos manager
+    * @param _issuer issuer's account address
+    */
     function approveIssuer(address _issuer) external onlyToposManager {
         require(
             issuerStatus[_issuer] == BondData.StakeHolderStatus.SUBMITTED,
@@ -62,6 +76,10 @@ contract ToposBank is IToposBank, ToposBankStorage {
         emit ApproveIssuer(_issuer);
     }
 
+    /**
+    * @notice Approves an investor registration request. Can be called only by Topos manager
+    * @param _investor investor's account address
+    */
     function approveInvestor(address _investor) external onlyToposManager {
         require(
             investorStatus[_investor] == BondData.StakeHolderStatus.SUBMITTED,
@@ -74,6 +92,10 @@ contract ToposBank is IToposBank, ToposBankStorage {
         emit ApproveInvestor(_investor);
     }
 
+    /**
+    * @notice Rejects an issuer registration request. Can be called only by Topos manager
+    * @param _issuer issuer's account address
+    */
     function rejectIssuer(address _issuer) external onlyToposManager {
         require(
             issuerStatus[_issuer] == BondData.StakeHolderStatus.SUBMITTED,
@@ -85,6 +107,10 @@ contract ToposBank is IToposBank, ToposBankStorage {
         emit RejectIssuer(_issuer);
     }
 
+    /**
+    * @notice Rejects an investor registration request. Can be called only by Topos manager
+    * @param _investor investor's account address
+    */
     function rejectInvestor(address _investor) external onlyToposManager {
         require(
             investorStatus[_investor] == BondData.StakeHolderStatus.SUBMITTED,
@@ -96,6 +122,11 @@ contract ToposBank is IToposBank, ToposBankStorage {
         emit RejectInvestor(_investor);
     }
 
+    /**
+    * @notice Submits a deal. Can be called only by registered issuers
+    * @param _dealID the deal ID
+    * @param _deal deal struct containing deal information - see BondData.sol
+    */
     function submitDeal(
         string calldata _dealID,
         BondData.Deal calldata _deal
@@ -122,6 +153,10 @@ contract ToposBank is IToposBank, ToposBankStorage {
         emit DealSubmitted(_dealID, _deal);
     }
 
+    /**
+    * @notice Approves a deal. Can be called only by Topos Manager
+    * @param _dealID the deal ID
+    */
     function approveDeal(
         string calldata _dealID
     ) external onlyToposManager {
@@ -136,6 +171,10 @@ contract ToposBank is IToposBank, ToposBankStorage {
         emit DealAPproved(_dealID);
     }
 
+    /**
+    * @notice Rejects a deal. Can be called only by Topos Manager
+    * @param _dealID the deal ID
+    */
     function rejectDeal(
         string calldata _dealID
     ) external onlyToposManager {
@@ -150,6 +189,12 @@ contract ToposBank is IToposBank, ToposBankStorage {
         emit DealARejected(_dealID);
     }
 
+    /**
+    * @notice Investors call this function to register for a Deal
+    *         Investors must submit the amount the want to invest
+    * @param _dealID the deal ID
+    * @param _amount Amount to invest - in bond currency unit
+    */
     function registerForDeal(
         string calldata _dealID,
         uint256 _amount
@@ -192,10 +237,21 @@ contract ToposBank is IToposBank, ToposBankStorage {
         }
 
         IIssuersFund(issuersFundContract).addFund(_dealID, _amount);
+        IERC20(
+            deals[_dealID].currency
+        ).transferFrom(
+            msg.sender, issuersFundContract, _amount * 1 ether
+        );
 
         emit RegisterForDeal(_dealID, msg.sender);
     }
 
+    /**
+    * @notice Issues bonds to investors. Can be called only by Topos Manager
+    * @param _dealID the deal ID
+    * @param _bond bond struct containing bond information - see BondData.sol
+    * @param _bondContract the ERC-7092 bond contract address
+    */
     function issue(
         string calldata _dealID,
         BondData.Bond calldata _bond,
@@ -217,6 +273,11 @@ contract ToposBank is IToposBank, ToposBankStorage {
         emit BondIssue(_dealID);
     }
 
+    /**
+    * @notice Redeem bonds. Can be called only by Topos Manager
+    * @param _dealID the deal ID
+    * @param _bondContract the ERC-7092 bond contract address
+    */
     function redeem(
         string calldata _dealID,
         address _bondContract
@@ -251,5 +312,14 @@ contract ToposBank is IToposBank, ToposBankStorage {
         require(_issuerFundContract != address(0), "INVALID_CONTRACT_ADDRESS");
 
         issuersFundContract = _issuerFundContract;
+    }
+
+    /**
+    * @notice Returns the deal fees in bips
+    *         1 bips = 0.01% = 0.0001
+    *         ex: if interest rate = 5%, then `dealFees = 500`
+    */
+    function getDealFees() external view returns(uint256) {
+        return dealFees;
     }
 }

@@ -22,6 +22,8 @@ contract ToposBankStorage {
     address public identityRegistryContract;
     address public issuersFundContract;
 
+    uint256 public dealFees;
+
     BondData.Bond[] bonds;
     BondData.Deal[] listOfDeals;
 
