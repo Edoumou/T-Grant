@@ -20,6 +20,7 @@ contract ToposBankStorage {
     address public toposManager;
     address public rolesContract;
     address public identityRegistryContract;
+    address public issuersFundContract;
 
     BondData.Bond[] bonds;
     BondData.Deal[] listOfDeals;

@@ -5,6 +5,8 @@ import "../interfaces/IToposBank.sol";
 import "./ToposBankStorage.sol";
 import "../interfaces/IRoles.sol";
 import "../interfaces/IBonds.sol";
+import "../../tests/tokens/IERC20.sol";
+import "../../treasury/IIssuersFund.sol";
 
 contract ToposBank is IToposBank, ToposBankStorage {
     constructor(
@@ -189,6 +191,8 @@ contract ToposBank is IToposBank, ToposBankStorage {
             );       
         }
 
+        IIssuersFund(issuersFundContract).addFund(_dealID, _amount);
+
         emit RegisterForDeal(_dealID, msg.sender);
     }
 
@@ -239,5 +243,13 @@ contract ToposBank is IToposBank, ToposBankStorage {
         string calldata _dealID
     ) external view returns(BondData.DealInvestment[] memory) {
         return dealInvestment[_dealID];
+    }
+
+    function setIssuerFundContract(
+        address _issuerFundContract
+    ) external onlyToposManager {
+        require(_issuerFundContract != address(0), "INVALID_CONTRACT_ADDRESS");
+
+        issuersFundContract = _issuerFundContract;
     }
 }
