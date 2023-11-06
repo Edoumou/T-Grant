@@ -5890,12 +5890,12 @@
     "2359": {
       "events": {},
       "links": {},
-      "address": "0xe15608A7DaaC632884103A8553669100A3045b77",
-      "transactionHash": "0xe907ceb82797cd7c3cf3971b6d7d09d40c974324af5a45459df330351db075fa"
+      "address": "0x9A1a2fc95A5b8079B9148D33D39A76104892eb82",
+      "transactionHash": "0x7ca7fa86a94aaa6836955d6b2f464e723927439be83f9503a643d70a6a137031"
     }
   },
   "schemaVersion": "3.4.9",
-  "updatedAt": "2023-11-05T20:48:30.470Z",
+  "updatedAt": "2023-11-06T00:16:42.964Z",
   "networkType": "ethereum",
   "devdoc": {
     "author": "@Edoumou",
