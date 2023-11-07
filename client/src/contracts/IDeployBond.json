@@ -1,0 +1,178 @@
+{
+  "contractName": "IDeployBond",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_dealID",
+          "type": "string"
+        },
+        {
+          "internalType": "address",
+          "name": "_ercAddress",
+          "type": "address"
+        }
+      ],
+      "name": "setBondContractAddress",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.19+commit.7dd6d404\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_dealID\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"_ercAddress\",\"type\":\"address\"}],\"name\":\"setBondContractAddress\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/Topos/interfaces/IDeployBond.sol\":\"IDeployBond\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/Topos/interfaces/IDeployBond.sol\":{\"keccak256\":\"0xb7e89054347fe56d1feead460c023f22ac529f6a6508bb7ea70c136281f9d1b5\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6f0a70987e1070993934faa9511ff2f5a8d6d8ce320fb539b5d3e66147db990b\",\"dweb:/ipfs/QmRL67NrF27NLijkeMrg2GQJZctuqtM4mBt9bmjCqcsCg5\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.18;\n\ninterface IDeployBond {\n    function setBondContractAddress(string memory _dealID, address _ercAddress) external;\n}",
+  "sourcePath": "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/contracts/Topos/interfaces/IDeployBond.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/Topos/interfaces/IDeployBond.sol",
+    "exportedSymbols": {
+      "IDeployBond": [
+        2672
+      ]
+    },
+    "id": 2673,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2664,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".18"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "32:24:10"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "IDeployBond",
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "fullyImplemented": false,
+        "id": 2672,
+        "linearizedBaseContracts": [
+          2672
+        ],
+        "name": "IDeployBond",
+        "nameLocation": "68:11:10",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "functionSelector": "1882c195",
+            "id": 2671,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "setBondContractAddress",
+            "nameLocation": "95:22:10",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2669,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2666,
+                  "mutability": "mutable",
+                  "name": "_dealID",
+                  "nameLocation": "132:7:10",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2671,
+                  "src": "118:21:10",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 2665,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "118:6:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2668,
+                  "mutability": "mutable",
+                  "name": "_ercAddress",
+                  "nameLocation": "149:11:10",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2671,
+                  "src": "141:19:10",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2667,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "141:7:10",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "117:44:10"
+            },
+            "returnParameters": {
+              "id": 2670,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "170:0:10"
+            },
+            "scope": 2672,
+            "src": "86:85:10",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 2673,
+        "src": "58:115:10",
+        "usedErrors": []
+      }
+    ],
+    "src": "32:141:10"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.19+commit.7dd6d404.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.9",
+  "updatedAt": "2023-11-06T14:56:26.082Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}

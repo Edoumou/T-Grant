@@ -1,43 +1,44 @@
 // SPDX-License-Identifier: CC0-1.0
 pragma solidity ^0.8.0;
 
-import "./utils/IData.sol";
+import "./BondData.sol";
+import "./Registry/IIdentityRegistry.sol";
 
-contract BondStorage is IData {
-    mapping(string => Bond) internal _bonds;
-    mapping(string => Issuer) internal issuer;
-    mapping(address => uint256) internal _principals;
-    mapping(address => uint256) internal _principalsLocked;
-    mapping(address => mapping(address => uint256)) internal _approvals;
-    mapping(address => bool) public isRegistered;
-    mapping(address => uint8) public stakeholderType;
+contract BondStorage {
+    mapping(string => BondData.IssueData) public issueData;
+    mapping(string => BondData.Bond) public bonds;
+    mapping(address => uint256) principals;
+    mapping(address => bool) public isInvestor;
+    mapping(address => mapping(address => uint256)) approvals;
 
-    event BondIssued(Bond _bond, Offer[] _offers);
-    event Redeemed();
-    event MessageSent(
-        bytes32 indexed messageId,
-        uint64 indexed destinationChainSelector,
-        address receiver,
-        string text,
-        address feeToken,
-        uint256 fees
-    );
-
-    string public bondISIN;
+    string public dealID;
     address public bondManager;
-    uint256 public lock;
-    uint256 public issued;
-    uint256 public redeemed;
+    address public toposBankContract;
+    bool public isInitialized;
 
-    Offer[] internal _investorsOffer;
+    BondData.BondStatus public bondStatus;
+
+    BondData.DealInvestment[] listOfInvestors;
 
     modifier onlyBondManager {
-        require(msg.sender == bondManager, "ERC7092: NOT_ALLOWED");
+        require(msg.sender == bondManager, "ONLY_BOND_MANAGER");
         _;
     }
 
-    modifier notLocked {
-        require(lock == 1, "REDEEM_IS_LOCKED");
+    modifier onlyToposBankContract {
+        require(
+            msg.sender == toposBankContract,
+            "ONLY_TOPOS_BANK_CONTRACT"
+        );
+        _;
+    }
+
+    modifier mustBeApproved(address _user) {
+        address registry = issueData[dealID].identyRegistryContract;
+        require(
+            IIdentityRegistry(registry).isVerified(_user),
+            "ACCOUNT_NOT_AAPROVED"
+        );
         _;
     }
 }
