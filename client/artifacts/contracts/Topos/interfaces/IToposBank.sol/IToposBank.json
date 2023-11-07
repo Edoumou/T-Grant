@@ -1,0 +1,74 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IToposBank",
+  "sourceName": "contracts/Topos/interfaces/IToposBank.sol",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "getDealFees",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_dealID",
+          "type": "string"
+        }
+      ],
+      "name": "getDealInvestment",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "investor",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct BondData.DealInvestment[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_dealID",
+          "type": "string"
+        }
+      ],
+      "name": "getTotalAmounInvested",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

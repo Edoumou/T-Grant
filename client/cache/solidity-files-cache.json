@@ -1,0 +1,1268 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/Lock.sol": {
+      "lastModificationDate": 1699321683267,
+      "contentHash": "ae66265769cc28ebdaa34881df95bc5e",
+      "sourceName": "contracts/Lock.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.9"
+      ],
+      "artifacts": [
+        "Lock"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/BondCall.sol": {
+      "lastModificationDate": 1699322156623,
+      "contentHash": "3586c959bcc95ecd52a3c5e7777faf56",
+      "sourceName": "contracts/BondCall.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./IERC7092.sol",
+        "./BondData.sol",
+        "./Topos/interfaces/IBondStorage.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "BondCall"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/IERC7092.sol": {
+      "lastModificationDate": 1699322156649,
+      "contentHash": "2c080360850243db032d53f794b64f54",
+      "sourceName": "contracts/IERC7092.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC7092"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/BondData.sol": {
+      "lastModificationDate": 1699322156632,
+      "contentHash": "9ffdfc98f13ecba25ee25577d4cc57fa",
+      "sourceName": "contracts/BondData.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "BondData"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/Topos/interfaces/IBondStorage.sol": {
+      "lastModificationDate": 1699322156601,
+      "contentHash": "309661e1552f63b487257e8c8eb7f91d",
+      "sourceName": "contracts/Topos/interfaces/IBondStorage.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../../BondData.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IBondStorage"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/coupon/CouponPayment.sol": {
+      "lastModificationDate": 1699322156580,
+      "contentHash": "8211f5f3407a6aefd34990c97c1471fa",
+      "sourceName": "contracts/coupon/CouponPayment.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../IERC7092.sol",
+        "../tests/tokens/IERC20.sol",
+        "../Topos/interfaces/IBondStorage.sol",
+        "./CouponMath.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "CouponPayment"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/tests/tokens/IERC20.sol": {
+      "lastModificationDate": 1699322156591,
+      "contentHash": "9d074fb45fb4fdc61f01e286374e53f7",
+      "sourceName": "contracts/tests/tokens/IERC20.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.19"
+      ],
+      "artifacts": [
+        "IERC20"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/coupon/CouponMath.sol": {
+      "lastModificationDate": 1699322156580,
+      "contentHash": "260508da91d21666e9eec45ad8d786c7",
+      "sourceName": "contracts/coupon/CouponMath.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../IERC7092.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "CouponMath"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/BondTopos.sol": {
+      "lastModificationDate": 1699322156639,
+      "contentHash": "73e792de81ab5985cecee674a74c76de",
+      "sourceName": "contracts/BondTopos.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./IERC7092.sol",
+        "./BondStorage.sol",
+        "./BondData.sol",
+        "./Topos/interfaces/IBonds.sol",
+        "./Topos/interfaces/IToposBank.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "BondTopos"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/BondStorage.sol": {
+      "lastModificationDate": 1699322156636,
+      "contentHash": "74f799e69e27319e91a9a26f68dbc3aa",
+      "sourceName": "contracts/BondStorage.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./BondData.sol",
+        "./Registry/IIdentityRegistry.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "BondStorage"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/Topos/interfaces/IBonds.sol": {
+      "lastModificationDate": 1699322156602,
+      "contentHash": "f442761e0133e81dda08f398d05ae9e4",
+      "sourceName": "contracts/Topos/interfaces/IBonds.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../../BondData.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IBonds"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/Topos/interfaces/IToposBank.sol": {
+      "lastModificationDate": 1699322156603,
+      "contentHash": "bef0bbedb32800bf9a79f0b8100eb21e",
+      "sourceName": "contracts/Topos/interfaces/IToposBank.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./IBonds.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IToposBank"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/Registry/IIdentityRegistry.sol": {
+      "lastModificationDate": 1699322156585,
+      "contentHash": "64a7747cb08fa9751d02d39f76cff36f",
+      "sourceName": "contracts/Registry/IIdentityRegistry.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./RegistryData.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IIdentityRegistry"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/Registry/RegistryData.sol": {
+      "lastModificationDate": 1699322156586,
+      "contentHash": "b67e48de67d7b13b1888a49ccf3e5471",
+      "sourceName": "contracts/Registry/RegistryData.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "RegistryData"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/Topos/Factory/BondFactory.sol": {
+      "lastModificationDate": 1699322156601,
+      "contentHash": "5432baf6b16a3e9df7a15e711e338c6b",
+      "sourceName": "contracts/Topos/Factory/BondFactory.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../../BondTopos.sol",
+        "../interfaces/IDeployBond.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "BondFactory"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/Topos/interfaces/IDeployBond.sol": {
+      "lastModificationDate": 1699322156602,
+      "contentHash": "5d049a44254c1f98d01be0a465a02963",
+      "sourceName": "contracts/Topos/interfaces/IDeployBond.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.18"
+      ],
+      "artifacts": [
+        "IDeployBond"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/treasury/IssuersFund.sol.sol": {
+      "lastModificationDate": 1699322156614,
+      "contentHash": "7b6f5121058ea0961ef59a76f291ec39",
+      "sourceName": "contracts/treasury/IssuersFund.sol.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../tests/tokens/IERC20.sol",
+        "./IIssuersFund.sol",
+        "./IToposTreasury.sol",
+        "../Topos/interfaces/IToposBank.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.19"
+      ],
+      "artifacts": [
+        "IssuersFund"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/treasury/IIssuersFund.sol": {
+      "lastModificationDate": 1699322156613,
+      "contentHash": "0d7d285bb79673b24caab0eebdc1c9bf",
+      "sourceName": "contracts/treasury/IIssuersFund.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.19"
+      ],
+      "artifacts": [
+        "IIssuersFund"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/treasury/IToposTreasury.sol": {
+      "lastModificationDate": 1699322156614,
+      "contentHash": "fd9bfcb00cc69f88cc10f73b57e1d855",
+      "sourceName": "contracts/treasury/IToposTreasury.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.19"
+      ],
+      "artifacts": [
+        "IToposTreasury"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/treasury/ToposTreasury.sol": {
+      "lastModificationDate": 1699322156614,
+      "contentHash": "d579d4bd1e6eb5423bea1a7b8c1696ea",
+      "sourceName": "contracts/treasury/ToposTreasury.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../tests/tokens/IERC20.sol",
+        "./IToposTreasury.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.19"
+      ],
+      "artifacts": [
+        "ToposTreasury"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/tests/tokens/TokenCall.sol": {
+      "lastModificationDate": 1699322156592,
+      "contentHash": "480fa7c32e8f8704cf080dc7ea894af2",
+      "sourceName": "contracts/tests/tokens/TokenCall.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./IERC20.sol"
+      ],
+      "versionPragmas": [
+        "0.8.19"
+      ],
+      "artifacts": [
+        "TokenCall"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/tests/tokens/ERC20.sol": {
+      "lastModificationDate": 1699322156591,
+      "contentHash": "759d55e3bf633436cf65a16b88bf69ca",
+      "sourceName": "contracts/tests/tokens/ERC20.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./IERC20.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.19"
+      ],
+      "artifacts": [
+        "ERC20"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/tests/tokens/assets/USDT.sol": {
+      "lastModificationDate": 1699322156595,
+      "contentHash": "d3a88d54de006bb5e6a846274fdd80de",
+      "sourceName": "contracts/tests/tokens/assets/USDT.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../ERC20.sol"
+      ],
+      "versionPragmas": [
+        "0.8.19"
+      ],
+      "artifacts": [
+        "USDT"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/tests/tokens/assets/USDC.sol": {
+      "lastModificationDate": 1699322156594,
+      "contentHash": "510bfc44c88c5e4b7a4814f46e05aadc",
+      "sourceName": "contracts/tests/tokens/assets/USDC.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../ERC20.sol"
+      ],
+      "versionPragmas": [
+        "0.8.19"
+      ],
+      "artifacts": [
+        "USDC"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/tests/tokens/assets/EURT.sol": {
+      "lastModificationDate": 1699322156594,
+      "contentHash": "a163f42be9bc8e3408f9243f4b18d7d2",
+      "sourceName": "contracts/tests/tokens/assets/EURT.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../ERC20.sol"
+      ],
+      "versionPragmas": [
+        "0.8.19"
+      ],
+      "artifacts": [
+        "EURT"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/tests/tokens/assets/EURC.sol": {
+      "lastModificationDate": 1699322156594,
+      "contentHash": "56667057dafb9d8238db0794b7e2ca5e",
+      "sourceName": "contracts/tests/tokens/assets/EURC.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../ERC20.sol"
+      ],
+      "versionPragmas": [
+        "0.8.19"
+      ],
+      "artifacts": [
+        "EURC"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/tests/tokens/assets/DAI.sol": {
+      "lastModificationDate": 1699322156593,
+      "contentHash": "88733f22f7c9032d7219e400eaaedfb0",
+      "sourceName": "contracts/tests/tokens/assets/DAI.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../ERC20.sol"
+      ],
+      "versionPragmas": [
+        "0.8.19"
+      ],
+      "artifacts": [
+        "DAI"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/tests/tokens/assets/CNYT.sol": {
+      "lastModificationDate": 1699322156593,
+      "contentHash": "0b51c2315a2be1aff30fc0e8897b289e",
+      "sourceName": "contracts/tests/tokens/assets/CNYT.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../ERC20.sol"
+      ],
+      "versionPragmas": [
+        "0.8.19"
+      ],
+      "artifacts": [
+        "CNYT"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/tests/tokens/assets/CNYC.sol": {
+      "lastModificationDate": 1699322156593,
+      "contentHash": "4d71a1dac67b5c7b312214cd674c33b1",
+      "sourceName": "contracts/tests/tokens/assets/CNYC.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../ERC20.sol"
+      ],
+      "versionPragmas": [
+        "0.8.19"
+      ],
+      "artifacts": [
+        "CNYC"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/Topos/Bank/ToposBankStorage.sol": {
+      "lastModificationDate": 1699322156600,
+      "contentHash": "e1be178452a8ec60dc41f5ab712e72d5",
+      "sourceName": "contracts/Topos/Bank/ToposBankStorage.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../../BondData.sol",
+        "../../Registry/IIdentityRegistry.sol",
+        "../../tests/tokens/IERC20.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "ToposBankStorage"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/Registry/IdentityRegistry.sol": {
+      "lastModificationDate": 1699322156586,
+      "contentHash": "971a778153ffcf24fa902db37823b5e3",
+      "sourceName": "contracts/Registry/IdentityRegistry.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./IIdentityRegistry.sol",
+        "./RegistryData.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IdentityRegistry"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/Topos/Bank/ToposBank.sol": {
+      "lastModificationDate": 1699322156600,
+      "contentHash": "59b141d390bfd9fcd6d6397705f2b86b",
+      "sourceName": "contracts/Topos/Bank/ToposBank.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../interfaces/IToposBank.sol",
+        "./ToposBankStorage.sol",
+        "../interfaces/IRoles.sol",
+        "../interfaces/IBonds.sol",
+        "../../tests/tokens/IERC20.sol",
+        "../../treasury/IIssuersFund.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "ToposBank"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/Topos/interfaces/IRoles.sol": {
+      "lastModificationDate": 1699322156603,
+      "contentHash": "311b873ba2e39c20287f0c060982be8b",
+      "sourceName": "contracts/Topos/interfaces/IRoles.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.18"
+      ],
+      "artifacts": [
+        "IRoles"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/utils/Roles.sol": {
+      "lastModificationDate": 1699322156620,
+      "contentHash": "96cf80b40b3c3c664618dd9ccfaae7d3",
+      "sourceName": "contracts/utils/Roles.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../Topos/interfaces/IRoles.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Roles"
+      ]
+    }
+  }
+}
