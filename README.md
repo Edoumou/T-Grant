@@ -32,14 +32,12 @@ In some cases you may need to remove the `package-lock.json` in `/client` folder
 
 The next step is to launch an instance of `Topos Subnet`, and update the `hardhat.config.js` file to include the `Topos Subnet`.
 
-
-![RPC](https://github.com/Edoumou/T-Grant/blob/dev/client/assets/topos_sunet.jpeg "topos subnet launced")
-
 ### Include the Topos Subnet in `hardhat.config.js`
 
 To configure the Topos Subnet, we need to add a new network in the `networks` object in `hardhat.config.js`. This network will be called `topos`:
 
 ```javascript
+  networks: {
     topos: {
       chainId: Number(process.env.TOPOS_CHAIN_ID),
       url: `${process.env.TOPOS_ENDPOINT}`,
@@ -56,6 +54,7 @@ To configure the Topos Subnet, we need to add a new network in the `networks` ob
         `${process.env.KEY10}`
       ]
     }
+  },
 ```
 
 where `chainId` is the Topos sunbnet ID, which is `2359`, and `url` is the Topos endpoint `"https://rpc.topos-subnet.testnet-1.topos.technology"`. The `accounts` field is an array that contains private keys that will be used to deploy and sign transactions.
