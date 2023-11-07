@@ -6,7 +6,6 @@
     Issue and manage financial bonds with the help of Blockchain technology
   </p>
 </div>
-
 <br>
 
 ## Description
@@ -63,10 +62,14 @@ where `chainId` is the Topos sunbnet ID, which is `2359`, and `url` is the Topos
 
 ## Contract Compilation and Deployment
 
-To compile and deploy the contract on Topos Subnet, you first need to get some `TOPOS` tokens to pay for the gas fees [Topos Faucet](https://faucet.testnet-1.topos.technology/). Once received, run the following command in `/client` folder
+To compile and deploy the contract on Topos Subnet, we first need to get some `TOPOS` tokens to pay for the gas fees [Topos Faucet](https://faucet.testnet-1.topos.technology/). Once received, run the following command in `/client` folder
 
-```
-    truffle migrate --network topos --reset
+```javascript
+    // Run Hardhat Network and keep it running
+    $ npx hardhat node
+
+    // Connect Hardhat to Topos to run the deployment script 'deploy.js`
+    $ npx hardhat run scripts/deploy.js --network topos
 ```
 
 ## Lauch the Dapp
