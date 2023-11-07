@@ -31,35 +31,57 @@ $ npm i
 
 In some cases you may need to remove the `package-lock.json` in `/client` folder before running the command.
 
-The next step is to launch an instance of `Topos Subnet`, and update the `hardhat.config.js` file to include the `Topos Subnet`.
+The next step is to launch an instance of `Topos Subnet`, and update the `truffle-config.js` file to include the `Topos Subnet`.
 
+### Launching an Instance of `Topos Subnet` with Ganache
+
+To launch the Topos Subnet we need to install [ganache-cli](https://www.npmjs.com/package/ganache-cli)
+
+```
+npm install -g ganache-cli
+```
+
+After installing successfully ganache-cli, the Topos Subnet can be launched by running the following command:
+
+```javascript
+    ganache -i 2359 --chain.chainId 2359 -p 7545 --server.rpcEndpoint "https://rpc.topos-subnet.testnet-1.topos.technology" -m "YOUR_MNEMONIC"
+```
+
+Replace `YOUR_MNEMONIC` by the mnemonic or seed phrase of the wallet you want to use.
+
+The screenshot bellow shows the result of running that command
 
 ![RPC](https://github.com/Edoumou/T-Grant/blob/dev/client/assets/topos_sunet.jpeg "topos subnet launced")
 
-### Include the Topos Subnet in `hardhat.config.js`
+### Include the Topos Subnet in `truffle-config.js`
 
-To configure the Topos Subnet, we need to add a new network in the `networks` object in `hardhat.config.js`. This network will be called `topos`:
+After launching successfully an instance of the topos subnet, we need to configure the subnet in `truffle-config.js` if that's not done already.
+
+In the `networks` section, add a new network called `topos`
 
 ```javascript
+    networks: {
+    dev: {
+      host: "127.0.0.1",
+      port: 7545,
+      network_id: "*"
+    },
     topos: {
-      chainId: Number(process.env.TOPOS_CHAIN_ID),
-      url: `${process.env.TOPOS_ENDPOINT}`,
-      accounts: [
-        `${process.env.KEY1}`,
-        `${process.env.KEY2}`,
-        `${process.env.KEY3}`,
-        `${process.env.KEY4}`,
-        `${process.env.KEY5}`,
-        `${process.env.KEY6}`,
-        `${process.env.KEY7}`,
-        `${process.env.KEY8}`,
-        `${process.env.KEY9}`,
-        `${process.env.KEY10}`
-      ]
+      provider: () =>
+        new HDWalletProvider(MNEMONIC, "https://rpc.topos-subnet.testnet-1.topos.technology"),
+        port: 7545,
+        network_id: 2359
     }
+  }
 ```
 
-where `chainId` is the Topos sunbnet ID, which is `2359`, and `url` is the Topos endpoint `"https://rpc.topos-subnet.testnet-1.topos.technology"`. The `accounts` field is an array that contains private keys that will be used to deploy and sign transactions.
+replace `MNEMONIC` by the mnemonic or seed phrase of the wallet you want to use.
+
+If the truffle `HDWalletProvider` is not installed, then run the following command in `/client` folder
+
+```
+    npm i @truffle/hdwallet-provider
+```
 
 ## Contract Compilation and Deployment
 

@@ -1,12 +1,24 @@
 require("@nomicfoundation/hardhat-toolbox");
+require('dotenv').config();
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   networks: {
     topos: {
-      chainId: 2359,
-      url: "https://rpc.topos-subnet.testnet-1.topos.technology",
-      accounts: ["e8ed4eda65774f262922f813712434e06dab54cbbb7ea178cfae2af99eeecca9"]
+      chainId: Number(process.env.TOPOS_CHAIN_ID),
+      url: `${process.env.TOPOS_ENDPOINT}`,
+      accounts: [
+        `${process.env.KEY1}`,
+        `${process.env.KEY2}`,
+        `${process.env.KEY3}`,
+        `${process.env.KEY4}`,
+        `${process.env.KEY5}`,
+        `${process.env.KEY6}`,
+        `${process.env.KEY7}`,
+        `${process.env.KEY8}`,
+        `${process.env.KEY9}`,
+        `${process.env.KEY10}`
+      ]
     }
   },
   solidity: {
@@ -14,5 +26,5 @@ module.exports = {
     settings: {
       optimizer: true
     }
-}
+  }
 };

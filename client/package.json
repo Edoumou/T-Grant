@@ -8,6 +8,7 @@
     "@openzeppelin/contracts": "^5.0.0",
     "@topos-protocol/topos-smart-contracts": "^1.2.3",
     "@truffle/hdwallet-provider": "^1.5.0",
+    "dotenv": "^16.3.1",
     "hardhat": "^2.19.0",
     "react": "16.11.0",
     "react-dom": "16.11.0",
