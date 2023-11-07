@@ -6,6 +6,11 @@ const MNEMONIC = "strong kangaroo exhibit ivory sunny present render click autho
 module.exports = {
   contracts_build_directory: path.join(__dirname, "client/src/contracts"),
   networks: {
+    dev: {
+      host: "127.0.0.1",
+      port: 7545,
+      network_id: "*"
+    },
     topos: {
       provider: () =>
         new HDWalletProvider(MNEMONIC, "https://rpc.topos-subnet.testnet-1.topos.technology"),

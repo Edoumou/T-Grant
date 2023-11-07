@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 /**
-* @title ERC-7092 Financial Bonds tandard
+* @title ERC-7092 Financial Bonds Standard
 */
 interface IERC7092 {
     /**
@@ -61,14 +61,6 @@ interface IERC7092 {
     function couponFrequency() external view returns(uint256);
 
     /**
-    * @notice Returns the day count basis
-    *         For example, 0 can denote actual/actual, 1 can denote actual/360, and so on
-    *
-    * OPTIONAL - interfaces and other contracts MUST NOT expect these values to be present. The method is used to improve usability.
-    */
-    function dayCountBasis() external view returns(uint8);
-
-    /**
     * @notice Returns the date when bonds were issued to investors. This is a Unix Timestamp similar the one returned by block.timestamp
     */
     function issueDate() external view returns(uint256);
@@ -104,7 +96,7 @@ interface IERC7092 {
     * @param _spender the address to be authorized by the bondholder
     * @param _amount amount of bond tokens to remove from allowance
     */
-    function decreaseAllowance(address _spender, uint256 _amount) external returns(bool);
+    function decreaseAllowance(address _spender, uint256 _amount) external;
 
     /**
     * @notice Transfers `_amount` bonds to the address `_to`. Additionally, this method enables to attach data to the token being transferred

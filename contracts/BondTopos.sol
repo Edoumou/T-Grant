@@ -3,132 +3,268 @@ pragma solidity ^0.8.0;
 
 import "./IERC7092.sol";
 import "./BondStorage.sol";
+import "./BondData.sol";
+import "./Topos/interfaces/IBonds.sol";
+import "./Topos/interfaces/IToposBank.sol";
 
-contract BondTopos is IERC7092, BondStorage {
+contract BondTopos is IERC7092, BondStorage, IBonds {
+    constructor(
+        string memory _dealID,
+        address _issuerWalletAddress,
+        string memory _countryOfIssuance
+    ) {
+        dealID = _dealID;
+        bondManager = msg.sender;
+
+        issueData[_dealID].issuerWalletAddress = _issuerWalletAddress;
+        issueData[_dealID].countryOfIssuance = _countryOfIssuance;
+    }
+
+    /**
+    * @notice Store contract addresses
+    * @param _toposBankContract topos Bank contract address
+    * @param _bondCallContractAddress BondCall contract address
+    * @param _identiRegistryContract Identity Registry contract address
+    */
+    function initialize(
+        address _toposBankContract,
+        address _bondCallContractAddress,
+        address _identiRegistryContract
+    ) external onlyBondManager {
+        require(!isInitialized, "ALREADY_INITIALIZED");
+
+        toposBankContract = _toposBankContract;
+        issueData[dealID].bondCallContract = _bondCallContractAddress;
+        issueData[dealID].identyRegistryContract = _identiRegistryContract;
+
+        isInitialized = true;
+    }
+
+    function issue(
+        BondData.Bond calldata _bond
+    ) external onlyToposBankContract {
+        _issue(_bond);
+    }
+
+    function redeem() external onlyToposBankContract {
+        _redeem();
+    }
+ 
     function isin() external view returns(string memory) {
-        return _bonds[bondISIN].isin;
+        return bonds[dealID].isin;
     }
 
     function name() external view returns(string memory) {
-        return _bonds[bondISIN].name;
+        return bonds[dealID].name;
     }
 
     function symbol() external view returns(string memory) {
-        return _bonds[bondISIN].symbol;
+        return bonds[dealID].symbol;
     }
 
     function currency() external view returns(address) {
-        return _bonds[bondISIN].currency;
+        return bonds[dealID].currency;
     }
 
     function denomination() external view returns(uint256) {
-        return _bonds[bondISIN].denomination;
+        return bonds[dealID].denomination;
     }
 
     function issueVolume() external view returns(uint256) {
-        return _bonds[bondISIN].issueVolume;
+        return bonds[dealID].issueVolume;
+    }
+
+    function totalSupply() external view returns(uint256) {
+        return bonds[dealID].issueVolume / bonds[dealID].denomination;
     }
 
     function couponRate() external view returns(uint256) {
-        return _bonds[bondISIN].couponRate;
+        return bonds[dealID].couponRate;
     }
 
     function couponType() external view returns(uint8) {
-        return _bonds[bondISIN].couponType;
+        return bonds[dealID].couponType;
     }
 
     function couponFrequency() external view returns(uint256) {
-        return _bonds[bondISIN].couponFrequency;
-    }
-
-    function dayCountBasis() external view returns(uint8) {
-        return _bonds[bondISIN].dayCountBasis;
+        return bonds[dealID].couponFrequency;
     }
 
     function issueDate() external view returns(uint256) {
-        return _bonds[bondISIN].issueDate;
+        return bonds[dealID].issueDate;
     }
 
     function maturityDate() external view returns(uint256) {
-        return _bonds[bondISIN].maturityDate;
+        return bonds[dealID].maturityDate;
     }
 
     function principalOf(address _account) external view returns(uint256) {
-        return _principals[_account];
+        return principals[_account];
+    }
+
+    function balanceOf(address _account) external view returns(uint256) {
+        return principals[_account] / bonds[dealID].denomination;
     }
 
     function allowance(address _owner, address _spender) external view returns(uint256) {
-
+        return approvals[_owner][_spender];
     }
 
-    function approve(address _spender, uint256 _amount) external returns(bool) {
-        address _owner = msg.sender;
+    function approve(
+        address _spender,
+        uint256 _amount
+    ) external mustBeApproved(_spender) returns(bool) {
+        address _owner = tx.origin;
+
         _approve(_owner, _spender, _amount);
 
         return true;
     }
 
-    function decreaseAllowance(address _spender, uint256 _amount) external returns(bool) {
-        address _owner = msg.sender;
+    function decreaseAllowance(
+        address _spender,
+        uint256 _amount
+    ) external {
+        address _owner = tx.origin;
 
         _decreaseAllowance(_owner, _spender, _amount);
-
-        return true;
     }
 
-    function transfer(address _to, uint256 _amount, bytes calldata _data) external returns(bool) {
-        address _from = msg.sender;
+    function transfer(
+        address _to,
+        uint256 _amount,
+        bytes calldata _data
+    ) external mustBeApproved(_to) returns(bool) {
+        address _from = tx.origin;
 
         _transfer(_from, _to, _amount, _data);
 
         return true;
     }
 
-    function transferFrom(address _from, address _to, uint256 _amount, bytes calldata _data) external returns(bool) {
-        address _spender = msg.sender;
+    function transferFrom(
+        address _from,
+        address _to,
+        uint256 _amount,
+        bytes calldata _data
+    ) external mustBeApproved(_to) returns(bool) {
+        address _spender = tx.origin;
 
-        _spendApproval(_from, _spender, _amount);
-
+        _spendAllowance(_from, _spender, _amount);
         _transfer(_from, _to, _amount, _data);
 
         return true;
     }
 
-    function _approve(address _owner, address _spender, uint256 _amount) internal virtual {
-        require(_owner != address(0), "BondTopos: OWNER_ZERO_ADDRESS");
-        require(_spender != address(0), "BondTopos: SPENDER_ZERO_ADDRESS");
-        require(_amount > 0, "BondTopos: INVALID_AMOUNT");
+    function getListOfInvestors() external view returns(BondData.DealInvestment[] memory) {
+        return listOfInvestors;
+    }
 
-        uint256 principal = _principals[_owner];
-        uint256 _approval = _approvals[_owner][_spender];
-        uint256 _denomination = _bonds[bondISIN].denomination;
-        uint256 _maturityDate = _bonds[bondISIN].maturityDate;
+    function _issue(BondData.Bond calldata _bond) internal virtual {
+        uint256 _issueVolume = _bond.issueVolume;
+        uint256 _totalAmountInvested = IToposBank(toposBankContract).getTotalAmounInvested(dealID);
+        require(_issueVolume ==  _totalAmountInvested, "INVALID_IISUE_VOLUME");
 
-        uint256 _balance = principal / _denomination;
+        BondData.DealInvestment[] memory _dealInvestment = IToposBank(toposBankContract).getDealInvestment(dealID);
 
-        require(block.timestamp < _maturityDate, "BondTopos: BONDS_MATURED");
-        require(_amount <= _balance, "BondTopos: INSUFFICIENT_BALANCE");
-        require((_amount * _denomination) % _denomination == 0, "BondTopos: INVALID_AMOUNT");
+        uint256 _denomination = bonds[dealID].denomination;
+        uint256 volume;
 
-        _approvals[_owner][_spender]  = _approval + _amount;
+        for(uint256 i; i < _dealInvestment.length; i++) {
+            address investor = _dealInvestment[i].investor;
+            uint256 principal = _dealInvestment[i].amount;
+
+            require(investor != address(0), "INVALID_INVESTOR_ADDRESS");
+            require(
+                principal != 0 && (principal * _denomination) * _denomination == 0,
+                "INVALID_AMOUNT"
+            );
+
+            volume += principal;
+            principals[investor] = principal;
+            isInvestor[investor] = true;
+ 
+            listOfInvestors.push(
+                BondData.DealInvestment({
+                    investor: investor,
+                    amount: principal
+                })
+            );
+        }
+
+        bonds[dealID] = _bond;
+        bonds[dealID].issueDate = block.timestamp;
+        bondStatus = BondData.BondStatus.ISSUED;
+
+        uint256 _maturityDate = bonds[dealID].maturityDate;
+        require(_maturityDate > block.timestamp);
+        require(volume == _totalAmountInvested, "INVALID_TOTAL_AMOUNT");
+    }
+
+    function _redeem() internal virtual {
+        require(
+            bondStatus == BondData.BondStatus.ISSUED,
+            "BONDS_NOT_ISSUED"
+        );
+        require(
+            block.timestamp > bonds[dealID].maturityDate,
+            "WAIT_TILL_MATURITY"
+        );
+
+        bondStatus = BondData.BondStatus.REDEEMED;
+
+        BondData.DealInvestment[] memory _dealInvestment = IToposBank(toposBankContract).getDealInvestment(dealID);
+
+        for(uint256 i; i < _dealInvestment.length; i++) {
+            if(principals[_dealInvestment[i].investor] != 0) {
+                principals[_dealInvestment[i].investor] = 0;
+                listOfInvestors[i].amount = 0;
+            }
+        }
+    }
+
+    function _approve(
+        address _owner,
+        address _spender,
+        uint256 _amount
+    ) internal virtual {
+        require(_owner != address(0), "INVALID_ADDRESS");
+        require(_spender != address(0), "INVALID_SPENDER_ADDRESS");
+        require(_amount > 0, "INVALID_AMOUNT");
+
+        uint256 principal = principals[_owner];
+        uint256 approval = approvals[_owner][_spender];
+        uint256 _denomination = bonds[dealID].denomination;
+        uint256 _maturityDate = bonds[dealID].maturityDate;
+        uint256 balance = principal / _denomination;
+
+        require(block.timestamp < _maturityDate, "BONDS_MATURED");
+        require(_amount <= balance, "INSUFFICIENT_BALANCE");
+        require((_amount * _denomination) % _denomination == 0, "INVALID_AMOUNT");
+
+        approvals[_owner][_spender] = approval + _amount;
 
         emit Approval(_owner, _spender, _amount);
     }
 
-    function _decreaseAllowance(address _owner, address _spender, uint256 _amount) internal virtual {
-        require(_owner != address(0), "ERC7092: OWNER_ZERO_ADDRESS");
-        require(_spender != address(0), "ERC7092: SPENDER_ZERO_ADDRESS");
-        require(_amount > 0, "ERC7092: INVALID_AMOUNT");
+    function _decreaseAllowance(
+        address _owner,
+        address _spender,
+        uint256 _amount
+    ) internal virtual {
+        require(_owner != address(0), "INVALID_ADDRESS");
+        require(_spender != address(0), "INVALID_SPENDER_ADDRESS");
+        require(_amount > 0, "INVALID_AMOUNT");
 
-        uint256 _approval = _approvals[_owner][_spender];
-        uint256 _denomination = _bonds[bondISIN].denomination;
-        uint256 _maturityDate = _bonds[bondISIN].maturityDate;
+        uint256 approval = approvals[_owner][_spender];
+        uint256 _denomination = bonds[dealID].denomination;
+        uint256 _maturityDate = bonds[dealID].maturityDate;
 
-        require(block.timestamp < _maturityDate, "ERC7092: BONDS_MATURED");
-        require(_amount <= _approval, "ERC7092: NOT_ENOUGH_APPROVAL");
-        require((_amount * _denomination) % _denomination == 0, "ERC7092: INVALID_AMOUNT");
+        require(block.timestamp < _maturityDate, "BONDS_MATURED");
+        require(_amount <= approval, "INSUFFICIENT_ALLOWANCE");
+        require((_amount * _denomination) % _denomination == 0, "INVALID_AMOUNT");
 
-        _approvals[_owner][_spender]  = _approval - _amount;
+        approvals[_owner][_spender] = approval - _amount;
 
         emit Approval(_owner, _spender, _amount);
     }
@@ -139,46 +275,46 @@ contract BondTopos is IERC7092, BondStorage {
         uint256 _amount,
         bytes calldata _data
     ) internal virtual {
-        require(_from != address(0), "ERC7092: OWNER_ZERO_ADDRESS");
-        require(_to != address(0), "ERC7092: SPENDER_ZERO_ADDRESS");
-        require(_amount > 0, "ERC7092: INVALID_AMOUNT");
+        require(_from != address(0), "INVALID_ADDRESS");
+        require(_to != address(0), "INVALID_RECIPIENT_ADDRESS");
+        require(_amount > 0, "INVALID_AMOUNT");
 
-        uint256 principal = _principals[_from];
-        uint256 _denomination = _bonds[bondISIN].denomination;
-        uint256 _maturityDate = _bonds[bondISIN].maturityDate;
+        uint256 principal = principals[_from];
+        uint256 _denomination = bonds[dealID].denomination;
+        uint256 _maturityDate = bonds[dealID].maturityDate;
+        uint256 balance = principal / _denomination;
 
-        uint256 _balance = principal / _denomination;
-
-        require(block.timestamp < _maturityDate, "ERC7092: BONDS_MATURED");
-        require(_amount <= _balance, "ERC7092: INSUFFICIENT_BALANCE");
-        require((_amount * _denomination) % _denomination == 0, "ERC7092: INVALID_AMOUNT");
+        require(block.timestamp < _maturityDate, "BONDS_MATURED");
+        require(_amount <= balance, "INSUFFICIENT_BALANCE");
+        require((_amount * _denomination) % _denomination == 0, "INVALID_AMOUNT");
 
         _beforeBondTransfer(_from, _to, _amount, _data);
 
-        uint256 principalTo = _principals[_to];
-
+        uint256 principalTo = principals[_to];
         unchecked {
-            uint256 _principalTransferred = _amount * _denomination;
+            uint256 principalToTransfer = principal * _denomination;
 
-            _principals[_from] = principal - _principalTransferred;
-            _principals[_to] = principalTo + _principalTransferred;
+            principals[_from] = principal - principalToTransfer;
+            principals[_to] = principalTo + principalToTransfer;
         }
-
-        stakeholderType[_to] = 2;
-
-        emit Transfer(_from, _to, _amount);
 
         _afterBondTransfer(_from, _to, _amount, _data);
+
+        emit Transfer(_from, _to, _amount);
     }
 
-    function _spendApproval(address _from, address _spender, uint256 _amount) internal virtual {
-        uint256 currentApproval = _approvals[_from][_spender];
-        require(_amount <= currentApproval, "ERC7092: INSUFFICIENT_ALLOWANCE");
+    function _spendAllowance(
+        address _from,
+        address _spender,
+        uint256 _amount
+    ) internal virtual {
+        uint256 currentApproval = approvals[_from][_spender];
+        require(_amount <= currentApproval, "INSUFFICIENT_ALLOWANCE");
 
         unchecked {
-            _approvals[_from][_spender] = currentApproval - _amount;
+            approvals[_from][_spender] = currentApproval - _amount;
         }
-   }
+    }
 
     function _beforeBondTransfer(address _from, address _to, uint256 _amount, bytes calldata _data) internal virtual {}
 
