@@ -1,5 +1,21 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { registryReducer, setIsVerified, setRegistrationStatus, setRegistrarOwner } from "./slices/registrySlice";
+import {
+    registryReducer,
+    setIsVerified,
+    setRegistrationStatus,
+    setRegistrarOwner
+} from "./slices/registrySlice";
+import { 
+    connectionReducer,
+    setActiveItem,
+    setColor,
+    setIsConnected,
+    setRole,
+    setAccount,
+    setAccountChanged,
+    setSignedUp,
+    setLoggedIn,
+    setUsername } from "./slices/connectionSlice";
 
 
 /**
@@ -7,7 +23,8 @@ import { registryReducer, setIsVerified, setRegistrationStatus, setRegistrarOwn
 */
 const store = configureStore({
     reducer: {
-        registry:  registryReducer
+        registry:  registryReducer,
+        connection: connectionReducer
     },
     middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
@@ -19,5 +36,14 @@ export {
     store,
     setIsVerified,
     setRegistrationStatus,
-    setRegistrarOwner 
+    setRegistrarOwner,
+    setActiveItem,
+    setColor,
+    setIsConnected,
+    setRole,
+    setAccount,
+    setAccountChanged,
+    setSignedUp,
+    setLoggedIn,
+    setUsername
 }
