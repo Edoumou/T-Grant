@@ -15,20 +15,18 @@ async function main() {
   */
   const IdentityRegistry = await hre.ethers.getContractFactory("IdentityRegistry");
   const register = await IdentityRegistry.deploy();
+  await register.waitForDeployment();
 
   /*
   * Roles
   */
   const Roles = await hre.ethers.getContractFactory("Roles");
   const roles = await Roles.deploy();
+  await roles.waitForDeployment();
 
   /**
   * Topos Bank
   */
-
-  const ToposBankStorage = await hre.ethers.getContractFactory("ToposBankStorage");
-  const bankStorage = await ToposBankStorage.deploy();
- /*
   const ToposBank = await hre.ethers.getContractFactory("ToposBank");
   const bank = await ToposBank.deploy(
     deployer1.address,
@@ -36,30 +34,30 @@ async function main() {
     register.target,
     500 
   );
-  */
+  await bank.waitForDeployment();
 
   /**
   * Bond Topos
   */
   const BondTopos = await hre.ethers.getContractFactory("BondTopos");
   const bond = await BondTopos.deploy("DEAL-1", users[0].address, "France");
+  await bond.waitForDeployment();
 
-  //const id = await bond.dealID({ from: deployer1.address });
+  //const id = await bond.getDealID();
 
 
   // CONSOLE.LOG
   console.log("Registry:", register.target || "");
   console.log("T--Roles:", roles.target || "");
   console.log("T--Bonds:", bond.target || "");
-  console.log("Bank Sto:", bankStorage.target || "");
-  //console.log("T---Bank:", bank.target || "");
+  console.log("T---Bank:", bank.target || "");
   //console.log('deal--ID:', id || "");
 }
 
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
 main()
-    .then(() => process.exit())
+    .then(() => process.exit(0))
     .catch(error => {
         console.error(error);
         process.exit(1);
