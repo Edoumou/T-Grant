@@ -5,6 +5,34 @@
   "abi": [
     {
       "inputs": [],
+      "name": "getContracts",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "manager",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "roles",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "identityRegistry",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "issuerFund",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
       "name": "getDealFees",
       "outputs": [
         {

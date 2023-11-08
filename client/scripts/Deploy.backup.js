@@ -8,7 +8,7 @@
 const hre = require("hardhat");
 
 async function main() {
-  let [deployer1, ...users] = await hre.ethers.getSigners();
+  let [deployer1, deployer2] = await hre.ethers.getSigners();
 
   /**
   * Identity Registry
@@ -25,11 +25,11 @@ async function main() {
   /**
   * Topos Bank
   */
-
   const ToposBankStorage = await hre.ethers.getContractFactory("ToposBankStorage");
   const bankStorage = await ToposBankStorage.deploy();
- /*
-  const ToposBank = await hre.ethers.getContractFactory("ToposBank");
+
+  /*
+  const ToposBank = await hre.ethers.getContractFactory("ToposBankStorage");
   const bank = await ToposBank.deploy(
     deployer1.address,
     roles.target,
@@ -42,9 +42,9 @@ async function main() {
   * Bond Topos
   */
   const BondTopos = await hre.ethers.getContractFactory("BondTopos");
-  const bond = await BondTopos.deploy("DEAL-1", users[0].address, "France");
+  const bond = await BondTopos.deploy("DEAL-1", deployer2.address, "France");
 
-  //const id = await bond.dealID({ from: deployer1.address });
+  const id = await bond.dealID({ from: deployer1.address });
 
 
   // CONSOLE.LOG
@@ -53,7 +53,7 @@ async function main() {
   console.log("T--Bonds:", bond.target || "");
   console.log("Bank Sto:", bankStorage.target || "");
   //console.log("T---Bank:", bank.target || "");
-  //console.log('deal--ID:', id || "");
+  console.log('deal--ID:', id || "");
 }
 
 // We recommend this pattern to be able to use async/await everywhere

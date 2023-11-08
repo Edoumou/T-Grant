@@ -295,7 +295,7 @@
       ]
     },
     "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/BondTopos.sol": {
-      "lastModificationDate": 1699322156639,
+      "lastModificationDate": 1699382876903,
       "contentHash": "73e792de81ab5985cecee674a74c76de",
       "sourceName": "contracts/BondTopos.sol",
       "solcConfig": {
@@ -411,8 +411,8 @@
       ]
     },
     "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/Topos/interfaces/IToposBank.sol": {
-      "lastModificationDate": 1699322156603,
-      "contentHash": "bef0bbedb32800bf9a79f0b8100eb21e",
+      "lastModificationDate": 1699407960425,
+      "contentHash": "18595ece68a2e5727f0e71fd9332894e",
       "sourceName": "contracts/Topos/interfaces/IToposBank.sol",
       "solcConfig": {
         "version": "0.8.19",
@@ -1074,8 +1074,8 @@
       ]
     },
     "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/Topos/Bank/ToposBankStorage.sol": {
-      "lastModificationDate": 1699322156600,
-      "contentHash": "e1be178452a8ec60dc41f5ab712e72d5",
+      "lastModificationDate": 1699410823135,
+      "contentHash": "61b94d5b07a930a3830d64434f4af800",
       "sourceName": "contracts/Topos/Bank/ToposBankStorage.sol",
       "solcConfig": {
         "version": "0.8.19",
@@ -1102,8 +1102,7 @@
       },
       "imports": [
         "../../BondData.sol",
-        "../../Registry/IIdentityRegistry.sol",
-        "../../tests/tokens/IERC20.sol"
+        "../../Registry/IIdentityRegistry.sol"
       ],
       "versionPragmas": [
         "^0.8.0"
@@ -1113,8 +1112,8 @@
       ]
     },
     "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/Registry/IdentityRegistry.sol": {
-      "lastModificationDate": 1699322156586,
-      "contentHash": "971a778153ffcf24fa902db37823b5e3",
+      "lastModificationDate": 1699374364428,
+      "contentHash": "5c9dcec9088b2d3758406a493c2ecd24",
       "sourceName": "contracts/Registry/IdentityRegistry.sol",
       "solcConfig": {
         "version": "0.8.19",
@@ -1151,8 +1150,8 @@
       ]
     },
     "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/Topos/Bank/ToposBank.sol": {
-      "lastModificationDate": 1699322156600,
-      "contentHash": "59b141d390bfd9fcd6d6397705f2b86b",
+      "lastModificationDate": 1699411187140,
+      "contentHash": "51ce33c1872da1d490e12f2b13524efe",
       "sourceName": "contracts/Topos/Bank/ToposBank.sol",
       "solcConfig": {
         "version": "0.8.19",
@@ -1181,7 +1180,6 @@
         "../interfaces/IToposBank.sol",
         "./ToposBankStorage.sol",
         "../interfaces/IRoles.sol",
-        "../interfaces/IBonds.sol",
         "../../tests/tokens/IERC20.sol",
         "../../treasury/IIssuersFund.sol"
       ],
@@ -1228,8 +1226,8 @@
       ]
     },
     "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/utils/Roles.sol": {
-      "lastModificationDate": 1699322156620,
-      "contentHash": "96cf80b40b3c3c664618dd9ccfaae7d3",
+      "lastModificationDate": 1699390849475,
+      "contentHash": "f541752be8dce2a61e796a9361c48807",
       "sourceName": "contracts/utils/Roles.sol",
       "solcConfig": {
         "version": "0.8.19",
@@ -1262,6 +1260,86 @@
       ],
       "artifacts": [
         "Roles"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/Topos/Bank/Issuer.sol": {
+      "lastModificationDate": 1699411017662,
+      "contentHash": "7f12f40103252172e4318d153e0de0a5",
+      "sourceName": "contracts/Topos/Bank/Issuer.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../../BondData.sol",
+        "..//interfaces/IRoles.sol",
+        "../interfaces/IToposBank.sol",
+        "../../Registry/IIdentityRegistry.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Issuer"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/Topos/Bank/Investor.sol": {
+      "lastModificationDate": 1699411182321,
+      "contentHash": "4a1fbecafed0cc1c132054b32e3bb612",
+      "sourceName": "contracts/Topos/Bank/Investor.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../../BondData.sol",
+        "..//interfaces/IRoles.sol",
+        "../interfaces/IToposBank.sol",
+        "../../Registry/IIdentityRegistry.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Investor"
       ]
     }
   }

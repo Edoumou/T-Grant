@@ -3,17 +3,12 @@ pragma solidity ^0.8.0;
 
 import "../../BondData.sol";
 import "../../Registry/IIdentityRegistry.sol";
-import "../../tests/tokens/IERC20.sol";
 
 contract ToposBankStorage {
     mapping(string => BondData.Deal) public deals;
-    mapping(address => BondData.Issuer) public issuers;
-    mapping(address => BondData.Investor) public investors;
     mapping(string => address) public dealBondContracts;
     mapping(string => BondData.DealInvestment[]) public dealInvestment;
     mapping(string => uint256) public totalAmountInvestedForDeal;
-    mapping(address => BondData.StakeHolderStatus) public issuerStatus;
-    mapping(address => BondData.StakeHolderStatus) public investorStatus;
     mapping(address => mapping(string => BondData.Investment)) public amountInvested;
     mapping(address => BondData.Deal[]) public issuerDeals;
 
@@ -28,6 +23,13 @@ contract ToposBankStorage {
     BondData.Deal[] listOfDeals;
 
     address bondFactoryContract;
+
+    event DealSubmitted(string dealID, BondData.Deal deal);
+    event DealAPproved(string dealID);
+    event DealARejected(string dealID);
+    event RegisterForDeal(string dealID, address investor);
+    event BondIssue(string _dealID);
+    event BondRedeem(string _dealID);
 
     modifier onlyToposManager {
         require(
@@ -44,17 +46,4 @@ contract ToposBankStorage {
         );
         _;
     }
-
-    event RequestIssuerRegistration(address issuer);
-    event RequestInvestorRegistration(address investor);
-    event ApproveIssuer(address issuer);
-    event ApproveInvestor(address investor);
-    event RejectIssuer(address issuer);
-    event RejectInvestor(address investor);
-    event DealSubmitted(string dealID, BondData.Deal deal);
-    event DealAPproved(string dealID);
-    event DealARejected(string dealID);
-    event RegisterForDeal(string dealID, address investor);
-    event BondIssue(string _dealID);
-    event BondRedeem(string _dealID);
 }
