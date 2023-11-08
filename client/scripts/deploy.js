@@ -105,6 +105,7 @@ async function main() {
   const couponPayment = await CouponPayment.deploy();
   await couponPayment.waitForDeployment();
 
+  //=== Cp artifacts in `src/contracts` directory
   exec(`cp -R ../client/artifacts ../client/src/contracts`, (err, stdout, stderr) => {
     if(err) {
       console.log(`exec error: ${err}`);
@@ -152,6 +153,7 @@ async function main() {
     "CouponPaymentContract": couponPayment.target
   };
 
+  //=== Write contracts addresses in `addr.json`file
   const PATH = './src/addresses/addr.json';
   const stringified = JSON.stringify(data)
 
