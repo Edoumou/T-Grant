@@ -1,13 +1,18 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import 'semantic-ui-css/semantic.min.css';
+import { Menu, MenuItem, Image, Button } from 'semantic-ui-react';
+import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
 import ToposCoreJSON from '@topos-protocol/topos-smart-contracts/artifacts/contracts/topos-core/ToposCore.sol/ToposCore.json';
 import SubnetRegistratorJSON from '@topos-protocol/topos-smart-contracts/artifacts/contracts/topos-core/SubnetRegistrator.sol/SubnetRegistrator.json';
-
 import ToposBankJSON from "../src/contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
 
 import Addresses from "../src/addresses/addr.json";
 import { web3Connection } from './utils/web3Connection';
 import { getContract } from './utils/getContract';
 import { toposData } from './utils/toposData';
+
+import HeaderLogo from './img/header-logo.png';
+
 import "./App.css";
 const fs = require('fs');
 
@@ -42,8 +47,26 @@ console.log("addresses:", Addresses);
     loadWeb3();
   });
 
+  const handleItemClick = (e, { name }) => {
+    dispatch(setActiveItem(name));
+    dispatch(setColor('pink'));
+  }
+
   return (
     <div className='App'>
+      <BrowserRouter>
+        <div className='header'>
+          <Menu stackable pointing inverted secondary size='large'>
+            <MenuItem name='home' onClick={handleItemClick} as={Link} to='/'>
+              <Image src={HeaderLogo} size='medium' />
+            </MenuItem>
+          </Menu>
+        </div>
+        <Routes>
+
+        </Routes>
+      </BrowserRouter>
+
       <h2>This quasi-empty page will become a full Dapp</h2>
 
       Strange, yeah!!! Let's keep building 💪🦾💪
