@@ -319,11 +319,4 @@ contract BondTopos is IERC7092, BondStorage, IBonds {
     function _beforeBondTransfer(address _from, address _to, uint256 _amount, bytes calldata _data) internal virtual {}
 
     function _afterBondTransfer(address _from, address _to, uint256 _amount, bytes calldata _data) internal virtual {}
-
-
-
-
-    function getDealID() external view returns(string memory) {
-        return dealID;
-    }
 }

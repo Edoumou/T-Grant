@@ -20,11 +20,10 @@ contract BondFactory {
     }
 
     constructor(
-        address _toposManger,
         address _toposBankContract,
         address _bondCallContract
     ) {
-        toposManager = _toposManger;
+        toposManager = msg.sender;
         toposBankContract = _toposBankContract;
         bondCallContract = _bondCallContract;
     }
