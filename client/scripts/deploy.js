@@ -7,21 +7,31 @@ async function main() {
 
   //=== IdentityRegistry Contract
   const IdentityRegistry = await hre.ethers.getContractFactory("IdentityRegistry");
-  const register = await IdentityRegistry.deploy();
-  await register.waitForDeployment();
+  const registery = await IdentityRegistry.deploy();
+  await registery.waitForDeployment();
 
+  //=== Authentication Contract
+  const Authentication = await hre.ethers.getContractFactory("Authentication");
+  const authentication = await Authentication.deploy(registery.target);
+  await authentication.waitForDeployment();
+  
   //=== Roles Contract
   const Roles = await hre.ethers.getContractFactory("Roles");
   const roles = await Roles.deploy();
   await roles.waitForDeployment();
 
+  //=== BondCall Contract
+  const BondCall = await hre.ethers.getContractFactory("BondCall");
+  const bondCall = await BondCall.deploy();
+  await bondCall.waitForDeployment();
 
   //=== ToposBank Contract
   const ToposBank = await hre.ethers.getContractFactory("ToposBank");
   const bank = await ToposBank.deploy(
     deployer1.address,
     roles.target,
-    register.target,
+    registery.target,
+    bondCall.target,
     350
   );
   await bank.waitForDeployment();
@@ -46,14 +56,9 @@ async function main() {
   const issuersFund = await IssuersFund.deploy(bank.target, toposTreasury.target);
   await issuersFund.waitForDeployment();
 
-  //=== BondCall Contract
-  const BondCall = await hre.ethers.getContractFactory("BondCall");
-  const bondCall = await BondCall.deploy();
-  await bondCall.waitForDeployment();
-
   //=== BondFactory Contract
   const BondFactory = await hre.ethers.getContractFactory("BondFactory");
-  const bondFactory = await BondFactory.deploy(bank.target, bondCall.target);
+  const bondFactory = await BondFactory.deploy(bank.target);
   await bondFactory.waitForDeployment();
 
   //=== USDC Contract
@@ -105,6 +110,8 @@ async function main() {
   const couponPayment = await CouponPayment.deploy();
   await couponPayment.waitForDeployment();
 
+  await registery.setAuthenticationContract(authentication.target, { from: deployer1.address });
+
   //=== Cp artifacts in `src/contracts` directory
   exec(`cp -R ../client/artifacts ../client/src/contracts`, (err, stdout, stderr) => {
     if(err) {
@@ -114,7 +121,8 @@ async function main() {
   })
 
   // CONSOLE.LOG
-  console.log("Registry:", register.target || "");
+  console.log("Auth----:", authentication.target || "");
+  console.log("Registry:", registery.target || "");
   console.log("T--Roles:", roles.target || "");
   console.log("T---Bank:", bank.target || "");
   console.log("T-Issuer:", issuerContract.target || "");
@@ -134,7 +142,8 @@ async function main() {
   console.log("");
 
   const data = {
-    "RegistryContract": register.target,
+    "AuthenticationContract": authentication.target,
+    "RegistryContract": registery.target,
     "RolesContract": roles.target,
     "ToposBankContract": bank.target,
     "IssuerContract": issuerContract.target,

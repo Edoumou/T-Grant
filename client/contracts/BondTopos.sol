@@ -11,6 +11,7 @@ contract BondTopos is IERC7092, BondStorage, IBonds {
     constructor(
         string memory _dealID,
         address _issuerWalletAddress,
+        address _toposBankContract,
         string memory _countryOfIssuance
     ) {
         dealID = _dealID;
@@ -18,26 +19,7 @@ contract BondTopos is IERC7092, BondStorage, IBonds {
 
         issueData[_dealID].issuerWalletAddress = _issuerWalletAddress;
         issueData[_dealID].countryOfIssuance = _countryOfIssuance;
-    }
-
-    /**
-    * @notice Store contract addresses
-    * @param _toposBankContract topos Bank contract address
-    * @param _bondCallContractAddress BondCall contract address
-    * @param _identiRegistryContract Identity Registry contract address
-    */
-    function initialize(
-        address _toposBankContract,
-        address _bondCallContractAddress,
-        address _identiRegistryContract
-    ) external onlyBondManager {
-        require(!isInitialized, "ALREADY_INITIALIZED");
-
         toposBankContract = _toposBankContract;
-        issueData[dealID].bondCallContract = _bondCallContractAddress;
-        issueData[dealID].identyRegistryContract = _identiRegistryContract;
-
-        isInitialized = true;
     }
 
     function issue(

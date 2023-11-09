@@ -50,8 +50,6 @@ abstract contract BondData {
     struct IssueData {
         address issuerWalletAddress;
         string countryOfIssuance;
-        address bondCallContract;
-        address identyRegistryContract;
     }
 
     struct Investment {

@@ -14,6 +14,8 @@ import { toposData } from './utils/toposData';
 import HeaderLogo from './img/header-logo.png';
 import "./App.css";
 import { setActiveItem, setColor, setIsConnected, setAccount, setRole } from './store';
+import Home from './components/Home';
+import Register from './components/Register';
 const fs = require('fs');
 
 function App() {
@@ -68,11 +70,18 @@ console.log("addresses:", Addresses);
                 <>
                   <MenuItem
                       position='right'
-                      name='issuer'
-                      active={connection.activeItem === 'issuer'}
+                      name='register'
+                      active={connection.activeItem === 'register'}
                       onClick={handleItemClick}
                       as={Link}
-                      to='/issuer'
+                      to='/register'
+                  />
+                  <MenuItem
+                      name='connect'
+                      active={connection.activeItem === 'connect'}
+                      onClick={handleItemClick}
+                      as={Link}
+                      to='/connect'
                   />
                 </>
               :
@@ -82,7 +91,8 @@ console.log("addresses:", Addresses);
           </Menu>
         </div>
         <Routes>
-
+          <Route path='/' element={<Home />}/>
+          <Route path='/register' element={<Register />}/>
         </Routes>
       </BrowserRouter>
 

@@ -12,11 +12,13 @@ contract ToposBank is IToposBank, ToposBankStorage {
         address _toposManager,
         address _rolesContract,
         address _identityRegistryContract,
+        address _bondCallContract,
         uint256 _dealFees
     ) {
         toposManager = _toposManager;
         rolesContract = _rolesContract;
         identityRegistryContract = _identityRegistryContract;
+        bondCallContract = _bondCallContract;
         dealFees = _dealFees;
     }
 
@@ -247,29 +249,24 @@ contract ToposBank is IToposBank, ToposBankStorage {
         issuersFundContract = _issuerFundContract;
     }
 
-
-
-
-
-
-
-
-
     function getContracts() external view returns(
         address manager,
         address roles,
         address identityRegistry,
+        address bondCall,
         address issuerFund
     ) {
         (   
             manager,
             roles,
             identityRegistry,
+            bondCall,
             issuerFund
         ) = (
             toposManager,
             rolesContract,
             identityRegistryContract,
+            bondCallContract,
             issuersFundContract
         );
     }

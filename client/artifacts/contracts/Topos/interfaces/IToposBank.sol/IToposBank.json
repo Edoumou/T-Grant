@@ -24,6 +24,11 @@
         },
         {
           "internalType": "address",
+          "name": "bondCall",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
           "name": "issuerFund",
           "type": "address"
         }

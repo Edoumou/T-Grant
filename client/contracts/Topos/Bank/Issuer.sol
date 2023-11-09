@@ -25,7 +25,7 @@ contract Issuer {
     }
 
     modifier mustBeApproved(address _user) {
-        (, , address registry, ) = IToposBank(toposBankContract).getContracts();
+        (, , address registry, ,) = IToposBank(toposBankContract).getContracts();
 
         require(
             IIdentityRegistry(registry).isVerified(_user),
@@ -62,7 +62,7 @@ contract Issuer {
     * @param _issuer issuer's account address
     */
     function approveIssuer(address _issuer) external {
-        (address toposManager, address rolesContract, , ) = IToposBank(toposBankContract).getContracts();
+        (address toposManager, address rolesContract, , ,) = IToposBank(toposBankContract).getContracts();
 
         require(msg.sender == toposManager, "ONLY_TOPOS_MANAGER");
         require(
@@ -81,7 +81,7 @@ contract Issuer {
     * @param _issuer issuer's account address
     */
     function rejectIssuer(address _issuer) external {
-        (address toposManager, , , ) = IToposBank(toposBankContract).getContracts();
+        (address toposManager, , , ,) = IToposBank(toposBankContract).getContracts();
 
         require(msg.sender == toposManager, "ONLY_TOPOS_MANAGER");
         require(
