@@ -95,11 +95,6 @@ console.log("addresses:", Addresses);
           <Route path='/register' element={<Register />}/>
         </Routes>
       </BrowserRouter>
-
-      <h2>This quasi-empty page will become a full Dapp</h2>
-
-      Strange, yeah!!! Let's keep building 💪🦾💪
-      <p>Topos</p>
     </div>
   );
 }
