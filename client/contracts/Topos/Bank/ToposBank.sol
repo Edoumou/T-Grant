@@ -4,7 +4,6 @@ pragma solidity ^0.8.0;
 import "../interfaces/IToposBank.sol";
 import "./ToposBankStorage.sol";
 import "../interfaces/IRoles.sol";
-import "../interfaces/IBonds.sol";
 import "../../tests/tokens/IERC20.sol";
 import "../../treasury/IIssuersFund.sol";
 
@@ -17,109 +16,12 @@ contract ToposBank is IToposBank, ToposBankStorage {
     ) {
         toposManager = _toposManager;
         rolesContract = _rolesContract;
-        IRoles(_rolesContract).setRole("MANAGER", _toposManager);
         identityRegistryContract = _identityRegistryContract;
         dealFees = _dealFees;
     }
 
-    /**
-    * @notice Sends an registration request to become an issuer.
-    * @param _issuer Issuer struct. See BondData.sol
-    */
-    function requestRegistrationIssuer(
-        BondData.Issuer calldata _issuer
-    ) external mustBeApproved(_issuer.walletAddress) {
-        require(msg.sender == _issuer.walletAddress, "INVALID_ADDRESS");
-        require(
-            issuerStatus[msg.sender] == BondData.StakeHolderStatus.UNDEFINED,
-            "CHECK_YOUR_STATUS"
-        );
-
-        issuers[_issuer.walletAddress] = _issuer;
-        issuerStatus[msg.sender] = BondData.StakeHolderStatus.SUBMITTED;
-
-        emit RequestIssuerRegistration(_issuer.walletAddress);
-    }
-
-    /**
-    * @notice Sends an registration request to become an investor.
-    * @param _investor Investor struct. See BondData.sol
-    */
-    function requestRegistrationInvestor(
-        BondData.Investor calldata _investor
-    ) external mustBeApproved(_investor.walletAddress) {
-        require(msg.sender == _investor.walletAddress, "INVALID_ADDRESS");
-        require(
-            investorStatus[msg.sender] == BondData.StakeHolderStatus.UNDEFINED,
-            "CHECK_YOUR_STATUS"
-        );
-
-        investors[_investor.walletAddress] = _investor;
-        investorStatus[msg.sender] = BondData.StakeHolderStatus.SUBMITTED;
-
-        emit RequestInvestorRegistration(_investor.walletAddress);
-    }
-
-    /**
-    * @notice Approves an issuer registration request. Can be called only by Topos manager
-    * @param _issuer issuer's account address
-    */
-    function approveIssuer(address _issuer) external onlyToposManager {
-        require(
-            issuerStatus[_issuer] == BondData.StakeHolderStatus.SUBMITTED,
-            "CHECK_YOUR_STATUS"
-        );
-
-        issuerStatus[_issuer] = BondData.StakeHolderStatus.APPROVED;
-        IRoles(rolesContract).setRole("ISSUER", _issuer);
-
-        emit ApproveIssuer(_issuer);
-    }
-
-    /**
-    * @notice Approves an investor registration request. Can be called only by Topos manager
-    * @param _investor investor's account address
-    */
-    function approveInvestor(address _investor) external onlyToposManager {
-        require(
-            investorStatus[_investor] == BondData.StakeHolderStatus.SUBMITTED,
-            "CHECK_YOUR_STATUS"
-        );
-
-        investorStatus[_investor] = BondData.StakeHolderStatus.APPROVED;
-        IRoles(rolesContract).setRole("INVESTOR", _investor);
-
-        emit ApproveInvestor(_investor);
-    }
-
-    /**
-    * @notice Rejects an issuer registration request. Can be called only by Topos manager
-    * @param _issuer issuer's account address
-    */
-    function rejectIssuer(address _issuer) external onlyToposManager {
-        require(
-            issuerStatus[_issuer] == BondData.StakeHolderStatus.SUBMITTED,
-            "CHECK_YOUR_STATUS"
-        );
-
-        issuerStatus[_issuer] = BondData.StakeHolderStatus.REJECTED;
-
-        emit RejectIssuer(_issuer);
-    }
-
-    /**
-    * @notice Rejects an investor registration request. Can be called only by Topos manager
-    * @param _investor investor's account address
-    */
-    function rejectInvestor(address _investor) external onlyToposManager {
-        require(
-            investorStatus[_investor] == BondData.StakeHolderStatus.SUBMITTED,
-            "CHECK_YOUR_STATUS"
-        );
-
-        investorStatus[_investor] = BondData.StakeHolderStatus.REJECTED;
-
-        emit RejectInvestor(_investor);
+    function setManager(address _toposManager) external onlyToposManager {
+        IRoles(rolesContract).setRole("MANAGER", _toposManager);
     }
 
     /**
@@ -199,24 +101,18 @@ contract ToposBank is IToposBank, ToposBankStorage {
         string calldata _dealID,
         uint256 _amount
     ) external mustBeApproved(msg.sender) {
-        uint256 _totalAmountInvested = totalAmountInvestedForDeal[_dealID];
-
         if(deals[_dealID].status != BondData.DealStatus.APPROVED)
             revert BondData.InvalidDealStatus(_dealID);
         require(
-            _amount != 0 && _amount + _totalAmountInvested <= deals[_dealID].debtAmount,
+            _amount != 0 && _amount + totalAmountInvestedForDeal[_dealID] <= deals[_dealID].debtAmount,
             "INVALID_AMOUNT"
         );
 
-        bool hasInvested = amountInvested[msg.sender][_dealID].hasInvested;
-        totalAmountInvestedForDeal[_dealID] = _totalAmountInvested + _amount;
+        totalAmountInvestedForDeal[_dealID] = totalAmountInvestedForDeal[_dealID] + _amount;
 
-        if(hasInvested) {
-            uint256 index = amountInvested[msg.sender][_dealID].index;
-            uint256 amount  = amountInvested[msg.sender][_dealID].amount;
-
-            dealInvestment[_dealID][index].amount = amount + _amount;
-            amountInvested[msg.sender][_dealID].amount = amount + _amount;
+        if(amountInvested[msg.sender][_dealID].hasInvested) {
+            dealInvestment[_dealID][amountInvested[msg.sender][_dealID].index].amount = amountInvested[msg.sender][_dealID].amount + _amount;
+            amountInvested[msg.sender][_dealID].amount = amountInvested[msg.sender][_dealID].amount + _amount;
         } else {
             amountInvested[msg.sender][_dealID] =  BondData.Investment(
                 {
@@ -322,15 +218,18 @@ contract ToposBank is IToposBank, ToposBankStorage {
     function withdrawIssuerFund(
         string memory _dealID
     ) external {
-        address issuer = deals[_dealID].issuerAddress;
-        address tokenAddress = deals[_dealID].currency;
 
         require(
-            msg.sender == issuer || msg.sender == toposManager, "NOT_ISSUER_NOR_TOPOS_MANAGER"
+            msg.sender == deals[_dealID].issuerAddress || msg.sender == toposManager,
+            "NOT_ISSUER_NOR_TOPOS_MANAGER"
         );
-        require(tokenAddress != address(0), "INVALID_TOKEN_ADDRESS");
+        require(deals[_dealID].currency != address(0), "INVALID_TOKEN_ADDRESS");
 
-        IIssuersFund(issuersFundContract).withdrawFund(_dealID, issuer, tokenAddress);
+        IIssuersFund(issuersFundContract).withdrawFund(
+            _dealID,
+            deals[_dealID].issuerAddress,
+            deals[_dealID].currency
+        );
     }
 
     function setBondContractAddress(
@@ -346,5 +245,32 @@ contract ToposBank is IToposBank, ToposBankStorage {
         require(_issuerFundContract != address(0), "INVALID_CONTRACT_ADDRESS");
 
         issuersFundContract = _issuerFundContract;
+    }
+
+
+
+
+
+
+
+
+
+    function getContracts() external view returns(
+        address manager,
+        address roles,
+        address identityRegistry,
+        address issuerFund
+    ) {
+        (   
+            manager,
+            roles,
+            identityRegistry,
+            issuerFund
+        ) = (
+            toposManager,
+            rolesContract,
+            identityRegistryContract,
+            issuersFundContract
+        );
     }
 }

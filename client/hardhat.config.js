@@ -7,6 +7,8 @@ module.exports = {
     topos: {
       chainId: Number(process.env.TOPOS_CHAIN_ID),
       url: `${process.env.TOPOS_ENDPOINT}`,
+      gasPrice: 2100000,
+      //blockGasLimit: 10000000,
       accounts: [
         `${process.env.KEY1}`,
         `${process.env.KEY2}`,

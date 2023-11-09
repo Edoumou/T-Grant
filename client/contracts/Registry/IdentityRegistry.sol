@@ -14,8 +14,8 @@ contract IdentityRegistry is IIdentityRegistry {
     mapping(address => RegistrationStatus) private _status;
     address public owner;
 
-    constructor(address _owner) {
-        owner = _owner;
+    constructor() {
+        owner = msg.sender;
     }
 
     enum RegistrationStatus {UNDEFINED, VERIFIED}
