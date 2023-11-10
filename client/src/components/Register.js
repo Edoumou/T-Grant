@@ -8,7 +8,7 @@ import AuthenticationHash from "../utils/AuthenticationHash";
 import "../users.css";
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
-import { setIsVerified, setSignedUp } from "../store";
+import { setIsVerified, setLoading, setSignedUp } from "../store";
 import Addresses from "../../src/addresses/addr.json";
 
 function Register() {
@@ -18,6 +18,10 @@ function Register() {
     const [email, setEmail] = useState('');
     const [digicode, setDigicode] = useState('');
     const [status, setStatus] = useState('');
+    const [txHash, setTxHash] = useState('');
+    const [loader, setLoader] = useState(true);
+    const [explorerLink, setExplorerLink] = useState('');
+    const [loadingMessage, setLoadingMessage] = useState('Transaction in Process');
 
     const [open, setOpen] = useState(false);
 
@@ -74,20 +78,41 @@ function Register() {
                         web3
                     );
 
-                    await contract.methods.register(identityID, authHash).send({ from: account });
+                    await contract.methods.register(identityID, authHash)
+                        .send({ from: account })
+                        .on('transactionHash', hash => {
+                            setLoadingMessage('Transaction in Process! ⌛️');
+                            setExplorerLink(`https://explorer.testnet-1.topos.technology/subnet/0xe93335e1ec5c2174dfcde38dbdcc6fd39d741a74521e0e01155c49fa77f743ae/transaction/${hash}`);
+                            setTxHash(hash);
+                            dispatch(setLoading(true));
+                            setFullname('');
+                            setPhone('');
+                            setEmail('');
+                            setDigicode('');
+                            dispatch(setSignedUp(true));
+                        })
+                        .on('receipt', receipt => {
+                            setLoadingMessage('Transaction Completed! ✅');
+                            setLoader(false);
+                            setStatus('success');
+                            setAlertMessage("Signup successful");
+                            dispatch(setLoading(false));
+                        });
 
                     setFullname('');
                     setPhone('');
                     setEmail('');
                     setDigicode('');
-                    setStatus('success');
-                    setAlertMessage("Signup successful");
-                    dispatch(setSignedUp(true));
 
                     return;
                 }
             }
         }
+    }
+
+    const goToExplorer = () => {
+        const newWindow = window.open(explorerLink, '_blank', 'noopener,noreferrer');
+        if (newWindow) newWindow.opener = null;
     }
 
     return (
@@ -153,8 +178,6 @@ function Register() {
                         />
                     </Form.Field>
                     <Form.Field>
-
-                    {!loading &&
                         <Modal
                             size="tiny"
                             open={open}
@@ -167,16 +190,18 @@ function Register() {
                             onOpen={() => setOpen(true)}
                         >
                             <Modal.Content>
-                                
                                 <div style={{ textAlign: 'center' }}>
-                                <h3>Transaction in Process</h3>
-                                <Button inverted basic loading size="massive">Loading</Button>
+                                    <h3>{loadingMessage}</h3>
+                                    {
+                                        loader ?
+                                            <Button inverted basic loading size="massive">Loading</Button>
+                                        :
+                                            <p style={{ color: 'green' }}><strong>transaction processed successfully</strong></p>
+                                    }
                                 </div>
-                                
-                                
                             </Modal.Content>
                             <Modal.Actions>
-                            <Button basic floated="left" onClick={() => setOpen(false)}>
+                            <Button basic floated="left" onClick={goToExplorer}>
                                 <strong>Check on Topos Explorer</strong>
                             </Button>
                             <Button color='black' onClick={() => setOpen(false)}>
@@ -184,7 +209,6 @@ function Register() {
                             </Button>
                             </Modal.Actions>
                         </Modal>
-                    }
                     </Form.Field>
                 </Form>
                 <div className="signin-onUp">

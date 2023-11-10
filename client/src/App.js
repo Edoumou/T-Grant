@@ -6,27 +6,30 @@ import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom'
 import ToposCoreJSON from '@topos-protocol/topos-smart-contracts/artifacts/contracts/topos-core/ToposCore.sol/ToposCore.json';
 import SubnetRegistratorJSON from '@topos-protocol/topos-smart-contracts/artifacts/contracts/topos-core/SubnetRegistrator.sol/SubnetRegistrator.json';
 import ToposBankJSON from "../src/contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
-
 import Addresses from "../src/addresses/addr.json";
 import { web3Connection } from './utils/web3Connection';
 import { getContract } from './utils/getContract';
 import { toposData } from './utils/toposData';
+import FormateAddress from './utils/FormateAddress';
 import HeaderLogo from './img/header-logo.png';
 import "./App.css";
 import { setActiveItem, setColor, setIsConnected, setAccount, setRole } from './store';
 import Home from './components/Home';
 import Register from './components/Register';
+import Connect from './components/Connect';
 const fs = require('fs');
 
 function App() {
-  const [open, setOpen] = useState(false);
-
   const dispatch = useDispatch();
 
-  const loading = useSelector(state => {
-    return state.connection.loading;
+  const data = useSelector(state => {
+    return {
+      signedUp: state.connection.signedUp,
+      loggedIn: state.connection.loggedIn,
+      account: state.connection.account
+    }
   });
-
+  
   const connection = useSelector(state => {
     return {
       activeItem: state.connection.activeItem,
@@ -91,13 +94,27 @@ function App() {
                 </>
               :
                 <>
+                  <MenuItem>
+                    <Button disabled color='purple'>
+                      {FormateAddress(data.account)}
+                    </Button>
+                  </MenuItem>
                 </>
             }
           </Menu>
         </div>
         <Routes>
           <Route path='/' element={<Home />}/>
-          <Route path='/register' element={<Register />}/>
+          {
+            data.loggedIn ?
+              <>
+              </>
+            :
+              <>
+                <Route path='/connect' element={<Connect />}/>
+                <Route path='/register' element={<Register />}/>
+              </>
+          }
         </Routes>
       </BrowserRouter>
     </div>
