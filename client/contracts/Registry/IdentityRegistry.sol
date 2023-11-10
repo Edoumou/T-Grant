@@ -36,6 +36,7 @@ contract IdentityRegistry is IIdentityRegistry {
     * @notice Registers a stakeholder.
     * @notice Changes the status to VERIFIED
     * @param _identityID Identity ID provided by the Identity Registry
+    * @param _signature Hash from authentication data (account + 6 digitcode)
     */
     function register(
         string memory _identityID,

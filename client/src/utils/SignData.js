@@ -1,8 +1,8 @@
-const SignData = async (username, accountAddress, web3) => {
+const SignData = async (digicode, accountAddress, web3) => {
     let signedData;
 
     await web3.eth.personal.sign(
-        username,
+        digicode,
         accountAddress,
         (err, signature) => {
             if (err) {
@@ -11,7 +11,7 @@ const SignData = async (username, accountAddress, web3) => {
                 signedData = web3.eth.accounts.hashMessage(signature);
             }
         }
-    );
+    ); 
 
     return signedData;
 }

@@ -35,7 +35,6 @@ function App() {
   });
 
   const [subnetID, setSubnetID] = useState('');
-console.log("addresses:", Addresses);
   const loadWeb3 = useCallback(async () => {
     let { web3, account } = await web3Connection();
     let coreData = toposData();

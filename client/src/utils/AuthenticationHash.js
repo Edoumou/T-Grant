@@ -1,10 +1,10 @@
 import SignData from './SignData';
 
-const AuthenticationHash = async (username, accountAddress, password, digiCode, web3) => {
-    let signedMessage = await SignData(username, accountAddress, web3);
-    let passwordDigiCodeHash = await web3.eth.accounts.hashMessage(password + digiCode);
+const AuthenticationHash = async (accountAddress, digiCode, web3) => {
+    let signedMessage = await SignData(digiCode, accountAddress, web3);
+    let accountDigiCodeHash = await web3.eth.accounts.hashMessage(accountAddress + digiCode);
 
-    return await web3.eth.accounts.hashMessage(signedMessage + passwordDigiCodeHash);
+    return await web3.eth.accounts.hashMessage(signedMessage + accountDigiCodeHash);
 }
 
 export default AuthenticationHash;
