@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Form, Button, Message, Modal } from 'semantic-ui-react';
+import { Form, Button, Message, Header, Modal, Loader, Dimmer } from 'semantic-ui-react';
 import IdentityRegistrationJSON from "../../src/contracts/artifacts/contracts/Registry/IdentityRegistry.sol/IdentityRegistry.json";
 import RegistrationHash from "../utils/RegistrationHash";
 import AuthenticationHash from "../utils/AuthenticationHash";
@@ -157,7 +157,6 @@ function Register() {
                     {!loading &&
                         <Modal
                             size="tiny"
-                            closeIcon
                             open={open}
                             trigger={
                                 <Button type='submit' primary fluid size='large' onClick={onRegister}>
@@ -168,13 +167,16 @@ function Register() {
                             onOpen={() => setOpen(true)}
                         >
                             <Modal.Content>
-                            <p>
-                                Your inbox is getting full, would you like us to enable automatic
-                                archiving of old messages?
-                            </p>
+                                
+                                <div style={{ textAlign: 'center' }}>
+                                <h3>Processing the transaction</h3>
+                                <Button inverted basic loading size="massive">Loading</Button>
+                                </div>
+                                
+                                
                             </Modal.Content>
                             <Modal.Actions>
-                            <Button color='red' onClick={() => setOpen(false)}>
+                            <Button floated="left" color='red' onClick={() => setOpen(false)}>
                                 No
                             </Button>
                             <Button color='green' onClick={() => setOpen(false)}>
