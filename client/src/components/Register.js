@@ -169,18 +169,18 @@ function Register() {
                             <Modal.Content>
                                 
                                 <div style={{ textAlign: 'center' }}>
-                                <h3>Processing the transaction</h3>
+                                <h3>Transaction in Process</h3>
                                 <Button inverted basic loading size="massive">Loading</Button>
                                 </div>
                                 
                                 
                             </Modal.Content>
                             <Modal.Actions>
-                            <Button floated="left" color='red' onClick={() => setOpen(false)}>
-                                No
+                            <Button basic floated="left" onClick={() => setOpen(false)}>
+                                <strong>Check on Topos Explorer</strong>
                             </Button>
-                            <Button color='green' onClick={() => setOpen(false)}>
-                                Yes
+                            <Button color='black' onClick={() => setOpen(false)}>
+                                Go to Dashboard
                             </Button>
                             </Modal.Actions>
                         </Modal>
