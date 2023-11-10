@@ -12,6 +12,7 @@ const connectionSlice = createSlice({
         signedUp: false,
         loggedIn: false,
         username: '',
+        loading: false
     },
     reducers: {
         setActiveItem(state, action) {
@@ -40,6 +41,9 @@ const connectionSlice = createSlice({
         },
         setUsername(state, action) {
             state.username = action.payload;
+        },
+        setLoading(state, action) {
+            state.loading = action.payload;
         }
     }
 });
@@ -53,6 +57,7 @@ export const {
     setAccountChanged,
     setSignedUp,
     setLoggedIn,
-    setUsername
+    setUsername,
+    setLoading
 } = connectionSlice.actions;
 export const connectionReducer = connectionSlice.reducer;

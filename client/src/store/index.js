@@ -15,7 +15,9 @@ import {
     setAccountChanged,
     setSignedUp,
     setLoggedIn,
-    setUsername } from "./slices/connectionSlice";
+    setUsername,
+    setLoading
+} from "./slices/connectionSlice";
 
 
 /**
@@ -45,5 +47,6 @@ export {
     setAccountChanged,
     setSignedUp,
     setLoggedIn,
-    setUsername
+    setUsername,
+    setLoading
 }

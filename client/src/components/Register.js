@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Form, Button, Card, Message, Grid, GridRow, GridColumn } from 'semantic-ui-react';
+import { Form, Button, Message } from 'semantic-ui-react';
 import IdentityRegistrationJSON from "../../src/contracts/artifacts/contracts/Registry/IdentityRegistry.sol/IdentityRegistry.json";
 import RegistrationHash from "../utils/RegistrationHash";
 import AuthenticationHash from "../utils/AuthenticationHash";
 import "../users.css";
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
-import { setSignedUp } from "../store";
+import { setIsVerified, setSignedUp } from "../store";
 import Addresses from "../../src/addresses/addr.json";
 
 function Register() {
@@ -22,14 +22,10 @@ function Register() {
     const dispatch = useDispatch();
 
     const onSignUp = async () => {
-        //this.setState({ signedUp: false });
         let connection = await web3Connection();
         let web3 = connection.web3;
         let account = connection.account;
         let contract = await getContract(web3, IdentityRegistrationJSON, Addresses.RegistryContract);
-
-        console.log('web3:', web3);
-        console.log('contract:', contract);
 
         if (fullname !== '' && phone !== '' && email !== '' && digicode !== '') {
             let fullNameToUse = fullname.trim();
@@ -49,6 +45,8 @@ function Register() {
                     .call({ from: account });
 
                 if (isVerified) {
+                    dispatch(setIsVerified(true));
+
                     setAlertMessage("this account is already registered");
                     setStatus('failed');
                     setFullname('');
@@ -78,7 +76,7 @@ function Register() {
                     setDigicode('');
                     setStatus('success');
                     setAlertMessage("Signup successful");
-                    //dispatch(setSignedUp(true));
+                    dispatch(setSignedUp(true));
 
                     return;
                 }
