@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Form, Button, Message } from 'semantic-ui-react';
+import { Form, Button, Message, Modal } from 'semantic-ui-react';
 import IdentityRegistrationJSON from "../../src/contracts/artifacts/contracts/Registry/IdentityRegistry.sol/IdentityRegistry.json";
 import RegistrationHash from "../utils/RegistrationHash";
 import AuthenticationHash from "../utils/AuthenticationHash";
@@ -19,9 +19,15 @@ function Register() {
     const [digicode, setDigicode] = useState('');
     const [status, setStatus] = useState('');
 
+    const [open, setOpen] = useState(false);
+
     const dispatch = useDispatch();
 
-    const onSignUp = async () => {
+    const loading = useSelector(state => {
+        return state.connection.loading;
+    });
+
+    const onRegister = async () => {
         let connection = await web3Connection();
         let web3 = connection.web3;
         let account = connection.account;
@@ -147,9 +153,36 @@ function Register() {
                         />
                     </Form.Field>
                     <Form.Field>
-                        <Button type='submit' primary fluid size='large' onClick={onSignUp}>
-                            Register
-                        </Button>
+
+                    {!loading &&
+                        <Modal
+                            size="tiny"
+                            closeIcon
+                            open={open}
+                            trigger={
+                                <Button type='submit' primary fluid size='large' onClick={onRegister}>
+                                    Register
+                                </Button>
+                            }
+                            onClose={() => setOpen(false)}
+                            onOpen={() => setOpen(true)}
+                        >
+                            <Modal.Content>
+                            <p>
+                                Your inbox is getting full, would you like us to enable automatic
+                                archiving of old messages?
+                            </p>
+                            </Modal.Content>
+                            <Modal.Actions>
+                            <Button color='red' onClick={() => setOpen(false)}>
+                                No
+                            </Button>
+                            <Button color='green' onClick={() => setOpen(false)}>
+                                Yes
+                            </Button>
+                            </Modal.Actions>
+                        </Modal>
+                    }
                     </Form.Field>
                 </Form>
                 <div className="signin-onUp">
