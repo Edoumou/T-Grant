@@ -13,7 +13,7 @@ import { toposData } from './utils/toposData';
 import FormateAddress from './utils/FormateAddress';
 import HeaderLogo from './img/header-logo.png';
 import "./App.css";
-import { setActiveItem, setColor, setIsConnected, setAccount, setRole } from './store';
+import { setActiveItem, setColor, setIsConnected, setAccount, setRole, setLoggedIn } from './store';
 import Home from './components/Home';
 import Register from './components/Register';
 import Connect from './components/Connect';
@@ -65,6 +65,11 @@ function App() {
     dispatch(setColor('pink'));
   }
 
+  const handleDisconnect = () => {
+    dispatch(setLoggedIn(false));
+    dispatch(setActiveItem("home"));
+  }
+
   return (
     <div className='App'>
       <BrowserRouter>
@@ -94,6 +99,14 @@ function App() {
                 </>
               :
                 <>
+                  <MenuItem
+                    position='right'
+                    name='disconnect'
+                    active={data.activeItem === 'disconnect'}
+                    onClick={handleDisconnect}
+                    as={Link}
+                    to='/'
+                  />
                   <MenuItem>
                     <Button disabled color='purple'>
                       {FormateAddress(data.account)}
@@ -108,6 +121,8 @@ function App() {
           {
             data.loggedIn ?
               <>
+                <Route path='*' element={<Navigate to='/' />}/>
+                <Route path='/disconnect' element={<Navigate to='/' />}/>
               </>
             :
               <>

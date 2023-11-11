@@ -6,7 +6,7 @@ import AuthenticationJSON from "../../src/contracts/artifacts/contracts/Auth/Aut
 import AuthValidation from "../utils/AuthValidation";
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
-import { setLoggedIn, setAccount } from "../store";
+import { setLoggedIn, setAccount, setActiveItem } from "../store";
 import Addresses from "../../src/addresses/addr.json";
 
 function Connect() {
@@ -15,12 +15,6 @@ function Connect() {
     const [status, setStatus] = useState('');
 
     const dispatch = useDispatch();
-
-    const signedUp = useSelector(state => {
-        return {
-          signedUp: state.connection.signedUp
-        };
-      });
 
     const onConnect = async () => {
         let connection = await web3Connection();
@@ -112,7 +106,7 @@ function Connect() {
                 </Form>
                 
                 <div className="signin-onUp">
-                    Don't have an account? <Link to='/register'>Register</Link>
+                    Don't have an account? <Button compact size="large" inverted onClick={() => dispatch(setActiveItem('register'))}><Link to='/register'>Register</Link></Button>
                 </div>
             </div>
         </div>

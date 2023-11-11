@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Form, Button, Message, Header, Modal, Loader, Dimmer } from 'semantic-ui-react';
+import { Form, Button, Message, Modal } from 'semantic-ui-react';
 import IdentityRegistrationJSON from "../../src/contracts/artifacts/contracts/Registry/IdentityRegistry.sol/IdentityRegistry.json";
 import RegistrationHash from "../utils/RegistrationHash";
 import AuthenticationHash from "../utils/AuthenticationHash";
 import "../users.css";
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
-import { setIsVerified, setLoading, setSignedUp } from "../store";
+import { setActiveItem, setIsVerified, setLoading, setSignedUp } from "../store";
 import Addresses from "../../src/addresses/addr.json";
 
 function Register() {
@@ -26,10 +26,6 @@ function Register() {
     const [open, setOpen] = useState(false);
 
     const dispatch = useDispatch();
-
-    const loading = useSelector(state => {
-        return state.connection.loading;
-    });
 
     const onRegister = async () => {
         let connection = await web3Connection();
@@ -212,7 +208,7 @@ function Register() {
                     </Form.Field>
                 </Form>
                 <div className="signin-onUp">
-                    Already registered? <Link to='/connect'>Connect</Link>
+                    Already registered? <Button compact size="large" inverted onClick={() => dispatch(setActiveItem('connect'))}><Link to='/connect'>Connect</Link></Button> 
                 </div>
             </div>
         </div>
