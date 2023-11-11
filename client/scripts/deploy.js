@@ -110,6 +110,7 @@ async function main() {
   const couponPayment = await CouponPayment.deploy();
   await couponPayment.waitForDeployment();
 
+  await bank.setManager(deployer1.address, { from: deployer1.address });
   await registery.setAuthenticationContract(authentication.target, { from: deployer1.address });
 
   //=== Cp artifacts in `src/contracts` directory
