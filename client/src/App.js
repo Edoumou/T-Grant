@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom'
 import ToposCoreJSON from '@topos-protocol/topos-smart-contracts/artifacts/contracts/topos-core/ToposCore.sol/ToposCore.json';
 import SubnetRegistratorJSON from '@topos-protocol/topos-smart-contracts/artifacts/contracts/topos-core/SubnetRegistrator.sol/SubnetRegistrator.json';
 import ToposBankJSON from "../src/contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
+import RolesJSON from "../src/contracts/artifacts/contracts/utils/Roles.sol/Roles.json";
 import Addresses from "../src/addresses/addr.json";
 import { web3Connection } from './utils/web3Connection';
 import { getContract } from './utils/getContract';
@@ -17,7 +18,6 @@ import { setActiveItem, setColor, setIsConnected, setAccount, setRole, setLogged
 import Home from './components/Home';
 import Register from './components/Register';
 import Connect from './components/Connect';
-const fs = require('fs');
 
 function App() {
   const dispatch = useDispatch();
@@ -53,7 +53,11 @@ function App() {
 
     //=== ToposBank Contract
     let toposBank = await getContract(web3, ToposBankJSON, Addresses.ToposBankContract);
-    let fees = await toposBank.methods.dealFees().call({ from: account });
+    let rolesContract = await getContract(web3, RolesJSON, Addresses.RolesContract);
+
+    let role = await rolesContract.methods.getRole(account).call({ from: account });
+
+    dispatch(setRole(role));
   });
 
   useEffect(() => {

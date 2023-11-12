@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import "../Topos/interfaces/IRoles.sol";
 
 contract Roles is IRoles {
-    mapping(address => string) public roles;
+    mapping(address => string) roles;
 
     address public owner;
     address public toposBankContract;
