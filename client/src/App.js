@@ -7,6 +7,8 @@ import ToposCoreJSON from '@topos-protocol/topos-smart-contracts/artifacts/contr
 import SubnetRegistratorJSON from '@topos-protocol/topos-smart-contracts/artifacts/contracts/topos-core/SubnetRegistrator.sol/SubnetRegistrator.json';
 import ToposBankJSON from "../src/contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
 import RolesJSON from "../src/contracts/artifacts/contracts/utils/Roles.sol/Roles.json";
+import IssuerJSON from "../src/contracts/artifacts/contracts/Topos/Bank/Issuer.sol/Issuer.json";
+import InvestorJSON from "../src/contracts/artifacts/contracts/Topos/Bank/Investor.sol/Investor.json";
 import Addresses from "../src/addresses/addr.json";
 import { web3Connection } from './utils/web3Connection';
 import { getContract } from './utils/getContract';
@@ -14,7 +16,7 @@ import { toposData } from './utils/toposData';
 import FormateAddress from './utils/FormateAddress';
 import HeaderLogo from './img/header-logo.png';
 import "./App.css";
-import { setActiveItem, setColor, setIsConnected, setAccount, setRole, setLoggedIn } from './store';
+import { setActiveItem, setColor, setIsConnected, setAccount, setRole, setLoggedIn, setIssuerRegistrationStatus, setInvestorRegistrationStatus } from './store';
 import Home from './components/Home';
 import Register from './components/Register';
 import Connect from './components/Connect';
@@ -38,6 +40,18 @@ function App() {
     };
   });
 
+  const issuer = useSelector(state => {
+    return {
+      registrationStatus: state.issuer.registrationStatus
+    }
+  });
+
+  const investor = useSelector(state => {
+    return {
+      registrationStatus: state.investor.registrationStatus
+    }
+  });
+
   const [subnetID, setSubnetID] = useState('');
   const loadWeb3 = useCallback(async () => {
     let { web3, account } = await web3Connection();
@@ -49,10 +63,16 @@ function App() {
     //=== ToposBank Contract
     let toposBank = await getContract(web3, ToposBankJSON, Addresses.ToposBankContract);
     let rolesContract = await getContract(web3, RolesJSON, Addresses.RolesContract);
+    let issuerContract = await getContract(web3, IssuerJSON, Addresses.IssuerContract);
+    let investorContract = await getContract(web3, InvestorJSON, Addresses.InvestorContract);
 
     let role = await rolesContract.methods.getRole(account).call({ from: account });
+    let issuerRegistrationStatus = await issuerContract.methods.issuerStatus(account).call({ from: account });
+    let investorRegistrationStatus = await investorContract.methods.investorStatus(account).call({ from: account });
 
     dispatch(setRole(role));
+    dispatch(setIssuerRegistrationStatus(issuerRegistrationStatus));
+    dispatch(setInvestorRegistrationStatus(investorRegistrationStatus));
   });
 
   useEffect(() => {

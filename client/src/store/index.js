@@ -18,6 +18,8 @@ import {
     setUsername,
     setLoading
 } from "./slices/connectionSlice";
+import { issuerReducer, setIssuerRegistrationStatus } from "./slices/issuerSlice";
+import { investorReducer, setInvestorRegistrationStatus } from "./slices/investorSlice";
 
 
 /**
@@ -26,7 +28,9 @@ import {
 const store = configureStore({
     reducer: {
         registry:  registryReducer,
-        connection: connectionReducer
+        connection: connectionReducer,
+        issuer: issuerReducer,
+        investor: investorReducer
     },
     middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
@@ -48,5 +52,7 @@ export {
     setSignedUp,
     setLoggedIn,
     setUsername,
-    setLoading
+    setLoading,
+    setIssuerRegistrationStatus,
+    setInvestorRegistrationStatus
 }

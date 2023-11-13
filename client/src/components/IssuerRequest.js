@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { Form, Button, Message, Grid, GridRow, GridColumn, Menu, Dropdown, Input, Modal } from 'semantic-ui-react';
+import { Button, Grid, GridRow, GridColumn, Menu, Dropdown, Input, Modal } from 'semantic-ui-react';
 import IssuerJSON from "../../src/contracts/artifacts/contracts/Topos/Bank/Issuer.sol/Issuer.json";
-import AuthValidation from "../utils/AuthValidation";
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
-import { setLoggedIn, setAccount, setActiveItem, setLoading } from "../store";
 import Addresses from "../../src/addresses/addr.json";
 
 function IssuerRequest() {
@@ -23,6 +21,12 @@ function IssuerRequest() {
     const [open, setOpen] = useState(false);
 
     const dispatch = useDispatch();
+
+    const issuer = useSelector(state => {
+        return {
+          status: state.issuer.registrationStatus
+        }
+    });
 
     const options = [
         { key: 1, text: 'GOV', value: 'GOV' },
@@ -105,109 +109,128 @@ function IssuerRequest() {
 
     return (
         <div className="deal-main">
-            <div className="deal-head">
-                Become an Issuer
-            </div>
-            <div className="deal-form">
-                <Grid stackable columns={3}>
-                    <GridRow>
-                        <GridColumn>
-                            <Input
-                                fluid
-                                size="mini"
-                                placeholder='Document URL'
-                                value={url}
-                                onChange={e => setUrl(e.target.value)}
-                            />
-                        </GridColumn>
-                        <GridColumn>
-                            <Input
-                                fluid
-                                size="mini"
-                                placeholder='Name'
-                                value={name}
-                                onChange={e => setName(e.target.value)}
-                            />
-                        </GridColumn>
-                        <GridColumn>
-                            <Input
-                                fluid
-                                size="mini"
-                                placeholder='Country'
-                                value={country}
-                                onChange={e => setCountry(e.target.value)}
-                            />
-                        </GridColumn>
-                    </GridRow>
-                    <GridRow>
-                        <GridColumn>
-                            <Menu>
-                                <Dropdown
-                                    placeholder="Issuer Type"
-                                    options={options}
-                                    value={issuerType}
-                                    onChange={(e, data) => setIssuerType(data.value)}
-                                />
-                            </Menu>
-                        </GridColumn>
-                        <GridColumn>
-                            <Input
-                                fluid
-                                size="mini"
-                                placeholder='Credit Rating'
-                                value={creditRating}
-                                onChange={e => setCreditRating(e.target.value)}
-                            />
-                        </GridColumn>
-                        <GridColumn>
-                            <Input
-                                fluid
-                                size="mini"
-                                placeholder='Carbon Credit'
-                                value={carbonCredit}
-                                onChange={e => setCarbonCredit(e.target.value)}
-                            />
-                        </GridColumn>
-                    </GridRow>
-                </Grid>
-            </div>
-            <br></br>
-            <br></br>
-            <div className="deal-button">
-                <Modal
-                    size="tiny"
-                    open={open}
-                    trigger={
-                        <Button type='submit' color="vk" fluid size='large' onClick={request}>
-                            Submit
-                        </Button>
-                    }
-                    onClose={() => setOpen(false)}
-                    onOpen={() => setOpen(true)}
-                >
-                    <Modal.Content>
-                        <div style={{ textAlign: 'center' }}>
-                            <h3>{loadingMessage}</h3>
-                            {
-                                loader ?
-                                    <Button inverted basic loading size="massive">Loading</Button>
-                                :
-                                    <p style={{ color: 'green' }}><strong>transaction processed successfully</strong></p>
-                            }
+            {
+                issuer.status === '0' ?
+                    <>
+                        <div className="deal-head">
+                            Become an Issuer
                         </div>
-                    </Modal.Content>
-                    <Modal.Actions>
-                    <Button basic floated="left" onClick={goToExplorer}>
-                        <strong>Check on Topos Explorer</strong>
-                    </Button>
-                    <Button color='black' onClick={() => setOpen(false)}>
-                        Go to Dashboard
-                    </Button>
-                    </Modal.Actions>
-                </Modal>
+                        <div className="deal-form">
+                            <Grid stackable columns={3}>
+                                <GridRow>
+                                    <GridColumn>
+                                        <Input
+                                            fluid
+                                            size="mini"
+                                            placeholder='Document URL'
+                                            value={url}
+                                            onChange={e => setUrl(e.target.value)}
+                                        />
+                                    </GridColumn>
+                                    <GridColumn>
+                                        <Input
+                                            fluid
+                                            size="mini"
+                                            placeholder='Name'
+                                            value={name}
+                                            onChange={e => setName(e.target.value)}
+                                        />
+                                    </GridColumn>
+                                    <GridColumn>
+                                        <Input
+                                            fluid
+                                            size="mini"
+                                            placeholder='Country'
+                                            value={country}
+                                            onChange={e => setCountry(e.target.value)}
+                                        />
+                                    </GridColumn>
+                                </GridRow>
+                                <GridRow>
+                                    <GridColumn>
+                                        <Menu>
+                                            <Dropdown
+                                                placeholder="Issuer Type"
+                                                options={options}
+                                                value={issuerType}
+                                                onChange={(e, data) => setIssuerType(data.value)}
+                                            />
+                                        </Menu>
+                                    </GridColumn>
+                                    <GridColumn>
+                                        <Input
+                                            fluid
+                                            size="mini"
+                                            placeholder='Credit Rating'
+                                            value={creditRating}
+                                            onChange={e => setCreditRating(e.target.value)}
+                                        />
+                                    </GridColumn>
+                                    <GridColumn>
+                                        <Input
+                                            fluid
+                                            size="mini"
+                                            placeholder='Carbon Credit'
+                                            value={carbonCredit}
+                                            onChange={e => setCarbonCredit(e.target.value)}
+                                        />
+                                    </GridColumn>
+                                </GridRow>
+                            </Grid>
+                        </div>
+                        <br></br>
+                        <br></br>
+                        <div className="deal-button">
+                            <Modal
+                                size="tiny"
+                                open={open}
+                                trigger={
+                                    <Button type='submit' color="vk" fluid size='large' onClick={request}>
+                                        Submit
+                                    </Button>
+                                }
+                                onClose={() => setOpen(false)}
+                                onOpen={() => setOpen(true)}
+                            >
+                                <Modal.Content>
+                                    <div style={{ textAlign: 'center' }}>
+                                        <h3>{loadingMessage}</h3>
+                                        {
+                                            loader ?
+                                                <Button inverted basic loading size="massive">Loading</Button>
+                                            :
+                                                <p style={{ color: 'green' }}><strong>transaction processed successfully</strong></p>
+                                        }
+                                    </div>
+                                </Modal.Content>
+                                <Modal.Actions>
+                                <Button basic floated="left" onClick={goToExplorer}>
+                                    <strong>Check on Topos Explorer</strong>
+                                </Button>
+                                <Button color='black' onClick={() => setOpen(false)}>
+                                    Go to Dashboard
+                                </Button>
+                                </Modal.Actions>
+                            </Modal>
 
 
-            </div>   
+                        </div>
+                    </>
+                :
+                    <>
+                        <div style={{ paddingTop: 80, paddingBottom: 40, fontSize: 25, fontFamily: "-moz-initial" }}>
+                            Your request to get the Issuer status is in progress
+                        </div>
+                        <div style={{ fontSize: 17, fontFamily: "-moz-initial" }}>
+                            <p>
+                                Check again later
+                            </p>
+                            <p>
+                                ⏰⏱️⌛️⏱️⏰
+                            </p>  
+                        </div>
+                    </>
+            }   
         </div>
     );
 }
