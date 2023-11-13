@@ -62,6 +62,13 @@
     font-weight: 600;
 }
 
+.issuer-request {
+    margin-left: 60px;
+    margin-right: 80px;
+    margin-top: 80px;
+    font-size: 20px;
+}
+
 .issuer-head {
     word-spacing: 1px;
     margin-bottom: 60px;
@@ -119,7 +126,7 @@
 
 .deal-head {
     word-spacing: 1px;
-    color: rgb(45, 115, 18);
+    color: rgb(129, 67, 16);
     font-size: calc(10px + 2vmin);
     margin-bottom: 40px;
 }
