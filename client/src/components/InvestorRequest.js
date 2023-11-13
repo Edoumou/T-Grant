@@ -7,13 +7,9 @@ import { getContract } from "../utils/getContract";
 import Addresses from "../../src/addresses/addr.json";
 
 function InvestorRequest() {
-    const [url, setUrl] = useState('');
     const [name, setName] = useState('');
     const [country, setCountry] = useState('');
-    const [issuerType, setIssuerType] = useState('');
-    const [creditRating, setCreditRating] = useState('');
-    const [carbonCredit, setCarbonCredit] = useState('');
-    const [txHash, setTxHash] = useState('');
+    const [investorType, setInvestorType] = useState('');
     const [loader, setLoader] = useState(true);
     const [explorerLink, setExplorerLink] = useState('');
     const [loadingMessage, setLoadingMessage] = useState('Transaction in Process');
@@ -42,67 +38,48 @@ function InvestorRequest() {
         let { web3, account } = await web3Connection();
         let contract = await getContract(web3, InvestorJSON, Addresses.InvestorContract);
 
-        if (url !== '' && name !== '' && country !== '' && issuerType !== '' && creditRating !== '' && carbonCredit !== '') {
-            let urlToUse = url.trim();
+        if (name !== '' && country !== '' && investorType !== '') {
             let nameToUse = name.trim();
             let countryToUse = country.trim();
-            let issuerTypeToUse = issuerType.trim();
-            let creditRatingToUse = creditRating.trim();
-            let carbonCreditToUse = carbonCredit.trim();
+            let investorTypeToUse = investorType.trim();
 
-            let issuer = {
-                documentURI: urlToUse,
+            let investor = {
                 name: nameToUse,
                 country: countryToUse,
-                issuerType: issuerTypeToUse,
-                creditRating: creditRatingToUse,
-                carbonCredit: carbonCreditToUse,
+                investorType: investorTypeToUse,
                 walletAddress: account
             }
 
-            await contract.methods.requestRegistrationIssuer(issuer)
+            await contract.methods.requestRegistrationInvestor(investor)
                 .send({ from: account })
                 .on('transactionHash', hash => {
                     setLoadingMessage('Transaction in Process! ⌛️');
                     setExplorerLink(`https://explorer.testnet-1.topos.technology/subnet/0xe93335e1ec5c2174dfcde38dbdcc6fd39d741a74521e0e01155c49fa77f743ae/transaction/${hash}`);
-                    setTxHash(hash);
-                    setUrl('');
                     setName('');
                     setCountry('');
-                    setIssuerType('');
-                    setCreditRating('');
-                    setCarbonCredit('');
+                    setInvestorType('');
                 })
                 .on('receipt', receipt => {
                     setLoadingMessage('Transaction Completed! ✅');
                     setLoader(false);
                 });
 
-            setUrl('');
             setName('');
             setCountry('');
-            setIssuerType('');
-            setCreditRating('');
-            setCarbonCredit('');
+            setInvestorType('');
             setLoader(false);
         }
 
-        setUrl('');
         setName('');
         setCountry('');
-        setIssuerType('');
-        setCreditRating('');
-        setCarbonCredit('');
+        setInvestorType('');
         setLoader(false);
     }
 
     const goToExplorer = () => {
-        setUrl('');
         setName('');
         setCountry('');
-        setIssuerType('');
-        setCreditRating('');
-        setCarbonCredit('');
+        setInvestorType('');
 
         const newWindow = window.open(explorerLink, '_blank', 'noopener,noreferrer');
         if (newWindow) newWindow.opener = null;
@@ -123,15 +100,6 @@ function InvestorRequest() {
                                         <Input
                                             fluid
                                             size="mini"
-                                            placeholder='Document URL'
-                                            value={url}
-                                            onChange={e => setUrl(e.target.value)}
-                                        />
-                                    </GridColumn>
-                                    <GridColumn>
-                                        <Input
-                                            fluid
-                                            size="mini"
                                             placeholder='Name'
                                             value={name}
                                             onChange={e => setName(e.target.value)}
@@ -146,35 +114,15 @@ function InvestorRequest() {
                                             onChange={e => setCountry(e.target.value)}
                                         />
                                     </GridColumn>
-                                </GridRow>
-                                <GridRow>
                                     <GridColumn>
                                         <Menu>
                                             <Dropdown
-                                                placeholder="Issuer Type"
+                                                placeholder="Investor Type"
                                                 options={options}
-                                                value={issuerType}
-                                                onChange={(e, data) => setIssuerType(data.value)}
+                                                value={investorType}
+                                                onChange={(e, data) => setInvestorType(data.value)}
                                             />
                                         </Menu>
-                                    </GridColumn>
-                                    <GridColumn>
-                                        <Input
-                                            fluid
-                                            size="mini"
-                                            placeholder='Credit Rating'
-                                            value={creditRating}
-                                            onChange={e => setCreditRating(e.target.value)}
-                                        />
-                                    </GridColumn>
-                                    <GridColumn>
-                                        <Input
-                                            fluid
-                                            size="mini"
-                                            placeholder='Carbon Credit'
-                                            value={carbonCredit}
-                                            onChange={e => setCarbonCredit(e.target.value)}
-                                        />
                                     </GridColumn>
                                 </GridRow>
                             </Grid>

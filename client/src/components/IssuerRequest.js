@@ -13,7 +13,6 @@ function IssuerRequest() {
     const [issuerType, setIssuerType] = useState('');
     const [creditRating, setCreditRating] = useState('');
     const [carbonCredit, setCarbonCredit] = useState('');
-    const [txHash, setTxHash] = useState('');
     const [loader, setLoader] = useState(true);
     const [explorerLink, setExplorerLink] = useState('');
     const [loadingMessage, setLoadingMessage] = useState('Transaction in Process');
@@ -64,7 +63,6 @@ function IssuerRequest() {
                 .on('transactionHash', hash => {
                     setLoadingMessage('Transaction in Process! ⌛️');
                     setExplorerLink(`https://explorer.testnet-1.topos.technology/subnet/0xe93335e1ec5c2174dfcde38dbdcc6fd39d741a74521e0e01155c49fa77f743ae/transaction/${hash}`);
-                    setTxHash(hash);
                     setUrl('');
                     setName('');
                     setCountry('');
