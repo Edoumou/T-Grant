@@ -91,7 +91,7 @@ function Connect() {
                     }
                     <Form.Field required>
                         <input
-                            type='text'
+                            type='password'
                             placeholder='6 digit code'
                             value={digicode}
                             autoComplete="digicode"

@@ -18,17 +18,11 @@ import { setActiveItem, setColor, setIsConnected, setAccount, setRole, setLogged
 import Home from './components/Home';
 import Register from './components/Register';
 import Connect from './components/Connect';
+import IssuerRequest from './components/IssuerRequest';
+import InvestorRequest from './components/InvestorRequest';
 
 function App() {
   const dispatch = useDispatch();
-
-  const data = useSelector(state => {
-    return {
-      signedUp: state.connection.signedUp,
-      loggedIn: state.connection.loggedIn,
-      account: state.connection.account
-    }
-  });
   
   const connection = useSelector(state => {
     return {
@@ -74,6 +68,16 @@ function App() {
     dispatch(setActiveItem("home"));
   }
 
+  const becomeIssuer = async (e, { name }) => {
+    dispatch(setActiveItem(name));
+    dispatch(setColor('pink'));
+  }
+
+  const becomeInvestor = async (e, { name }) => {
+    dispatch(setActiveItem(name));
+    dispatch(setColor('pink'));
+  }
+
   return (
     <div className='App'>
       <BrowserRouter>
@@ -103,17 +107,44 @@ function App() {
                 </>
               :
                 <>
+                 {
+                    connection.role === "" ?
+                      <>
+                        <MenuItem
+                        position='right'
+                        name='issuers'
+                        active={connection.activeItem === 'issuers'}
+                        onClick={becomeIssuer}
+                        as={Link}
+                        to='/register/become-issuer'
+                      />
+                      <MenuItem
+                        name='investors'
+                        active={connection.activeItem === 'investors'}
+                        onClick={becomeInvestor}
+                        as={Link}
+                        to='/register/become-investor'
+                      />
+                      </>
+                    : connection.role === "MANAGER" ?
+                      <></>
+                    : connection.role === "ISSUER" ?
+                      <></>
+                    : connection.role === "INVESTOR" ?
+                      <></>
+                    :
+                      <></>
+                 }
                   <MenuItem
-                    position='right'
                     name='disconnect'
-                    active={data.activeItem === 'disconnect'}
+                    active={connection.activeItem === 'disconnect'}
                     onClick={handleDisconnect}
                     as={Link}
                     to='/'
                   />
                   <MenuItem>
                     <Button disabled color='purple'>
-                      {FormateAddress(data.account)}
+                      {FormateAddress(connection.account)}
                     </Button>
                   </MenuItem>
                 </>
@@ -123,9 +154,24 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />}/>
           {
-            data.loggedIn ?
+            connection.loggedIn ?
               <>
                 <Route path='*' element={<Navigate to='/' />}/>
+                {
+                  connection.role === "" ?
+                    <>
+                      <Route path='/register/become-issuer' element={<IssuerRequest to='/' />}/>
+                      <Route path='/register/become-investor' element={<InvestorRequest to='/' />}/>
+                    </>
+                  : connection.role === "MANAGER" ?
+                    <></>
+                  : connection.role === "ISSUER" ?
+                    <></>
+                  : connection.role === "ISSUER" ?
+                    <></>
+                  :
+                    <></>
+                }
                 <Route path='/disconnect' element={<Navigate to='/' />}/>
               </>
             :
