@@ -20,6 +20,7 @@ import Register from './components/Register';
 import Connect from './components/Connect';
 import IssuerRequest from './components/IssuerRequest';
 import InvestorRequest from './components/InvestorRequest';
+import SubmitDeal from './components/SubmitDeal';
 
 function App() {
   const dispatch = useDispatch();
@@ -111,25 +112,34 @@ function App() {
                     connection.role === "" ?
                       <>
                         <MenuItem
-                        position='right'
-                        name='issuers'
-                        active={connection.activeItem === 'issuers'}
-                        onClick={becomeIssuer}
-                        as={Link}
-                        to='/register/become-issuer'
-                      />
-                      <MenuItem
-                        name='investors'
-                        active={connection.activeItem === 'investors'}
-                        onClick={becomeInvestor}
-                        as={Link}
-                        to='/register/become-investor'
-                      />
+                          position='right'
+                          name='issuers'
+                          active={connection.activeItem === 'issuers'}
+                          onClick={becomeIssuer}
+                          as={Link}
+                          to='/register/become-issuer'
+                        />
+                        <MenuItem
+                          name='investors'
+                          active={connection.activeItem === 'investors'}
+                          onClick={becomeInvestor}
+                          as={Link}
+                          to='/register/become-investor'
+                        />
                       </>
                     : connection.role === "MANAGER" ?
                       <></>
                     : connection.role === "ISSUER" ?
-                      <></>
+                      <>
+                        <MenuItem
+                          position='right'
+                          name='submit deal'
+                          active={connection.activeItem === 'submit deal'}
+                          onClick={handleItemClick}
+                          as={Link}
+                          to='/issuer/submit-deal'
+                        />
+                      </>
                     : connection.role === "INVESTOR" ?
                       <></>
                     :
@@ -168,7 +178,9 @@ function App() {
                   : connection.role === "ISSUER" ?
                     <></>
                   : connection.role === "ISSUER" ?
-                    <></>
+                    <>
+                      <Route path='/issuer/submit-deal' element={<SubmitDeal />} />
+                    </>
                   :
                     <></>
                 }

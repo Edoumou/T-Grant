@@ -1,18 +1,26 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { Form, Button, Message, Grid, GridRow, GridColumn, Menu, Dropdown, Input } from 'semantic-ui-react';
-import AuthenticationJSON from "../../src/contracts/artifacts/contracts/Auth/Authentication.sol/Authentication.json";
+import { Form, Button, Message, Grid, GridRow, GridColumn, Menu, Dropdown, Input, Modal } from 'semantic-ui-react';
+import IssuerJSON from "../../src/contracts/artifacts/contracts/Topos/Bank/Issuer.sol/Issuer.json";
 import AuthValidation from "../utils/AuthValidation";
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
-import { setLoggedIn, setAccount, setActiveItem } from "../store";
+import { setLoggedIn, setAccount, setActiveItem, setLoading } from "../store";
 import Addresses from "../../src/addresses/addr.json";
 
 function IssuerRequest() {
-    const [alertMessage, setAlertMessage] = useState('');
     const [url, setUrl] = useState('');
     const [name, setName] = useState('');
-    const [status, setStatus] = useState('');
+    const [country, setCountry] = useState('');
+    const [issuerType, setIssuerType] = useState('');
+    const [creditRating, setCreditRating] = useState('');
+    const [carbonCredit, setCarbonCredit] = useState('');
+    const [txHash, setTxHash] = useState('');
+    const [loader, setLoader] = useState(true);
+    const [explorerLink, setExplorerLink] = useState('');
+    const [loadingMessage, setLoadingMessage] = useState('Transaction in Process');
+
+    const [open, setOpen] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -26,7 +34,73 @@ function IssuerRequest() {
     ];
 
     const request = async () => {
+        let { web3, account } = await web3Connection();
+        let contract = await getContract(web3, IssuerJSON, Addresses.IssuerContract);
 
+        if (url !== '' && name !== '' && country !== '' && issuerType !== '' && creditRating !== '' && carbonCredit !== '') {
+            let urlToUse = url.trim();
+            let nameToUse = name.trim();
+            let countryToUse = country.trim();
+            let issuerTypeToUse = issuerType.trim();
+            let creditRatingToUse = creditRating.trim();
+            let carbonCreditToUse = carbonCredit.trim();
+
+            let issuer = {
+                documentURI: urlToUse,
+                name: nameToUse,
+                country: countryToUse,
+                issuerType: issuerTypeToUse,
+                creditRating: creditRatingToUse,
+                carbonCredit: carbonCreditToUse,
+                walletAddress: account
+            }
+
+            await contract.methods.requestRegistrationIssuer(issuer)
+                .send({ from: account })
+                .on('transactionHash', hash => {
+                    setLoadingMessage('Transaction in Process! ⌛️');
+                    setExplorerLink(`https://explorer.testnet-1.topos.technology/subnet/0xe93335e1ec5c2174dfcde38dbdcc6fd39d741a74521e0e01155c49fa77f743ae/transaction/${hash}`);
+                    setTxHash(hash);
+                    setUrl('');
+                    setName('');
+                    setCountry('');
+                    setIssuerType('');
+                    setCreditRating('');
+                    setCarbonCredit('');
+                })
+                .on('receipt', receipt => {
+                    setLoadingMessage('Transaction Completed! ✅');
+                    setLoader(false);
+                });
+
+            setUrl('');
+            setName('');
+            setCountry('');
+            setIssuerType('');
+            setCreditRating('');
+            setCarbonCredit('');
+            setLoader(false);
+        }
+
+        setUrl('');
+        setName('');
+        setCountry('');
+        setIssuerType('');
+        setCreditRating('');
+        setCarbonCredit('');
+        setLoader(false);
+    }
+
+    const goToExplorer = () => {
+        setUrl('');
+        setName('');
+        setCountry('');
+        setIssuerType('');
+        setCreditRating('');
+        setCarbonCredit('');
+
+        const newWindow = window.open(explorerLink, '_blank', 'noopener,noreferrer');
+        if (newWindow) newWindow.opener = null;
     }
 
     return (
@@ -50,47 +124,18 @@ function IssuerRequest() {
                             <Input
                                 fluid
                                 size="mini"
-                                placeholder='issuer account address'
-                                value={url}
-                                onChange={e => setUrl(e.target.value)}
+                                placeholder='Name'
+                                value={name}
+                                onChange={e => setName(e.target.value)}
                             />
                         </GridColumn>
                         <GridColumn>
                             <Input
                                 fluid
                                 size="mini"
-                                placeholder='issue volume'
-                                value={url}
-                                onChange={e => setUrl(e.target.value)}
-                            />
-                        </GridColumn>
-                    </GridRow>
-                    <GridRow>
-                        <GridColumn>
-                            <Input
-                                fluid
-                                size="mini"
-                                placeholder='denomination'
-                                value={url}
-                                onChange={e => setUrl(e.target.value)}
-                            />
-                        </GridColumn>
-                        <GridColumn>
-                            <Input
-                                fluid
-                                size="mini"
-                                placeholder='coupon rate'
-                                value={url}
-                                onChange={e => setUrl(e.target.value)}
-                            />
-                        </GridColumn>
-                        <GridColumn>
-                            <Input
-                                fluid
-                                size="mini"
-                                placeholder='coupon frequency'
-                                value={url}
-                                onChange={e => setUrl(e.target.value)}
+                                placeholder='Country'
+                                value={country}
+                                onChange={e => setCountry(e.target.value)}
                             />
                         </GridColumn>
                     </GridRow>
@@ -98,31 +143,29 @@ function IssuerRequest() {
                         <GridColumn>
                             <Menu>
                                 <Dropdown
-                                    placeholder="principal token address"
+                                    placeholder="Issuer Type"
                                     options={options}
-                                    value={url}
-                                    onChange={(e, data) => setUrl(e.target.value)}
-                                />
-                            </Menu>
-                        </GridColumn>
-                        <GridColumn>
-                            <Menu>
-                                <Dropdown
-                                    placeholder="coupon type"
-                                    options={options}
-                                    value={url}
-                                    onChange={(e, data) => setUrl(data.value)}
+                                    value={issuerType}
+                                    onChange={(e, data) => setIssuerType(data.value)}
                                 />
                             </Menu>
                         </GridColumn>
                         <GridColumn>
                             <Input
                                 fluid
-                                type="date"
                                 size="mini"
-                                placeholder='maturity date'
-                                value={url}
-                                onChange={e => setUrl(e.target.value)}
+                                placeholder='Credit Rating'
+                                value={creditRating}
+                                onChange={e => setCreditRating(e.target.value)}
+                            />
+                        </GridColumn>
+                        <GridColumn>
+                            <Input
+                                fluid
+                                size="mini"
+                                placeholder='Carbon Credit'
+                                value={carbonCredit}
+                                onChange={e => setCarbonCredit(e.target.value)}
                             />
                         </GridColumn>
                     </GridRow>
@@ -131,13 +174,39 @@ function IssuerRequest() {
             <br></br>
             <br></br>
             <div className="deal-button">
-            <Button
-                    fluid
-                    size='large'
-                    color='vk'
-                    content="Submit"
-                    onClick={request}
-                /> 
+                <Modal
+                    size="tiny"
+                    open={open}
+                    trigger={
+                        <Button type='submit' color="vk" fluid size='large' onClick={request}>
+                            Submit
+                        </Button>
+                    }
+                    onClose={() => setOpen(false)}
+                    onOpen={() => setOpen(true)}
+                >
+                    <Modal.Content>
+                        <div style={{ textAlign: 'center' }}>
+                            <h3>{loadingMessage}</h3>
+                            {
+                                loader ?
+                                    <Button inverted basic loading size="massive">Loading</Button>
+                                :
+                                    <p style={{ color: 'green' }}><strong>transaction processed successfully</strong></p>
+                            }
+                        </div>
+                    </Modal.Content>
+                    <Modal.Actions>
+                    <Button basic floated="left" onClick={goToExplorer}>
+                        <strong>Check on Topos Explorer</strong>
+                    </Button>
+                    <Button color='black' onClick={() => setOpen(false)}>
+                        Go to Dashboard
+                    </Button>
+                    </Modal.Actions>
+                </Modal>
+
+
             </div>   
         </div>
     );
