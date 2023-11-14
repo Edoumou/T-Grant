@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import 'semantic-ui-css/semantic.min.css';
-import { Menu, MenuItem, Image, Button, Modal } from 'semantic-ui-react';
+import { Menu, MenuItem, Image, Button, Modal, Icon } from 'semantic-ui-react';
 import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
 import ToposCoreJSON from '@topos-protocol/topos-smart-contracts/artifacts/contracts/topos-core/ToposCore.sol/ToposCore.json';
 import SubnetRegistratorJSON from '@topos-protocol/topos-smart-contracts/artifacts/contracts/topos-core/SubnetRegistrator.sol/SubnetRegistrator.json';
@@ -144,8 +144,8 @@ function App() {
                       <>
                         <MenuItem
                           position='right'
-                          name='manager requests'
-                          active={connection.activeItem === 'manager requests'}
+                          name='requests'
+                          active={connection.activeItem === 'requests'}
                           onClick={handleItemClick}
                           as={Link}
                           to='/manager/requests'
@@ -183,11 +183,14 @@ function App() {
                  }
                   <MenuItem
                     name='disconnect'
-                    active={connection.activeItem === 'disconnect'}
                     onClick={handleDisconnect}
                     as={Link}
                     to='/'
-                  />
+                    className='sign-out'
+                  >
+                    <Icon fitted color='red'  name='sign-out' />
+                    <div className='hover-text'>disconnect</div>
+                  </MenuItem>
                   <MenuItem>
                     <Button disabled color='purple'>
                       {FormateAddress(connection.account)}
