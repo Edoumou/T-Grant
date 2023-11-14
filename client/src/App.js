@@ -23,6 +23,9 @@ import Connect from './components/Connect';
 import IssuerRequest from './components/IssuerRequest';
 import InvestorRequest from './components/InvestorRequest';
 import SubmitDeal from './components/SubmitDeal';
+import ManagerRequests from './components/ManagerRequests';
+import ManagerBonds from './components/ManagerBonds';
+import ManagerDeals from './components/ManagerDeals';
 
 function App() {
   const dispatch = useDispatch();
@@ -89,16 +92,6 @@ function App() {
     dispatch(setActiveItem("home"));
   }
 
-  const becomeIssuer = async (e, { name }) => {
-    dispatch(setActiveItem(name));
-    dispatch(setColor('pink'));
-  }
-
-  const becomeInvestor = async (e, { name }) => {
-    dispatch(setActiveItem(name));
-    dispatch(setColor('pink'));
-  }
-
   return (
     <div className='App'>
       <BrowserRouter>
@@ -135,20 +128,43 @@ function App() {
                           position='right'
                           name='issuers'
                           active={connection.activeItem === 'issuers'}
-                          onClick={becomeIssuer}
+                          onClick={handleItemClick}
                           as={Link}
                           to='/register/become-issuer'
                         />
                         <MenuItem
                           name='investors'
                           active={connection.activeItem === 'investors'}
-                          onClick={becomeInvestor}
+                          onClick={handleItemClick}
                           as={Link}
                           to='/register/become-investor'
                         />
                       </>
                     : connection.role === "MANAGER" ?
-                      <></>
+                      <>
+                        <MenuItem
+                          position='right'
+                          name='manager requests'
+                          active={connection.activeItem === 'manager requests'}
+                          onClick={handleItemClick}
+                          as={Link}
+                          to='/manager/requests'
+                        />
+                        <MenuItem
+                          name='deals'
+                          active={connection.activeItem === 'deals'}
+                          onClick={handleItemClick}
+                          as={Link}
+                          to='/manager/deals'
+                        />
+                        <MenuItem
+                          name='bonds'
+                          active={connection.activeItem === 'bonds'}
+                          onClick={handleItemClick}
+                          as={Link}
+                          to='/manager/bonds'
+                        />
+                      </>
                     : connection.role === "ISSUER" ?
                       <>
                         <MenuItem
@@ -194,7 +210,11 @@ function App() {
                       <Route path='/register/become-investor' element={<InvestorRequest to='/' />}/>
                     </>
                   : connection.role === "MANAGER" ?
-                    <></>
+                    <>
+                      <Route path='/manager/requests' element={<ManagerRequests />} />
+                      <Route path='/manager/deals' element={<ManagerDeals />} />
+                      <Route path='/manager/bonds' element={<ManagerBonds />} />
+                    </>
                   : connection.role === "ISSUER" ?
                     <></>
                   : connection.role === "ISSUER" ?
