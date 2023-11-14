@@ -38,6 +38,8 @@ abstract contract BondData {
         string creditRating;
         uint256 carbonCredit;
         address walletAddress;
+        StakeHolderStatus status;
+        uint256 index;
     }
 
     struct Investor {
@@ -45,6 +47,8 @@ abstract contract BondData {
         string country;
         string investorType;
         address walletAddress;
+        StakeHolderStatus status;
+        uint256 index;
     }
 
     struct IssueData {

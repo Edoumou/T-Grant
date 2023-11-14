@@ -8,9 +8,10 @@ import "../../Registry/IIdentityRegistry.sol";
 
 contract Issuer {
     mapping(address => BondData.Issuer) public issuers;
-    mapping(address => BondData.StakeHolderStatus) public issuerStatus;
 
     address public toposBankContract;
+
+    BondData.Issuer[] listOfIssuers;
 
     event ApproveIssuer(address issuer);
     event RejectIssuer(address issuer);
@@ -45,52 +46,63 @@ contract Issuer {
     function requestRegistrationIssuer(
         BondData.Issuer calldata _issuer
     ) external mustBeApproved(_issuer.walletAddress) {
-        require(msg.sender == _issuer.walletAddress, "INVALID_ADDRESS");
+        address issuerAddress = _issuer.walletAddress;
+
+        require(msg.sender == issuerAddress, "INVALID_ADDRESS");
         require(
-            issuerStatus[msg.sender] == BondData.StakeHolderStatus.UNDEFINED,
+            issuers[issuerAddress].status == BondData.StakeHolderStatus.UNDEFINED,
             "CHECK_YOUR_STATUS"
         );
 
         issuers[_issuer.walletAddress] = _issuer;
-        issuerStatus[msg.sender] = BondData.StakeHolderStatus.SUBMITTED;
+        issuers[_issuer.walletAddress].status = BondData.StakeHolderStatus.SUBMITTED;
+        issuers[_issuer.walletAddress].index = listOfIssuers.length;
+
+        listOfIssuers.push(_issuer);
 
         emit RequestIssuerRegistration(_issuer.walletAddress);
     }
 
     /**
     * @notice Approves an issuer registration request. Can be called only by Topos manager
-    * @param _issuer issuer's account address
+    * @param _issuerAddress issuer's account address
     */
-    function approveIssuer(address _issuer) external {
+    function approveIssuer(address _issuerAddress) external {
+        BondData.Issuer memory _issuer = issuers[_issuerAddress];
+
         (address toposManager, address rolesContract, , ,) = IToposBank(toposBankContract).getContracts();
 
         require(msg.sender == toposManager, "ONLY_TOPOS_MANAGER");
         require(
-            issuerStatus[_issuer] == BondData.StakeHolderStatus.SUBMITTED,
+            _issuer.status == BondData.StakeHolderStatus.SUBMITTED,
             "CHECK_YOUR_STATUS"
         );
 
-        issuerStatus[_issuer] = BondData.StakeHolderStatus.APPROVED;
-        IRoles(rolesContract).setRole("ISSUER", _issuer);
+        issuers[_issuerAddress].status = BondData.StakeHolderStatus.APPROVED;
+        listOfIssuers[_issuer.index].status = BondData.StakeHolderStatus.APPROVED;
+        IRoles(rolesContract).setRole("ISSUER", _issuerAddress);
 
-        emit ApproveIssuer(_issuer);
+        emit ApproveIssuer(_issuerAddress);
     }
 
     /**
     * @notice Rejects an issuer registration request. Can be called only by Topos manager
-    * @param _issuer issuer's account address
+    * @param _issuerAddress issuer's account address
     */
-    function rejectIssuer(address _issuer) external {
+    function rejectIssuer(address _issuerAddress) external {
+        BondData.Issuer memory _issuer = issuers[_issuerAddress];
+
         (address toposManager, , , ,) = IToposBank(toposBankContract).getContracts();
 
         require(msg.sender == toposManager, "ONLY_TOPOS_MANAGER");
         require(
-            issuerStatus[_issuer] == BondData.StakeHolderStatus.SUBMITTED,
+            _issuer.status == BondData.StakeHolderStatus.SUBMITTED,
             "CHECK_YOUR_STATUS"
         );
 
-        issuerStatus[_issuer] = BondData.StakeHolderStatus.REJECTED;
+        issuers[_issuerAddress].status = BondData.StakeHolderStatus.REJECTED;
+        listOfIssuers[_issuer.index].status = BondData.StakeHolderStatus.REJECTED;
 
-        emit RejectIssuer(_issuer);
+        emit RejectIssuer(_issuerAddress);
     }
 }
