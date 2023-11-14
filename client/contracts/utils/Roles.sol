@@ -24,6 +24,7 @@ contract Roles is IRoles {
 
     constructor() {
         owner = msg.sender;
+        roles[msg.sender] = "MANAGER";
     }
 
     function setToposBankContract(

@@ -55,6 +55,8 @@ contract IdentityRegistry is IIdentityRegistry {
 
         kwcPassed[_identityID] = true;
         _status[msg.sender] = RegistrationStatus.VERIFIED;
+
+
         _stakeholders[msg.sender] = RegistryData.Stakeholder(
             {
                 identityID: _identityID,

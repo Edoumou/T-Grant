@@ -3,7 +3,7 @@ const { exec } = require('child_process');
 const hre = require("hardhat");
 
 async function main() {
-  let [deployer1, ...users] = await hre.ethers.getSigners();
+  let [deployer, ...users] = await hre.ethers.getSigners();
 
   //=== IdentityRegistry Contract
   const IdentityRegistry = await hre.ethers.getContractFactory("IdentityRegistry");
@@ -28,7 +28,7 @@ async function main() {
   //=== ToposBank Contract
   const ToposBank = await hre.ethers.getContractFactory("ToposBank");
   const bank = await ToposBank.deploy(
-    deployer1.address,
+    deployer.address,
     roles.target,
     registery.target,
     bondCall.target,
@@ -110,8 +110,9 @@ async function main() {
   const couponPayment = await CouponPayment.deploy();
   await couponPayment.waitForDeployment();
 
-  await bank.setManager(deployer1.address, { from: deployer1.address });
-  await registery.setAuthenticationContract(authentication.target, { from: deployer1.address });
+  await registery.setAuthenticationContract(authentication.target, { from: deployer.address });
+  await roles.setToposBankContract(bank.target, { from: deployer.address });
+  //await bank.setManager(deployer.address, { from: deployer.address });
 
   //=== Cp artifacts in `src/contracts` directory
   exec(`cp -R ../client/artifacts ../client/src/contracts`, (err, stdout, stderr) => {

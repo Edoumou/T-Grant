@@ -28,7 +28,7 @@ function Register() {
     const dispatch = useDispatch();
 
     const onRegister = async () => {
-        let { web3, account } = await web3Connection();
+        let { web3, account } = await web3Connection();
         let contract = await getContract(web3, IdentityRegistrationJSON, Addresses.RegistryContract);
 
         if (fullname !== '' && phone !== '' && email !== '' && digicode !== '') {
@@ -71,13 +71,14 @@ function Register() {
                         emailToUse,
                         web3
                     );
-
+                    
                     await contract.methods.register(identityID, authHash)
                         .send({ from: account })
                         .on('transactionHash', hash => {
                             setLoadingMessage('Transaction in Process! ⌛️');
                             setExplorerLink(`https://explorer.testnet-1.topos.technology/subnet/0xe93335e1ec5c2174dfcde38dbdcc6fd39d741a74521e0e01155c49fa77f743ae/transaction/${hash}`);
                             setTxHash(hash);
+                            dispatch(setLoading(true));
                             setFullname('');
                             setPhone('');
                             setEmail('');
@@ -89,24 +90,18 @@ function Register() {
                             setLoader(false);
                             setStatus('success');
                             setAlertMessage("Signup successful");
+                            dispatch(setLoading(false));
                         });
 
                     setFullname('');
                     setPhone('');
                     setEmail('');
                     setDigicode('');
-                    setLoader(false);
 
                     return;
                 }
             }
         }
-
-        setFullname('');
-        setPhone('');
-        setEmail('');
-        setDigicode('');
-        setLoader(false);
     }
 
     const goToExplorer = () => {
@@ -197,7 +192,7 @@ function Register() {
                                     <h3>{loadingMessage}</h3>
                                     {
                                         loader ?
-                                            <Button inverted basic loading size="massive">Processing</Button>
+                                            <Button inverted basic loading size="massive">processing</Button>
                                         :
                                             <p style={{ color: 'green' }}><strong>transaction processed successfully</strong></p>
                                     }

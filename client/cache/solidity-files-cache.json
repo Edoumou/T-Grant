@@ -1113,8 +1113,8 @@
       ]
     },
     "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/Registry/IdentityRegistry.sol": {
-      "lastModificationDate": 1699495553557,
-      "contentHash": "d0c89446b4bb328fc9e99bc05513d4a8",
+      "lastModificationDate": 1699934554330,
+      "contentHash": "38aa21da5074af049aacfb12a54baa16",
       "sourceName": "contracts/Registry/IdentityRegistry.sol",
       "solcConfig": {
         "version": "0.8.19",
@@ -1228,8 +1228,8 @@
       ]
     },
     "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/utils/Roles.sol": {
-      "lastModificationDate": 1699390849475,
-      "contentHash": "f541752be8dce2a61e796a9361c48807",
+      "lastModificationDate": 1699929834362,
+      "contentHash": "a22ece4b59887548b80b66ac217277e3",
       "sourceName": "contracts/utils/Roles.sol",
       "solcConfig": {
         "version": "0.8.19",
