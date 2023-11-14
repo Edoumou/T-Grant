@@ -105,4 +105,8 @@ contract Issuer {
 
         emit RejectIssuer(_issuerAddress);
     }
+
+    function getIssuers() external view returns(BondData.Issuer[] memory) {
+        return listOfIssuers;
+    }
 }

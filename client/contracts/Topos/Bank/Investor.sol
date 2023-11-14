@@ -8,9 +8,10 @@ import "../../Registry/IIdentityRegistry.sol";
 
 contract Investor {
     mapping(address => BondData.Investor) public investors;
-    mapping(address => BondData.StakeHolderStatus) public investorStatus;
 
     address public toposBankContract;
+
+    BondData.Investor[] listOfInvestors;
 
     event ApproveInvestor(address investor);
     event RejectInvestor(address investor);
@@ -45,52 +46,67 @@ contract Investor {
     function requestRegistrationInvestor(
         BondData.Investor calldata _investor
     ) external mustBeApproved(_investor.walletAddress) {
+        address investorAddress = _investor.walletAddress;
+
         require(msg.sender == _investor.walletAddress, "INVALID_ADDRESS");
         require(
-            investorStatus[msg.sender] == BondData.StakeHolderStatus.UNDEFINED,
+            investors[investorAddress].status == BondData.StakeHolderStatus.UNDEFINED,
             "CHECK_YOUR_STATUS"
         );
 
         investors[_investor.walletAddress] = _investor;
-        investorStatus[msg.sender] = BondData.StakeHolderStatus.SUBMITTED;
+        investors[_investor.walletAddress].status = BondData.StakeHolderStatus.SUBMITTED;
+        investors[_investor.walletAddress].index = listOfInvestors.length;
+
+        listOfInvestors.push(_investor);
 
         emit RequestInvestorRegistration(_investor.walletAddress);
     }
 
     /**
     * @notice Approves an investor registration request. Can be called only by Topos manager
-    * @param _investor investor's account address
+    * @param _investorAddress investor's account address
     */
-    function approveInvestor(address _investor) external {
+    function approveInvestor(address _investorAddress) external {
+        BondData.Investor memory _investor = investors[_investorAddress];
+
         (address toposManager, address rolesContract, , ,) = IToposBank(toposBankContract).getContracts();
 
         require(msg.sender == toposManager, "ONLY_TOPOS_MANAGER");
         require(
-            investorStatus[_investor] == BondData.StakeHolderStatus.SUBMITTED,
+            _investor.status == BondData.StakeHolderStatus.SUBMITTED,
             "CHECK_YOUR_STATUS"
         );
 
-        investorStatus[_investor] = BondData.StakeHolderStatus.APPROVED;
-        IRoles(rolesContract).setRole("INVESTOR", _investor);
+        investors[_investorAddress].status = BondData.StakeHolderStatus.APPROVED;
+        listOfInvestors[_investor.index].status = BondData.StakeHolderStatus.APPROVED;
+        IRoles(rolesContract).setRole("INVESTOR", _investorAddress);
 
-        emit ApproveInvestor(_investor);
+        emit ApproveInvestor(_investorAddress);
     }
 
     /**
     * @notice Rejects an investor registration request. Can be called only by Topos manager
-    * @param _investor investor's account address
+    * @param _investorAddress investor's account address
     */
-    function rejectInvestor(address _investor) external {
+    function rejectInvestor(address _investorAddress) external {
+        BondData.Investor memory _investor = investors[_investorAddress];
+
         (address toposManager, , , ,) = IToposBank(toposBankContract).getContracts();
 
         require(msg.sender == toposManager, "ONLY_TOPOS_MANAGER");
         require(
-            investorStatus[_investor] == BondData.StakeHolderStatus.SUBMITTED,
+            _investor.status == BondData.StakeHolderStatus.SUBMITTED,
             "CHECK_YOUR_STATUS"
         );
 
-        investorStatus[_investor] = BondData.StakeHolderStatus.REJECTED;
+        investors[_investorAddress].status = BondData.StakeHolderStatus.REJECTED;
+        listOfInvestors[_investor.index].status = BondData.StakeHolderStatus.REJECTED;
 
-        emit RejectInvestor(_investor);
+        emit RejectInvestor(_investorAddress);
+    }
+
+    function getInvestors() external view returns(BondData.Investor[] memory) {
+        return listOfInvestors;
     }
 }
