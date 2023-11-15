@@ -16,7 +16,7 @@ import { toposData } from './utils/toposData';
 import FormateAddress from './utils/FormateAddress';
 import HeaderLogo from './img/header-logo.png';
 import "./App.css";
-import { setActiveItem, setColor, setIsConnected, setAccount, setRole, setLoggedIn, setIssuerRegistrationStatus, setInvestorRegistrationStatus } from './store';
+import { setActiveItem, setColor, setIsConnected, setAccount, setRole, setLoggedIn, setIssuerRegistrationStatus, setInvestorRegistrationStatus, setListOfIssuers, setListOfInvestors } from './store';
 import Home from './components/Home';
 import Register from './components/Register';
 import Connect from './components/Connect';
@@ -70,12 +70,21 @@ function App() {
     let investorContract = await getContract(web3, InvestorJSON, Addresses.InvestorContract);
 
     let role = await rolesContract.methods.getRole(account).call({ from: account });
-    let issuerRegistrationStatus = await issuerContract.methods.issuerStatus(account).call({ from: account });
-    let investorRegistrationStatus = await investorContract.methods.investorStatus(account).call({ from: account });
+
+    let issuerRequest = await issuerContract.methods.issuers(account).call({ from: account });
+    let listOfIssuers = await issuerContract.methods.getIssuers().call({ from: account });
+
+    let investorRequest = await investorContract.methods.investors(account).call({ from: account });
+    let listOfInvestors = await investorContract.methods.getInvestors().call({ from: account });
+
+    let issuerRegistrationStatus = issuerRequest.status;
+    let investorRegistrationStatus = investorRequest.status;
 
     dispatch(setRole(role));
     dispatch(setIssuerRegistrationStatus(issuerRegistrationStatus));
     dispatch(setInvestorRegistrationStatus(investorRegistrationStatus));
+    dispatch(setListOfIssuers(listOfIssuers));
+    dispatch(setListOfInvestors(listOfInvestors));
   });
 
   useEffect(() => {

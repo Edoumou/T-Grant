@@ -32,7 +32,8 @@
     position: relative;
     right: 40px;
     top: 20px;
-    color: white;
+    color: rgb(217, 135, 53);
+    font-size: 12px;
     display: none;
 }
 

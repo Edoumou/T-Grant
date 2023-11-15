@@ -18,8 +18,8 @@ import {
     setUsername,
     setLoading
 } from "./slices/connectionSlice";
-import { issuerReducer, setIssuerRegistrationStatus } from "./slices/issuerSlice";
-import { investorReducer, setInvestorRegistrationStatus } from "./slices/investorSlice";
+import { issuerReducer, setIssuerRegistrationStatus, setListOfIssuers } from "./slices/issuerSlice";
+import { investorReducer, setInvestorRegistrationStatus, setListOfInvestors } from "./slices/investorSlice";
 
 
 /**
@@ -54,5 +54,7 @@ export {
     setUsername,
     setLoading,
     setIssuerRegistrationStatus,
-    setInvestorRegistrationStatus
+    setInvestorRegistrationStatus,
+    setListOfIssuers,
+    setListOfInvestors
 }

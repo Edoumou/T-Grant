@@ -5,6 +5,7 @@ import IssuerJSON from "../../src/contracts/artifacts/contracts/Topos/Bank/Issue
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
 import Addresses from "../../src/addresses/addr.json";
+import { setIssuerRegistrationStatus, setListOfIssuers } from "../store";
 
 function IssuerRequest() {
     const [url, setUrl] = useState('');
@@ -55,7 +56,9 @@ function IssuerRequest() {
                 issuerType: issuerTypeToUse,
                 creditRating: creditRatingToUse,
                 carbonCredit: carbonCreditToUse,
-                walletAddress: account
+                walletAddress: account,
+                StakeHolderStatus: 0,
+                index: 0
             }
 
             await contract.methods.requestRegistrationIssuer(issuer)
@@ -91,6 +94,14 @@ function IssuerRequest() {
         setCreditRating('');
         setCarbonCredit('');
         setLoader(false);
+
+        let issuerRequest = await contract.methods.issuers(account).call({ from: account });
+        let issuerRegistrationStatus = issuerRequest.status;
+
+        let listOfIssuers = await contract.methods.getIssuers().call({ from: account });
+
+        dispatch(setIssuerRegistrationStatus(issuerRegistrationStatus));
+        dispatch(setListOfIssuers(listOfIssuers));
     }
 
     const goToExplorer = () => {

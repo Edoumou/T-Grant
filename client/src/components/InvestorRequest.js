@@ -5,6 +5,7 @@ import InvestorJSON from "../../src/contracts/artifacts/contracts/Topos/Bank/Inv
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
 import Addresses from "../../src/addresses/addr.json";
+import { setInvestorRegistrationStatus, setListOfInvestors } from "../store";
 
 function InvestorRequest() {
     const [name, setName] = useState('');
@@ -47,7 +48,9 @@ function InvestorRequest() {
                 name: nameToUse,
                 country: countryToUse,
                 investorType: investorTypeToUse,
-                walletAddress: account
+                walletAddress: account,
+                StakeHolderStatus: 0,
+                index: 0
             }
 
             await contract.methods.requestRegistrationInvestor(investor)
@@ -74,6 +77,14 @@ function InvestorRequest() {
         setCountry('');
         setInvestorType('');
         setLoader(false);
+
+        let investorRequest = await contract.methods.investors(account).call({ from: account });
+        let investorRegistrationStatus = investorRequest.status;
+
+        let listOfInvestors = await contract.methods.getInvestors().call({ from: account });
+
+        dispatch(setInvestorRegistrationStatus(investorRegistrationStatus));
+        dispatch(setListOfInvestors(listOfInvestors));
     }
 
     const goToExplorer = () => {
