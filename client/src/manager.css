@@ -4,7 +4,6 @@
     padding-right: 50px;
     padding-left: 50px;
     background-color: #e3e3ea;
-    font-size: calc(2px + 1.7vmin);
     min-height: 100vh;
   }
 
@@ -16,4 +15,8 @@
 
   .manager-body {
     margin-top: 60px;
+  }
+
+  .list-card {
+    padding-bottom: 5%;
   }
