@@ -16,7 +16,7 @@ import { toposData } from './utils/toposData';
 import FormateAddress from './utils/FormateAddress';
 import HeaderLogo from './img/header-logo.png';
 import "./App.css";
-import { setActiveItem, setColor, setIsConnected, setAccount, setRole, setLoggedIn, setIssuerRegistrationStatus, setInvestorRegistrationStatus, setListOfIssuers, setListOfInvestors } from './store';
+import { setActiveItem, setColor, setIsConnected, setAccount, setRole, setLoggedIn, setIssuerRegistrationStatus, setInvestorRegistrationStatus, setListOfIssuers, setListOfInvestors, setIssuerRequest, setInvestorRequest } from './store';
 import Home from './components/Home';
 import Register from './components/Register';
 import Connect from './components/Connect';
@@ -31,37 +31,18 @@ function App() {
   const dispatch = useDispatch();
   
   const connection = useSelector(state => {
-    return {
-      activeItem: state.connection.activeItem,
-      color: state.connection.color,
-      isConnected: state.connection.isConnected,
-      role: state.connection.role,
-      account: state.connection.account,
-      accountChanged: state.connection.accountChanged, 
-      signedUp: state.connection.signedUp,
-      loggedIn: state.connection.loggedIn
-    };
+    return state.connection;
   });
+  
+  const fetchOnchainData = useCallback(async () => {
 
-  const issuer = useSelector(state => {
-    return {
-      registrationStatus: state.issuer.registrationStatus
-    }
-  });
-
-  const investor = useSelector(state => {
-    return {
-      registrationStatus: state.investor.registrationStatus
-    }
-  });
-
-  const [subnetID, setSubnetID] = useState('');
-  const loadWeb3 = useCallback(async () => {
     let { web3, account } = await web3Connection();
     let coreData = toposData();
 
-    let toposCore = await getContract(web3, ToposCoreJSON, coreData.toposCoreProxyContractAddress);
-    let subnetRegistrator = await getContract(web3, SubnetRegistratorJSON, coreData.subnetRegistratorContractAddress);
+    //let toposCore = await getContract(web3, ToposCoreJSON, coreData.toposCoreProxyContractAddress);
+    //let subnetRegistrator = await getContract(web3, SubnetRegistratorJSON, coreData.subnetRegistratorContractAddress);
+
+    //const data = await loadOnchainData();
 
     //=== ToposBank Contract
     let toposBank = await getContract(web3, ToposBankJSON, Addresses.ToposBankContract);
@@ -70,25 +51,42 @@ function App() {
     let investorContract = await getContract(web3, InvestorJSON, Addresses.InvestorContract);
 
     let role = await rolesContract.methods.getRole(account).call({ from: account });
-
-    let issuerRequest = await issuerContract.methods.issuers(account).call({ from: account });
-    let listOfIssuers = await issuerContract.methods.getIssuers().call({ from: account });
-
-    let investorRequest = await investorContract.methods.investors(account).call({ from: account });
-    let listOfInvestors = await investorContract.methods.getInvestors().call({ from: account });
-
-    let issuerRegistrationStatus = issuerRequest.status;
-    let investorRegistrationStatus = investorRequest.status;
-
     dispatch(setRole(role));
-    dispatch(setIssuerRegistrationStatus(issuerRegistrationStatus));
-    dispatch(setInvestorRegistrationStatus(investorRegistrationStatus));
-    dispatch(setListOfIssuers(listOfIssuers));
-    dispatch(setListOfInvestors(listOfInvestors));
+
+    if (role === "") {
+      let issuerRequest = await issuerContract.methods.issuers(account).call({ from: account });
+      let investorRequest = await investorContract.methods.investors(account).call({ from: account });
+      let listOfIssuers = await issuerContract.methods.getIssuers().call({ from: account });
+
+      dispatch(setIssuerRequest(issuerRequest));
+      dispatch(setInvestorRequest(investorRequest));
+    }
+
+    if (role === "MANAGER") {
+      let issuerRequest = await issuerContract.methods.issuers(account).call({ from: account });
+      let listOfIssuers = await issuerContract.methods.getIssuers().call({ from: account });
+
+      let investorRequest = await investorContract.methods.investors(account).call({ from: account });
+      let listOfInvestors = await investorContract.methods.getInvestors().call({ from: account });
+
+      dispatch(setIssuerRequest(issuerRequest));
+      dispatch(setListOfIssuers(listOfIssuers));
+      dispatch(setInvestorRequest(investorRequest));
+      dispatch(setListOfInvestors(listOfInvestors));
+    }
+
+    if (role === "ISSUER") {
+      let issuerRequest = await issuerContract.methods.issuers(account).call({ from: account });
+      dispatch(setIssuerRequest(issuerRequest));
+    }
+
+    if (role === "INVESTOR") {
+
+    }
   });
 
   useEffect(() => {
-    loadWeb3();
+    fetchOnchainData();
   });
 
   const handleItemClick = (e, { name }) => {
@@ -215,11 +213,12 @@ function App() {
             connection.loggedIn ?
               <>
                 <Route path='*' element={<Navigate to='/' />}/>
+                <Route path='/disconnect' element={<Navigate to='/' />}/>
                 {
                   connection.role === "" ?
                     <>
-                      <Route path='/register/become-issuer' element={<IssuerRequest to='/' />}/>
-                      <Route path='/register/become-investor' element={<InvestorRequest to='/' />}/>
+                      <Route path='/register/become-issuer' element={<IssuerRequest />}/>
+                      <Route path='/register/become-investor' element={<InvestorRequest />}/>
                     </>
                   : connection.role === "MANAGER" ?
                     <>
@@ -228,15 +227,14 @@ function App() {
                       <Route path='/manager/bonds' element={<ManagerBonds />} />
                     </>
                   : connection.role === "ISSUER" ?
-                    <></>
-                  : connection.role === "ISSUER" ?
                     <>
                       <Route path='/issuer/submit-deal' element={<SubmitDeal />} />
                     </>
+                  : connection.role === "INVESTOR" ?
+                    <></>
                   :
                     <></>
                 }
-                <Route path='/disconnect' element={<Navigate to='/' />}/>
               </>
             :
               <>

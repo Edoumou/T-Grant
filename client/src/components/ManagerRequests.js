@@ -1,11 +1,14 @@
-import React from "react";
-import 'semantic-ui-css/semantic.min.css';
-import { Grid, GridColumn, GridRow } from "semantic-ui-react";
+import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 function ManagerRequests() {
+    let issuers = useSelector(state => {
+        return state.issuer.listOfIssuers;
+    });
+
     return (
         <div className="container">
-            Manager Requests
+            Manager Requests:
         </div>
     );
 }

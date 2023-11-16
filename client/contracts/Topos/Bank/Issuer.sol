@@ -54,13 +54,13 @@ contract Issuer {
             "CHECK_YOUR_STATUS"
         );
 
-        issuers[_issuer.walletAddress] = _issuer;
-        issuers[_issuer.walletAddress].status = BondData.StakeHolderStatus.SUBMITTED;
-        issuers[_issuer.walletAddress].index = listOfIssuers.length;
+        issuers[issuerAddress] = _issuer;
+        issuers[issuerAddress].status = BondData.StakeHolderStatus.SUBMITTED;
+        issuers[issuerAddress].index = listOfIssuers.length;
 
         listOfIssuers.push(_issuer);
 
-        emit RequestIssuerRegistration(_issuer.walletAddress);
+        emit RequestIssuerRegistration(issuerAddress);
     }
 
     /**

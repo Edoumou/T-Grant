@@ -5,7 +5,7 @@ import InvestorJSON from "../../src/contracts/artifacts/contracts/Topos/Bank/Inv
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
 import Addresses from "../../src/addresses/addr.json";
-import { setInvestorRegistrationStatus, setListOfInvestors } from "../store";
+import { setInvestorRequest, setListOfInvestors } from "../store";
 
 function InvestorRequest() {
     const [name, setName] = useState('');
@@ -19,20 +19,18 @@ function InvestorRequest() {
 
     const dispatch = useDispatch();
 
-    const investor = useSelector(state => {
-        return {
-          status: state.investor.registrationStatus
-        }
+    const investorRequest = useSelector(state => {
+        return state.investor.investorRequest;
     });
 
     const options = [
         { key: 1, text: 'PERSONAL', value: 'Personal Investors' },
         { key: 2, text: 'ANGEL INV', value: 'Angel Investors' },
         { key: 3, text: 'VC', value: 'Venture Capitalist' },
-        { key: 3, text: 'P2P LEND', value: 'Peer-to-peer lenders' },
-        { key: 4, text: 'INCUBATOR', value: 'Incubators' },
-        { key: 5, text: 'FINANCIAL INST', value: 'Financial Institues' },
-        { key: 6, text: 'CORPORATION', value: 'Corporate investors' },
+        { key: 4, text: 'P2P LEND', value: 'Peer-to-peer lenders' },
+        { key: 5, text: 'INCUBATOR', value: 'Incubators' },
+        { key: 6, text: 'FINANCIAL INST', value: 'Financial Institues' },
+        { key: 7, text: 'CORPORATION', value: 'Corporate investors' },
     ];
 
     const request = async () => {
@@ -44,13 +42,20 @@ function InvestorRequest() {
             let countryToUse = country.trim();
             let investorTypeToUse = investorType.trim();
 
+            let StakeHolderStatus = {
+                UNDEFINED: '0',
+                SUBMITTED: '1',
+                APPROVED: '2',
+                REJECTED: '3'
+            }
+
             let investor = {
                 name: nameToUse,
                 country: countryToUse,
                 investorType: investorTypeToUse,
                 walletAddress: account,
-                StakeHolderStatus: 0,
-                index: 0
+                status: StakeHolderStatus.UNDEFINED,
+                index: '0'
             }
 
             await contract.methods.requestRegistrationInvestor(investor)
@@ -83,7 +88,7 @@ function InvestorRequest() {
 
         let listOfInvestors = await contract.methods.getInvestors().call({ from: account });
 
-        dispatch(setInvestorRegistrationStatus(investorRegistrationStatus));
+        dispatch(setInvestorRequest(investorRegistrationStatus));
         dispatch(setListOfInvestors(listOfInvestors));
     }
 
@@ -99,7 +104,7 @@ function InvestorRequest() {
     return (
         <div className="deal-main">
             {
-                investor.status === '0' ?
+                investorRequest.status === '0' ?
                     <>
                         <div className="deal-head">
                             Become an Investor
@@ -186,7 +191,7 @@ function InvestorRequest() {
                                 Check again later
                             </p>
                             <p>
-                                ⏰⏱️⌛️⏱️⏰ {investor.status}
+                                ⏰⏱️⌛️⏱️⏰
                             </p>  
                         </div>
                     </>

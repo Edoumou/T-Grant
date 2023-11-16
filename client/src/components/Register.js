@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Form, Button, Message, Modal } from 'semantic-ui-react';
 import IdentityRegistrationJSON from "../../src/contracts/artifacts/contracts/Registry/IdentityRegistry.sol/IdentityRegistry.json";
@@ -18,7 +18,6 @@ function Register() {
     const [email, setEmail] = useState('');
     const [digicode, setDigicode] = useState('');
     const [status, setStatus] = useState('');
-    const [txHash, setTxHash] = useState('');
     const [loader, setLoader] = useState(true);
     const [explorerLink, setExplorerLink] = useState('');
     const [loadingMessage, setLoadingMessage] = useState('Transaction in Process');
@@ -77,7 +76,6 @@ function Register() {
                         .on('transactionHash', hash => {
                             setLoadingMessage('Transaction in Process! ⌛️');
                             setExplorerLink(`https://explorer.testnet-1.topos.technology/subnet/0xe93335e1ec5c2174dfcde38dbdcc6fd39d741a74521e0e01155c49fa77f743ae/transaction/${hash}`);
-                            setTxHash(hash);
                             dispatch(setLoading(true));
                             setFullname('');
                             setPhone('');
@@ -136,30 +134,30 @@ function Register() {
                     <Form.Field>
                         <input
                             required
+                            name="fullname"
                             type='text'
                             placeholder='Full Name'
                             value={fullname}
-                            autoComplete="username"
                             onChange={e => setFullname(e.target.value)}
                         />
                     </Form.Field>
                     <Form.Field>
                         <input
                             required
+                            name="phoneNumber"
                             type='text'
                             placeholder='Phone Number'
                             value={phone}
-                            autoComplete="username"
                             onChange={e => setPhone(e.target.value)}
                         />
                     </Form.Field>
                     <Form.Field>
                         <input
                             required
+                            name="emailAddress"
                             type='text'
                             placeholder='Email Address'
                             value={email}
-                            autoComplete="username"
                             onChange={e => setEmail(e.target.value)}
                         />
                     </Form.Field>
@@ -168,10 +166,10 @@ function Register() {
                     <Form.Field>
                         <input
                             required
-                            type='text'
+                            name="digicode"
+                            type='password'
                             placeholder='6 digit code for connection'
                             value={digicode}
-                            autoComplete="digicode"
                             onChange={e => setDigicode(e.target.value)}
                         />
                     </Form.Field>

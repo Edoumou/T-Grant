@@ -3,12 +3,12 @@ import { createSlice } from "@reduxjs/toolkit";
 const investorSlice = createSlice({
     name: 'investor',
     initialState: {
-        registrationStatus: 0,
+        investorRequest: {},
         listOfInvestors: []
     },
     reducers: {
-        setInvestorRegistrationStatus(state, action) {
-            state.registrationStatus = action.payload;
+        setInvestorRequest(state, action) {
+            state.investorRequest = action.payload;
         },
         setListOfInvestors(state, action) {
             state.listOfInvestors = action.payload;
@@ -16,5 +16,5 @@ const investorSlice = createSlice({
     }
 });
 
-export const {  setInvestorRegistrationStatus, setListOfInvestors } = investorSlice.actions;
+export const {  setInvestorRequest, setListOfInvestors } = investorSlice.actions;
 export const investorReducer = investorSlice.reducer;

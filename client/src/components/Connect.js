@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Form, Button, Message } from 'semantic-ui-react';
 import AuthenticationJSON from "../../src/contracts/artifacts/contracts/Auth/Authentication.sol/Authentication.json";
@@ -91,10 +91,11 @@ function Connect() {
                     }
                     <Form.Field required>
                         <input
+                            required
+                            name="digicode"
                             type='password'
                             placeholder='6 digit code'
                             value={digicode}
-                            autoComplete="digicode"
                             onChange={e => setDigicode(e.target.value )}
                         />
                     </Form.Field>

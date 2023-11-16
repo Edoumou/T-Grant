@@ -54,13 +54,13 @@ contract Investor {
             "CHECK_YOUR_STATUS"
         );
 
-        investors[_investor.walletAddress] = _investor;
-        investors[_investor.walletAddress].status = BondData.StakeHolderStatus.SUBMITTED;
-        investors[_investor.walletAddress].index = listOfInvestors.length;
+        investors[investorAddress] = _investor;
+        investors[investorAddress].status = BondData.StakeHolderStatus.SUBMITTED;
+        investors[investorAddress].index = listOfInvestors.length;
 
         listOfInvestors.push(_investor);
 
-        emit RequestInvestorRegistration(_investor.walletAddress);
+        emit RequestInvestorRegistration(investorAddress);
     }
 
     /**

@@ -5,7 +5,7 @@ import IssuerJSON from "../../src/contracts/artifacts/contracts/Topos/Bank/Issue
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
 import Addresses from "../../src/addresses/addr.json";
-import { setIssuerRegistrationStatus, setListOfIssuers } from "../store";
+import { setIssuerRequest, setListOfIssuers } from "../store";
 
 function IssuerRequest() {
     const [url, setUrl] = useState('');
@@ -22,10 +22,8 @@ function IssuerRequest() {
 
     const dispatch = useDispatch();
 
-    const issuer = useSelector(state => {
-        return {
-          status: state.issuer.registrationStatus
-        }
+    const issuerRequest = useSelector(state => {
+        return state.issuer.issuerRequest;
     });
 
     const options = [
@@ -49,6 +47,13 @@ function IssuerRequest() {
             let creditRatingToUse = creditRating.trim();
             let carbonCreditToUse = carbonCredit.trim();
 
+            let StakeHolderStatus = {
+                UNDEFINED: '0',
+                SUBMITTED: '1',
+                APPROVED: '2',
+                REJECTED: '3'
+            }
+
             let issuer = {
                 documentURI: urlToUse,
                 name: nameToUse,
@@ -57,8 +62,8 @@ function IssuerRequest() {
                 creditRating: creditRatingToUse,
                 carbonCredit: carbonCreditToUse,
                 walletAddress: account,
-                StakeHolderStatus: 0,
-                index: 0
+                status: StakeHolderStatus.UNDEFINED,
+                index: '0'
             }
 
             await contract.methods.requestRegistrationIssuer(issuer)
@@ -100,7 +105,7 @@ function IssuerRequest() {
 
         let listOfIssuers = await contract.methods.getIssuers().call({ from: account });
 
-        dispatch(setIssuerRegistrationStatus(issuerRegistrationStatus));
+        dispatch(setIssuerRequest(issuerRegistrationStatus));
         dispatch(setListOfIssuers(listOfIssuers));
     }
 
@@ -119,7 +124,7 @@ function IssuerRequest() {
     return (
         <div className="deal-main">
             {
-                issuer.status === '0' ?
+                issuerRequest.status === '0' ?
                     <>
                         <div className="deal-head">
                             Become an Issuer

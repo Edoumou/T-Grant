@@ -3,12 +3,12 @@ import { createSlice } from "@reduxjs/toolkit";
 const issuerSlice = createSlice({
     name: 'issuer',
     initialState: {
-        registrationStatus: 0,
+        issuerRequest: {},
         listOfIssuers: []
     },
     reducers: {
-        setIssuerRegistrationStatus(state, action) {
-            state.registrationStatus = action.payload;
+        setIssuerRequest(state, action) {
+            state.issuerRequest = action.payload;
         },
         setListOfIssuers(state, action) {
             state.listOfIssuers = action.payload;
@@ -16,5 +16,5 @@ const issuerSlice = createSlice({
     }
 });
 
-export const {  setIssuerRegistrationStatus, setListOfIssuers } = issuerSlice.actions;
+export const {  setIssuerRequest, setListOfIssuers } = issuerSlice.actions;
 export const issuerReducer = issuerSlice.reducer;
