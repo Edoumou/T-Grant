@@ -8,6 +8,7 @@ const connectionSlice = createSlice({
         isConnected: false,
         role: '',
         account: '',
+        balance: 0,
         accountChanged: false,
         signedUp: false,
         loggedIn: false,
@@ -29,6 +30,9 @@ const connectionSlice = createSlice({
         },
         setAccount(state, action) {
             state.account = action.payload;
+        },
+        setBalance(state, action) {
+            state.balance = action.payload;
         },
         setAccountChanged(state, action) {
             state.accountChanged = action.payload;
@@ -54,6 +58,7 @@ export const {
     setIsConnected,
     setRole,
     setAccount,
+    setBalance,
     setAccountChanged,
     setSignedUp,
     setLoggedIn,

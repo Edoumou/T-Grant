@@ -1,0 +1,19 @@
+.manager {
+    margin-top: 0px;
+    padding-top: 10px;
+    padding-right: 50px;
+    padding-left: 50px;
+    background-color: #e3e3ea;
+    font-size: calc(2px + 1.7vmin);
+    min-height: 100vh;
+  }
+
+  .manager-head {
+    color: rgb(120, 19, 19);
+    font-size: medium;
+    font-weight:bold;
+  }
+
+  .manager-body {
+    margin-top: 60px;
+  }

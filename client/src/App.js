@@ -16,7 +16,7 @@ import { toposData } from './utils/toposData';
 import FormateAddress from './utils/FormateAddress';
 import HeaderLogo from './img/header-logo.png';
 import "./App.css";
-import { setActiveItem, setColor, setIsConnected, setAccount, setRole, setLoggedIn, setIssuerRegistrationStatus, setInvestorRegistrationStatus, setListOfIssuers, setListOfInvestors, setIssuerRequest, setInvestorRequest } from './store';
+import { setActiveItem, setColor, setIsConnected, setAccount, setRole, setLoggedIn, setIssuerRegistrationStatus, setInvestorRegistrationStatus, setListOfIssuers, setListOfInvestors, setIssuerRequest, setInvestorRequest, setBalance } from './store';
 import Home from './components/Home';
 import Register from './components/Register';
 import Connect from './components/Connect';
@@ -53,25 +53,23 @@ function App() {
     let role = await rolesContract.methods.getRole(account).call({ from: account });
     dispatch(setRole(role));
 
+    let balance = await web3.eth.getBalance(account);
+    balance = web3.utils.fromWei(balance);
+    dispatch(setBalance(balance));
+
     if (role === "") {
       let issuerRequest = await issuerContract.methods.issuers(account).call({ from: account });
       let investorRequest = await investorContract.methods.investors(account).call({ from: account });
-      let listOfIssuers = await issuerContract.methods.getIssuers().call({ from: account });
 
       dispatch(setIssuerRequest(issuerRequest));
       dispatch(setInvestorRequest(investorRequest));
     }
 
     if (role === "MANAGER") {
-      let issuerRequest = await issuerContract.methods.issuers(account).call({ from: account });
       let listOfIssuers = await issuerContract.methods.getIssuers().call({ from: account });
-
-      let investorRequest = await investorContract.methods.investors(account).call({ from: account });
       let listOfInvestors = await investorContract.methods.getInvestors().call({ from: account });
 
-      dispatch(setIssuerRequest(issuerRequest));
       dispatch(setListOfIssuers(listOfIssuers));
-      dispatch(setInvestorRequest(investorRequest));
       dispatch(setListOfInvestors(listOfInvestors));
     }
 
