@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import 'semantic-ui-css/semantic.min.css';
 import { Card, CardContent, Table, TableHeader, TableRow, TableHeaderCell, TableBody, TableCell, Button, Modal } from "semantic-ui-react";
-import IssuerJSON from "../contracts/artifacts/contracts/Topos/Bank/Issuer.sol/Issuer.json";
+import InvestorJSON from "../contracts/artifacts/contracts/Topos/Bank/Investor.sol/Investor.json";
 import Formate from "../utils/Formate";
 import FormateAddress from "../utils/FormateAddress";
 import "../manager.css";
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
 import Addresses from "../addresses/addr.json"
-import { setBalance, setListOfIssuers, setLoading } from "../store";
+import { setBalance, setListOfInvestors, setLoading } from "../store";
 
-function IssuersList() {
+function InvestorsList() {
     const [open, setOpen] = useState(false);
     const [loader, setLoader] = useState(true);
     const [explorerLink, setExplorerLink] = useState('');
@@ -19,19 +19,19 @@ function IssuersList() {
 
     let dispatch = useDispatch();
 
-    let issuersList = useSelector(state => {
-        return state.issuer.listOfIssuers;
+    let investorsList = useSelector(state => {
+        return state.investor.listOfInvestors;
     });
 
-    let issuers = issuersList.filter(issuer => {
-        return issuer.status === "1";
+    let investors = investorsList.filter(investor => {
+        return investor.status === "1";
     });
 
-    const approve = async issuerAccount => {
+    const approve = async investorAccount => {
         let { web3, account } = await web3Connection();
-        let contract = await getContract(web3, IssuerJSON, Addresses.IssuerContract);
+        let contract = await getContract(web3, InvestorJSON, Addresses.InvestorContract);
 
-        await contract.methods.approveIssuer(issuerAccount)
+        await contract.methods.approveInvestor(investorAccount)
             .send({ from: account })
             .on('transactionHash', hash => {
                 setLoadingMessage('Transaction in Process! ⌛️');
@@ -44,11 +44,11 @@ function IssuersList() {
                 dispatch(setLoading(false));
             });
 
-        let listOfIssuers = await contract.methods.getIssuers().call({ from: account });
+        let listOfInvestors = await contract.methods.getInvestors().call({ from: account });
         let balance = await web3.eth.getBalance(account);
         balance = web3.utils.fromWei(balance);
 
-        dispatch(setListOfIssuers(listOfIssuers));
+        dispatch(setListOfInvestors(listOfInvestors));
         dispatch(setBalance(balance));
     }
 
@@ -61,20 +61,13 @@ function IssuersList() {
         if (newWindow) newWindow.opener = null;
     }
 
-    const renderedIssuers = issuers.map((issuer, index) => {
+    const renderedInvestors = investors.map((investor, index) => {
         return (
             <TableRow key={index}>
-                <TableCell>{issuer.name}</TableCell>
-                <TableCell warning>{issuer.country}</TableCell>
-                <TableCell positive textAlign="center">{issuer.issuerType}</TableCell>
-                <TableCell positive textAlign="center">{issuer.creditRating}</TableCell>
-                <TableCell warning textAlign="right">{Formate(issuer.carbonCredit)}</TableCell>
-                <TableCell textAlign="right">{FormateAddress(issuer.walletAddress)}</TableCell>
-                <TableCell textAlign="right">
-                    <a href={issuer.documentURI} target="_blank" rel="noopener noreferrer">
-                        {issuer.documentURI}
-                    </a>
-                </TableCell>
+                <TableCell>{investor.name}</TableCell>
+                <TableCell warning>{investor.country}</TableCell>
+                <TableCell positive textAlign="center">{investor.issuerType}</TableCell>
+                <TableCell textAlign="right">{FormateAddress(investor.walletAddress)}</TableCell>
                 <TableCell textAlign="center">
                     <Modal
                         size="tiny"
@@ -85,7 +78,7 @@ function IssuersList() {
                                 compact
                                 color="vk"
                                 size="tiny"
-                                onClick={() => approve(issuer.walletAddress)}
+                                onClick={() => approve(investor.walletAddress)}
                             >
                                 Approve
                             </Button>
@@ -119,7 +112,7 @@ function IssuersList() {
                         key={index}
                         color="red"
                         size="tiny"
-                        onClick={() => reject(issuer.walletAddress)}
+                        onClick={() => reject(investor.walletAddress)}
                     >
                         Reject
                     </Button>
@@ -132,27 +125,24 @@ function IssuersList() {
         <div className="list-card">
             <Card fluid>
                 <CardContent textAlign="left">
-                    <strong>Issuers Requests</strong>
+                    <strong>Investors Requests</strong>
                     <br></br>
                     <br></br>
                     {
-                        issuers.length > 0 &&
+                        investors.length > 0 &&
                         <Table celled>
                             <TableHeader>
                                 <TableRow>
                                     <TableHeaderCell>Name</TableHeaderCell>
                                     <TableHeaderCell>Country</TableHeaderCell>
                                     <TableHeaderCell textAlign="center">Type</TableHeaderCell>
-                                    <TableHeaderCell textAlign="center">Credit Rating</TableHeaderCell>
-                                    <TableHeaderCell textAlign="right">Carbon Credit</TableHeaderCell>
                                     <TableHeaderCell textAlign="right">Address</TableHeaderCell>
-                                    <TableHeaderCell textAlign="right">Document</TableHeaderCell>
                                     <TableHeaderCell textAlign="center">Approve</TableHeaderCell>
                                     <TableHeaderCell textAlign="center">Reject</TableHeaderCell>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {renderedIssuers}
+                                {renderedInvestors}
                             </TableBody>
                         </Table>
                     }
@@ -162,4 +152,4 @@ function IssuersList() {
     );
 }
 
-export default IssuersList;
+export default InvestorsList;
