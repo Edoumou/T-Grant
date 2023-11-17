@@ -7,9 +7,19 @@ import FormateAddress from "../utils/FormateAddress";
 import "../manager.css";
 
 function IssuersList() {
+    let issuersList = useSelector(state => {
+        return state.issuer.listOfIssuers;
+    });
+
+    let issuers = issuersList.filter(issuer => {
+        return issuer.status === "1";
+    });
+
+    /*
     let issuers = useSelector(state => {
         return state.issuer.listOfIssuers;
     });
+    */
 
     const approve = account => {
         console.log(account);

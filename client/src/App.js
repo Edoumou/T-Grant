@@ -68,7 +68,6 @@ function App() {
     if (role === "MANAGER") {
       let listOfIssuers = await issuerContract.methods.getIssuers().call({ from: account });
       let listOfInvestors = await investorContract.methods.getInvestors().call({ from: account });
-
       dispatch(setListOfIssuers(listOfIssuers));
       dispatch(setListOfInvestors(listOfInvestors));
     }

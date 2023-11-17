@@ -58,7 +58,7 @@ contract Investor {
         investors[investorAddress].status = BondData.StakeHolderStatus.SUBMITTED;
         investors[investorAddress].index = listOfInvestors.length;
 
-        listOfInvestors.push(_investor);
+        listOfInvestors.push(investors[investorAddress]);
 
         emit RequestInvestorRegistration(investorAddress);
     }

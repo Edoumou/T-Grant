@@ -58,7 +58,7 @@ contract Issuer {
         issuers[issuerAddress].status = BondData.StakeHolderStatus.SUBMITTED;
         issuers[issuerAddress].index = listOfIssuers.length;
 
-        listOfIssuers.push(_issuer);
+        listOfIssuers.push(issuers[issuerAddress]);
 
         emit RequestIssuerRegistration(issuerAddress);
     }
