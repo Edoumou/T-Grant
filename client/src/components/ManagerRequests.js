@@ -1,15 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import 'semantic-ui-css/semantic.min.css';
 import { Grid, GridColumn, GridRow } from "semantic-ui-react";
 import IssuersList from "./IssuersList";
 import "../manager.css";
 
 function ManagerRequests() {
-    let issuers = useSelector(state => {
-        return state.issuer.listOfIssuers;
-    });
-
     let connection = useSelector(state => {
         return state.connection;
     })
@@ -31,8 +27,8 @@ function ManagerRequests() {
             <div className="manager-body">
                 <Grid stackable columns={2}>
                     <GridRow>
-                        <GridColumn width={5}>1</GridColumn>
-                        <GridColumn width={11}>
+                        <GridColumn width={4}>1</GridColumn>
+                        <GridColumn width={12}>
                             <IssuersList />
                         </GridColumn>
                     </GridRow>
