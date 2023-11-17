@@ -1228,8 +1228,8 @@
       ]
     },
     "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/utils/Roles.sol": {
-      "lastModificationDate": 1699929834362,
-      "contentHash": "a22ece4b59887548b80b66ac217277e3",
+      "lastModificationDate": 1700238457799,
+      "contentHash": "05784bb1491945c4083358c5f408503d",
       "sourceName": "contracts/utils/Roles.sol",
       "solcConfig": {
         "version": "0.8.19",
@@ -1265,7 +1265,7 @@
       ]
     },
     "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/Topos/Bank/Issuer.sol": {
-      "lastModificationDate": 1700183434393,
+      "lastModificationDate": 1700240471182,
       "contentHash": "eb4389d109b2629fb14e6e1691086a98",
       "sourceName": "contracts/Topos/Bank/Issuer.sol",
       "solcConfig": {

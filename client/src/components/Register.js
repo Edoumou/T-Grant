@@ -197,12 +197,12 @@ function Register() {
                                 </div>
                             </Modal.Content>
                             <Modal.Actions>
-                            <Button basic floated="left" onClick={goToExplorer}>
-                                <strong>Check on Topos Explorer</strong>
-                            </Button>
-                            <Button color='black' onClick={() => setOpen(false)}>
-                                Go to Dashboard
-                            </Button>
+                                <Button basic floated="left" onClick={goToExplorer}>
+                                    <strong>Check on Topos Explorer</strong>
+                                </Button>
+                                <Button color='black' onClick={() => setOpen(false)}>
+                                    Go to Dashboard
+                                </Button>
                             </Modal.Actions>
                         </Modal>
                     </Form.Field>

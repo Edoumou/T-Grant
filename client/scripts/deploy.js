@@ -129,16 +129,6 @@ async function main() {
   await couponPayment.waitForDeployment();
   console.log("Coupon-P:", couponPayment.target || "");
 
-  await registery.setAuthenticationContract(authentication.target, { from: deployer.address });
-  console.log("");
-  console.log("Authentication contract set in Registry contract:");
-
-  await roles.setToposBankContract(bank.target, { from: deployer.address });
-  console.log("Bank contract set in Roles contract:");
-  console.log("");
-
-  //await bank.setManager(deployer.address, { from: deployer.address });
-
   //=== Cp artifacts in `src/contracts` directory
   exec(`cp -R ../client/artifacts ../client/src/contracts`, (err, stdout, stderr) => {
     if(err) {
