@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import 'semantic-ui-css/semantic.min.css';
 import { Card, CardContent, Table, TableHeader, TableRow, TableHeaderCell, TableBody, TableCell, Button, Modal } from "semantic-ui-react";
 import InvestorJSON from "../contracts/artifacts/contracts/Topos/Bank/Investor.sol/Investor.json";
-import Formate from "../utils/Formate";
 import FormateAddress from "../utils/FormateAddress";
 import "../manager.css";
 import { web3Connection } from "../utils/web3Connection";

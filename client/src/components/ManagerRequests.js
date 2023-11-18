@@ -5,6 +5,7 @@ import { Grid, GridColumn, GridRow } from "semantic-ui-react";
 import IssuersList from "./IssuersList";
 import "../manager.css";
 import InvestorsList from "./InvestorsList";
+import IssuerRequierement from "./IssuerRequierement";
 
 function ManagerRequests() {
     let connection = useSelector(state => {
@@ -28,7 +29,9 @@ function ManagerRequests() {
             <div className="manager-body">
                 <Grid stackable columns={2}>
                     <GridRow>
-                        <GridColumn width={4}>1</GridColumn>
+                        <GridColumn width={4}>
+                            <IssuerRequierement />
+                        </GridColumn>
                         <GridColumn width={12}>
                             <IssuersList />
                             <InvestorsList />
