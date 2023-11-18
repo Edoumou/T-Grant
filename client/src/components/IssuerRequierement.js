@@ -10,9 +10,9 @@ function IssuerRequierement() {
                     <h3><strong>Check carefully</strong></h3>
                     <List divided relaxed>
                         <ListItem>
-                            <ListIcon name='github' size='large' verticalAlign='middle' />
+                            <ListIcon name='file' size='large' color='orange' verticalAlign='middle' />
                             <ListContent>
-                                <div style={{ color: 'blue', paddingBottom: 10 }}>
+                                <div style={{ paddingBottom: 10 }}>
                                     <h5><a href="#">Issuer Document</a></h5>
                                 </div>
                                 <ListDescription>
@@ -23,9 +23,9 @@ function IssuerRequierement() {
                             </ListContent>  
                         </ListItem>
                         <ListItem>
-                            <ListIcon name='github' size='large' verticalAlign='middle' />
+                            <ListIcon name='certificate' size='large' color='blue' verticalAlign='middle' />
                             <ListContent>
-                                <div style={{ color: 'blue', paddingBottom: 10 }}>
+                                <div style={{ paddingBottom: 10 }}>
                                     <h5><a href="#">Credit Rating</a></h5>
                                 </div>
                                 <ListDescription>
@@ -37,9 +37,9 @@ function IssuerRequierement() {
                             </ListContent>  
                         </ListItem>
                         <ListItem>
-                            <ListIcon name='github' size='large' verticalAlign='middle' />
+                            <ListIcon name='ticket' size='large' color='green' verticalAlign='middle' />
                             <ListContent>
-                                <div style={{ color: 'blue', paddingBottom: 10 }}>
+                                <div style={{ paddingBottom: 10 }}>
                                     <h5><a href="#">Carbon Credit</a></h5>
                                 </div>
                                 <ListDescription>
