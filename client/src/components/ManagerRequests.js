@@ -6,6 +6,7 @@ import IssuersList from "./IssuersList";
 import "../manager.css";
 import InvestorsList from "./InvestorsList";
 import IssuerRequierement from "./IssuerRequierement";
+import AccountCheck from "./AccountCheck";
 
 function ManagerRequests() {
     let connection = useSelector(state => {
@@ -31,6 +32,7 @@ function ManagerRequests() {
                     <GridRow>
                         <GridColumn width={4}>
                             <IssuerRequierement />
+                            <AccountCheck />
                         </GridColumn>
                         <GridColumn width={12}>
                             <IssuersList />

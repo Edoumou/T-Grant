@@ -5,11 +5,11 @@ import { Card, CardContent, Table, TableHeader, TableRow, TableHeaderCell, Table
 import IssuerJSON from "../contracts/artifacts/contracts/Topos/Bank/Issuer.sol/Issuer.json";
 import Formate from "../utils/Formate";
 import FormateAddress from "../utils/FormateAddress";
-import "../manager.css";
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
 import Addresses from "../addresses/addr.json"
 import { setBalance, setListOfIssuers, setLoading } from "../store";
+import "../manager.css";
 
 function IssuersList() {
     const [open, setOpen] = useState(false);
