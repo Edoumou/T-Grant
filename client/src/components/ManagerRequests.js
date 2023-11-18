@@ -3,10 +3,10 @@ import { useSelector } from "react-redux";
 import 'semantic-ui-css/semantic.min.css';
 import { Grid, GridColumn, GridRow } from "semantic-ui-react";
 import IssuersList from "./IssuersList";
-import "../manager.css";
 import InvestorsList from "./InvestorsList";
 import IssuerRequierement from "./IssuerRequierement";
 import AccountCheck from "./AccountCheck";
+import "../manager.css";
 
 function ManagerRequests() {
     let connection = useSelector(state => {
