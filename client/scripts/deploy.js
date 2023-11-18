@@ -113,6 +113,12 @@ async function main() {
   await dai.waitForDeployment();
   console.log("DAI- Tok:", dai.target || "");
 
+    //=== TokenCall Contract
+    const TokenCall = await hre.ethers.getContractFactory("TokenCall");
+    const tokenCall = await TokenCall.deploy();
+    await tokenCall.waitForDeployment();
+    console.log("Token-Ca:", tokenCall.target || "");
+
   //== CouponMath Library
   const CouponMath = await hre.ethers.getContractFactory("CouponMath");
   const couponMath = await CouponMath.deploy();
@@ -155,7 +161,8 @@ async function main() {
     "CNYCContract": cnyc.target,
     "CNYTContract": cnyt.target,
     "DAIContract": dai.target,
-    "CouponPaymentContract": couponPayment.target
+    "CouponPaymentContract": couponPayment.target,
+    "TokenCallContract": tokenCall.target
   };
 
   //=== Write contracts addresses in `addr.json`file

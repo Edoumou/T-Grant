@@ -17,7 +17,9 @@ import {
     setSignedUp,
     setLoggedIn,
     setUsername,
-    setLoading
+    setLoading,
+    setTokenSymbols,
+    setDeals
 } from "./slices/connectionSlice";
 import { issuerReducer, setIssuerRequest, setListOfIssuers, setShowForm } from "./slices/issuerSlice";
 import { investorReducer, setInvestorRequest, setListOfInvestors } from "./slices/investorSlice";
@@ -55,6 +57,8 @@ export {
     setLoggedIn,
     setUsername,
     setLoading,
+    setTokenSymbols,
+    setDeals,
     setIssuerRequest,
     setShowForm,
     setInvestorRequest,

@@ -13,7 +13,9 @@ const connectionSlice = createSlice({
         signedUp: false,
         loggedIn: false,
         username: '',
-        loading: false
+        loading: false,
+        tokenSymbols: [],
+        deals: []
     },
     reducers: {
         setActiveItem(state, action) {
@@ -48,6 +50,12 @@ const connectionSlice = createSlice({
         },
         setLoading(state, action) {
             state.loading = action.payload;
+        },
+        setTokenSymbols(state, action) {
+            state.tokenSymbols = action.payload;
+        },
+        setDeals(state, action) {
+            state.deals = action.payload;
         }
     }
 });
@@ -63,6 +71,8 @@ export const {
     setSignedUp,
     setLoggedIn,
     setUsername,
-    setLoading
+    setLoading,
+    setTokenSymbols,
+    setDeals
 } = connectionSlice.actions;
 export const connectionReducer = connectionSlice.reducer;

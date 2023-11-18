@@ -9,6 +9,7 @@ import ToposBankJSON from "../src/contracts/artifacts/contracts/Topos/Bank/Topos
 import RolesJSON from "../src/contracts/artifacts/contracts/utils/Roles.sol/Roles.json";
 import IssuerJSON from "../src/contracts/artifacts/contracts/Topos/Bank/Issuer.sol/Issuer.json";
 import InvestorJSON from "../src/contracts/artifacts/contracts/Topos/Bank/Investor.sol/Investor.json";
+import TokenCallJSON from "../src/contracts/artifacts/contracts/tests/tokens/TokenCall.sol/TokenCall.json";
 import Addresses from "../src/addresses/addr.json";
 import { web3Connection } from './utils/web3Connection';
 import { getContract } from './utils/getContract';
@@ -16,7 +17,7 @@ import { toposData } from './utils/toposData';
 import FormateAddress from './utils/FormateAddress';
 import HeaderLogo from './img/header-logo.png';
 import "./App.css";
-import { setActiveItem, setColor, setIsConnected, setAccount, setRole, setLoggedIn, setIssuerRegistrationStatus, setInvestorRegistrationStatus, setListOfIssuers, setListOfInvestors, setIssuerRequest, setInvestorRequest, setBalance } from './store';
+import { setActiveItem, setColor, setIsConnected, setAccount, setRole, setLoggedIn, setIssuerRegistrationStatus, setInvestorRegistrationStatus, setListOfIssuers, setListOfInvestors, setIssuerRequest, setInvestorRequest, setBalance, setTokenSymbols, setDeals } from './store';
 import Home from './components/Home';
 import Register from './components/Register';
 import Connect from './components/Connect';
@@ -51,9 +52,16 @@ function App() {
     let rolesContract = await getContract(web3, RolesJSON, Addresses.RolesContract);
     let issuerContract = await getContract(web3, IssuerJSON, Addresses.IssuerContract);
     let investorContract = await getContract(web3, InvestorJSON, Addresses.InvestorContract);
+    let tokenCallContract = await getContract(web3, TokenCallJSON, Addresses.TokenCallContract);
 
     let role = await rolesContract.methods.getRole(account).call({ from: account });
     dispatch(setRole(role));
+
+    let tokenSymbols = await tokenCallContract.methods.getTokenSymbols().call({ from: account });
+    dispatch(setTokenSymbols(tokenSymbols));
+
+    let deals = await toposBank.methods.getListOfDeals().call({ from: account });
+    dispatch(setDeals(deals));
 
     let balance = await web3.eth.getBalance(account);
     balance = web3.utils.fromWei(balance);
