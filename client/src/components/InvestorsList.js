@@ -52,8 +52,29 @@ function InvestorsList() {
         dispatch(setBalance(balance));
     }
 
-    const reject = account => {
-        console.log(account);
+    const reject = async investorAccount => {
+        let { web3, account } = await web3Connection();
+        let contract = await getContract(web3, InvestorJSON, Addresses.InvestorContract);
+
+        await contract.methods.rejectInvestor(investorAccount)
+            .send({ from: account })
+            .on('transactionHash', hash => {
+                setLoadingMessage('Transaction in Process! ⌛️');
+                setExplorerLink(`https://explorer.testnet-1.topos.technology/subnet/0xe93335e1ec5c2174dfcde38dbdcc6fd39d741a74521e0e01155c49fa77f743ae/transaction/${hash}`);
+                dispatch(setLoading(true));
+            })
+            .on('receipt', receipt => {
+                setLoadingMessage('Transaction Completed! ✅');
+                setLoader(false);
+                dispatch(setLoading(false));
+            });
+
+        let listOfInvestors = await contract.methods.getInvestors().call({ from: account });
+        let balance = await web3.eth.getBalance(account);
+        balance = web3.utils.fromWei(balance);
+
+        dispatch(setListOfInvestors(listOfInvestors));
+        dispatch(setBalance(balance));
     }
 
     const goToExplorer = () => {
@@ -66,7 +87,7 @@ function InvestorsList() {
             <TableRow key={index}>
                 <TableCell>{investor.name}</TableCell>
                 <TableCell warning>{investor.country}</TableCell>
-                <TableCell positive textAlign="center">{investor.issuerType}</TableCell>
+                <TableCell positive textAlign="center">{investor.investorType}</TableCell>
                 <TableCell textAlign="right">{FormateAddress(investor.walletAddress)}</TableCell>
                 <TableCell textAlign="center">
                     <Modal
@@ -108,14 +129,43 @@ function InvestorsList() {
                     </Modal>
                 </TableCell>
                 <TableCell textAlign="center">
-                    <Button
-                        key={index}
-                        color="red"
+                    <Modal
                         size="tiny"
-                        onClick={() => reject(investor.walletAddress)}
+                        open={open}
+                        trigger={
+                            <Button
+                                key={index}
+                                compact
+                                color="red"
+                                size="tiny"
+                                onClick={() => reject(investor.walletAddress)}
+                            >
+                                Reject
+                            </Button>
+                        }
+                        onClose={() => setOpen(false)}
+                        onOpen={() => setOpen(true)}
                     >
-                        Reject
-                    </Button>
+                        <Modal.Content>
+                            <div style={{ textAlign: 'center' }}>
+                                <h3>{loadingMessage}</h3>
+                                {
+                                    loader ?
+                                        <Button inverted basic loading size="massive">processing</Button>
+                                    :
+                                        <p style={{ color: 'green' }}><strong>transaction processed successfully</strong></p>
+                                }
+                            </div>
+                        </Modal.Content>
+                        <Modal.Actions>
+                            <Button basic floated="left" onClick={goToExplorer}>
+                                <strong>Check on Topos Explorer</strong>
+                            </Button>
+                            <Button color='black' onClick={() => setOpen(false)}>
+                                Go to Dashboard
+                            </Button>
+                        </Modal.Actions>
+                    </Modal>
                 </TableCell>
             </TableRow>
         );

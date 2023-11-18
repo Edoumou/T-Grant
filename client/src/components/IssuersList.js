@@ -52,8 +52,29 @@ function IssuersList() {
         dispatch(setBalance(balance));
     }
 
-    const reject = account => {
-        console.log(account);
+    const reject = async issuerAccount => {
+        let { web3, account } = await web3Connection();
+        let contract = await getContract(web3, IssuerJSON, Addresses.IssuerContract);
+
+        await contract.methods.rejectIssuer(issuerAccount)
+            .send({ from: account })
+            .on('transactionHash', hash => {
+                setLoadingMessage('Transaction in Process! ⌛️');
+                setExplorerLink(`https://explorer.testnet-1.topos.technology/subnet/0xe93335e1ec5c2174dfcde38dbdcc6fd39d741a74521e0e01155c49fa77f743ae/transaction/${hash}`);
+                dispatch(setLoading(true));
+            })
+            .on('receipt', receipt => {
+                setLoadingMessage('Transaction Completed! ✅');
+                setLoader(false);
+                dispatch(setLoading(false));
+            });
+
+        let listOfIssuers = await contract.methods.getIssuers().call({ from: account });
+        let balance = await web3.eth.getBalance(account);
+        balance = web3.utils.fromWei(balance);
+
+        dispatch(setListOfIssuers(listOfIssuers));
+        dispatch(setBalance(balance));
     }
 
     const goToExplorer = () => {
@@ -115,14 +136,43 @@ function IssuersList() {
                     </Modal>
                 </TableCell>
                 <TableCell textAlign="center">
-                    <Button
-                        key={index}
-                        color="red"
+                    <Modal
                         size="tiny"
-                        onClick={() => reject(issuer.walletAddress)}
+                        open={open}
+                        trigger={
+                            <Button
+                                key={index}
+                                compact
+                                color="red"
+                                size="tiny"
+                                onClick={() => reject(issuer.walletAddress)}
+                            >
+                                Reject
+                            </Button>
+                        }
+                        onClose={() => setOpen(false)}
+                        onOpen={() => setOpen(true)}
                     >
-                        Reject
-                    </Button>
+                        <Modal.Content>
+                            <div style={{ textAlign: 'center' }}>
+                                <h3>{loadingMessage}</h3>
+                                {
+                                    loader ?
+                                        <Button inverted basic loading size="massive">processing</Button>
+                                    :
+                                        <p style={{ color: 'green' }}><strong>transaction processed successfully</strong></p>
+                                }
+                            </div>
+                        </Modal.Content>
+                        <Modal.Actions>
+                            <Button basic floated="left" onClick={goToExplorer}>
+                                <strong>Check on Topos Explorer</strong>
+                            </Button>
+                            <Button color='black' onClick={() => setOpen(false)}>
+                                Go to Dashboard
+                            </Button>
+                        </Modal.Actions>
+                    </Modal>
                 </TableCell>
             </TableRow>
         );
