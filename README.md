@@ -67,7 +67,7 @@ To compile and deploy the contract on Topos Subnet, we first need to get some `T
     // Run Hardhat Network and keep it running
     $ npx hardhat node
 
-    // Run the deployment script ans set initialize contracts addresses
+    // Runs the deployment script and initializes contracts addresses
     $ sh deploy.sh 
 ```
 
