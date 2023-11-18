@@ -39,6 +39,8 @@ function App() {
     let { web3, account } = await web3Connection();
     let coreData = toposData();
 
+    dispatch(setAccount(account));
+
     //let toposCore = await getContract(web3, ToposCoreJSON, coreData.toposCoreProxyContractAddress);
     //let subnetRegistrator = await getContract(web3, SubnetRegistratorJSON, coreData.subnetRegistratorContractAddress);
 

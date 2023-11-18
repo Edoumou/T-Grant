@@ -3,10 +3,15 @@ import { useSelector } from "react-redux";
 import 'semantic-ui-css/semantic.min.css';
 import { Grid, GridColumn, GridRow } from "semantic-ui-react";
 import SubmitDealButton from "./SubmitDealButton";
+import DealForm from "./DealForm";
 
 function SubmitDeal() {
     const connection = useSelector(state => {
         return state.connection;
+    });
+
+    const issuer = useSelector(state => {
+        return state.issuer;
     });
 
     return (
@@ -30,7 +35,16 @@ function SubmitDeal() {
                             <SubmitDealButton />
                         </GridColumn>
                         <GridColumn width={12}>
-                            2
+                            {
+                                issuer.showForm ?
+                                    <>
+                                        <DealForm />
+                                    </>
+                                :
+                                    <>
+                                        Hidding Form
+                                    </>
+                            }
                         </GridColumn>
                     </GridRow>
                 </Grid>

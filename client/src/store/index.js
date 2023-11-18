@@ -19,7 +19,7 @@ import {
     setUsername,
     setLoading
 } from "./slices/connectionSlice";
-import { issuerReducer, setIssuerRequest, setListOfIssuers } from "./slices/issuerSlice";
+import { issuerReducer, setIssuerRequest, setListOfIssuers, setShowForm } from "./slices/issuerSlice";
 import { investorReducer, setInvestorRequest, setListOfInvestors } from "./slices/investorSlice";
 
 
@@ -56,6 +56,7 @@ export {
     setUsername,
     setLoading,
     setIssuerRequest,
+    setShowForm,
     setInvestorRequest,
     setListOfIssuers,
     setListOfInvestors
