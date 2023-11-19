@@ -57,11 +57,12 @@ function App() {
     let role = await rolesContract.methods.getRole(account).call({ from: account });
     dispatch(setRole(role));
 
-    //let tokenSymbols = await tokenCallContract.methods.getTokenSymbols().call({ from: account });
-    //dispatch(setTokenSymbols(tokenSymbols));
-
-    //let tokenAddresses = await tokenCallContract.methods.getTokenAddresses().call({ from: account });
-    //dispatch(setTokenAddresses(tokenAddresses)); 
+    let tokenAddresses = await tokenCallContract.methods.getTokenAddresses().call({ from: account });
+    let tokenSymbols = await tokenCallContract.methods.getTokenSymbols().call({ from: account });
+    let deals = await toposBank.methods.getListOfDeals().call({ from: account });
+    dispatch(setTokenAddresses(tokenAddresses));
+    dispatch(setTokenSymbols(tokenSymbols));
+    dispatch(setDeals(deals));
 
     let balance = await web3.eth.getBalance(account);
     balance = web3.utils.fromWei(balance);
@@ -85,19 +86,22 @@ function App() {
     if (role === "ISSUER") {
       let issuerRequest = await issuerContract.methods.issuers(account).call({ from: account });
       dispatch(setIssuerRequest(issuerRequest));
-
-      //let deals = await toposBank.methods.getListOfDeals().call({ from: account });
-      //dispatch(setDeals(deals));
     }
 
     if (role === "INVESTOR") {
 
     }
-  });
+
+    const cleanUp = () => {
+
+    };
+
+    return cleanUp;
+  }, []);
 
   useEffect(() => {
     fetchOnchainData();
-  });
+  }, [fetchOnchainData]);
 
   const handleItemClick = (e, { name }) => {
     dispatch(setActiveItem(name));

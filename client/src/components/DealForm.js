@@ -57,11 +57,13 @@ function DealForm() {
         ];
 
         setCurrencyOptions(options);
-    });
+    }, []);
 
     useEffect(() => {
-        fetchOnchainData();
-    })
+        let mounted = true;
+
+        if (mounted) fetchOnchainData();
+    });
 
 
     const issuer = useSelector(state => {
