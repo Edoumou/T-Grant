@@ -20,7 +20,7 @@ function IssuerListOfDeals() {
         deal => deal.issuerAddress.toLowerCase() === connection.account.toLowerCase()
     );
 
-    let symbols = connection.dealsCurrencySymbols;
+    let symbols = issuer.dealsCurrencySymbols;
 
     const status = issuerDeals.map((deal, index) => {
         if(deal.status === '1') {
@@ -51,12 +51,12 @@ function IssuerListOfDeals() {
             <TableRow key={index}>
                 <TableCell textAlign="center">{deal.dealID}</TableCell>
                 <TableCell textAlign="left"><a href={deal.prospectusURI} target="_blank"><strong>{deal.prospectusURI}</strong></a></TableCell>
-                <TableCell positive textAlign="left">{FormateAddress(deal.issuerAddress)}</TableCell>
-                <TableCell negative textAlign="right">{Formate(deal.debtAmount)} USDC</TableCell>
+                <TableCell textAlign="left">{FormateAddress(deal.issuerAddress)}</TableCell>
+                <TableCell positive textAlign="right">{Formate(deal.debtAmount)} {symbols[index]}</TableCell>
                 <TableCell warning textAlign="center">{deal.couponRate / 100}%</TableCell>
                 <TableCell textAlign="center">{deal.couponFrequency}</TableCell>
-                <TableCell textAlign="center">{couponType[index]}</TableCell>
-                <TableCell warning textAlign="right">{(new Date(deal.maturityDate * 1000)).toLocaleDateString()}</TableCell>
+                <TableCell warning textAlign="center">{couponType[index]}</TableCell>
+                <TableCell positive textAlign="right">{(new Date(deal.maturityDate * 1000)).toLocaleDateString()}</TableCell>
                 <TableCell textAlign="center">{status[index]}</TableCell>
             </TableRow>
         );
