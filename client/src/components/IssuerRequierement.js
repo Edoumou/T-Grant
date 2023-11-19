@@ -13,7 +13,7 @@ function IssuerRequierement() {
                             <ListIcon name='file' size='large' color='orange' verticalAlign='middle' />
                             <ListContent>
                                 <div style={{ paddingBottom: 10 }}>
-                                    <h5><a href="#">Issuer Document</a></h5>
+                                    <h5><a href="/#">Issuer Document</a></h5>
                                 </div>
                                 <ListDescription>
                                     Make sure that the issuer has submitted their document.
@@ -26,7 +26,7 @@ function IssuerRequierement() {
                             <ListIcon name='certificate' size='large' color='blue' verticalAlign='middle' />
                             <ListContent>
                                 <div style={{ paddingBottom: 10 }}>
-                                    <h5><a href="#">Credit Rating</a></h5>
+                                    <h5><a href="/#">Credit Rating</a></h5>
                                 </div>
                                 <ListDescription>
                                     A credit rating is an evaluation of the credit risk of a prospective debtor
@@ -40,7 +40,7 @@ function IssuerRequierement() {
                             <ListIcon name='ticket' size='large' color='green' verticalAlign='middle' />
                             <ListContent>
                                 <div style={{ paddingBottom: 10 }}>
-                                    <h5><a href="#">Carbon Credit</a></h5>
+                                    <h5><a href="/#">Carbon Credit</a></h5>
                                 </div>
                                 <ListDescription>
                                     Permit that allows the owner to emit a certain amount of carbon dioxide or other greenhouse gases

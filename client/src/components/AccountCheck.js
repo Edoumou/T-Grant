@@ -103,7 +103,7 @@ function AccountCheck() {
                                                         <ListIcon name='check circle outline' size='large' color='green' verticalAlign='middle' />
                                                         <ListContent>
                                                             <div style={{ paddingBottom: 10 }}>
-                                                                <h5><a href="#">Name</a></h5>
+                                                                <h5><a href="/#">Name</a></h5>
                                                             </div>
                                                             <ListDescription>
                                                                 {accountToCheck[0].name}
@@ -114,7 +114,7 @@ function AccountCheck() {
                                                         <ListIcon name='check circle outline' size='large' color='green' verticalAlign='middle' />
                                                         <ListContent>
                                                             <div style={{ paddingBottom: 10 }}>
-                                                                <h5><a href="#">Country</a></h5>
+                                                                <h5><a href="/#">Country</a></h5>
                                                             </div>
                                                             <ListDescription>
                                                                 {accountToCheck[0].country}
@@ -125,7 +125,7 @@ function AccountCheck() {
                                                         <ListIcon name='check circle outline' size='large' color='green' verticalAlign='middle' />
                                                         <ListContent>
                                                             <div style={{ paddingBottom: 10 }}>
-                                                                <h5><a href="#">Type</a></h5>
+                                                                <h5><a href="/#">Type</a></h5>
                                                             </div>
                                                             <ListDescription>
                                                                 {accountToCheck[0].issuerType}
@@ -136,7 +136,7 @@ function AccountCheck() {
                                                         <ListIcon name='check circle outline' size='large' color='green' verticalAlign='middle' />
                                                         <ListContent>
                                                             <div style={{ paddingBottom: 10 }}>
-                                                                <h5><a href="#">Credit Rating</a></h5>
+                                                                <h5><a href="/#">Credit Rating</a></h5>
                                                             </div>
                                                             <ListDescription>
                                                                 {accountToCheck[0].creditRating}
@@ -147,7 +147,7 @@ function AccountCheck() {
                                                         <ListIcon name='check circle outline' size='large' color='green' verticalAlign='middle' />
                                                         <ListContent>
                                                             <div style={{ paddingBottom: 10 }}>
-                                                                <h5><a href="#">Carbon Credit</a></h5>
+                                                                <h5><a href="/#">Carbon Credit</a></h5>
                                                             </div>
                                                             <ListDescription>
                                                                 {Formate(accountToCheck[0].carbonCredit)}
@@ -158,7 +158,7 @@ function AccountCheck() {
                                                         <ListIcon name='check circle outline' size='large' color='green' verticalAlign='middle' />
                                                         <ListContent>
                                                             <div style={{ paddingBottom: 10 }}>
-                                                                <h5><a href="#">Address</a></h5>
+                                                                <h5><a href="/#">Address</a></h5>
                                                             </div>
                                                             <ListDescription>
                                                                 {FormateAddress(accountToCheck[0].walletAddress)}
@@ -178,7 +178,7 @@ function AccountCheck() {
                                                         <ListIcon name='check circle outline' size='large' color='green' verticalAlign='middle' />
                                                         <ListContent>
                                                             <div style={{ paddingBottom: 10 }}>
-                                                                <h5><a href="#">Name</a></h5>
+                                                                <h5><a href="/#">Name</a></h5>
                                                             </div>
                                                             <ListDescription>
                                                                 {accountToCheck[0].name}
@@ -189,7 +189,7 @@ function AccountCheck() {
                                                         <ListIcon name='check circle outline' size='large' color='green' verticalAlign='middle' />
                                                         <ListContent>
                                                             <div style={{ paddingBottom: 10 }}>
-                                                                <h5><a href="#">Country</a></h5>
+                                                                <h5><a href="/#">Country</a></h5>
                                                             </div>
                                                             <ListDescription>
                                                                 {accountToCheck[0].country}
@@ -200,7 +200,7 @@ function AccountCheck() {
                                                         <ListIcon name='check circle outline' size='large' color='green' verticalAlign='middle' />
                                                         <ListContent>
                                                             <div style={{ paddingBottom: 10 }}>
-                                                                <h5><a href="#">Type</a></h5>
+                                                                <h5><a href="/#">Type</a></h5>
                                                             </div>
                                                             <ListDescription>
                                                                 {accountToCheck[0].investorType}
@@ -211,7 +211,7 @@ function AccountCheck() {
                                                         <ListIcon name='check circle outline' size='large' color='green' verticalAlign='middle' />
                                                         <ListContent>
                                                             <div style={{ paddingBottom: 10 }}>
-                                                                <h5><a href="#">Address</a></h5>
+                                                                <h5><a href="/#">Address</a></h5>
                                                             </div>
                                                             <ListDescription>
                                                                 {FormateAddress(accountToCheck[0].walletAddress)}

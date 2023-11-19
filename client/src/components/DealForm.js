@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import 'semantic-ui-css/semantic.min.css';
 import { Button, Grid, GridRow, GridColumn, Card, CardContent, Input, Menu, Modal, Dropdown } from "semantic-ui-react";
 import BankJSON from "../contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
+import TokenCallJSON from "../contracts/artifacts/contracts/tests/tokens/TokenCall.sol/TokenCall.json";
 import { setDeals, setLoading, setShowForm } from "../store";
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
@@ -30,6 +31,7 @@ function DealForm() {
     const [currency, setCurrency] = useState("");
     const [status, setStatus] = useState("SUBMISSION");
     const [accountAddress, setAccountAddress] = useState(connection.account);
+    const [currencyOptions, setCurrencyOptions] = useState([]);
 
     const couponTypeOptions = [
         { key: 1, text: 'Zero Coupon', value: '0' },
@@ -37,15 +39,29 @@ function DealForm() {
         { key: 3, text: 'Floating Rate', value: '2' }
     ];
 
-    const currencyOptions = [
-        { key: 1, text: connection.tokenSymbold[0], value: connection.tokenSymbold[0] },
-        { key: 2, text: connection.tokenSymbold[1], value: connection.tokenSymbold[1] },
-        { key: 3, text: connection.tokenSymbold[2], value: connection.tokenSymbold[2] },
-        { key: 4, text: connection.tokenSymbold[3], value: connection.tokenSymbold[3] },
-        { key: 5, text: connection.tokenSymbold[4], value: connection.tokenSymbold[4] },
-        { key: 6, text: connection.tokenSymbold[5], value: connection.tokenSymbold[5] },
-        { key: 7, text: connection.tokenSymbold[6], value: connection.tokenSymbold[6] }
-    ];
+    const fetchOnchainData = useCallback(async () => {
+        let { web3, account } = await web3Connection();
+        let contract = await getContract(web3, TokenCallJSON, Addresses.TokenCallContract);
+
+        let tokenAddresses = await contract.methods.getTokenAddresses().call({ from: account });
+        let tokenSymbols = await contract.methods.getTokenSymbols().call({ from: account });
+
+        let  options = [
+            { key: 1, text: tokenSymbols[0], value: tokenAddresses[0] },
+            { key: 2, text: tokenSymbols[1], value: tokenAddresses[1] },
+            { key: 3, text: tokenSymbols[2], value: tokenAddresses[2] },
+            { key: 4, text: tokenSymbols[3], value: tokenAddresses[3] },
+            { key: 5, text: tokenSymbols[4], value: tokenAddresses[4] },
+            { key: 6, text: tokenSymbols[5], value: tokenAddresses[5] },
+            { key: 7, text: tokenSymbols[6], value: tokenAddresses[6] }
+        ];
+
+        setCurrencyOptions(options);
+    });
+
+    useEffect(() => {
+        fetchOnchainData();
+    })
 
 
     const issuer = useSelector(state => {
@@ -59,16 +75,14 @@ function DealForm() {
         let deals = await contract.methods.getListOfDeals().call({ from: account });
         
         let _dealID;
-        for (let i = 0; i < deals.length; i++) {
-            let numStr = String(i + 1);
+        let len = deals.length;
 
-            if (numStr.length === 1) {
-                _dealID = `DEAL-00${numStr}`;
-            } else if (numStr.length === 2) {
-                _dealID = `DEAL-0${numStr}`;
-            } else {
-                _dealID = `DEAL-${numStr}`;
-            }
+        if (len < 10) {
+            _dealID = `DEAL-00${len + 1}`;
+        } else if (len < 100) {
+            _dealID = `DEAL-0${len + 1}`;
+        } else {
+            _dealID = `DEAL-${len + 1}`;
         }
 
         let _maturityDate = Date.parse(maturityDate) / 1000;
@@ -172,6 +186,7 @@ function DealForm() {
                                 <GridColumn>
                                     <Input
                                         fluid
+                                        type="date"
                                         size="mini"
                                         placeholder='Maturity Date'
                                         value={maturityDate}

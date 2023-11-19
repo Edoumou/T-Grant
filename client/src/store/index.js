@@ -19,6 +19,7 @@ import {
     setUsername,
     setLoading,
     setTokenSymbols,
+    setTokenAddresses,
     setDeals
 } from "./slices/connectionSlice";
 import { issuerReducer, setIssuerRequest, setListOfIssuers, setShowForm } from "./slices/issuerSlice";
@@ -58,6 +59,7 @@ export {
     setUsername,
     setLoading,
     setTokenSymbols,
+    setTokenAddresses,
     setDeals,
     setIssuerRequest,
     setShowForm,

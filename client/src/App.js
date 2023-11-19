@@ -17,7 +17,7 @@ import { toposData } from './utils/toposData';
 import FormateAddress from './utils/FormateAddress';
 import HeaderLogo from './img/header-logo.png';
 import "./App.css";
-import { setActiveItem, setColor, setIsConnected, setAccount, setRole, setLoggedIn, setIssuerRegistrationStatus, setInvestorRegistrationStatus, setListOfIssuers, setListOfInvestors, setIssuerRequest, setInvestorRequest, setBalance, setTokenSymbols, setDeals } from './store';
+import { setActiveItem, setColor, setIsConnected, setAccount, setRole, setLoggedIn, setIssuerRegistrationStatus, setInvestorRegistrationStatus, setListOfIssuers, setListOfInvestors, setIssuerRequest, setInvestorRequest, setBalance, setTokenSymbols, setDeals, setTokenAddresses } from './store';
 import Home from './components/Home';
 import Register from './components/Register';
 import Connect from './components/Connect';
@@ -57,11 +57,11 @@ function App() {
     let role = await rolesContract.methods.getRole(account).call({ from: account });
     dispatch(setRole(role));
 
-    let tokenSymbols = await tokenCallContract.methods.getTokenSymbols().call({ from: account });
-    dispatch(setTokenSymbols(tokenSymbols));
+    //let tokenSymbols = await tokenCallContract.methods.getTokenSymbols().call({ from: account });
+    //dispatch(setTokenSymbols(tokenSymbols));
 
-    let deals = await toposBank.methods.getListOfDeals().call({ from: account });
-    dispatch(setDeals(deals));
+    //let tokenAddresses = await tokenCallContract.methods.getTokenAddresses().call({ from: account });
+    //dispatch(setTokenAddresses(tokenAddresses)); 
 
     let balance = await web3.eth.getBalance(account);
     balance = web3.utils.fromWei(balance);
@@ -85,6 +85,9 @@ function App() {
     if (role === "ISSUER") {
       let issuerRequest = await issuerContract.methods.issuers(account).call({ from: account });
       dispatch(setIssuerRequest(issuerRequest));
+
+      //let deals = await toposBank.methods.getListOfDeals().call({ from: account });
+      //dispatch(setDeals(deals));
     }
 
     if (role === "INVESTOR") {
