@@ -22,7 +22,7 @@ import {
     setTokenAddresses,
     setDeals
 } from "./slices/connectionSlice";
-import { issuerReducer, setIssuerRequest, setListOfIssuers, setShowForm } from "./slices/issuerSlice";
+import { issuerReducer, setIssuerRequest, setListOfIssuers, setShowForm, setIssuerDealsCurrencySymbols } from "./slices/issuerSlice";
 import { investorReducer, setInvestorRequest, setListOfInvestors } from "./slices/investorSlice";
 
 
@@ -63,6 +63,7 @@ export {
     setDeals,
     setIssuerRequest,
     setShowForm,
+    setIssuerDealsCurrencySymbols,
     setInvestorRequest,
     setListOfIssuers,
     setListOfInvestors

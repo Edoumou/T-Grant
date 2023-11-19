@@ -17,7 +17,7 @@ import { toposData } from './utils/toposData';
 import FormateAddress from './utils/FormateAddress';
 import HeaderLogo from './img/header-logo.png';
 import "./App.css";
-import { setActiveItem, setColor, setIsConnected, setAccount, setRole, setLoggedIn, setIssuerRegistrationStatus, setInvestorRegistrationStatus, setListOfIssuers, setListOfInvestors, setIssuerRequest, setInvestorRequest, setBalance, setTokenSymbols, setDeals, setTokenAddresses } from './store';
+import { setActiveItem, setColor, setIsConnected, setAccount, setRole, setLoggedIn, setIssuerRegistrationStatus, setInvestorRegistrationStatus, setListOfIssuers, setListOfInvestors, setIssuerRequest, setInvestorRequest, setBalance, setTokenSymbols, setDeals, setTokenAddresses, setIssuerDealsCurrencySymbols } from './store';
 import Home from './components/Home';
 import Register from './components/Register';
 import Connect from './components/Connect';
@@ -55,42 +55,45 @@ function App() {
     let tokenCallContract = await getContract(web3, TokenCallJSON, Addresses.TokenCallContract);
 
     let role = await rolesContract.methods.getRole(account).call({ from: account });
-    dispatch(setRole(role));
 
     let tokenAddresses = await tokenCallContract.methods.getTokenAddresses().call({ from: account });
     let tokenSymbols = await tokenCallContract.methods.getTokenSymbols().call({ from: account });
     let deals = await toposBank.methods.getListOfDeals().call({ from: account });
+
+    //=== issuers filtering
+    if (role === "ISSUER") {
+      let issuerDeals = deals.filter(
+        deal => deal.issuerAddress.toLowerCase() === account.toLowerCase()
+      );
+
+      let issuerDealsCurrencySymbols = [];
+      for(let i = 0; i < issuerDeals.length; i++) {
+        let tokenAddress = issuerDeals[i].currency;
+        let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
+
+        issuerDealsCurrencySymbols.push(tokenSymbol);
+      }
+
+      dispatch(setIssuerDealsCurrencySymbols(issuerDealsCurrencySymbols));
+    }
+
+    
+    let listOfIssuers = await issuerContract.methods.getIssuers().call({ from: account });
+    let listOfInvestors = await investorContract.methods.getInvestors().call({ from: account });
+    let issuerRequest = await issuerContract.methods.issuers(account).call({ from: account });
+    let investorRequest = await investorContract.methods.investors(account).call({ from: account });
+    let balance = await web3.eth.getBalance(account);
+    balance = web3.utils.fromWei(balance);
+
+    dispatch(setRole(role));
     dispatch(setTokenAddresses(tokenAddresses));
     dispatch(setTokenSymbols(tokenSymbols));
     dispatch(setDeals(deals));
-
-    let balance = await web3.eth.getBalance(account);
-    balance = web3.utils.fromWei(balance);
-    dispatch(setBalance(balance));
-
-    if (role === "") {
-      let issuerRequest = await issuerContract.methods.issuers(account).call({ from: account });
-      let investorRequest = await investorContract.methods.investors(account).call({ from: account });
-
-      dispatch(setIssuerRequest(issuerRequest));
-      dispatch(setInvestorRequest(investorRequest));
-    }
-
-    if (role === "MANAGER") {
-      let listOfIssuers = await issuerContract.methods.getIssuers().call({ from: account });
-      let listOfInvestors = await investorContract.methods.getInvestors().call({ from: account });
-      dispatch(setListOfIssuers(listOfIssuers));
-      dispatch(setListOfInvestors(listOfInvestors));
-    }
-
-    if (role === "ISSUER") {
-      let issuerRequest = await issuerContract.methods.issuers(account).call({ from: account });
-      dispatch(setIssuerRequest(issuerRequest));
-    }
-
-    if (role === "INVESTOR") {
-
-    }
+    dispatch(setListOfIssuers(listOfIssuers));
+    dispatch(setListOfInvestors(listOfInvestors));
+    dispatch(setIssuerRequest(issuerRequest));
+    dispatch(setInvestorRequest(investorRequest));
+    dispatch(setBalance(balance)); 
 
     const cleanUp = () => {
 

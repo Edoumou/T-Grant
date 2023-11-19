@@ -323,3 +323,12 @@
     margin-left: 35%;
     margin-top: 100px;
 }
+
+.issuerDealList {
+    text-align: center;
+    margin-top: 100px;
+    margin-bottom: 25px;
+    color: rgb(19, 74, 51);
+    font-size: calc(5px + 1.5vmin);
+    text-transform: uppercase;
+}

@@ -4,6 +4,7 @@ import 'semantic-ui-css/semantic.min.css';
 import { Grid, GridColumn, GridRow } from "semantic-ui-react";
 import SubmitDealButton from "./SubmitDealButton";
 import DealForm from "./DealForm";
+import IssuerListOfDeals from "./IssuerListOfDeals";
 
 function SubmitDeal() {
     const connection = useSelector(state => {
@@ -13,6 +14,10 @@ function SubmitDeal() {
     const issuer = useSelector(state => {
         return state.issuer;
     });
+
+    let issuerDeals = connection.deals.filter(
+        deal => deal.issuerAddress.toLowerCase() === connection.account.toLowerCase()
+    );
 
     return (
         <div className="manager">
@@ -48,6 +53,14 @@ function SubmitDeal() {
                         </GridColumn>
                     </GridRow>
                 </Grid>
+                <div style={{ marginTop: 80 }}>
+                    {
+                        issuerDeals.length > 0 ?
+                            <IssuerListOfDeals />
+                        :
+                            <></>
+                    }
+                </div>
             </div>
         </div>
     );

@@ -5,7 +5,8 @@ const issuerSlice = createSlice({
     initialState: {
         issuerRequest: {},
         listOfIssuers: [],
-        showForm: false
+        showForm: false,
+        dealsCurrencySymbols: []
     },
     reducers: {
         setIssuerRequest(state, action) {
@@ -16,9 +17,17 @@ const issuerSlice = createSlice({
         },
         setShowForm(state, action) {
             state.showForm = action.payload;
+        },
+        setIssuerDealsCurrencySymbols(state, action) {
+            state.dealsCurrencySymbols = action.payload;
         }
     }
 });
 
-export const {  setIssuerRequest, setListOfIssuers, setShowForm } = issuerSlice.actions;
+export const { 
+    setIssuerRequest,
+    setListOfIssuers,
+    setShowForm,
+    setIssuerDealsCurrencySymbols
+} = issuerSlice.actions;
 export const issuerReducer = issuerSlice.reducer;
