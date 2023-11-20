@@ -75,7 +75,7 @@ function IssuerListOfDeals() {
                 <strong>Your Deals</strong>
             </div>
             <div className="tab-scroll">
-                <Table celled>
+                <Table padded>
                     <TableHeader className="header-sticky">
                         <TableRow>
                             <TableHeaderCell textAlign="center">Deal ID</TableHeaderCell>

@@ -102,16 +102,82 @@ function App() {
     return cleanUp;
   }, []);
 
+  const checkAccountChange = useCallback(async () => {
+    let { web3 } = await web3Connection();
+
+    let toposBank = await getContract(web3, ToposBankJSON, Addresses.ToposBankContract);
+    let rolesContract = await getContract(web3, RolesJSON, Addresses.RolesContract);
+    let issuerContract = await getContract(web3, IssuerJSON, Addresses.IssuerContract);
+    let investorContract = await getContract(web3, InvestorJSON, Addresses.InvestorContract);
+    let tokenCallContract = await getContract(web3, TokenCallJSON, Addresses.TokenCallContract);
+
+    if(typeof window.ethereum !== 'undefined') {
+      await window.ethereum.on('accountsChanged', async accounts => {
+        let account = accounts[0];
+        
+        let role = await rolesContract.methods.getRole(account).call({ from: account });
+
+        let tokenAddresses = await tokenCallContract.methods.getTokenAddresses().call({ from: account });
+        let tokenSymbols = await tokenCallContract.methods.getTokenSymbols().call({ from: account });
+        let deals = await toposBank.methods.getListOfDeals().call({ from: account });
+
+        //=== issuers filtering
+        if (role === "ISSUER") {
+          let issuerDeals = deals.filter(
+            deal => deal.issuerAddress.toLowerCase() === account.toLowerCase()
+          );
+
+          let issuerDealsCurrencySymbols = [];
+          for(let i = 0; i < issuerDeals.length; i++) {
+            let tokenAddress = issuerDeals[i].currency;
+            let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
+
+            issuerDealsCurrencySymbols.push(tokenSymbol);
+          }
+
+          dispatch(setIssuerDealsCurrencySymbols(issuerDealsCurrencySymbols));
+        }
+
+        
+        let listOfIssuers = await issuerContract.methods.getIssuers().call({ from: account });
+        let listOfInvestors = await investorContract.methods.getInvestors().call({ from: account });
+        let issuerRequest = await issuerContract.methods.issuers(account).call({ from: account });
+        let investorRequest = await investorContract.methods.investors(account).call({ from: account });
+        let balance = await web3.eth.getBalance(account);
+        balance = web3.utils.fromWei(balance);
+
+        dispatch(setAccount(account));
+        dispatch(setRole(role));
+        dispatch(setTokenAddresses(tokenAddresses));
+        dispatch(setTokenSymbols(tokenSymbols));
+        dispatch(setDeals(deals));
+        dispatch(setListOfIssuers(listOfIssuers));
+        dispatch(setListOfInvestors(listOfInvestors));
+        dispatch(setIssuerRequest(issuerRequest));
+        dispatch(setInvestorRequest(investorRequest));
+        dispatch(setBalance(balance)); 
+        dispatch(setLoggedIn(false));
+      });
+    }
+
+    const cleanUp = () => {
+
+    };
+
+    return cleanUp;
+  }, []);
+
   useEffect(() => {
+    checkAccountChange();
     fetchOnchainData();
-  }, [fetchOnchainData]);
+  }, [checkAccountChange, fetchOnchainData]);
 
   const handleItemClick = (e, { name }) => {
     dispatch(setActiveItem(name));
     dispatch(setColor('pink'));
   }
 
-  const handleDisconnect = () => {
+  const handleDisconnect = async () => {
     dispatch(setLoggedIn(false));
     dispatch(setActiveItem("home"));
   }

@@ -127,7 +127,9 @@ function DealForm() {
         <div className="list-card">
             <Card fluid>
                 <CardContent textAlign="left">
-                    <strong>Submit Deal</strong>
+                    <div className="deal-form-head">
+                        Submit Deal
+                    </div>
                     <br></br>
                     <br></br>
                     <div className="deal-form">

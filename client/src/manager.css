@@ -48,3 +48,8 @@
     word-spacing: 2px;
     line-height: 20px;
   }
+
+  .list-card .deal-form-head {
+    word-spacing: 2px;
+    text-transform: uppercase;
+  }
