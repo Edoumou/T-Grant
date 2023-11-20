@@ -2,7 +2,6 @@ import React from "react";
 import { useSelector } from "react-redux";
 import 'semantic-ui-css/semantic.min.css';
 import { Grid, GridColumn, GridRow } from "semantic-ui-react";
-import SubmitDealButton from "./SubmitDealButton";
 import DealForm from "./DealForm";
 import IssuerListOfDeals from "./IssuerListOfDeals";
 
@@ -34,26 +33,14 @@ function SubmitDeal() {
                 </Grid>
             </div>
             <div className="manager-body">
-                <Grid stackable columns={2}>
+                <Grid stackable columns={1}>
                     <GridRow>
-                        <GridColumn width={4}>
-                            <SubmitDealButton />
-                        </GridColumn>
-                        <GridColumn width={12}>
-                            {
-                                issuer.showForm ?
-                                    <>
-                                        <DealForm />
-                                    </>
-                                :
-                                    <>
-                                        Hidding Form
-                                    </>
-                            }
+                        <GridColumn width={16}>
+                            <DealForm />
                         </GridColumn>
                     </GridRow>
                 </Grid>
-                <div style={{ marginTop: 80 }}>
+                <div style={{ marginTop: 5 }}>
                     {
                         issuerDeals.length > 0 ?
                             <IssuerListOfDeals />

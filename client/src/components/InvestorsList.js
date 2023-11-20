@@ -34,7 +34,7 @@ function InvestorsList() {
             .send({ from: account })
             .on('transactionHash', hash => {
                 setLoadingMessage('Transaction in Process! ⌛️');
-                setExplorerLink(`https://explorer.testnet-1.topos.technology/subnet/0xe93335e1ec5c2174dfcde38dbdcc6fd39d741a74521e0e01155c49fa77f743ae/transaction/${hash}`);
+                setExplorerLink(`https://topos.blockscout.testnet-1.topos.technology/tx/${hash}`);
                 dispatch(setLoading(true));
             })
             .on('receipt', receipt => {
@@ -59,7 +59,7 @@ function InvestorsList() {
             .send({ from: account })
             .on('transactionHash', hash => {
                 setLoadingMessage('Transaction in Process! ⌛️');
-                setExplorerLink(`https://explorer.testnet-1.topos.technology/subnet/0xe93335e1ec5c2174dfcde38dbdcc6fd39d741a74521e0e01155c49fa77f743ae/transaction/${hash}`);
+                setExplorerLink(`https://topos.blockscout.testnet-1.topos.technology/tx/${hash}`);
                 dispatch(setLoading(true));
             })
             .on('receipt', receipt => {
@@ -174,11 +174,13 @@ function InvestorsList() {
         <div className="list-card">
             <Card fluid>
                 <CardContent textAlign="left">
-                    <strong>Investors Requests</strong>
+                    <div className="list-card-head">
+                        Investors Requests
+                    </div>
                     <br></br>
                     <br></br>
                     {
-                        investors.length > 0 &&
+                        investors.length > 0 ?
                         <Table celled>
                             <TableHeader>
                                 <TableRow>
@@ -194,6 +196,10 @@ function InvestorsList() {
                                 {renderedInvestors}
                             </TableBody>
                         </Table>
+                        :
+                            <div  className="list-card-head-no">
+                                There is No Request from Investors
+                            </div>
                     }
                 </CardContent>
             </Card>

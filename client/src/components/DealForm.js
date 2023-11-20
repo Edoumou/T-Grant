@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import 'semantic-ui-css/semantic.min.css';
 import { Button, Grid, GridRow, GridColumn, Card, CardContent, Input, Menu, Modal, Dropdown } from "semantic-ui-react";
 import BankJSON from "../contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
-import { setDeals, setLoading, setShowForm } from "../store";
+import TokenCallJSON from "../contracts/artifacts/contracts/tests/tokens/TokenCall.sol/TokenCall.json";
+import { setDeals, setIssuerDealsCurrencySymbols, setLoading, setShowForm } from "../store";
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
 import Addresses from "../addresses/addr.json";
@@ -54,6 +55,7 @@ function DealForm() {
     const submiDeal = async () => {
         let { web3, account } = await web3Connection();
         let contract = await getContract(web3, BankJSON, Addresses.ToposBankContract);
+        let tokenCallContract = await getContract(web3, TokenCallJSON, Addresses.TokenCallContract);
         
         let deals = await contract.methods.getListOfDeals().call({ from: account });
         
@@ -88,7 +90,7 @@ function DealForm() {
             .send({ from: account })
             .on('transactionHash', hash => {
                 setLoadingMessage('Transaction in Process! ⌛️');
-                setExplorerLink(`https://explorer.testnet-1.topos.technology/subnet/0xe93335e1ec5c2174dfcde38dbdcc6fd39d741a74521e0e01155c49fa77f743ae/transaction/${hash}`);
+                setExplorerLink(`https://topos.blockscout.testnet-1.topos.technology/tx/${hash}`);
                 dispatch(setLoading(true));
             })
             .on('receipt', receipt => {
@@ -99,8 +101,21 @@ function DealForm() {
 
         let newDeals = await contract.methods.getListOfDeals().call({ from: account });
 
+        let issuerDeals = newDeals.filter(
+            deal => deal.issuerAddress.toLowerCase() === account.toLowerCase()
+        );
+    
+        let issuerDealsCurrencySymbols = [];
+        for(let i = 0; i < issuerDeals.length; i++) {
+            let tokenAddress = issuerDeals[i].currency;
+            let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
+
+            issuerDealsCurrencySymbols.push(tokenSymbol);
+        }
+
         dispatch(setDeals(newDeals));
         dispatch(setShowForm(false));
+        dispatch(setIssuerDealsCurrencySymbols(issuerDealsCurrencySymbols));
     }
 
     const goToExplorer = () => {

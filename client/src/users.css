@@ -325,10 +325,22 @@
 }
 
 .issuerDealList {
-    text-align: center;
-    margin-top: 100px;
+    text-align: left;
+    margin-top: 20px;
     margin-bottom: 25px;
     color: rgb(19, 74, 51);
     font-size: calc(5px + 1.5vmin);
     text-transform: uppercase;
+}
+
+.tab-scroll {
+    /*height: 232px;*/
+    max-height: 272px;
+    overflow: scroll;
+}
+
+.header-sticky {
+    position: sticky;
+    top: 0px;
+    margin: 0;
 }

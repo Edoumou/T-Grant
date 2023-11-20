@@ -20,7 +20,11 @@ function IssuerListOfDeals() {
         deal => deal.issuerAddress.toLowerCase() === connection.account.toLowerCase()
     );
 
-    let symbols = issuer.dealsCurrencySymbols;
+    let symbols = issuer.dealsCurrencySymbols.map((symbol, index) => {
+        return symbol;
+    });
+
+    //let symbols = issuer.dealsCurrencySymbols;
 
     const status = issuerDeals.map((deal, index) => {
         if(deal.status === '1') {
@@ -46,13 +50,16 @@ function IssuerListOfDeals() {
         }
     });
 
-    const renderedDeals = issuerDeals.map((deal, index) => {
+    const issuerDealsReversed = issuerDeals.reverse();
+    const symbolsReversed = symbols.reverse();
+
+    const renderedDeals = issuerDealsReversed.map((deal, index) => {
         return (
             <TableRow key={index}>
                 <TableCell textAlign="center">{deal.dealID}</TableCell>
                 <TableCell textAlign="left"><a href={deal.prospectusURI} target="_blank"><strong>{deal.prospectusURI}</strong></a></TableCell>
                 <TableCell textAlign="left">{FormateAddress(deal.issuerAddress)}</TableCell>
-                <TableCell positive textAlign="right">{Formate(deal.debtAmount)} {symbols[index]}</TableCell>
+                <TableCell positive textAlign="right">{Formate(deal.debtAmount)} {symbolsReversed[index]}</TableCell>
                 <TableCell warning textAlign="center">{deal.couponRate / 100}%</TableCell>
                 <TableCell textAlign="center">{deal.couponFrequency}</TableCell>
                 <TableCell warning textAlign="center">{couponType[index]}</TableCell>
@@ -67,24 +74,26 @@ function IssuerListOfDeals() {
             <div className="issuerDealList">
                 <strong>Your Deals</strong>
             </div>
-            <Table celled>
-                <TableHeader>
-                    <TableRow>
-                        <TableHeaderCell textAlign="center">Deal ID</TableHeaderCell>
-                        <TableHeaderCell textAlign="left">Prospectus URL</TableHeaderCell>
-                        <TableHeaderCell textAlign="left">Issuer Addresse</TableHeaderCell>
-                        <TableHeaderCell textAlign="right">Volume</TableHeaderCell>
-                        <TableHeaderCell textAlign="center">Coupon Rate</TableHeaderCell>
-                        <TableHeaderCell textAlign="center">Coupon Frequency</TableHeaderCell>
-                        <TableHeaderCell textAlign="center">Coupon Type</TableHeaderCell>
-                        <TableHeaderCell textAlign="right">Maturity date</TableHeaderCell>
-                        <TableHeaderCell textAlign="center">Status</TableHeaderCell>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {renderedDeals}
-                </TableBody>
-            </Table>
+            <div className="tab-scroll">
+                <Table celled>
+                    <TableHeader className="header-sticky">
+                        <TableRow>
+                            <TableHeaderCell textAlign="center">Deal ID</TableHeaderCell>
+                            <TableHeaderCell textAlign="left">Prospectus URL</TableHeaderCell>
+                            <TableHeaderCell textAlign="left">Issuer Addresse</TableHeaderCell>
+                            <TableHeaderCell textAlign="right">Volume</TableHeaderCell>
+                            <TableHeaderCell textAlign="center">Coupon Rate</TableHeaderCell>
+                            <TableHeaderCell textAlign="center">Coupon Frequency</TableHeaderCell>
+                            <TableHeaderCell textAlign="center">Coupon Type</TableHeaderCell>
+                            <TableHeaderCell textAlign="right">Maturity date</TableHeaderCell>
+                            <TableHeaderCell textAlign="center">Status</TableHeaderCell>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {renderedDeals}
+                    </TableBody>
+                </Table>
+            </div>
         </>
     );
 }

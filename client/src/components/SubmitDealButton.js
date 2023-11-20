@@ -20,7 +20,7 @@ function SubmitDealButton() {
         <div className="list-card">
             <Card fluid>
                 <CardContent textAlign="left">
-                    <strong>Fill out the Form for the Deal</strong>
+                    <strong>Submit a Deal</strong>
                     <br></br>
                     <br></br>
                     {

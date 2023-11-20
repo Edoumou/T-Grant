@@ -7,7 +7,7 @@ import Formate from "../utils/Formate";
 import FormateAddress from "../utils/FormateAddress";
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
-import Addresses from "../addresses/addr.json"
+import Addresses from "../addresses/addr.json";
 import { setBalance, setListOfIssuers, setLoading } from "../store";
 import "../manager.css";
 
@@ -35,7 +35,7 @@ function IssuersList() {
             .send({ from: account })
             .on('transactionHash', hash => {
                 setLoadingMessage('Transaction in Process! ⌛️');
-                setExplorerLink(`https://explorer.testnet-1.topos.technology/subnet/0xe93335e1ec5c2174dfcde38dbdcc6fd39d741a74521e0e01155c49fa77f743ae/transaction/${hash}`);
+                setExplorerLink(`https://topos.blockscout.testnet-1.topos.technology/tx/${hash}`);
                 dispatch(setLoading(true));
             })
             .on('receipt', receipt => {
@@ -182,11 +182,13 @@ function IssuersList() {
         <div className="list-card">
             <Card fluid>
                 <CardContent textAlign="left">
-                    <strong>Issuers Requests</strong>
+                    <div className="list-card-head">
+                        Issuers Requests
+                    </div>
                     <br></br>
                     <br></br>
                     {
-                        issuers.length > 0 &&
+                        issuers.length > 0 ?
                         <Table celled>
                             <TableHeader>
                                 <TableRow>
@@ -205,6 +207,10 @@ function IssuersList() {
                                 {renderedIssuers}
                             </TableBody>
                         </Table>
+                        :
+                            <div className="list-card-head-no">
+                                There is No Request from Users
+                            </div>
                     }
                 </CardContent>
             </Card>

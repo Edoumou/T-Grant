@@ -3,20 +3,48 @@
     padding-top: 10px;
     padding-right: 50px;
     padding-left: 50px;
-    background-color: #e3e3ea;
+    background-color: rgb(6, 4, 133);
     min-height: 100vh;
   }
 
   .manager-head {
-    color: rgb(120, 19, 19);
+    color: rgb(255, 255, 255);
     font-size: medium;
     font-weight:bold;
   }
 
   .manager-body {
-    margin-top: 60px;
+    margin-top: 40px;
   }
 
   .list-card {
     padding-bottom: 5%;
+  }
+
+  .list-card-head {
+    text-transform: uppercase;
+    font-weight: bolder;
+    word-spacing: 2px;
+    color: rgb(2, 53, 24);
+  }
+
+  .list-card-head-no {
+    color:rgb(48, 31, 12)
+  }
+
+  .list-card .account-check {
+    border-radius: 12px;
+    background-image: linear-gradient(
+      to right bottom,
+      rgba(18, 27, 4, 0.9),
+      rgba(11, 43, 57, 0.9)
+    ),
+    url(./img/head-cover.jpeg);
+    color: white;
+  }
+
+  .list-description {
+    color: white;
+    word-spacing: 2px;
+    line-height: 20px;
   }
