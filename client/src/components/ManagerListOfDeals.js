@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import Formate from "../utils/Formate";
 import FormateAddress from "../utils/FormateAddress";
 
-function IssuerListOfDeals() {
+function ManagerListOfDeals() {
     const connection = useSelector(state => {
         return state.connection;
     });
@@ -51,26 +51,25 @@ function IssuerListOfDeals() {
     const issuerDealsReversed = issuerDeals.reverse();
     const symbolsReversed = symbols.reverse();
 
-    const renderedDeals = issuerDealsReversed.map((deal, index) => {
+    const renderedDeals = connection.deals.map((deal, index) => {
         return (
             <TableRow key={index}>
                 <TableCell textAlign="center">{deal.dealID}</TableCell>
-                <TableCell textAlign="left"><a href={deal.prospectusURI} target="_blank"><strong>{deal.prospectusURI}</strong></a></TableCell>
-                <TableCell textAlign="left">{FormateAddress(deal.issuerAddress)}</TableCell>
+                <TableCell textAlign="left"><a href={deal.prospectusURI} target="_blank"><strong>{deal.dealID.toLowerCase()}</strong></a></TableCell>
                 <TableCell positive textAlign="right">{Formate(deal.debtAmount)} {symbolsReversed[index]}</TableCell>
                 <TableCell warning textAlign="center">{deal.couponRate / 100}%</TableCell>
                 <TableCell textAlign="center">{deal.couponFrequency}</TableCell>
-                <TableCell warning textAlign="center">{couponType[index]}</TableCell>
+                <TableCell warning textAlign="center">CouponType</TableCell>
                 <TableCell positive textAlign="right">{(new Date(deal.maturityDate * 1000)).toLocaleDateString()}</TableCell>
-                <TableCell textAlign="center">{status[index]}</TableCell>
+                <TableCell textAlign="center">STATUS</TableCell>
             </TableRow>
         );
     });
 
     return (
         <>
-            <div className="issuerDealList">
-                <strong>Your Deals</strong>
+            <div className="managerDealList">
+                <strong>Approve or Reject Deals</strong>
             </div>
             <div className="tab-scroll">
                 <Table padded>
@@ -78,7 +77,6 @@ function IssuerListOfDeals() {
                         <TableRow>
                             <TableHeaderCell textAlign="center">Deal ID</TableHeaderCell>
                             <TableHeaderCell textAlign="left">Prospectus URL</TableHeaderCell>
-                            <TableHeaderCell textAlign="left">Issuer Addresse</TableHeaderCell>
                             <TableHeaderCell textAlign="right">Volume</TableHeaderCell>
                             <TableHeaderCell textAlign="center">Coupon Rate</TableHeaderCell>
                             <TableHeaderCell textAlign="center">Coupon Frequency</TableHeaderCell>
@@ -96,4 +94,4 @@ function IssuerListOfDeals() {
     );
 }
 
-export default IssuerListOfDeals;
+export default ManagerListOfDeals;

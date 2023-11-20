@@ -335,7 +335,7 @@
 
 .tab-scroll {
     /*height: 232px;*/
-    max-height: 272px;
+    max-height: 500px;
     overflow: scroll;
 }
 

@@ -53,3 +53,12 @@
     word-spacing: 2px;
     text-transform: uppercase;
   }
+
+  .managerDealList {
+    text-align: left;
+    margin-top: 0px;
+    margin-bottom: 25px;
+    color: white;
+    font-size: calc(5px + 1.5vmin);
+    text-transform: uppercase;
+}
