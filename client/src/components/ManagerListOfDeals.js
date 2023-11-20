@@ -1,12 +1,16 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import 'semantic-ui-css/semantic.min.css';
-import { Table, TableRow, TableCell, TableHeader, TableHeaderCell, TableBody, Icon, Button } from "semantic-ui-react";
-import { useSelector } from "react-redux";
+import { Table, TableRow, TableCell, TableHeader, TableHeaderCell, TableBody, Icon, Button, Modal, ModalContent, ModalActions } from "semantic-ui-react";
+import BankJSON from "../contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
+import { web3Connection } from "../utils/web3Connection";
+import { getContract } from "../utils/getContract";
 import Formate from "../utils/Formate";
 import FormateAddress from "../utils/FormateAddress";
+import Addresses from "../../src/addresses/addr.json";
 import "../users.css";
 import "../manager.css";
-import { web3Connection } from "../utils/web3Connection";
+import { setBalance, setDeals, setLoading } from "../store";
 
 function ManagerListOfDeals() {
     const connection = useSelector(state => {
@@ -19,7 +23,28 @@ function ManagerListOfDeals() {
 
     const bonds = useSelector(state => {
         return state.bond;
-    })
+    });
+
+    const dispatch = useDispatch();
+
+    const [alertMessage, setAlertMessage] = useState('');
+    const [loader, setLoader] = useState(true);
+    const [explorerLink, setExplorerLink] = useState('');
+    const [loadingMessage, setLoadingMessage] = useState('Transaction in Process');
+
+    const [open, setOpen] = useState(false);
+
+    const goToExplorer = () => {
+        const newWindow = window.open(explorerLink, '_blank', 'noopener,noreferrer');
+        if (newWindow) newWindow.opener = null;
+    }
+
+    const goToDashboard = () => {
+        setOpen(false);
+        setLoader(true);
+        setLoadingMessage('');
+        setExplorerLink('');
+    }
 
     const status = connection.deals.map((deal, index) => {
         if(deal.status === '1') {
@@ -38,14 +63,42 @@ function ManagerListOfDeals() {
     const statusApprove = connection.deals.map((deal, index) => {
         if(deal.status === '1') {
             return (
-                <Button
-                    key={index}
-                    compact
-                    color='vk'
-                    onClick={() => approve(deal.dealID)}
+                <Modal
+                    size="tiny"
+                    open={open}
+                    trigger={
+                        <Button
+                            key={index}
+                            compact
+                            color='vk'
+                            onClick={() => approve(deal.dealID)}
+                        >
+                            Approve
+                        </Button>
+                    }
+                    onClose={() => setOpen(false)}
+                    onOpen={() => setOpen(true)}
                 >
-                    Approve
-                </Button>
+                    <ModalContent>
+                        <div style={{ textAlign: 'center' }}>
+                            <h3>{loadingMessage}</h3>
+                            {
+                                loader ?
+                                    <Button inverted basic loading size="massive">processing</Button>
+                                :
+                                    <p style={{ color: 'green' }}><strong>transaction processed successfully</strong></p>
+                            }
+                        </div>
+                    </ModalContent>
+                    <ModalActions>
+                        <Button basic floated="left" onClick={goToExplorer}>
+                            <strong>Check on Topos Explorer</strong>
+                        </Button>
+                        <Button color='black' onClick={goToDashboard}>
+                            Go to Dashboard
+                        </Button>
+                    </ModalActions>
+                </Modal>                
             ) 
         } else if(deal.status === '2') {
             return <Icon key={index} color='green' name='checkmark' />;
@@ -59,14 +112,42 @@ function ManagerListOfDeals() {
     const statusReject = connection.deals.map((deal, index) => {
         if(deal.status === '1') {
             return (
-                <Button
-                    key={index}
-                    compact
-                    color='red'
-                    onClick={() => reject(deal.dealID)}
+                <Modal
+                    size="tiny"
+                    open={open}
+                    trigger={
+                        <Button
+                            key={index}
+                            compact
+                            color='red'
+                            onClick={() => reject(deal.dealID)}
+                        >
+                            Reject
+                        </Button>
+                    }
+                    onClose={() => setOpen(false)}
+                    onOpen={() => setOpen(true)}
                 >
-                    Reject
-                </Button>
+                    <Modal.Content>
+                        <div style={{ textAlign: 'center' }}>
+                            <h3>{loadingMessage}</h3>
+                            {
+                                loader ?
+                                    <Button inverted basic loading size="massive">processing</Button>
+                                :
+                                    <p style={{ color: 'green' }}><strong>transaction processed successfully</strong></p>
+                            }
+                        </div>
+                    </Modal.Content>
+                    <Modal.Actions>
+                        <Button basic floated="left" onClick={goToExplorer}>
+                            <strong>Check on Topos Explorer</strong>
+                        </Button>
+                        <Button color='black' onClick={goToDashboard}>
+                            Go to Dashboard
+                        </Button>
+                    </Modal.Actions>
+                </Modal>
             ) 
         } else if(deal.status === '2') {
             return '-';
@@ -78,11 +159,59 @@ function ManagerListOfDeals() {
     });
 
     const approve = async dealID => {
-        let {account, web3} = await web3Connection();
+        let {web3, account} = await web3Connection();
+        let contract = await getContract(web3, BankJSON, Addresses.ToposBankContract);
+
+        await contract.methods.approveDeal(dealID)
+            .send({ from: account })
+            .on('transactionHash', hash => {
+                setLoadingMessage('Transaction in Process! ⌛️');
+                setExplorerLink(`https://topos.blockscout.testnet-1.topos.technology/tx/${hash}`);
+                dispatch(setLoading(true));
+            })
+            .on('receipt', receipt => {
+                setLoadingMessage('Transaction Completed! ✅');
+                setLoader(false);
+                dispatch(setLoading(false));
+            });
+
+        
+        let deals = await contract.methods.getListOfDeals().call({ from: account });
+        let balance = await web3.eth.getBalance(account);
+        balance = web3.utils.fromWei(balance);
+
+        dispatch(setDeals(deals));
+        dispatch(setBalance(balance));
+
+        return;
     }
 
     const reject = async dealID => {
-        let {account, web3} = await web3Connection();
+        let {web3, account} = await web3Connection();
+        let contract = await getContract(web3, BankJSON, Addresses.ToposBankContract);
+
+        await contract.methods.rejectDeal(dealID)
+            .send({ from: account })
+            .on('transactionHash', hash => {
+                setLoadingMessage('Transaction in Process! ⌛️');
+                setExplorerLink(`https://topos.blockscout.testnet-1.topos.technology/tx/${hash}`);
+                dispatch(setLoading(true));
+            })
+            .on('receipt', receipt => {
+                setLoadingMessage('Transaction Completed! ✅');
+                setLoader(false);
+                dispatch(setLoading(false));
+            });
+
+        
+        let deals = await contract.methods.getListOfDeals().call({ from: account });
+        let balance = await web3.eth.getBalance(account);
+        balance = web3.utils.fromWei(balance);
+
+        dispatch(setDeals(deals));
+        dispatch(setBalance(balance));
+
+        return;
     }
 
 
