@@ -5,6 +5,7 @@ import {
     setRegistrationStatus,
     setRegistrarOwner
 } from "./slices/registrySlice";
+import { bondReducer, setBondSymbols } from "./slices/bondSlice";
 import { 
     connectionReducer,
     setActiveItem,
@@ -34,7 +35,8 @@ const store = configureStore({
         registry:  registryReducer,
         connection: connectionReducer,
         issuer: issuerReducer,
-        investor: investorReducer
+        investor: investorReducer,
+        bond: bondReducer
     },
     middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
@@ -44,6 +46,7 @@ const store = configureStore({
 
 export {
     store,
+    setBondSymbols,
     setIsVerified,
     setRegistrationStatus,
     setRegistrarOwner,

@@ -16,15 +16,11 @@ function ManagerListOfDeals() {
         return state.issuer;
     });
 
-    let issuerDeals = connection.deals.filter(
-        deal => deal.issuerAddress.toLowerCase() === connection.account.toLowerCase()
-    );
+    const deals = useSelector(state => {
+        return state.bond;
+    })
 
-    let symbols = issuer.dealsCurrencySymbols.map((symbol, index) => {
-        return symbol;
-    });
-
-    const status = issuerDeals.map((deal, index) => {
+    const status = connection.deals.map((deal, index) => {
         if(deal.status === '1') {
             return <Icon key={index} color="yellow" name="hourglass outline" />;
         } else if(deal.status === '2') {
@@ -38,7 +34,7 @@ function ManagerListOfDeals() {
         }
     });
 
-    const couponType = issuerDeals.map((deal, index) => {
+    const couponType = connection.deals.map((deal, index) => {
         if(deal.couponType === '0') {
             return <span>Zero Coupon</span>
         } else if(deal.couponType === '1') {
@@ -48,20 +44,17 @@ function ManagerListOfDeals() {
         }
     });
 
-    const issuerDealsReversed = issuerDeals.reverse();
-    const symbolsReversed = symbols.reverse();
-
     const renderedDeals = connection.deals.map((deal, index) => {
         return (
             <TableRow key={index}>
-                <TableCell textAlign="center">{deal.dealID}</TableCell>
+                <TableCell textAlign="left">{deal.dealID}</TableCell>
                 <TableCell textAlign="left"><a href={deal.prospectusURI} target="_blank"><strong>{deal.dealID.toLowerCase()}</strong></a></TableCell>
-                <TableCell positive textAlign="right">{Formate(deal.debtAmount)} {symbolsReversed[index]}</TableCell>
+                <TableCell positive textAlign="right">{Formate(deal.debtAmount)} {deals.bondSymbols[index]}</TableCell>
                 <TableCell warning textAlign="center">{deal.couponRate / 100}%</TableCell>
                 <TableCell textAlign="center">{deal.couponFrequency}</TableCell>
-                <TableCell warning textAlign="center">CouponType</TableCell>
+                <TableCell warning textAlign="center">{couponType[index]}</TableCell>
                 <TableCell positive textAlign="right">{(new Date(deal.maturityDate * 1000)).toLocaleDateString()}</TableCell>
-                <TableCell textAlign="center">STATUS</TableCell>
+                <TableCell textAlign="center">{status[index]}</TableCell>
             </TableRow>
         );
     });
@@ -75,13 +68,13 @@ function ManagerListOfDeals() {
                 <Table padded>
                     <TableHeader className="header-sticky">
                         <TableRow>
-                            <TableHeaderCell textAlign="center">Deal ID</TableHeaderCell>
-                            <TableHeaderCell textAlign="left">Prospectus URL</TableHeaderCell>
+                            <TableHeaderCell textAlign="left">Deal ID</TableHeaderCell>
+                            <TableHeaderCell textAlign="left">Prospectus</TableHeaderCell>
                             <TableHeaderCell textAlign="right">Volume</TableHeaderCell>
-                            <TableHeaderCell textAlign="center">Coupon Rate</TableHeaderCell>
-                            <TableHeaderCell textAlign="center">Coupon Frequency</TableHeaderCell>
-                            <TableHeaderCell textAlign="center">Coupon Type</TableHeaderCell>
-                            <TableHeaderCell textAlign="right">Maturity date</TableHeaderCell>
+                            <TableHeaderCell textAlign="center">Coupon</TableHeaderCell>
+                            <TableHeaderCell textAlign="center">Frequency</TableHeaderCell>
+                            <TableHeaderCell textAlign="center">Type</TableHeaderCell>
+                            <TableHeaderCell textAlign="right">Maturity</TableHeaderCell>
                             <TableHeaderCell textAlign="center">Status</TableHeaderCell>
                         </TableRow>
                     </TableHeader>
