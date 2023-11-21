@@ -229,6 +229,7 @@ function ManagerListOfDeals() {
         return (
             <TableRow key={index}>
                 <TableCell textAlign="left">{deal.dealID}</TableCell>
+                <TableCell textAlign="left">{bonds.issuersName[index]}</TableCell>
                 <TableCell textAlign="left"><a href={deal.prospectusURI} target="_blank"><strong>{deal.dealID.toLowerCase()}</strong></a></TableCell>
                 <TableCell positive textAlign="right">{Formate(deal.debtAmount)} {bonds.bondSymbols[index]}</TableCell>
                 <TableCell warning textAlign="center">{deal.couponRate / 100}%</TableCell>
@@ -254,6 +255,7 @@ function ManagerListOfDeals() {
                             <TableHeader className="header-sticky">
                                 <TableRow>
                                     <TableHeaderCell textAlign="left">Deal ID</TableHeaderCell>
+                                    <TableHeaderCell textAlign="left">Issuer</TableHeaderCell>
                                     <TableHeaderCell textAlign="left">Prospectus</TableHeaderCell>
                                     <TableHeaderCell textAlign="right">Volume</TableHeaderCell>
                                     <TableHeaderCell textAlign="center">Coupon</TableHeaderCell>

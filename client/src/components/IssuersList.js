@@ -9,6 +9,7 @@ import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
 import Addresses from "../addresses/addr.json";
 import { setBalance, setListOfIssuers, setLoading } from "../store";
+import "../users.css";
 import "../manager.css";
 
 function IssuersList() {
@@ -179,18 +180,15 @@ function IssuersList() {
     });
 
     return (
-        <div className="list-card">
-            <Card fluid>
-                <CardContent textAlign="left">
-                    <div className="list-card-head">
-                        Issuers Requests
-                    </div>
-                    <br></br>
-                    <br></br>
-                    {
-                        issuers.length > 0 ?
-                        <Table celled>
-                            <TableHeader>
+        <>
+            <div className="managerDealList">
+                Issuers Requests
+            </div>
+            {
+                issuers.length > 0 ?
+                    <div className="tab-scroll">
+                        <Table padded>
+                            <TableHeader className="header-sticky">
                                 <TableRow>
                                     <TableHeaderCell>Name</TableHeaderCell>
                                     <TableHeaderCell>Country</TableHeaderCell>
@@ -207,14 +205,13 @@ function IssuersList() {
                                 {renderedIssuers}
                             </TableBody>
                         </Table>
-                        :
-                            <div className="list-card-head-no">
-                                There is No Request from Users
-                            </div>
-                    }
-                </CardContent>
-            </Card>
-        </div>
+                    </div>
+                :
+                    <div className="list-card-head-no">
+                        There is No Request from Issuers
+                    </div>
+            }
+        </>
     );
 }
 

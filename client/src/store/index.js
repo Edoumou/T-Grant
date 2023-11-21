@@ -5,7 +5,7 @@ import {
     setRegistrationStatus,
     setRegistrarOwner
 } from "./slices/registrySlice";
-import { bondReducer, setBondSymbols } from "./slices/bondSlice";
+import { bondReducer, setBondSymbols, setIssuersName } from "./slices/bondSlice";
 import { 
     connectionReducer,
     setActiveItem,
@@ -47,6 +47,7 @@ const store = configureStore({
 export {
     store,
     setBondSymbols,
+    setIssuersName,
     setIsVerified,
     setRegistrationStatus,
     setRegistrarOwner,

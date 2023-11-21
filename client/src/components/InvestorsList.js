@@ -4,11 +4,12 @@ import 'semantic-ui-css/semantic.min.css';
 import { Card, CardContent, Table, TableHeader, TableRow, TableHeaderCell, TableBody, TableCell, Button, Modal } from "semantic-ui-react";
 import InvestorJSON from "../contracts/artifacts/contracts/Topos/Bank/Investor.sol/Investor.json";
 import FormateAddress from "../utils/FormateAddress";
-import "../manager.css";
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
 import Addresses from "../addresses/addr.json"
 import { setBalance, setListOfInvestors, setLoading } from "../store";
+import "../users.css";
+import "../manager.css";
 
 function InvestorsList() {
     const [open, setOpen] = useState(false);
@@ -171,18 +172,16 @@ function InvestorsList() {
     });
 
     return (
-        <div className="list-card">
-            <Card fluid>
-                <CardContent textAlign="left">
-                    <div className="list-card-head">
-                        Investors Requests
-                    </div>
-                    <br></br>
-                    <br></br>
-                    {
-                        investors.length > 0 ?
-                        <Table celled>
-                            <TableHeader>
+        <>
+            <div style={{ marginTop: 80 }}></div>
+            <div className="managerDealList">
+                Investors Requests
+            </div>
+            {
+                investors.length > 0 ?
+                    <div className="tab-scroll">
+                        <Table padded>
+                            <TableHeader className="header-sticky">
                                 <TableRow>
                                     <TableHeaderCell>Name</TableHeaderCell>
                                     <TableHeaderCell>Country</TableHeaderCell>
@@ -196,14 +195,13 @@ function InvestorsList() {
                                 {renderedInvestors}
                             </TableBody>
                         </Table>
-                        :
-                            <div  className="list-card-head-no">
-                                There is No Request from Investors
-                            </div>
-                    }
-                </CardContent>
-            </Card>
-        </div>
+                    </div>
+                :
+                    <div  className="list-card-head-no">
+                        There is No Request from Investors
+                    </div>
+            }
+        </>
     );
 }
 

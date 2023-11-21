@@ -27,7 +27,7 @@ import SubmitDeal from './components/SubmitDeal';
 import ManagerRequests from './components/ManagerRequests';
 import ManagerBonds from './components/ManagerBonds';
 import ManagerDeals from './components/ManagerDeals';
-import { setBondSymbols } from './store/slices/bondSlice';
+import { setBondSymbols, setIssuersName } from './store/slices/bondSlice';
 import InvestorDeals from './components/InvestorDeals';
 
 function App() {
@@ -64,14 +64,19 @@ function App() {
 
     //=== store bonds currency symbols
     let bondSymbols = [];
+    let issuersNames = [];
     for(let i = 0; i < deals.length; i++) {
       let tokenAddress = deals[i].currency;
       let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
 
+      let issuer = await issuerContract.methods.issuers(deals[i].issuerAddress).call({ from: account });
+
       bondSymbols.push(tokenSymbol);
+      issuersNames.push(issuer.name);
     }
 
     dispatch(setBondSymbols(bondSymbols));
+    dispatch(setIssuersName(issuersNames));
 
 
     //=== issuers filtering
@@ -137,14 +142,19 @@ function App() {
 
         //=== store bonds currency symbols
         let bondSymbols = [];
-        for(let i = 0; i < deals.length; i++) {
-          let tokenAddress = deals[i].currency;
-          let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
+    let issuersNames = [];
+    for(let i = 0; i < deals.length; i++) {
+      let tokenAddress = deals[i].currency;
+      let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
 
-          bondSymbols.push(tokenSymbol);
-        }
+      let issuer = await issuerContract.methods.issuers(deals[i].issuerAddress).call({ from: account });
+
+      bondSymbols.push(tokenSymbol);
+      issuersNames.push(issuer.name);
+    }
 
     dispatch(setBondSymbols(bondSymbols));
+    dispatch(setIssuersName(issuersNames));
 
         //=== issuers filtering
         if (role === "ISSUER") {
