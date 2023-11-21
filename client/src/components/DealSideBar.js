@@ -27,7 +27,7 @@ function DealSideBar() {
                             </ListContent>  
                         </ListItem>
                         <ListItem>
-                            <ListIcon name='certificate' size='large' color='blue' verticalAlign='middle' />
+                            <ListIcon name='cube' size='large' color='teal' verticalAlign='middle' />
                             <ListContent>
                                 <div style={{ paddingBottom: 10, textTransform: "uppercase" }}>
                                     <h5><a href="/#">Issue Volume</a></h5>
@@ -41,7 +41,7 @@ function DealSideBar() {
                             </ListContent>  
                         </ListItem>
                         <ListItem>
-                            <ListIcon name='ticket' size='large' color='green' verticalAlign='middle' />
+                            <ListIcon name='percent' size='large' color='orange' verticalAlign='middle' />
                             <ListContent>
                                 <div style={{ paddingBottom: 10, textTransform: "uppercase" }}>
                                     <h5><a href="/#">Coupon Rate</a></h5>
@@ -55,7 +55,7 @@ function DealSideBar() {
                             </ListContent>  
                         </ListItem>
                         <ListItem>
-                            <ListIcon name='ticket' size='large' color='green' verticalAlign='middle' />
+                            <ListIcon name='calendar alternate' size='large' color='purple' verticalAlign='middle' />
                             <ListContent>
                                 <div style={{ paddingBottom: 10, textTransform: "uppercase" }}>
                                     <h5><a href="/#">Coupon Frequency</a></h5>
@@ -68,7 +68,7 @@ function DealSideBar() {
                             </ListContent>  
                         </ListItem>
                         <ListItem>
-                            <ListIcon name='ticket' size='large' color='green' verticalAlign='middle' />
+                            <ListIcon name='money bill alternate outline' size='large' color='green' verticalAlign='middle' />
                             <ListContent>
                                 <div style={{ paddingBottom: 10, textTransform: "uppercase" }}>
                                     <h5><a href="/#">Currency</a></h5>
@@ -83,7 +83,7 @@ function DealSideBar() {
                             </ListContent>  
                         </ListItem>
                         <ListItem>
-                            <ListIcon name='ticket' size='large' color='green' verticalAlign='middle' />
+                            <ListIcon name='calendar alternate' size='large' color='orange' verticalAlign='middle' />
                             <ListContent>
                                 <div style={{ paddingBottom: 10, textTransform: "uppercase" }}>
                                     <h5><a href="/#">Maturity Date</a></h5>
@@ -94,7 +94,7 @@ function DealSideBar() {
                                         becomes due and is repaid to the investor or holder
                                     </div>
                                 </ListDescription>
-                            </ListContent>  
+                            </ListContent>
                         </ListItem>
                     </List>
                 </CardContent>

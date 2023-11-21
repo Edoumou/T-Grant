@@ -28,6 +28,7 @@ import ManagerRequests from './components/ManagerRequests';
 import ManagerBonds from './components/ManagerBonds';
 import ManagerDeals from './components/ManagerDeals';
 import { setBondSymbols } from './store/slices/bondSlice';
+import InvestorDeals from './components/InvestorDeals';
 
 function App() {
   const dispatch = useDispatch();
@@ -283,15 +284,24 @@ function App() {
                       <>
                         <MenuItem
                           position='right'
-                          name='submit deal'
-                          active={connection.activeItem === 'submit deal'}
+                          name='deals'
+                          active={connection.activeItem === 'submit deals'}
                           onClick={handleItemClick}
                           as={Link}
                           to='/issuer/submit-deal'
                         />
                       </>
                     : connection.role === "INVESTOR" ?
-                      <></>
+                      <>
+                        <MenuItem
+                          position='right'
+                          name='deals'
+                          active={connection.activeItem === 'deals'}
+                          onClick={handleItemClick}
+                          as={Link}
+                          to='/investor/deals'
+                        />
+                      </>
                     :
                       <></>
                  }
@@ -338,7 +348,9 @@ function App() {
                       <Route path='/issuer/submit-deal' element={<SubmitDeal />} />
                     </>
                   : connection.role === "INVESTOR" ?
-                    <></>
+                    <>
+                      <Route path='/investor/deals' element={<InvestorDeals />} />
+                    </>
                   :
                     <></>
                 }
