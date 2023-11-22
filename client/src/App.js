@@ -27,7 +27,7 @@ import SubmitDeal from './components/SubmitDeal';
 import ManagerRequests from './components/ManagerRequests';
 import ManagerBonds from './components/ManagerBonds';
 import ManagerDeals from './components/ManagerDeals';
-import { setApprovedDeals, setBondSymbols, setIssuersForApprovedDelas, setIssuersName, setIssuersNameForApprovedDeals } from './store/slices/bondSlice';
+import { setApprovedDeals, setBondSymbols, setIssuersForApprovedDelas, setIssuersName, setIssuersNameForApprovedDeals, setSelectedDealID, setShowInvestForm, setTokenSymbolForApprovedDeals } from './store/slices/bondSlice';
 import InvestorDeals from './components/InvestorDeals';
 
 function App() {
@@ -68,6 +68,7 @@ function App() {
     let issuersNameForApprovedDeals = [];
     let approvedDeals = [];
     let issuersForApprovedDeals = [];
+    let tokenSymbolForApprovedDeals = [];
     for(let i = 0; i < deals.length; i++) {
       let tokenAddress = deals[i].currency;
       let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
@@ -83,6 +84,7 @@ function App() {
           approvedDeals.push(deals[i]);
           issuersForApprovedDeals.push(issuerForApprovedDeals);
           issuersNameForApprovedDeals.push(issuer.name);
+          tokenSymbolForApprovedDeals.push(tokenSymbol);
       }
     }
 
@@ -91,6 +93,7 @@ function App() {
     dispatch(setApprovedDeals(approvedDeals));
     dispatch(setIssuersForApprovedDelas(issuersForApprovedDeals));
     dispatch(setIssuersNameForApprovedDeals(issuersNameForApprovedDeals));
+    dispatch(setTokenSymbolForApprovedDeals(tokenSymbolForApprovedDeals));
 
 
     //=== issuers filtering
@@ -160,6 +163,7 @@ function App() {
         let issuersNameForApprovedDeals = [];
         let approvedDeals = [];
         let issuersForApprovedDeals = [];
+        let tokenSymbolForApprovedDeals = [];
         for(let i = 0; i < deals.length; i++) {
           let tokenAddress = deals[i].currency;
           let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
@@ -175,6 +179,7 @@ function App() {
             approvedDeals.push(deals[i]);
             issuersForApprovedDeals.push(issuerForApprovedDeals);
             issuersNameForApprovedDeals.push(issuer.name);
+            tokenSymbolForApprovedDeals.push(tokenSymbol);
           }
         }
 
@@ -183,6 +188,7 @@ function App() {
         dispatch(setApprovedDeals(approvedDeals));
         dispatch(setIssuersForApprovedDelas(issuersForApprovedDeals));
         dispatch(setIssuersNameForApprovedDeals(issuersNameForApprovedDeals));
+        dispatch(setTokenSymbolForApprovedDeals(tokenSymbolForApprovedDeals));
 
         //=== issuers filtering
         if (role === "ISSUER") {
@@ -220,6 +226,8 @@ function App() {
         dispatch(setInvestorRequest(investorRequest));
         dispatch(setBalance(balance)); 
         dispatch(setLoggedIn(false));
+        dispatch(setSelectedDealID(''));
+        dispatch(setShowInvestForm(false));
       });
     }
 
@@ -243,6 +251,8 @@ function App() {
   const handleDisconnect = async () => {
     dispatch(setLoggedIn(false));
     dispatch(setActiveItem("home"));
+    dispatch(setSelectedDealID(''));
+    dispatch(setShowInvestForm(false));
   }
 
   return (

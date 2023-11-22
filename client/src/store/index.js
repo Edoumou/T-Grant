@@ -13,7 +13,8 @@ import {
     setIssuersName,
     setIssuersNameForApprovedDeals,
     setApprovedDeals,
-    setIssuersForApprovedDelas
+    setIssuersForApprovedDelas,
+    setTokenSymbolForApprovedDeals
 } from "./slices/bondSlice";
 import { 
     connectionReducer,
@@ -62,6 +63,7 @@ export {
     setIssuersNameForApprovedDeals,
     setApprovedDeals,
     setIssuersForApprovedDelas,
+    setTokenSymbolForApprovedDeals,
     setIsVerified,
     setRegistrationStatus,
     setRegistrarOwner,

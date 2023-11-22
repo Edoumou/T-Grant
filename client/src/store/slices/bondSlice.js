@@ -9,7 +9,8 @@ const bondSlice = createSlice({
         issuersName: [],
         issuersNameForApprovedDeals: [],
         approvedDeals: [],
-        issuersForApprovedDeals: []
+        issuersForApprovedDeals: [],
+        tokenSymbolForApprovedDeals: []
     },
     reducers: {
         setSelectedDealID(state, action) {
@@ -32,6 +33,9 @@ const bondSlice = createSlice({
         },
         setIssuersForApprovedDelas(state, action) {
             state.issuersForApprovedDeals = action.payload;
+        },
+        setTokenSymbolForApprovedDeals(state, action) {
+            state.tokenSymbolForApprovedDeals = action.payload;
         }
     }
 });
@@ -43,6 +47,7 @@ export const {
     setIssuersName,
     setIssuersNameForApprovedDeals,
     setApprovedDeals,
-    setIssuersForApprovedDelas
+    setIssuersForApprovedDelas,
+    setTokenSymbolForApprovedDeals
 } = bondSlice.actions;
 export const bondReducer = bondSlice.reducer;

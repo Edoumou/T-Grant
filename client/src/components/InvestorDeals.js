@@ -77,7 +77,11 @@ function InvestorDeals() {
                         <GridColumn width={4}>
                             {
                                 bonds.showInvestForm ?
-                                    <InvestInDeal />
+                                    <>
+                                        <InvestInDeal />
+                                        <br></br>
+                                        <InvestorDealSideBar />
+                                    </>
                                 :
                                     <>
                                         <InvestorDealSideBar />
