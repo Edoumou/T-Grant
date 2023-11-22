@@ -7,7 +7,14 @@ import {
 } from "./slices/registrySlice";
 import {
     bondReducer,
-    setSelectedDealID, 
+    setSelectedDealID,
+    setSelectedDealVolume,
+    setSelectedDealDenomination,
+    setSelectedDealTokenSymbol,
+    setSelectedDealIssuerName,
+    setSelectedDealCouponRate,
+    setSelectedDealMaturityDate,
+    setSelectedDealRemainingAmount,
     setShowInvestForm,
     setBondSymbols,
     setIssuersName,
@@ -56,7 +63,14 @@ const store = configureStore({
 
 export {
     store,
-    setSelectedDealID, 
+    setSelectedDealID,
+    setSelectedDealVolume,
+    setSelectedDealDenomination,
+    setSelectedDealTokenSymbol,
+    setSelectedDealIssuerName,
+    setSelectedDealCouponRate,
+    setSelectedDealMaturityDate,
+    setSelectedDealRemainingAmount,
     setShowInvestForm,
     setBondSymbols,
     setIssuersName,

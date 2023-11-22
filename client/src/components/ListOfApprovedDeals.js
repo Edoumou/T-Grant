@@ -5,7 +5,7 @@ import { Table, TableRow, TableHeader, TableHeaderCell, TableBody, TableCell, Bu
 import "../users.css";
 import "../manager.css";
 import Formate from "../utils/Formate";
-import { setSelectedDealID, setShowInvestForm } from "../store";
+import { setSelectedDealCouponRate, setSelectedDealDenomination, setSelectedDealID, setSelectedDealIssuerName, setSelectedDealMaturityDate, setSelectedDealTokenSymbol, setSelectedDealVolume, setShowInvestForm } from "../store";
 
 function ListOfApprovedDeals() {
     const connection = useSelector(state => {
@@ -46,7 +46,17 @@ function ListOfApprovedDeals() {
                         key={index}
                         compact
                         color='linkedin'
-                        onClick={() => setDeal(deal.dealID)}
+                        onClick={
+                            () => setDeal(
+                                    deal.dealID,
+                                    deal.debtAmount,
+                                    deal.denomination,
+                                    bonds.bondSymbols[index],
+                                    bonds.issuersNameForApprovedDeals[index],
+                                    deal.couponRate,
+                                    deal.maturityDate
+                                )
+                        }
                     >
                         Invest
                     </Button>
@@ -55,8 +65,14 @@ function ListOfApprovedDeals() {
         );
     });
 
-    const setDeal = async dealID => {
+    const setDeal = async (dealID, dealVolume, dealDenomination, tokenSymbol, issuersName, couponRate, maturityDate)=> {
         dispatch(setSelectedDealID(dealID));
+        dispatch(setSelectedDealDenomination(dealDenomination));
+        dispatch(setSelectedDealVolume(dealVolume));
+        dispatch(setSelectedDealTokenSymbol(tokenSymbol));
+        dispatch(setSelectedDealIssuerName(issuersName));
+        dispatch(setSelectedDealCouponRate(couponRate));
+        dispatch(setSelectedDealMaturityDate(maturityDate));
         dispatch(setShowInvestForm(true));
     }
 

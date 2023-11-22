@@ -105,6 +105,10 @@ contract ToposBank is IToposBank, ToposBankStorage {
     ) external mustBeApproved(msg.sender) {
         if(deals[_dealID].status != BondData.DealStatus.APPROVED)
             revert BondData.InvalidDealStatus(_dealID);
+
+        if((_amount * deals[_dealID].denomination) % deals[_dealID].denomination != 0)
+            revert BondData.InvalidAmount(_amount);
+
         require(
             _amount != 0 && _amount + totalAmountInvestedForDeal[_dealID] <= deals[_dealID].debtAmount,
             "INVALID_AMOUNT"

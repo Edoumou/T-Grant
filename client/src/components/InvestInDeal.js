@@ -101,16 +101,16 @@ function InvestInDeal() {
             </div>
             <Card fluid>
                 <CardContent>
+
                     <Input
                         fluid
+                        action={bonds.selectedDealID}
                         size="large"
                         placeholder='Amount to Invest'
                         value={amount}
                         onChange={e => setAmount(e.target.value)}
                     />
                     <br></br>
-
-
                     <Modal
                         size="tiny"
                         open={open}

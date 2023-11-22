@@ -4,6 +4,13 @@ const bondSlice = createSlice({
     name: 'bond',
     initialState: {
         selectedDealID: '',
+        selectedDealVolume: '',
+        selectedDealDenomination: '',
+        selectedDealTokenSymbol: '',
+        selectedDealIssuerName: '',
+        selectedDealCouponRate: '',
+        selectedDealMaturityDate: '',
+        selectedDealRemainingAmount: '',
         showInvestForm: false,
         bondSymbols: [],
         issuersName: [],
@@ -15,6 +22,27 @@ const bondSlice = createSlice({
     reducers: {
         setSelectedDealID(state, action) {
             state.selectedDealID = action.payload;
+        },
+        setSelectedDealVolume(state, action) {
+            state.selectedDealVolume = action.payload;
+        },
+        setSelectedDealDenomination(state, action) {
+            state.selectedDealDenomination = action.payload;
+        },
+        setSelectedDealTokenSymbol(state, action) {
+            state.selectedDealTokenSymbol = action.payload;
+        },
+        setSelectedDealIssuerName(state, action) {
+            state.selectedDealIssuerName = action.payload;
+        },
+        setSelectedDealCouponRate(state, action) {
+            state.selectedDealCouponRate = action.payload;
+        },
+        setSelectedDealMaturityDate(state, action) {
+            state.selectedDealMaturityDate = action.payload;
+        },
+        setSelectedDealRemainingAmount(state, action) {
+            state.selectedDealRemainingAmount = action.payload;
         },
         setShowInvestForm(state, action) {
             state.showInvestForm = action.payload;
@@ -41,7 +69,14 @@ const bondSlice = createSlice({
 });
 
 export const {
-    setSelectedDealID, 
+    setSelectedDealID,
+    setSelectedDealVolume,
+    setSelectedDealDenomination,
+    setSelectedDealTokenSymbol,
+    setSelectedDealIssuerName,
+    setSelectedDealCouponRate,
+    setSelectedDealMaturityDate,
+    setSelectedDealRemainingAmount,
     setShowInvestForm,
     setBondSymbols,
     setIssuersName,

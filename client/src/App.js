@@ -29,6 +29,7 @@ import ManagerBonds from './components/ManagerBonds';
 import ManagerDeals from './components/ManagerDeals';
 import { setApprovedDeals, setBondSymbols, setIssuersForApprovedDelas, setIssuersName, setIssuersNameForApprovedDeals, setSelectedDealID, setShowInvestForm, setTokenSymbolForApprovedDeals } from './store/slices/bondSlice';
 import InvestorDeals from './components/InvestorDeals';
+import MintTokens from './components/MintTokens';
 
 function App() {
   const dispatch = useDispatch();
@@ -349,6 +350,13 @@ function App() {
                           as={Link}
                           to='/investor/deals'
                         />
+                        <MenuItem
+                          name='buy tokens'
+                          active={connection.activeItem === 'buy tokens'}
+                          onClick={handleItemClick}
+                          as={Link}
+                          to='/investor/buy-tokens'
+                        />
                       </>
                     :
                       <></>
@@ -398,6 +406,7 @@ function App() {
                   : connection.role === "INVESTOR" ?
                     <>
                       <Route path='/investor/deals' element={<InvestorDeals />} />
+                      <Route path='/investor/buy-tokens' element={<MintTokens />} />
                     </>
                   :
                     <></>

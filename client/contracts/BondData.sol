@@ -21,6 +21,7 @@ abstract contract BondData {
         string prospectusURI;
         address issuerAddress;
         uint256 debtAmount;
+        uint256 denomination;
         uint256 couponRate;
         uint256 couponFrequency;
         uint256 maturityDate;
@@ -69,6 +70,7 @@ abstract contract BondData {
 
     error InvalidInvestorAddress(address investor);
     error InvalidDealStatus(string dealID);
+    error InvalidAmount(uint256 amount);
 
     enum BondStatus {ISSUED, REDEEMED}
     enum DealStatus {UNDEFINED, SUBMITTED, APPROVED, REJECTED, ISSUED, REDEEMED}

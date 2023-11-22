@@ -24,6 +24,7 @@ function DealForm() {
     const [loadingMessage, setLoadingMessage] = useState('Transaction in Process');
     const [url, setUrl] = useState("");
     const [issueVolume, setIssueVolume] = useState("");
+    const [denomination, setDenomination] = useState("");
     const [couponRate, setCouponRate] = useState("");
     const [couponFrequency, setCouponFrequency] = useState("");
     const [couponType, setCouponType] = useState("");
@@ -116,6 +117,15 @@ function DealForm() {
         dispatch(setDeals(newDeals));
         dispatch(setShowForm(false));
         dispatch(setIssuerDealsCurrencySymbols(issuerDealsCurrencySymbols));
+
+        setUrl("");
+        setIssueVolume("");
+        setDenomination("");
+        setCouponRate("");
+        setCouponFrequency("");
+        setCouponType("");
+        setMaturityDate("");
+        setCurrency("");
     }
 
     const goToExplorer = () => {
@@ -157,17 +167,26 @@ function DealForm() {
                                     <Input
                                         fluid
                                         size="mini"
-                                        placeholder='Coupon Rate'
-                                        value={couponRate}
-                                        onChange={e => setCouponRate(e.target.value)}
+                                        placeholder='Denomination'
+                                        value={denomination}
+                                        onChange={e => setDenomination(e.target.value)}
                                     />
                                 </GridColumn>
                             </GridRow>
                             <GridRow>
                                 <GridColumn>
+                                    <Input
+                                        fluid
+                                        size="mini"
+                                        placeholder='Coupon Rate'
+                                        value={couponRate}
+                                        onChange={e => setCouponRate(e.target.value)}
+                                    />
+                                </GridColumn>
+                                <GridColumn>
                                     <Menu>
                                         <Dropdown
-                                            placeholder="Issuer Type"
+                                            placeholder="Coupon Type"
                                             options={couponTypeOptions}
                                             value={couponType}
                                             onChange={(e, data) => setCouponType(data.value)}
@@ -183,6 +202,8 @@ function DealForm() {
                                         onChange={e => setCouponFrequency(e.target.value)}
                                     />
                                 </GridColumn>
+                            </GridRow>
+                            <GridRow>
                                 <GridColumn>
                                     <Input
                                         fluid
@@ -193,8 +214,6 @@ function DealForm() {
                                         onChange={e => setMaturityDate(e.target.value)}
                                     />
                                 </GridColumn>
-                            </GridRow>
-                            <GridRow>
                                 <GridColumn>
                                     <Menu>
                                         <Dropdown
@@ -213,16 +232,6 @@ function DealForm() {
                                         placeholder='Issuer Address'
                                         value={accountAddress}
                                         onChange={e => setAccountAddress(e.target.value)}
-                                    />
-                                </GridColumn>
-                                <GridColumn>
-                                    <Input
-                                        fluid
-                                        disabled
-                                        size="mini"
-                                        placeholder='Status'
-                                        value={status}
-                                        onChange={e => setStatus(e.target.value)}
                                     />
                                 </GridColumn>
                             </GridRow>

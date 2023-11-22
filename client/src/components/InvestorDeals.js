@@ -8,8 +8,6 @@ import { getContract } from "../utils/getContract";
 import Formate from "../utils/Formate";
 import FormateAddress from "../utils/FormateAddress";
 import Addresses from "../../src/addresses/addr.json";
-import "../users.css";
-import "../manager.css";
 import { setBalance, setDeals, setLoading } from "../store";
 import AccountCheck from "./AccountCheck";
 import IssuersList from "./IssuersList";
@@ -19,6 +17,8 @@ import InvestInDeal from "./InvestInDeal";
 import ListOfApprovedDeals from "./ListOfApprovedDeals";
 import InvestorRegisteredDeals from "./InvestorRegisteredDeals";
 import InvestorDealSideBar from "./InvestorDealSideBar";
+import "../users.css";
+import "../manager.css";
 
 function InvestorDeals() {
     const connection = useSelector(state => {
