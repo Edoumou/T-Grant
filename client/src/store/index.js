@@ -5,7 +5,14 @@ import {
     setRegistrationStatus,
     setRegistrarOwner
 } from "./slices/registrySlice";
-import { bondReducer, setBondSymbols, setIssuersName, setApprovedDeals } from "./slices/bondSlice";
+import {
+    bondReducer,
+    setBondSymbols,
+    setIssuersName,
+    setIssuersNameForApprovedDeals,
+    setApprovedDeals,
+    setIssuersForApprovedDelas
+} from "./slices/bondSlice";
 import { 
     connectionReducer,
     setActiveItem,
@@ -48,7 +55,9 @@ export {
     store,
     setBondSymbols,
     setIssuersName,
+    setIssuersNameForApprovedDeals,
     setApprovedDeals,
+    setIssuersForApprovedDelas,
     setIsVerified,
     setRegistrationStatus,
     setRegistrarOwner,

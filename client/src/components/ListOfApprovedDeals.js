@@ -15,11 +15,7 @@ function ListOfApprovedDeals() {
         return state.bond;
     });
 
-    const deals = connection.deals.filter(
-        deal => deal.status === '2'
-    );
-
-    const couponType = deals.map((deal, index) => {
+    const couponType = bonds.approvedDeals.map((deal, index) => {
         if(deal.couponType === '0') {
             return <span>Zero Coupon</span>
         } else if(deal.couponType === '1') {
@@ -29,12 +25,14 @@ function ListOfApprovedDeals() {
         }
     });
 
-    const renderedDeals = deals.map((deal, index) => {
+    const renderedDeals = bonds.approvedDeals.map((deal, index) => {
         return (
             <TableRow key={index}>
                 <TableCell textAlign="left">{deal.dealID}</TableCell>
-                <TableCell textAlign="left">{bonds.issuersName[index]}</TableCell>
+                <TableCell textAlign="left">{bonds.issuersNameForApprovedDeals[index]}</TableCell>
                 <TableCell textAlign="left"><a href={deal.prospectusURI} target="_blank"><strong>{deal.dealID.toLowerCase()}</strong></a></TableCell>
+                <TableCell textAlign="left">{bonds.issuersForApprovedDeals[index].creditRating}</TableCell>
+                <TableCell textAlign="left">{Formate(bonds.issuersForApprovedDeals[index].carbonCredit)}</TableCell>
                 <TableCell positive textAlign="right">{Formate(deal.debtAmount)} {bonds.bondSymbols[index]}</TableCell>
                 <TableCell warning textAlign="center">{deal.couponRate / 100}%</TableCell>
                 <TableCell textAlign="center">{deal.couponFrequency}</TableCell>
@@ -58,6 +56,8 @@ function ListOfApprovedDeals() {
                                     <TableHeaderCell textAlign="left">Deal ID</TableHeaderCell>
                                     <TableHeaderCell textAlign="left">Issuer</TableHeaderCell>
                                     <TableHeaderCell textAlign="left">Prospectus</TableHeaderCell>
+                                    <TableHeaderCell textAlign="left">Credit rading</TableHeaderCell>
+                                    <TableHeaderCell textAlign="left">Carbon Credit</TableHeaderCell>
                                     <TableHeaderCell textAlign="right">Volume</TableHeaderCell>
                                     <TableHeaderCell textAlign="center">Coupon</TableHeaderCell>
                                     <TableHeaderCell textAlign="center">Frequency</TableHeaderCell>

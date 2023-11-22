@@ -27,7 +27,7 @@ import SubmitDeal from './components/SubmitDeal';
 import ManagerRequests from './components/ManagerRequests';
 import ManagerBonds from './components/ManagerBonds';
 import ManagerDeals from './components/ManagerDeals';
-import { setApprovedDeals, setBondSymbols, setIssuersName } from './store/slices/bondSlice';
+import { setApprovedDeals, setBondSymbols, setIssuersForApprovedDelas, setIssuersName, setIssuersNameForApprovedDeals } from './store/slices/bondSlice';
 import InvestorDeals from './components/InvestorDeals';
 
 function App() {
@@ -65,7 +65,9 @@ function App() {
     //=== store bonds currency symbols
     let bondSymbols = [];
     let issuersNames = [];
+    let issuersNameForApprovedDeals = [];
     let approvedDeals = [];
+    let issuersForApprovedDeals = [];
     for(let i = 0; i < deals.length; i++) {
       let tokenAddress = deals[i].currency;
       let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
@@ -76,13 +78,19 @@ function App() {
       issuersNames.push(issuer.name);
 
       if(deals[i].status === "2") {
-        approvedDeals.push(deals[i]);
+        let issuerForApprovedDeals = issuer;
+
+          approvedDeals.push(deals[i]);
+          issuersForApprovedDeals.push(issuerForApprovedDeals);
+          issuersNameForApprovedDeals.push(issuer.name);
       }
     }
 
     dispatch(setBondSymbols(bondSymbols));
     dispatch(setIssuersName(issuersNames));
     dispatch(setApprovedDeals(approvedDeals));
+    dispatch(setIssuersForApprovedDelas(issuersForApprovedDeals));
+    dispatch(setIssuersNameForApprovedDeals(issuersNameForApprovedDeals));
 
 
     //=== issuers filtering
@@ -149,7 +157,9 @@ function App() {
         //=== store bonds currency symbols
         let bondSymbols = [];
         let issuersNames = [];
+        let issuersNameForApprovedDeals = [];
         let approvedDeals = [];
+        let issuersForApprovedDeals = [];
         for(let i = 0; i < deals.length; i++) {
           let tokenAddress = deals[i].currency;
           let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
@@ -160,13 +170,19 @@ function App() {
           issuersNames.push(issuer.name);
 
           if(deals[i].status === "2") {
+            let issuerForApprovedDeals = issuer;
+
             approvedDeals.push(deals[i]);
+            issuersForApprovedDeals.push(issuerForApprovedDeals);
+            issuersNameForApprovedDeals.push(issuer.name);
           }
         }
 
         dispatch(setBondSymbols(bondSymbols));
         dispatch(setIssuersName(issuersNames));
         dispatch(setApprovedDeals(approvedDeals));
+        dispatch(setIssuersForApprovedDelas(issuersForApprovedDeals));
+        dispatch(setIssuersNameForApprovedDeals(issuersNameForApprovedDeals));
 
         //=== issuers filtering
         if (role === "ISSUER") {
