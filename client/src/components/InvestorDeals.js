@@ -18,6 +18,7 @@ import DealSideBar from "./DealSideBar";
 import InvestInDeal from "./InvestInDeal";
 import ListOfApprovedDeals from "./ListOfApprovedDeals";
 import InvestorRegisteredDeals from "./InvestorRegisteredDeals";
+import InvestorDealSideBar from "./InvestorDealSideBar";
 
 function InvestorDeals() {
     const connection = useSelector(state => {
@@ -74,7 +75,14 @@ function InvestorDeals() {
                             <InvestorRegisteredDeals />
                         </GridColumn>
                         <GridColumn width={4}>
-                            <InvestInDeal />
+                            {
+                                bonds.showInvestForm ?
+                                    <InvestInDeal />
+                                :
+                                    <>
+                                        <InvestorDealSideBar />
+                                    </>
+                            }
                         </GridColumn>
                     </GridRow>
                 </Grid>

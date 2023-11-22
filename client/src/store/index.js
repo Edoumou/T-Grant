@@ -7,6 +7,8 @@ import {
 } from "./slices/registrySlice";
 import {
     bondReducer,
+    setSelectedDealID, 
+    setShowInvestForm,
     setBondSymbols,
     setIssuersName,
     setIssuersNameForApprovedDeals,
@@ -53,6 +55,8 @@ const store = configureStore({
 
 export {
     store,
+    setSelectedDealID, 
+    setShowInvestForm,
     setBondSymbols,
     setIssuersName,
     setIssuersNameForApprovedDeals,

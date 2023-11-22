@@ -3,6 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const bondSlice = createSlice({
     name: 'bond',
     initialState: {
+        selectedDealID: '',
+        showInvestForm: false,
         bondSymbols: [],
         issuersName: [],
         issuersNameForApprovedDeals: [],
@@ -10,6 +12,12 @@ const bondSlice = createSlice({
         issuersForApprovedDeals: []
     },
     reducers: {
+        setSelectedDealID(state, action) {
+            state.selectedDealID = action.payload;
+        },
+        setShowInvestForm(state, action) {
+            state.showInvestForm = action.payload;
+        },
         setBondSymbols(state, action) {
             state.bondSymbols = action.payload;
         },
@@ -28,7 +36,9 @@ const bondSlice = createSlice({
     }
 });
 
-export const { 
+export const {
+    setSelectedDealID, 
+    setShowInvestForm,
     setBondSymbols,
     setIssuersName,
     setIssuersNameForApprovedDeals,

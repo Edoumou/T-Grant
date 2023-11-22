@@ -1,15 +1,18 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import 'semantic-ui-css/semantic.min.css';
-import { Table, TableRow, TableHeader, TableHeaderCell, TableBody, TableCell } from "semantic-ui-react";
+import { Table, TableRow, TableHeader, TableHeaderCell, TableBody, TableCell, Button } from "semantic-ui-react";
 import "../users.css";
 import "../manager.css";
 import Formate from "../utils/Formate";
+import { setSelectedDealID, setShowInvestForm } from "../store";
 
 function ListOfApprovedDeals() {
     const connection = useSelector(state => {
         return state.connection;
     });
+
+    const dispatch = useDispatch();
 
     const bonds = useSelector(state => {
         return state.bond;
@@ -38,9 +41,24 @@ function ListOfApprovedDeals() {
                 <TableCell textAlign="center">{deal.couponFrequency}</TableCell>
                 <TableCell warning textAlign="center">{couponType[index]}</TableCell>
                 <TableCell positive textAlign="right">{(new Date(deal.maturityDate * 1000)).toLocaleDateString()}</TableCell>
+                <TableCell textAlign="center">
+                    <Button
+                        key={index}
+                        compact
+                        color='linkedin'
+                        onClick={() => setDeal(deal.dealID)}
+                    >
+                        Invest
+                    </Button>
+                </TableCell>
             </TableRow>
         );
     });
+
+    const setDeal = async dealID => {
+        dispatch(setSelectedDealID(dealID));
+        dispatch(setShowInvestForm(true));
+    }
 
     return (
         <>
@@ -63,6 +81,7 @@ function ListOfApprovedDeals() {
                                     <TableHeaderCell textAlign="center">Frequency</TableHeaderCell>
                                     <TableHeaderCell textAlign="center">Type</TableHeaderCell>
                                     <TableHeaderCell textAlign="right">Maturity</TableHeaderCell>
+                                    <TableHeaderCell></TableHeaderCell>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
