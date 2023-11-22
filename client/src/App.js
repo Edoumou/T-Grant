@@ -27,7 +27,7 @@ import SubmitDeal from './components/SubmitDeal';
 import ManagerRequests from './components/ManagerRequests';
 import ManagerBonds from './components/ManagerBonds';
 import ManagerDeals from './components/ManagerDeals';
-import { setBondSymbols, setIssuersName } from './store/slices/bondSlice';
+import { setApprovedDeals, setBondSymbols, setIssuersName } from './store/slices/bondSlice';
 import InvestorDeals from './components/InvestorDeals';
 
 function App() {
@@ -65,6 +65,7 @@ function App() {
     //=== store bonds currency symbols
     let bondSymbols = [];
     let issuersNames = [];
+    let approvedDeals = [];
     for(let i = 0; i < deals.length; i++) {
       let tokenAddress = deals[i].currency;
       let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
@@ -73,10 +74,15 @@ function App() {
 
       bondSymbols.push(tokenSymbol);
       issuersNames.push(issuer.name);
+
+      if(deals[i].status === "2") {
+        approvedDeals.push(deals[i]);
+      }
     }
 
     dispatch(setBondSymbols(bondSymbols));
     dispatch(setIssuersName(issuersNames));
+    dispatch(setApprovedDeals(approvedDeals));
 
 
     //=== issuers filtering
@@ -142,19 +148,25 @@ function App() {
 
         //=== store bonds currency symbols
         let bondSymbols = [];
-    let issuersNames = [];
-    for(let i = 0; i < deals.length; i++) {
-      let tokenAddress = deals[i].currency;
-      let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
+        let issuersNames = [];
+        let approvedDeals = [];
+        for(let i = 0; i < deals.length; i++) {
+          let tokenAddress = deals[i].currency;
+          let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
 
-      let issuer = await issuerContract.methods.issuers(deals[i].issuerAddress).call({ from: account });
+          let issuer = await issuerContract.methods.issuers(deals[i].issuerAddress).call({ from: account });
 
-      bondSymbols.push(tokenSymbol);
-      issuersNames.push(issuer.name);
-    }
+          bondSymbols.push(tokenSymbol);
+          issuersNames.push(issuer.name);
 
-    dispatch(setBondSymbols(bondSymbols));
-    dispatch(setIssuersName(issuersNames));
+          if(deals[i].status === "2") {
+            approvedDeals.push(deals[i]);
+          }
+        }
+
+        dispatch(setBondSymbols(bondSymbols));
+        dispatch(setIssuersName(issuersNames));
+        dispatch(setApprovedDeals(approvedDeals));
 
         //=== issuers filtering
         if (role === "ISSUER") {

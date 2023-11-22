@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import 'semantic-ui-css/semantic.min.css';
-import { Table, TableRow, TableCell, TableHeader, TableHeaderCell, TableBody, Icon, Button, Modal, ModalContent, ModalActions, Grid, GridRow, GridColumn } from "semantic-ui-react";
+import { Grid, GridRow, GridColumn } from "semantic-ui-react";
 import BankJSON from "../contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
@@ -11,6 +11,13 @@ import Addresses from "../../src/addresses/addr.json";
 import "../users.css";
 import "../manager.css";
 import { setBalance, setDeals, setLoading } from "../store";
+import AccountCheck from "./AccountCheck";
+import IssuersList from "./IssuersList";
+import InvestorsList from "./InvestorsList";
+import DealSideBar from "./DealSideBar";
+import InvestInDeal from "./InvestInDeal";
+import ListOfApprovedDeals from "./ListOfApprovedDeals";
+import InvestorRegisteredDeals from "./InvestorRegisteredDeals";
 
 function InvestorDeals() {
     const connection = useSelector(state => {
@@ -55,6 +62,19 @@ function InvestorDeals() {
                         </GridColumn>
                         <GridColumn textAlign="right">
                             <strong>{Number(connection.balance).toFixed(2)} TOPOS</strong>
+                        </GridColumn>
+                    </GridRow>
+                </Grid>
+            </div>
+            <div className="manager-body">
+                <Grid stackable columns={2}>
+                    <GridRow>
+                        <GridColumn width={12}>
+                            <ListOfApprovedDeals />
+                            <InvestorRegisteredDeals />
+                        </GridColumn>
+                        <GridColumn width={4}>
+                            <InvestInDeal />
                         </GridColumn>
                     </GridRow>
                 </Grid>

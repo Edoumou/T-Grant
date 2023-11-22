@@ -7,11 +7,12 @@ import InvestorsList from "./InvestorsList";
 import IssuerRequierement from "./IssuerRequierement";
 import AccountCheck from "./AccountCheck";
 import "../manager.css";
+import "../users.css";
 
 function ManagerRequests() {
     let connection = useSelector(state => {
         return state.connection;
-    })
+    });
 
     return (
         <div className="manager">

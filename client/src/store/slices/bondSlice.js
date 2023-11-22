@@ -4,7 +4,8 @@ const bondSlice = createSlice({
     name: 'bond',
     initialState: {
         bondSymbols: [],
-        issuersName: []
+        issuersName: [],
+        approvedDeals: []
     },
     reducers: {
         setBondSymbols(state, action) {
@@ -12,9 +13,12 @@ const bondSlice = createSlice({
         },
         setIssuersName(state, action) {
             state.issuersName = action.payload;
+        },
+        setApprovedDeals(state, action) {
+            state.approvedDeals = action.payload;
         }
     }
 });
 
-export const {  setBondSymbols, setIssuersName } = bondSlice.actions;
+export const {  setBondSymbols, setIssuersName, setApprovedDeals } = bondSlice.actions;
 export const bondReducer = bondSlice.reducer;
