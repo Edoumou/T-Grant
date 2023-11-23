@@ -1,8 +1,16 @@
 import React, { useState } from "react";
 import "../users.css";
 import "../manager.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button, Dropdown, Menu, Modal, ModalActions, ModalContent } from "semantic-ui-react";
+import BankJSON from "../contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
+import TokenCall from "../contracts/artifacts/contracts/tests/tokens/TokenCall.sol/TokenCall.json";
+import { web3Connection } from "../utils/web3Connection";
+import { getContract } from "../utils/getContract";
+import Formate from "../utils/Formate";
+import FormateAddress from "../utils/FormateAddress";
+import Addresses from "../../src/addresses/addr.json";
+import { setLoading } from "../store";
 
 function MintTokens() {
     const [tokenAddress, setTokenAddress] = useState('');
@@ -15,6 +23,8 @@ function MintTokens() {
         return state.connection;
     });
 
+    const dispatch = useDispatch();
+
     const tokenOptions = [
         { key: 1, text: connection.tokenSymbols[0], value: connection.tokenAddresses[0] },
         { key: 2, text: connection.tokenSymbols[1], value: connection.tokenAddresses[1] },
@@ -26,7 +36,21 @@ function MintTokens() {
     ];
 
     const mint = async () => {
+        let { web3, account } = await web3Connection();
+        let tokenCall = await getContract(web3, TokenCall, Addresses.TokenCallContract);
 
+        await tokenCall.methods.mint(account, '1000000000000000000000000', tokenAddress)
+            .send({ from: account })
+            .on('transactionHash', hash => {
+                setLoadingMessage('Transaction in Process! ⌛️');
+                setExplorerLink(`https://topos.blockscout.testnet-1.topos.technology/tx/${hash}`);
+                dispatch(setLoading(true));
+            })
+            .on('receipt', receipt => {
+                setLoadingMessage('Transaction Completed! ✅');
+                setLoader(false);
+                dispatch(setLoading(false));
+            });
     }
 
     const goToExplorer = () => {

@@ -3,6 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import BankJSON from "../contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
 import TokenCallJSON from "../contracts/artifacts/contracts/tests/tokens/TokenCall.sol/TokenCall.json";
 import IssuerJSON from "../contracts/artifacts/contracts/Topos/Bank/Issuer.sol/Issuer.json";
+import USDCJSON from "../contracts/artifacts/contracts/tests/tokens/assets/USDC.sol/USDC.json";
+import USDTJSON from "../contracts/artifacts/contracts/tests/tokens/assets/USDT.sol/USDT.json";
+import EURCJSON from "../contracts/artifacts/contracts/tests/tokens/assets/EURC.sol/EURC.json";
+import EURTJSON from "../contracts/artifacts/contracts/tests/tokens/assets/EURT.sol/EURT.json";
+import CNYCJSON from "../contracts/artifacts/contracts/tests/tokens/assets/CNYC.sol/CNYC.json";
+import CNYTJSON from "../contracts/artifacts/contracts/tests/tokens/assets/CNYT.sol/CNYT.json";
+import DAIJSON from "../contracts/artifacts/contracts/tests/tokens/assets/DAI.sol/DAI.json";
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
 import { Button, Card, CardContent, Input, Image, List, ListContent, ListItem, Modal, ModalActions, ModalContent } from "semantic-ui-react";
@@ -35,9 +42,49 @@ function InvestInDeal() {
         let tokenCallContract = await getContract(web3, TokenCallJSON, Addresses.TokenCallContract);
         let issuerContract = await getContract(web3, IssuerJSON, Addresses.IssuerContract);
 
+        let tokenContract = null;
+
+        if(bonds.selectedDealTokenSymbol === "USDC") {
+            tokenContract = await getContract(web3, USDCJSON, Addresses.USDCContract);
+        }
+        if(bonds.selectedDealTokenSymbol === "USDT") {
+            tokenContract = await getContract(web3, USDTJSON, Addresses.USDTContract);
+        }
+        if(bonds.selectedDealTokenSymbol === "EURC") {
+            tokenContract = await getContract(web3, EURCJSON, Addresses.EURCContract);
+        }
+        if(bonds.selectedDealTokenSymbol === "EURT") {
+            tokenContract = await getContract(web3, EURTJSON, Addresses.EURTContract);
+        }
+        if(bonds.selectedDealTokenSymbol === "CNYC") {
+            tokenContract = await getContract(web3, CNYCJSON, Addresses.CNYCContract);
+        }
+        if(bonds.selectedDealTokenSymbol === "CNYT") {
+            tokenContract = await getContract(web3, CNYTJSON, Addresses.CNYTContract);
+        }
+        if(bonds.selectedDealTokenSymbol === "DAI") {
+            tokenContract = await getContract(web3, DAIJSON, Addresses.DAIContract);
+        }
+
         if(bonds.selectedDealID === '' || bonds.selectedDealID === '0') {
             return;
         }
+
+        let deal = await bankContract.methods.deals(bonds.selectedDealID).call({ from: account });
+        let amountToApprove = web3.utils.toWei(amount, 'ether');
+        
+
+        await tokenContract.methods.approve(Addresses.ToposBankContract, amountToApprove)
+            .send({ from: account })
+            .on('transactionHash', hash => {
+                setLoadingMessage('Approve Bank Contract in Process! ⌛️');
+                setExplorerLink(`https://topos.blockscout.testnet-1.topos.technology/tx/${hash}`);
+                dispatch(setLoading(true));
+            })
+            .on('receipt', receipt => {
+                setLoadingMessage('Approve Bank Contract Completed! ✅');
+            });
+
 
         await bankContract.methods.registerForDeal(bonds.selectedDealID, amount)
             .send({ from: account })
