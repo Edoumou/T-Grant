@@ -62,3 +62,29 @@
     font-size: calc(5px + 1.5vmin);
     text-transform: uppercase;
 }
+
+.center-text {
+  text-align: center;
+}
+
+.amount-remaining {
+  color: rgb(97, 3, 3);
+  font-weight: bold;
+  padding-right: 5px;
+}
+
+.mint-tokens {
+  margin-top: 0px;
+  padding-top: 200px;
+  text-align: center;
+  color: white;
+  min-height: 100vh;
+  font-weight: bold;
+  background-color: rgb(6, 4, 133);
+}
+
+.mint-token-form {
+  width: 20%;
+  margin-left: 40%;
+  margin-right: 40%;
+}

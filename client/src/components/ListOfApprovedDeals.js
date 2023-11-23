@@ -2,10 +2,15 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import 'semantic-ui-css/semantic.min.css';
 import { Table, TableRow, TableHeader, TableHeaderCell, TableBody, TableCell, Button } from "semantic-ui-react";
+import BankJSON from "../contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
+import { web3Connection } from "../utils/web3Connection";
+import { getContract } from "../utils/getContract";
+import FormateAddress from "../utils/FormateAddress";
+import Addresses from "../../src/addresses/addr.json";
 import "../users.css";
 import "../manager.css";
 import Formate from "../utils/Formate";
-import { setSelectedDealCouponRate, setSelectedDealDenomination, setSelectedDealID, setSelectedDealIssuerName, setSelectedDealMaturityDate, setSelectedDealTokenSymbol, setSelectedDealVolume, setShowInvestForm } from "../store";
+import { setSelectedDealCouponRate, setSelectedDealDenomination, setSelectedDealID, setSelectedDealIssuerName, setSelectedDealMaturityDate, setSelectedDealRemainingAmount, setSelectedDealTokenSymbol, setSelectedDealVolume, setShowInvestForm } from "../store";
 
 function ListOfApprovedDeals() {
     const connection = useSelector(state => {
@@ -67,6 +72,12 @@ function ListOfApprovedDeals() {
     });
 
     const setDeal = async (dealID, dealVolume, dealDenomination, tokenSymbol, issuersName, couponRate, maturityDate)=> {
+        let { web3, account } = await web3Connection();
+        let bankContract = await getContract(web3, BankJSON, Addresses.ToposBankContract);
+
+        let totalAmountInvested = await bankContract.methods.totalAmountInvestedForDeal(dealID).call({ from: account });
+        let remainingAmount =  dealVolume - totalAmountInvested;
+
         dispatch(setSelectedDealID(dealID));
         dispatch(setSelectedDealDenomination(dealDenomination));
         dispatch(setSelectedDealVolume(dealVolume));
@@ -74,6 +85,7 @@ function ListOfApprovedDeals() {
         dispatch(setSelectedDealIssuerName(issuersName));
         dispatch(setSelectedDealCouponRate(couponRate));
         dispatch(setSelectedDealMaturityDate(maturityDate));
+        dispatch(setSelectedDealRemainingAmount(remainingAmount));
         dispatch(setShowInvestForm(true));
     }
 

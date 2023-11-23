@@ -6,7 +6,7 @@ import IssuerJSON from "../contracts/artifacts/contracts/Topos/Bank/Issuer.sol/I
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
 import { Button, Card, CardContent, Input, Image, List, ListContent, ListItem, Modal, ModalActions, ModalContent } from "semantic-ui-react";
-import { setApprovedDeals, setIssuersForApprovedDelas, setIssuersNameForApprovedDeals, setLoading, setSelectedDealID, setShowInvestForm, setTokenSymbolForApprovedDeals } from "../store";
+import { setApprovedDeals, setIssuersForApprovedDelas, setIssuersNameForApprovedDeals, setLoading, setSelectedDealID, setSelectedDealRemainingAmount, setShowInvestForm, setTokenSymbolForApprovedDeals } from "../store";
 import Addresses from "../addresses/addr.json";
 import "../manager.css";
 import "../users.css";
@@ -75,12 +75,16 @@ function InvestInDeal() {
           }
         }
 
+        let totalAmountInvested = await bankContract.methods.totalAmountInvestedForDeal(bonds.selectedDealID).call({ from: account });
+        let remainingAmount =  bonds.selectedDealVolume - totalAmountInvested;
+
         setAmount('');
 
         dispatch(setApprovedDeals(approvedDeals));
         dispatch(setIssuersForApprovedDelas(issuersForApprovedDeals));
         dispatch(setIssuersNameForApprovedDeals(issuersNameForApprovedDeals));
         dispatch(setTokenSymbolForApprovedDeals(tokenSymbolForApprovedDeals));
+        dispatch(setSelectedDealRemainingAmount(remainingAmount));
         dispatch(setSelectedDealID(''));
         dispatch(setShowInvestForm(false));
     };
@@ -105,7 +109,7 @@ function InvestInDeal() {
                     <List relaxed='very'>
                         <ListItem>
                             <List.Icon name='user' size='large' verticalAlign='middle' />
-                            <ListContent textAlign="right">{bonds.selectedDealIssuerName}</ListContent>
+                            <ListContent floated="right">{bonds.selectedDealIssuerName}</ListContent>
                         </ListItem>
                         <ListItem>
                             <ListContent>
@@ -126,6 +130,19 @@ function InvestInDeal() {
                             <ListContent>
                                 <h4>Maturity Date</h4> {(new Date(bonds.selectedDealMaturityDate * 1000)).toLocaleDateString()}
                             </ListContent>
+                        </ListItem>
+                            <ListItem>
+                            <div style={{ textAlign: 'center'}}>
+                                <br></br>
+                                <ListContent>
+
+                                <h4>Remaining Amount to Raise</h4>
+                                <span className="amount-remaining">
+                                    {Formate(bonds.selectedDealRemainingAmount)}
+                                </span>
+                                <span>{bonds.selectedDealTokenSymbol}</span>
+                                </ListContent>
+                             </div>
                         </ListItem>
                     </List>
                     <br></br>

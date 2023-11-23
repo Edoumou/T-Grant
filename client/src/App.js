@@ -351,11 +351,11 @@ function App() {
                           to='/investor/deals'
                         />
                         <MenuItem
-                          name='buy tokens'
-                          active={connection.activeItem === 'buy tokens'}
+                          name='mint tokens'
+                          active={connection.activeItem === 'mint tokens'}
                           onClick={handleItemClick}
                           as={Link}
-                          to='/investor/buy-tokens'
+                          to='/investor/mint-tokens'
                         />
                       </>
                     :
@@ -406,7 +406,7 @@ function App() {
                   : connection.role === "INVESTOR" ?
                     <>
                       <Route path='/investor/deals' element={<InvestorDeals />} />
-                      <Route path='/investor/buy-tokens' element={<MintTokens />} />
+                      <Route path='/investor/mint-tokens' element={<MintTokens />} />
                     </>
                   :
                     <></>
