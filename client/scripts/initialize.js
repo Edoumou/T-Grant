@@ -7,6 +7,13 @@ async function main() {
     let registry = await hre.ethers.getContractAt("IdentityRegistry", Addresses.RegistryContract);
     let roles = await hre.ethers.getContractAt("Roles", Addresses.RolesContract);
     let tokenCall = await hre.ethers.getContractAt("TokenCall", Addresses.TokenCallContract);
+    let bank = await hre.ethers.getContractAt("ToposBank", Addresses.ToposBankContract);
+
+    let tx = await bank.setIssuerFundContract(
+        Addresses.IssuersFundContract,
+        { from: deployer }
+    );
+    await tx.wait();
 
     let tx1 = await registry.setAuthenticationContract(
         Addresses.AuthenticationContract,

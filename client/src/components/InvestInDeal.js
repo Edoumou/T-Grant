@@ -156,7 +156,7 @@ function InvestInDeal() {
                     <List relaxed='very'>
                         <ListItem>
                             <List.Icon name='user' size='large' verticalAlign='middle' />
-                            <ListContent floated="right">{bonds.selectedDealIssuerName}</ListContent>
+                            <ListContent>{bonds.selectedDealIssuerName}</ListContent>
                         </ListItem>
                         <ListItem>
                             <ListContent>
