@@ -50,19 +50,22 @@ function IssuerListOfDeals() {
 
     const issuerDealsReversed = issuerDeals.reverse();
     const symbolsReversed = symbols.reverse();
+    const statusReversed = status.reverse();
+    const couponTypeReversed = couponType.reverse();
 
     const renderedDeals = issuerDealsReversed.map((deal, index) => {
         return (
             <TableRow key={index}>
                 <TableCell textAlign="center">{deal.dealID}</TableCell>
-                <TableCell textAlign="left"><a href={deal.prospectusURI} target="_blank"><strong>{deal.prospectusURI}</strong></a></TableCell>
+                <TableCell textAlign="left"><a href={deal.prospectusURI} target="_blank"><strong>{deal.dealID.toLowerCase()}</strong></a></TableCell>
                 <TableCell textAlign="left">{FormateAddress(deal.issuerAddress)}</TableCell>
                 <TableCell positive textAlign="right">{Formate(deal.debtAmount)} {symbolsReversed[index]}</TableCell>
+                <TableCell positive textAlign="right">{Formate(deal.denomination)} {symbolsReversed[index]}</TableCell>
                 <TableCell warning textAlign="center">{deal.couponRate / 100}%</TableCell>
                 <TableCell textAlign="center">{deal.couponFrequency}</TableCell>
-                <TableCell warning textAlign="center">{couponType[index]}</TableCell>
+                <TableCell warning textAlign="center">{couponTypeReversed[index]}</TableCell>
                 <TableCell positive textAlign="right">{(new Date(deal.maturityDate * 1000)).toLocaleDateString()}</TableCell>
-                <TableCell textAlign="center">{status[index]}</TableCell>
+                <TableCell textAlign="center">{statusReversed[index]}</TableCell>
             </TableRow>
         );
     });
@@ -80,6 +83,7 @@ function IssuerListOfDeals() {
                             <TableHeaderCell textAlign="left">Prospectus URL</TableHeaderCell>
                             <TableHeaderCell textAlign="left">Issuer Addresse</TableHeaderCell>
                             <TableHeaderCell textAlign="right">Volume</TableHeaderCell>
+                            <TableHeaderCell textAlign="right">Denomination</TableHeaderCell>
                             <TableHeaderCell textAlign="center">Coupon Rate</TableHeaderCell>
                             <TableHeaderCell textAlign="center">Coupon Frequency</TableHeaderCell>
                             <TableHeaderCell textAlign="center">Coupon Type</TableHeaderCell>

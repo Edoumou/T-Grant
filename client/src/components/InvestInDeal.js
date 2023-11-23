@@ -5,11 +5,12 @@ import TokenCallJSON from "../contracts/artifacts/contracts/tests/tokens/TokenCa
 import IssuerJSON from "../contracts/artifacts/contracts/Topos/Bank/Issuer.sol/Issuer.json";
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
-import { Button, Card, CardContent, Input, Modal, ModalActions, ModalContent } from "semantic-ui-react";
+import { Button, Card, CardContent, Input, Image, List, ListContent, ListItem, Modal, ModalActions, ModalContent } from "semantic-ui-react";
 import { setApprovedDeals, setIssuersForApprovedDelas, setIssuersNameForApprovedDeals, setLoading, setSelectedDealID, setShowInvestForm, setTokenSymbolForApprovedDeals } from "../store";
 import Addresses from "../addresses/addr.json";
 import "../manager.css";
 import "../users.css";
+import Formate from "../utils/Formate";
 
 function InvestInDeal() {
     const [amount, setAmount] = useState('');
@@ -101,10 +102,37 @@ function InvestInDeal() {
             </div>
             <Card fluid>
                 <CardContent>
-
+                    <List relaxed='very'>
+                        <ListItem>
+                            <List.Icon name='user' size='large' verticalAlign='middle' />
+                            <ListContent textAlign="right">{bonds.selectedDealIssuerName}</ListContent>
+                        </ListItem>
+                        <ListItem>
+                            <ListContent>
+                                <h4>Volume</h4> {Formate(bonds.selectedDealVolume)} {bonds.selectedDealTokenSymbol}
+                            </ListContent>
+                        </ListItem>
+                        <ListItem>
+                            <ListContent>
+                                <h4>Denomination</h4> {Formate(bonds.selectedDealDenomination)} {bonds.selectedDealTokenSymbol}
+                            </ListContent>
+                        </ListItem>
+                        <ListItem>
+                            <ListContent>
+                                <h4>Coupon rate</h4> {Formate(bonds.selectedDealCouponRate) / 100}%
+                            </ListContent>
+                        </ListItem>
+                        <ListItem>
+                            <ListContent>
+                                <h4>Maturity Date</h4> {(new Date(bonds.selectedDealMaturityDate * 1000)).toLocaleDateString()}
+                            </ListContent>
+                        </ListItem>
+                    </List>
+                    <br></br>
+                    <br></br>
                     <Input
                         fluid
-                        action={bonds.selectedDealID}
+                        action={bonds.selectedDealTokenSymbol}
                         size="large"
                         placeholder='Amount to Invest'
                         value={amount}

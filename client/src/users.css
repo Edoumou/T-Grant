@@ -344,3 +344,10 @@
     top: 0px;
     margin: 0;
 }
+
+.no-deal {
+    text-align: left;
+    margin-top: 50px;
+    color: white;
+    font-size: calc(3px + 1.3vmin);
+}

@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import 'semantic-ui-css/semantic.min.css';
 import { Table, TableRow, TableCell, TableHeader, TableHeaderCell, TableBody, Icon, Button, Modal, ModalContent, ModalActions } from "semantic-ui-react";
 import BankJSON from "../contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
+import TokenCallJSON from "../contracts/artifacts/contracts/tests/tokens/TokenCall.sol/TokenCall.json";
+import IssuerJSON from "../contracts/artifacts/contracts/Topos/Bank/Issuer.sol/Issuer.json";
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
 import Formate from "../utils/Formate";
@@ -10,7 +12,7 @@ import FormateAddress from "../utils/FormateAddress";
 import Addresses from "../../src/addresses/addr.json";
 import "../users.css";
 import "../manager.css";
-import { setBalance, setDeals, setLoading } from "../store";
+import { setApprovedDeals, setBalance, setBondSymbols, setDeals, setIssuersForApprovedDelas, setIssuersNameForApprovedDeals, setLoading, setTokenSymbolForApprovedDeals } from "../store";
 
 function ManagerListOfDeals() {
     const connection = useSelector(state => {
@@ -161,6 +163,8 @@ function ManagerListOfDeals() {
     const approve = async dealID => {
         let {web3, account} = await web3Connection();
         let contract = await getContract(web3, BankJSON, Addresses.ToposBankContract);
+        let tokenCallContract = await getContract(web3, TokenCallJSON, Addresses.TokenCallContract);
+        let issuerContract = await getContract(web3, IssuerJSON, Addresses.IssuerContract);
 
         await contract.methods.approveDeal(dealID)
             .send({ from: account })
@@ -180,8 +184,36 @@ function ManagerListOfDeals() {
         let balance = await web3.eth.getBalance(account);
         balance = web3.utils.fromWei(balance);
 
+        let bondSymbols = [];
+        let issuersNameForApprovedDeals = [];
+        let approvedDeals = [];
+        let issuersForApprovedDeals = [];
+        let tokenSymbolForApprovedDeals = [];
+
+        for(let i = 0; i < deals.length; i++) {
+            let tokenAddress = deals[i].currency;
+            let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
+            let issuer = await issuerContract.methods.issuers(deals[i].issuerAddress).call({ from: account });
+
+            bondSymbols.push(tokenSymbol);
+
+            if(deals[i].status === "2") {
+                let issuerForApprovedDeals = issuer;
+
+                approvedDeals.push(deals[i]);
+                issuersForApprovedDeals.push(issuerForApprovedDeals);
+                issuersNameForApprovedDeals.push(issuer.name);
+                tokenSymbolForApprovedDeals.push(tokenSymbol);
+            }
+        }
+
         dispatch(setDeals(deals));
         dispatch(setBalance(balance));
+        dispatch(setBondSymbols(bondSymbols));
+        dispatch(setApprovedDeals(approvedDeals));
+        dispatch(setIssuersForApprovedDelas(issuersForApprovedDeals));
+        dispatch(setIssuersNameForApprovedDeals(issuersNameForApprovedDeals));
+        dispatch(setTokenSymbolForApprovedDeals(tokenSymbolForApprovedDeals));
 
         return;
     }
@@ -189,6 +221,8 @@ function ManagerListOfDeals() {
     const reject = async dealID => {
         let {web3, account} = await web3Connection();
         let contract = await getContract(web3, BankJSON, Addresses.ToposBankContract);
+        let tokenCallContract = await getContract(web3, TokenCallJSON, Addresses.TokenCallContract);
+        let issuerContract = await getContract(web3, IssuerJSON, Addresses.IssuerContract);
 
         await contract.methods.rejectDeal(dealID)
             .send({ from: account })
@@ -208,8 +242,36 @@ function ManagerListOfDeals() {
         let balance = await web3.eth.getBalance(account);
         balance = web3.utils.fromWei(balance);
 
+        let bondSymbols = [];
+        let issuersNameForApprovedDeals = [];
+        let approvedDeals = [];
+        let issuersForApprovedDeals = [];
+        let tokenSymbolForApprovedDeals = [];
+
+        for(let i = 0; i < deals.length; i++) {
+            let tokenAddress = deals[i].currency;
+            let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
+            let issuer = await issuerContract.methods.issuers(deals[i].issuerAddress).call({ from: account });
+
+            bondSymbols.push(tokenSymbol);
+
+            if(deals[i].status === "2") {
+                let issuerForApprovedDeals = issuer;
+
+                approvedDeals.push(deals[i]);
+                issuersForApprovedDeals.push(issuerForApprovedDeals);
+                issuersNameForApprovedDeals.push(issuer.name);
+                tokenSymbolForApprovedDeals.push(tokenSymbol);
+            }
+        }
+
         dispatch(setDeals(deals));
         dispatch(setBalance(balance));
+        dispatch(setBondSymbols(bondSymbols));
+        dispatch(setApprovedDeals(approvedDeals));
+        dispatch(setIssuersForApprovedDelas(issuersForApprovedDeals));
+        dispatch(setIssuersNameForApprovedDeals(issuersNameForApprovedDeals));
+        dispatch(setTokenSymbolForApprovedDeals(tokenSymbolForApprovedDeals));
 
         return;
     }
@@ -232,6 +294,7 @@ function ManagerListOfDeals() {
                 <TableCell textAlign="left">{bonds.issuersName[index]}</TableCell>
                 <TableCell textAlign="left"><a href={deal.prospectusURI} target="_blank"><strong>{deal.dealID.toLowerCase()}</strong></a></TableCell>
                 <TableCell positive textAlign="right">{Formate(deal.debtAmount)} {bonds.bondSymbols[index]}</TableCell>
+                <TableCell positive textAlign="right">{Formate(deal.denomination)} {bonds.bondSymbols[index]}</TableCell>
                 <TableCell warning textAlign="center">{deal.couponRate / 100}%</TableCell>
                 <TableCell textAlign="center">{deal.couponFrequency}</TableCell>
                 <TableCell warning textAlign="center">{couponType[index]}</TableCell>
@@ -258,6 +321,7 @@ function ManagerListOfDeals() {
                                     <TableHeaderCell textAlign="left">Issuer</TableHeaderCell>
                                     <TableHeaderCell textAlign="left">Prospectus</TableHeaderCell>
                                     <TableHeaderCell textAlign="right">Volume</TableHeaderCell>
+                                    <TableHeaderCell textAlign="right">Denomination</TableHeaderCell>
                                     <TableHeaderCell textAlign="center">Coupon</TableHeaderCell>
                                     <TableHeaderCell textAlign="center">Frequency</TableHeaderCell>
                                     <TableHeaderCell textAlign="center">Type</TableHeaderCell>
@@ -273,8 +337,8 @@ function ManagerListOfDeals() {
                         </Table>
                     </div>
                 :
-                    <div  className="list-card-head-no">
-                        There is No Deal
+                    <div  className="no-deal">
+                        No Deal Found
                     </div>
             }
         </>

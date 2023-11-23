@@ -34,9 +34,10 @@ function ListOfApprovedDeals() {
                 <TableCell textAlign="left">{deal.dealID}</TableCell>
                 <TableCell textAlign="left">{bonds.issuersNameForApprovedDeals[index]}</TableCell>
                 <TableCell textAlign="left"><a href={deal.prospectusURI} target="_blank"><strong>{deal.dealID.toLowerCase()}</strong></a></TableCell>
-                <TableCell textAlign="left">{bonds.issuersForApprovedDeals[index].creditRating}</TableCell>
-                <TableCell textAlign="left">{Formate(bonds.issuersForApprovedDeals[index].carbonCredit)}</TableCell>
+                <TableCell textAlign="center">{bonds.issuersForApprovedDeals[index].creditRating}</TableCell>
+                <TableCell textAlign="center">{Formate(bonds.issuersForApprovedDeals[index].carbonCredit)}</TableCell>
                 <TableCell positive textAlign="right">{Formate(deal.debtAmount)} {bonds.bondSymbols[index]}</TableCell>
+                <TableCell positive textAlign="right">{Formate(deal.denomination)} {bonds.bondSymbols[index]}</TableCell>
                 <TableCell warning textAlign="center">{deal.couponRate / 100}%</TableCell>
                 <TableCell textAlign="center">{deal.couponFrequency}</TableCell>
                 <TableCell warning textAlign="center">{couponType[index]}</TableCell>
@@ -90,9 +91,10 @@ function ListOfApprovedDeals() {
                                     <TableHeaderCell textAlign="left">Deal ID</TableHeaderCell>
                                     <TableHeaderCell textAlign="left">Issuer</TableHeaderCell>
                                     <TableHeaderCell textAlign="left">Prospectus</TableHeaderCell>
-                                    <TableHeaderCell textAlign="left">Credit rading</TableHeaderCell>
-                                    <TableHeaderCell textAlign="left">Carbon Credit</TableHeaderCell>
+                                    <TableHeaderCell textAlign="center">Credit rading</TableHeaderCell>
+                                    <TableHeaderCell textAlign="center">Carbon Credit</TableHeaderCell>
                                     <TableHeaderCell textAlign="right">Volume</TableHeaderCell>
+                                    <TableHeaderCell textAlign="right">Denomination</TableHeaderCell>
                                     <TableHeaderCell textAlign="center">Coupon</TableHeaderCell>
                                     <TableHeaderCell textAlign="center">Frequency</TableHeaderCell>
                                     <TableHeaderCell textAlign="center">Type</TableHeaderCell>

@@ -73,12 +73,15 @@ function DealForm() {
 
         let _maturityDate = Date.parse(maturityDate) / 1000;
 
+        let _couponRate = Number(couponRate) * 100;
+
         let deal = {
             dealID: _dealID,
             prospectusURI: url,
             issuerAddress: account,
             debtAmount: issueVolume,
-            couponRate: couponRate,
+            denomination: denomination,
+            couponRate: _couponRate.toString(),
             couponFrequency: couponFrequency,
             maturityDate: _maturityDate,
             index: Number(deals.length) + '',
