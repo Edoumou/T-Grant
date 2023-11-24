@@ -18,6 +18,7 @@ interface IToposBank {
         address manager,
         address roles,
         address identityRegistry,
+        address bondCall,
         address issuerFund
     );
 }

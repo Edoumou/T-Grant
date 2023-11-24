@@ -9,7 +9,6 @@ contract BondFactory {
 
     address public toposManager;
     address public toposBankContract;
-    address public bondCallContract;
 
     modifier onlyToposManager {
         require(
@@ -20,17 +19,16 @@ contract BondFactory {
     }
 
     constructor(
-        address _toposBankContract,
-        address _bondCallContract
+        address _toposBankContract
     ) {
         toposManager = msg.sender;
         toposBankContract = _toposBankContract;
-        bondCallContract = _bondCallContract;
     }
 
     function DeployBondContract(
         string calldata _dealID,
         address _issuerWalletAddress,
+        address _toposBankContract,
         string calldata _countryOfIssuance
     ) external onlyToposManager {
         require(!isBondContract[_dealID], "CONTRACT_ALREADY_DEPLOYED");
@@ -38,6 +36,7 @@ contract BondFactory {
         BondTopos bond = new BondTopos{salt: bytes32(abi.encodePacked(_dealID))}(
             _dealID,
             _issuerWalletAddress,
+            _toposBankContract,
             _countryOfIssuance
         );
 

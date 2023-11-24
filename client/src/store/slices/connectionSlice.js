@@ -8,10 +8,15 @@ const connectionSlice = createSlice({
         isConnected: false,
         role: '',
         account: '',
+        balance: 0,
         accountChanged: false,
         signedUp: false,
         loggedIn: false,
         username: '',
+        loading: false,
+        tokenSymbols: [],
+        tokenAddresses: [],
+        deals: []
     },
     reducers: {
         setActiveItem(state, action) {
@@ -29,6 +34,9 @@ const connectionSlice = createSlice({
         setAccount(state, action) {
             state.account = action.payload;
         },
+        setBalance(state, action) {
+            state.balance = action.payload;
+        },
         setAccountChanged(state, action) {
             state.accountChanged = action.payload;
         },
@@ -40,6 +48,18 @@ const connectionSlice = createSlice({
         },
         setUsername(state, action) {
             state.username = action.payload;
+        },
+        setLoading(state, action) {
+            state.loading = action.payload;
+        },
+        setTokenSymbols(state, action) {
+            state.tokenSymbols = action.payload;
+        },
+        setTokenAddresses(state, action) {
+            state.tokenAddresses = action.payload;
+        },
+        setDeals(state, action) {
+            state.deals = action.payload;
         }
     }
 });
@@ -50,9 +70,14 @@ export const {
     setIsConnected,
     setRole,
     setAccount,
+    setBalance,
     setAccountChanged,
     setSignedUp,
     setLoggedIn,
-    setUsername
+    setUsername,
+    setLoading,
+    setTokenSymbols,
+    setTokenAddresses,
+    setDeals
 } = connectionSlice.actions;
 export const connectionReducer = connectionSlice.reducer;

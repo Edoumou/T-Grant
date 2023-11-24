@@ -5,6 +5,29 @@ import {
     setRegistrationStatus,
     setRegistrarOwner
 } from "./slices/registrySlice";
+import {
+    bondReducer,
+    setSelectedDealID,
+    setSelectedDealVolume,
+    setSelectedDealDenomination,
+    setSelectedDealTokenSymbol,
+    setSelectedDealIssuerName,
+    setSelectedDealCouponRate,
+    setSelectedDealMaturityDate,
+    setSelectedDealRemainingAmount,
+    setShowInvestForm,
+    setBondSymbols,
+    setIssuersName,
+    setIssuersNameForApprovedDeals,
+    setApprovedDeals,
+    setIssuersForApprovedDelas,
+    setTokenSymbolForApprovedDeals,
+    setDealsToIssue,
+    setDealToIssue,
+    setIssuerNameForDealToIssue,
+    setCountryForDealToIssue,
+    setShowIssueDealForm
+} from "./slices/bondSlice";
 import { 
     connectionReducer,
     setActiveItem,
@@ -12,10 +35,18 @@ import {
     setIsConnected,
     setRole,
     setAccount,
+    setBalance,
     setAccountChanged,
     setSignedUp,
     setLoggedIn,
-    setUsername } from "./slices/connectionSlice";
+    setUsername,
+    setLoading,
+    setTokenSymbols,
+    setTokenAddresses,
+    setDeals
+} from "./slices/connectionSlice";
+import { issuerReducer, setIssuerRequest, setListOfIssuers, setShowForm, setIssuerDealsCurrencySymbols } from "./slices/issuerSlice";
+import { investorReducer, setInvestorRequest, setListOfInvestors } from "./slices/investorSlice";
 
 
 /**
@@ -24,7 +55,10 @@ import {
 const store = configureStore({
     reducer: {
         registry:  registryReducer,
-        connection: connectionReducer
+        connection: connectionReducer,
+        issuer: issuerReducer,
+        investor: investorReducer,
+        bond: bondReducer
     },
     middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
@@ -34,6 +68,26 @@ const store = configureStore({
 
 export {
     store,
+    setSelectedDealID,
+    setSelectedDealVolume,
+    setSelectedDealDenomination,
+    setSelectedDealTokenSymbol,
+    setSelectedDealIssuerName,
+    setSelectedDealCouponRate,
+    setSelectedDealMaturityDate,
+    setSelectedDealRemainingAmount,
+    setShowInvestForm,
+    setBondSymbols,
+    setIssuersName,
+    setIssuersNameForApprovedDeals,
+    setApprovedDeals,
+    setIssuersForApprovedDelas,
+    setTokenSymbolForApprovedDeals,
+    setDealsToIssue,
+    setDealToIssue,
+    setIssuerNameForDealToIssue,
+    setCountryForDealToIssue,
+    setShowIssueDealForm,
     setIsVerified,
     setRegistrationStatus,
     setRegistrarOwner,
@@ -42,8 +96,19 @@ export {
     setIsConnected,
     setRole,
     setAccount,
+    setBalance,
     setAccountChanged,
     setSignedUp,
     setLoggedIn,
-    setUsername
+    setUsername,
+    setLoading,
+    setTokenSymbols,
+    setTokenAddresses,
+    setDeals,
+    setIssuerRequest,
+    setShowForm,
+    setIssuerDealsCurrencySymbols,
+    setInvestorRequest,
+    setListOfIssuers,
+    setListOfInvestors
 }

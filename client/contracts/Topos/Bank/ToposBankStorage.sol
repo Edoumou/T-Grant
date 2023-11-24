@@ -15,6 +15,7 @@ contract ToposBankStorage {
     address public toposManager;
     address public rolesContract;
     address public identityRegistryContract;
+    address public bondCallContract;
     address public issuersFundContract;
 
     uint256 public dealFees;

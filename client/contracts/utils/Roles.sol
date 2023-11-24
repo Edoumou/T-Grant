@@ -4,38 +4,47 @@ pragma solidity ^0.8.0;
 import "../Topos/interfaces/IRoles.sol";
 
 contract Roles is IRoles {
-    mapping(address => string) public roles;
+    mapping(address => string) roles;
 
     address public owner;
     address public toposBankContract;
+    address public issuerContract;
+    address public investorContract;
 
     modifier onlyOwner {
         require(msg.sender == owner, "ONLY_OWNER");
         _;
     }
 
-    modifier onlyToposBank {
+    modifier onlyContracts {
         require(
-            msg.sender == toposBankContract,
-            "Roles: ONLY_TOPOS_BANK"
+            msg.sender == toposBankContract ||
+            msg.sender == issuerContract ||
+            msg.sender == investorContract,
+            "Gov: WRONG_CONTRACT"
         );
         _;
     }
 
     constructor() {
         owner = msg.sender;
+        roles[msg.sender] = "MANAGER";
     }
 
-    function setToposBankContract(
-        address _toposBankContract
+    function setToposContracts(
+        address _toposBankContract,
+        address _issuerContract,
+        address _investorContract
     ) external onlyOwner {
         toposBankContract = _toposBankContract;
+        issuerContract = _issuerContract;
+        investorContract = _investorContract;
     }
 
     function setRole(
         string memory _role,
         address _user
-    ) external onlyToposBank {
+    ) external onlyContracts {
         roles[_user] = _role;
     }
 

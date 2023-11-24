@@ -12,11 +12,13 @@ contract ToposBank is IToposBank, ToposBankStorage {
         address _toposManager,
         address _rolesContract,
         address _identityRegistryContract,
+        address _bondCallContract,
         uint256 _dealFees
     ) {
         toposManager = _toposManager;
         rolesContract = _rolesContract;
         identityRegistryContract = _identityRegistryContract;
+        bondCallContract = _bondCallContract;
         dealFees = _dealFees;
     }
 
@@ -103,6 +105,10 @@ contract ToposBank is IToposBank, ToposBankStorage {
     ) external mustBeApproved(msg.sender) {
         if(deals[_dealID].status != BondData.DealStatus.APPROVED)
             revert BondData.InvalidDealStatus(_dealID);
+
+        if((_amount * deals[_dealID].denomination) % deals[_dealID].denomination != 0)
+            revert BondData.InvalidAmount(_amount);
+
         require(
             _amount != 0 && _amount + totalAmountInvestedForDeal[_dealID] <= deals[_dealID].debtAmount,
             "INVALID_AMOUNT"
@@ -247,29 +253,32 @@ contract ToposBank is IToposBank, ToposBankStorage {
         issuersFundContract = _issuerFundContract;
     }
 
+    function getListOfDeals() external view returns(BondData.Deal[] memory) {
+        return listOfDeals;
+    }
 
-
-
-
-
-
-
+    function getListOfBonds() external view returns(BondData.Bond[] memory) {
+        return bonds;
+    }
 
     function getContracts() external view returns(
         address manager,
         address roles,
         address identityRegistry,
+        address bondCall,
         address issuerFund
     ) {
         (   
             manager,
             roles,
             identityRegistry,
+            bondCall,
             issuerFund
         ) = (
             toposManager,
             rolesContract,
             identityRegistryContract,
+            bondCallContract,
             issuersFundContract
         );
     }
