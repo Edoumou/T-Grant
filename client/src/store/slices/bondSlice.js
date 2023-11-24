@@ -17,7 +17,12 @@ const bondSlice = createSlice({
         issuersNameForApprovedDeals: [],
         approvedDeals: [],
         issuersForApprovedDeals: [],
-        tokenSymbolForApprovedDeals: []
+        tokenSymbolForApprovedDeals: [],
+        dealsToIssue: [],
+        dealToIssue: [],
+        issuerNameForDealToIssue: '',
+        countryForDealToIssue: '',
+        showIssueDealForm: false
     },
     reducers: {
         setSelectedDealID(state, action) {
@@ -64,6 +69,21 @@ const bondSlice = createSlice({
         },
         setTokenSymbolForApprovedDeals(state, action) {
             state.tokenSymbolForApprovedDeals = action.payload;
+        },
+        setDealsToIssue(state, action) {
+            state.dealsToIssue = action.payload;
+        },
+        setDealToIssue(state, action) {
+            state.dealToIssue = action.payload;
+        },
+        setIssuerNameForDealToIssue(state, action) {
+            state.issuerNameForDealToIssue = action.payload;
+        },
+        setCountryForDealToIssue(state, action) {
+            state.countryForDealToIssue = action.payload;
+        },
+        setShowIssueDealForm(state, action) {
+            state.showIssueDealForm = action.payload;
         }
     }
 });
@@ -83,6 +103,11 @@ export const {
     setIssuersNameForApprovedDeals,
     setApprovedDeals,
     setIssuersForApprovedDelas,
-    setTokenSymbolForApprovedDeals
+    setTokenSymbolForApprovedDeals,
+    setDealsToIssue,
+    setDealToIssue,
+    setIssuerNameForDealToIssue,
+    setCountryForDealToIssue,
+    setShowIssueDealForm
 } = bondSlice.actions;
 export const bondReducer = bondSlice.reducer;

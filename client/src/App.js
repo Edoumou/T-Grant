@@ -27,9 +27,10 @@ import SubmitDeal from './components/SubmitDeal';
 import ManagerRequests from './components/ManagerRequests';
 import ManagerBonds from './components/ManagerBonds';
 import ManagerDeals from './components/ManagerDeals';
-import { setApprovedDeals, setBondSymbols, setIssuersForApprovedDelas, setIssuersName, setIssuersNameForApprovedDeals, setSelectedDealID, setShowInvestForm, setTokenSymbolForApprovedDeals } from './store/slices/bondSlice';
+import { setApprovedDeals, setBondSymbols, setDealsToIssue, setIssuersForApprovedDelas, setIssuersName, setIssuersNameForApprovedDeals, setSelectedDealID, setShowInvestForm, setTokenSymbolForApprovedDeals } from './store/slices/bondSlice';
 import InvestorDeals from './components/InvestorDeals';
 import MintTokens from './components/MintTokens';
+import IssueBonds from './components/IssueBonds';
 
 function App() {
   const dispatch = useDispatch();
@@ -70,6 +71,7 @@ function App() {
     let approvedDeals = [];
     let issuersForApprovedDeals = [];
     let tokenSymbolForApprovedDeals = [];
+    let dealsToIssue = [];
     for(let i = 0; i < deals.length; i++) {
       let tokenAddress = deals[i].currency;
       let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
@@ -82,13 +84,22 @@ function App() {
       if(deals[i].status === "2") {
         let issuerForApprovedDeals = issuer;
 
-          approvedDeals.push(deals[i]);
-          issuersForApprovedDeals.push(issuerForApprovedDeals);
-          issuersNameForApprovedDeals.push(issuer.name);
-          tokenSymbolForApprovedDeals.push(tokenSymbol);
+        let dealID = deals[i].dealID;
+        let dealDebtAmount = deals[i].debtAmount;
+        let totalAmountInvested = await toposBank.methods.totalAmountInvestedForDeal(dealID).call({ from: account });
+
+        approvedDeals.push(deals[i]);
+        issuersForApprovedDeals.push(issuerForApprovedDeals);
+        issuersNameForApprovedDeals.push(issuer.name);
+        tokenSymbolForApprovedDeals.push(tokenSymbol);
+
+        if (dealDebtAmount === totalAmountInvested) {
+          dealsToIssue.push(dealID);
+        }
       }
     }
 
+    dispatch(setDealsToIssue(dealsToIssue));
     dispatch(setBondSymbols(bondSymbols));
     dispatch(setIssuersName(issuersNames));
     dispatch(setApprovedDeals(approvedDeals));
@@ -322,6 +333,13 @@ function App() {
                           to='/manager/deals'
                         />
                         <MenuItem
+                          name='issue bonds'
+                          active={connection.activeItem === 'issue bonds'}
+                          onClick={handleItemClick}
+                          as={Link}
+                          to='/manager/issue-bonds'
+                        />
+                        <MenuItem
                           name='bonds'
                           active={connection.activeItem === 'bonds'}
                           onClick={handleItemClick}
@@ -397,6 +415,7 @@ function App() {
                     <>
                       <Route path='/manager/requests' element={<ManagerRequests />} />
                       <Route path='/manager/deals' element={<ManagerDeals />} />
+                      <Route path='/manager/issue-bonds' element={<IssueBonds />} />
                       <Route path='/manager/bonds' element={<ManagerBonds />} />
                     </>
                   : connection.role === "ISSUER" ?

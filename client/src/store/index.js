@@ -21,7 +21,12 @@ import {
     setIssuersNameForApprovedDeals,
     setApprovedDeals,
     setIssuersForApprovedDelas,
-    setTokenSymbolForApprovedDeals
+    setTokenSymbolForApprovedDeals,
+    setDealsToIssue,
+    setDealToIssue,
+    setIssuerNameForDealToIssue,
+    setCountryForDealToIssue,
+    setShowIssueDealForm
 } from "./slices/bondSlice";
 import { 
     connectionReducer,
@@ -78,6 +83,11 @@ export {
     setApprovedDeals,
     setIssuersForApprovedDelas,
     setTokenSymbolForApprovedDeals,
+    setDealsToIssue,
+    setDealToIssue,
+    setIssuerNameForDealToIssue,
+    setCountryForDealToIssue,
+    setShowIssueDealForm,
     setIsVerified,
     setRegistrationStatus,
     setRegistrarOwner,
