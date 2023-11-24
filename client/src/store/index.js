@@ -26,6 +26,7 @@ import {
     setDealToIssue,
     setIssuerNameForDealToIssue,
     setCountryForDealToIssue,
+    setCurrencyForDealToIssue,
     setShowIssueDealForm
 } from "./slices/bondSlice";
 import { 
@@ -87,6 +88,7 @@ export {
     setDealToIssue,
     setIssuerNameForDealToIssue,
     setCountryForDealToIssue,
+    setCurrencyForDealToIssue,
     setShowIssueDealForm,
     setIsVerified,
     setRegistrationStatus,

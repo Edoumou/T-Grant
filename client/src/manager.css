@@ -5,62 +5,62 @@
     padding-left: 50px;
     background-color: rgb(6, 4, 133);
     min-height: 100vh;
-  }
+}
 
-  .manager-head {
-    color: rgb(255, 255, 255);
-    font-size: medium;
-    font-weight:bold;
-  }
+.manager-head {
+  color: rgb(255, 255, 255);
+  font-size: medium;
+  font-weight:bold;
+}
 
-  .manager-body {
-    margin-top: 40px;
-  }
+.manager-body {
+  margin-top: 40px;
+}
 
-  .list-card {
-    padding-bottom: 5%;
-  }
+.list-card {
+  padding-bottom: 5%;
+}
 
-  .list-card-head {
-    text-transform: uppercase;
-    font-weight: bolder;
-    word-spacing: 2px;
-    color: rgb(2, 53, 24);
-  }
+.list-card-head {
+  text-transform: uppercase;
+  font-weight: bolder;
+  word-spacing: 2px;
+  color: rgb(2, 53, 24);
+}
 
-  .list-card-head-no {
-    color:rgb(48, 31, 12)
-  }
+.list-card-head-no {
+  color:rgb(48, 31, 12)
+}
 
-  .list-card .account-check {
-    border-radius: 12px;
-    background-image: linear-gradient(
-      to right bottom,
-      rgba(18, 27, 4, 0.9),
-      rgba(11, 43, 57, 0.9)
-    ),
-    url(./img/head-cover.jpeg);
-    color: white;
-  }
+.list-card .account-check {
+  border-radius: 12px;
+  background-image: linear-gradient(
+    to right bottom,
+    rgba(18, 27, 4, 0.9),
+    rgba(11, 43, 57, 0.9)
+  ),
+  url(./img/head-cover.jpeg);
+  color: white;
+}
 
-  .list-description {
-    color: white;
-    word-spacing: 2px;
-    line-height: 20px;
-  }
+.list-description {
+  color: white;
+  word-spacing: 2px;
+  line-height: 20px;
+}
 
-  .list-card .deal-form-head {
-    word-spacing: 2px;
-    text-transform: uppercase;
-  }
+.list-card .deal-form-head {
+  word-spacing: 2px;
+  text-transform: uppercase;
+}
 
-  .managerDealList {
-    text-align: left;
-    margin-top: 0px;
-    margin-bottom: 25px;
-    color: white;
-    font-size: calc(5px + 1.5vmin);
-    text-transform: uppercase;
+.managerDealList {
+  text-align: left;
+  margin-top: 0px;
+  margin-bottom: 25px;
+  color: white;
+  /*font-size: calc(5px + 1.5vmin);*/
+  text-transform: uppercase;
 }
 
 .center-text {

@@ -8,10 +8,15 @@ import AccountCheck from "./AccountCheck";
 import IssuersList from "./IssuersList";
 import InvestorsList from "./InvestorsList";
 import SelectDealToDeploy from "./SelectDealToDeploy";
+import IssueDealForm from "./IssueDealForm";
 
 function IssueBonds() {
     const connection = useSelector(state => {
         return state.connection;
+    });
+
+    const bonds = useSelector(state => {
+        return state.bond;
     });
 
     return (
@@ -29,15 +34,22 @@ function IssueBonds() {
                 </Grid>
             </div>
             <div className="manager-body">
-            <Grid stackable columns={2}>
+                <Grid stackable columns={2}>
                     <GridRow>
                         <GridColumn width={4}>
                             <SelectDealToDeploy />
-                            <AccountCheck />
                         </GridColumn>
                         <GridColumn width={12}>
-                            <IssuersList />
-                            <InvestorsList />
+                            {
+                                bonds.showIssueDealForm ?
+                                    <IssueDealForm />
+                                :
+                                    <>
+                                    </>
+                            }
+                            <div>
+
+                            </div>
                         </GridColumn>
                     </GridRow>
                 </Grid>

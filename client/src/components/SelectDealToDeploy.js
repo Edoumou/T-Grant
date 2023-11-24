@@ -4,10 +4,11 @@ import 'semantic-ui-css/semantic.min.css';
 import { Button, Card, CardContent, Dropdown } from "semantic-ui-react";
 import BankJSON from "../contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
 import IssuerJSON from "../contracts/artifacts/contracts/Topos/Bank/Issuer.sol/Issuer.json";
+import TokenCallJSON from "../contracts/artifacts/contracts/tests/tokens/TokenCall.sol/TokenCall.json";
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
 import Addresses from "../../src/addresses/addr.json";
-import { setCountryForDealToIssue, setDealToIssue, setIssuerNameForDealToIssue, setProspectusForDealToIssue, setShowIssueDealForm } from "../store";
+import { setCountryForDealToIssue, setCurrencyForDealToIssue, setDealToIssue, setIssuerNameForDealToIssue, setShowIssueDealForm } from "../store";
 
 function SelectDealToDeploy() {
     const [dealID, setDealID] = useState('');
@@ -33,16 +34,21 @@ function SelectDealToDeploy() {
         let { web3, account } = await web3Connection();
         let bank = await getContract(web3, BankJSON, Addresses.ToposBankContract);
         let issuerContract = await getContract(web3, IssuerJSON, Addresses.IssuerContract);
+        let tokenCallContract = await getContract(web3, TokenCallJSON, Addresses.TokenCallContract);
 
         let deal = await bank.methods.deals(dealID).call({ from: account });
 
         let issuerAddress = deal.issuerAddress;
-        let issuer = await issuerContract.methods.issuers(issuerAddress);
+        let issuer = await issuerContract.methods.issuers(issuerAddress).call({ from: account });
+
+        let tokenAddress = deal.currency;
+        let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
 
         dispatch(setDealToIssue(deal));
         dispatch(setIssuerNameForDealToIssue(issuer.name));
         dispatch(setCountryForDealToIssue(issuer.country));
         dispatch(setShowIssueDealForm(true));
+        dispatch(setCurrencyForDealToIssue(tokenSymbol));
     }
 
     return (
