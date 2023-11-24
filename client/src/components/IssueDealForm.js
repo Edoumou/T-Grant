@@ -14,6 +14,7 @@ import { setLoading } from "../store";
 function IssueDealForm() {
     const [loader, setLoader] = useState(true);
     const [showBondForm, setShowBondForm] = useState(true);
+    const [bondContractDeployed, setBondContractDeployed] = useState(false);
     const [open, setOpen] = useState(false);
     const [explorerLink, setExplorerLink] = useState('');
     const [loadingMessage, setLoadingMessage] = useState('Transaction in Process');
@@ -47,6 +48,7 @@ function IssueDealForm() {
             });
 
         setShowBondForm(false);
+        setBondContractDeployed(true);
     }
 
     const goToExplorer = () => {
@@ -121,6 +123,16 @@ function IssueDealForm() {
                             </ModalActions>
                         </Modal>
                     </div>
+                </div>
+            }
+            {
+                bondContractDeployed &&
+                <div className="deploy-bond-contract">
+                    <div className="deploy-bond-head">
+                        Issue Bonds
+                    </div>
+                    <br></br>
+                    <br></br>
                 </div>
             }
         </>
