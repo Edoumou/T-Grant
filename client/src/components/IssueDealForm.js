@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Modal, ModalActions, ModalContent, Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } from "semantic-ui-react";
+import { Button, Grid, GridColumn, GridRow, Input, Modal, ModalActions, ModalContent, Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } from "semantic-ui-react";
 import BankJSON from "../contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
 import BondFactoryJSON from "../contracts/artifacts/contracts/Topos/Factory/BondFactory.sol/BondFactory.json";
 import Formate from "../utils/Formate";
@@ -15,9 +15,13 @@ function IssueDealForm() {
     const [loader, setLoader] = useState(true);
     const [showBondForm, setShowBondForm] = useState(true);
     const [bondContractDeployed, setBondContractDeployed] = useState(false);
+    const [bondISIN, setBondISIN] = useState('');
+    const [bondName, setBondName] = useState('');
+    const [bondSymbol, setBondSymbol] = useState('');
+    const [bondContract, setBondContract] = useState('');
     const [open, setOpen] = useState(false);
     const [explorerLink, setExplorerLink] = useState('');
-    const [loadingMessage, setLoadingMessage] = useState('Transaction in Process');
+    const [loadingMessage, setLoadingMessage] = useState('');
 
     const bonds = useSelector(state => {
         return state.bond;
@@ -47,8 +51,52 @@ function IssueDealForm() {
                 dispatch(setLoading(false));
             });
 
+        let _bondContract = await bankContract.methods.dealBondContracts(bonds.dealToIssue.dealID).call({ from: account });
+
         setShowBondForm(false);
         setBondContractDeployed(true);
+        setBondContract(_bondContract);
+    }
+
+    const issue = async () => {
+        let { web3, account } = await web3Connection();
+        let bankContract = await getContract(web3, BankJSON, Addresses.ToposBankContract);
+
+        setLoadingMessage('');
+
+        let issueDate = Date.now() / 1000;
+
+        let bond = {
+            isin: bondISIN,
+            name: bondName,
+            symbol: bondSymbol,
+            currency: bonds.dealToIssue.currency,
+            denomination: bonds.dealToIssue.denomination,
+            issueVolume: bonds.dealToIssue.debtAmount,
+            couponRate: bonds.dealToIssue.couponRate,
+            couponType: bonds.dealToIssue.couponType,
+            couponFrequency: bonds.dealToIssue.couponFrequency,
+            issueDate: Math.floor(issueDate) + '',
+            maturityDate: bonds.dealToIssue.maturityDate
+        }
+
+        await bankContract.methods.issue(
+            bonds.dealToIssue.dealID,
+            bond,
+            bondContract
+        ).send({ from: account })
+            .on('transactionHash', hash => {
+                setLoadingMessage('Issuing Bonds To Investors! ⌛️');
+                setExplorerLink(`https://topos.blockscout.testnet-1.topos.technology/tx/${hash}`);
+                dispatch(setLoading(true));
+            })
+            .on('receipt', receipt => {
+                setLoadingMessage('Bonds Issued To Investors! ✅');
+                setLoader(false);
+                dispatch(setLoading(false));
+            });
+
+        setBondContractDeployed(false);
     }
 
     const goToExplorer = () => {
@@ -128,11 +176,82 @@ function IssueDealForm() {
             {
                 bondContractDeployed &&
                 <div className="deploy-bond-contract">
-                    <div className="deploy-bond-head">
-                        Issue Bonds
+                    <div className="bond-conctract-deployed">
+                        Bond Contract Deployed at: <strong>{bondContract}</strong>
                     </div>
                     <br></br>
                     <br></br>
+                    <div className="deal-head">
+                            Issue Bonds for {bonds.dealToIssue.dealID}
+                        </div>
+                        <div className="deal-form">
+                            <Grid stackable columns={3}>
+                                <GridRow>
+                                    <GridColumn>
+                                        <Input
+                                            fluid
+                                            size="mini"
+                                            placeholder='Bond ISIN'
+                                            value={bondISIN}
+                                            onChange={e => setBondISIN(e.target.value)}
+                                        />
+                                    </GridColumn>
+                                    <GridColumn>
+                                        <Input
+                                            fluid
+                                            size="mini"
+                                            placeholder='Bond Name'
+                                            value={bondName}
+                                            onChange={e => setBondName(e.target.value)}
+                                        />
+                                    </GridColumn>
+                                    <GridColumn>
+                                        <Input
+                                            fluid
+                                            size="mini"
+                                            placeholder='Bond Symbol'
+                                            value={bondSymbol}
+                                            onChange={e => setBondSymbol(e.target.value)}
+                                        />
+                                    </GridColumn>
+                                </GridRow>
+                            </Grid>
+                        </div>
+                        <br></br>
+                        <br></br>
+                        <div className="deal-button">
+                            <Modal
+                                size="tiny"
+                                open={open}
+                                trigger={
+                                    <Button type='submit' color="vk" fluid size='large' onClick={issue}>
+                                        Submit
+                                    </Button>
+                                }
+                                onClose={() => setOpen(false)}
+                                onOpen={() => setOpen(true)}
+                            >
+                                <Modal.Content>
+                                    <div style={{ textAlign: 'center' }}>
+                                        <h3>{loadingMessage}</h3>
+                                        {
+                                            loader ?
+                                                <Button inverted basic loading size="massive">Loading</Button>
+                                            :
+                                                <p style={{ color: 'green' }}><strong>transaction processed successfully</strong></p>
+                                        }
+                                    </div>
+                                </Modal.Content>
+                                <Modal.Actions>
+                                <Button basic floated="left" onClick={goToExplorer}>
+                                    <strong>Check on Topos Explorer</strong>
+                                </Button>
+                                <Button color='black' onClick={() => setOpen(false)}>
+                                    Go to Dashboard
+                                </Button>
+                                </Modal.Actions>
+                            </Modal>
+                        </div>
                 </div>
             }
         </>

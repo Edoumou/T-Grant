@@ -30,9 +30,10 @@ function IssuerRequest() {
         { key: 1, text: 'GOV', value: 'GOV' },
         { key: 2, text: 'MUNI', value: 'MUNI' },
         { key: 3, text: 'CORP', value: 'CORP' },
-        { key: 4, text: 'CEX', value: 'CEX' },
-        { key: 5, text: 'DEX', value: 'DEX' },
-        { key: 6, text: 'OTHER', value: 'OTHER' },
+        { key: 4, text: 'SME', value: 'SME' },
+        { key: 5, text: 'CEX', value: 'CEX' },
+        { key: 6, text: 'DEX', value: 'DEX' },
+        { key: 7, text: 'OTHER', value: 'OTHER' }
     ];
 
     const request = async () => {
