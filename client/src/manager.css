@@ -59,7 +59,7 @@
   margin-top: 0px;
   margin-bottom: 25px;
   color: white;
-  /*font-size: calc(5px + 1.5vmin);*/
+  font-size: calc(5px + 1.5vmin);
   text-transform: uppercase;
 }
 
@@ -87,4 +87,16 @@
   width: 20%;
   margin-left: 40%;
   margin-right: 40%;
+}
+
+.deploy-bond-contract {
+  margin-top: 50px;
+  text-align: center;
+}
+
+.deploy-bond-head {
+  color: white;
+  word-spacing: 2px;
+  line-height: 20px;
+  font-size: calc(5px + 2vmin);
 }
