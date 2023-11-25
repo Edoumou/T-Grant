@@ -27,7 +27,7 @@ import SubmitDeal from './components/SubmitDeal';
 import ManagerRequests from './components/ManagerRequests';
 import ManagerBonds from './components/ManagerBonds';
 import ManagerDeals from './components/ManagerDeals';
-import { setApprovedDeals, setBondSymbols, setDealsToIssue, setIssuersForApprovedDelas, setIssuersName, setIssuersNameForApprovedDeals, setSelectedDealID, setShowInvestForm, setTokenSymbolForApprovedDeals } from './store/slices/bondSlice';
+import { setApprovedDeals, setBondSymbols, setBonds, setBondsCurrency, setBondsDealIDs, setBondsIssuers, setDealsToIssue, setIssuersForApprovedDelas, setIssuersName, setIssuersNameForApprovedDeals, setSelectedDealID, setShowInvestForm, setTokenSymbolForApprovedDeals } from './store/slices/bondSlice';
 import InvestorDeals from './components/InvestorDeals';
 import MintTokens from './components/MintTokens';
 import IssueBonds from './components/IssueBonds';
@@ -63,6 +63,8 @@ function App() {
     let tokenAddresses = await tokenCallContract.methods.getTokenAddresses().call({ from: account });
     let tokenSymbols = await tokenCallContract.methods.getTokenSymbols().call({ from: account });
     let deals = await toposBank.methods.getListOfDeals().call({ from: account });
+    let bonds = await toposBank.methods.getListOfBonds().call({ from: account });
+    let bondsDealIDs = await toposBank.methods.getListOfBondsDealIDs().call({ from: account });
 
     //=== store bonds currency symbols
     let bondSymbols = [];
@@ -99,6 +101,22 @@ function App() {
       }
     }
 
+    //=== Bonds
+    let bondsIssuers = [];
+    let bondsCurrency = [];
+    for(let i = 0; i < bondsDealIDs.length; i++) {
+      let deal = await toposBank.methods.deals(bondsDealIDs[i]).call({ from: account });
+      let issuerAddress = deal.issuerAddress;
+      let currency = deal.currency;
+
+      let issuer = await issuerContract.methods.issuers(issuerAddress).call({ from: account });
+
+      let tokenSymbol = await tokenCallContract.methods.symbol(currency).call({ from: account });
+
+      bondsIssuers.push(issuer);
+      bondsCurrency.push(tokenSymbol);
+    }
+
     dispatch(setDealsToIssue(dealsToIssue));
     dispatch(setBondSymbols(bondSymbols));
     dispatch(setIssuersName(issuersNames));
@@ -106,6 +124,10 @@ function App() {
     dispatch(setIssuersForApprovedDelas(issuersForApprovedDeals));
     dispatch(setIssuersNameForApprovedDeals(issuersNameForApprovedDeals));
     dispatch(setTokenSymbolForApprovedDeals(tokenSymbolForApprovedDeals));
+    dispatch(setBonds(bonds));
+    dispatch(setBondsDealIDs(bondsDealIDs));
+    dispatch(setBondsIssuers(bondsIssuers));
+    dispatch(setBondsCurrency(bondsCurrency));
 
 
     //=== issuers filtering
@@ -124,7 +146,6 @@ function App() {
 
       dispatch(setIssuerDealsCurrencySymbols(issuerDealsCurrencySymbols));
     }
-
     
     let listOfIssuers = await issuerContract.methods.getIssuers().call({ from: account });
     let listOfInvestors = await investorContract.methods.getInvestors().call({ from: account });
@@ -168,6 +189,8 @@ function App() {
         let tokenAddresses = await tokenCallContract.methods.getTokenAddresses().call({ from: account });
         let tokenSymbols = await tokenCallContract.methods.getTokenSymbols().call({ from: account });
         let deals = await toposBank.methods.getListOfDeals().call({ from: account });
+        let bonds = await toposBank.methods.getListOfBonds().call({ from: account });
+        let bondsDealIDs = await toposBank.methods.getListOfBondsDealIDs().call({ from: account });
 
         //=== store bonds currency symbols
         let bondSymbols = [];
@@ -195,12 +218,32 @@ function App() {
           }
         }
 
+        //=== Bonds
+        let bondsIssuers = [];
+        let bondsCurrency = [];
+        for(let i = 0; i < bondsDealIDs.length; i++) {
+          let deal = await toposBank.methods.deals(bondsDealIDs[i]).call({ from: account });
+          let issuerAddress = deal.issuerAddress;
+          let currency = deal.currency;
+
+          let issuer = await issuerContract.methods.issuers(issuerAddress).call({ from: account });
+
+          let tokenSymbol = await tokenCallContract.methods.symbol(currency).call({ from: account });
+
+          bondsIssuers.push(issuer);
+          bondsCurrency.push(tokenSymbol);
+        }
+
         dispatch(setBondSymbols(bondSymbols));
         dispatch(setIssuersName(issuersNames));
         dispatch(setApprovedDeals(approvedDeals));
         dispatch(setIssuersForApprovedDelas(issuersForApprovedDeals));
         dispatch(setIssuersNameForApprovedDeals(issuersNameForApprovedDeals));
         dispatch(setTokenSymbolForApprovedDeals(tokenSymbolForApprovedDeals));
+        dispatch(setBonds(bonds));
+        dispatch(setBondsDealIDs(bondsDealIDs));
+        dispatch(setBondsIssuers(bondsIssuers));
+        dispatch(setBondsCurrency(bondsCurrency));
 
         //=== issuers filtering
         if (role === "ISSUER") {

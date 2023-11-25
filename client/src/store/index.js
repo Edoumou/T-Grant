@@ -27,7 +27,11 @@ import {
     setIssuerNameForDealToIssue,
     setCountryForDealToIssue,
     setCurrencyForDealToIssue,
-    setShowIssueDealForm
+    setShowIssueDealForm,
+    setBonds,
+    setBondsDealIDs,
+    setBondsIssuers,
+    setBondsCurrency
 } from "./slices/bondSlice";
 import { 
     connectionReducer,
@@ -90,6 +94,10 @@ export {
     setCountryForDealToIssue,
     setCurrencyForDealToIssue,
     setShowIssueDealForm,
+    setBonds,
+    setBondsDealIDs,
+    setBondsIssuers,
+    setBondsCurrency,
     setIsVerified,
     setRegistrationStatus,
     setRegistrarOwner,

@@ -14,6 +14,10 @@ const bondSlice = createSlice({
         showInvestForm: false,
         bondSymbols: [],
         issuersName: [],
+        bonds: [],
+        bondsDealIDs: [],
+        bondsIssuers: [],
+        bondsCurrency: [],
         issuersNameForApprovedDeals: [],
         approvedDeals: [],
         issuersForApprovedDeals: [],
@@ -89,6 +93,18 @@ const bondSlice = createSlice({
         },
         setShowIssueDealForm(state, action) {
             state.showIssueDealForm = action.payload;
+        },
+        setBonds(state, action) {
+            state.bonds = action.payload;
+        },
+        setBondsDealIDs(state, action) {
+            state.bondsDealIDs = action.payload;
+        },
+        setBondsIssuers(state, action) {
+            state.bondsIssuers = action.payload;
+        },
+        setBondsCurrency(state, action) {
+            state.bondsCurrency = action.payload;
         }
     }
 });
@@ -114,6 +130,10 @@ export const {
     setIssuerNameForDealToIssue,
     setCountryForDealToIssue,
     setCurrencyForDealToIssue,
-    setShowIssueDealForm
+    setShowIssueDealForm,
+    setBonds,
+    setBondsDealIDs,
+    setBondsIssuers,
+    setBondsCurrency
 } = bondSlice.actions;
 export const bondReducer = bondSlice.reducer;

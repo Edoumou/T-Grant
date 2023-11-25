@@ -167,6 +167,7 @@ contract ToposBank is IToposBank, ToposBankStorage {
         deals[_dealID].status != BondData.DealStatus.ISSUED;
         listOfDeals[deals[_dealID].index].status = BondData.DealStatus.ISSUED;
         issuerDeals[deals[_dealID].issuerAddress].push(deals[_dealID]);
+        bondsDealIDs.push(_dealID);
 
         IBonds(_bondContract).issue(_bond);
 
@@ -259,6 +260,10 @@ contract ToposBank is IToposBank, ToposBankStorage {
 
     function getListOfBonds() external view returns(BondData.Bond[] memory) {
         return bonds;
+    }
+
+    function getListOfBondsDealIDs() external view returns(string[] memory) {
+        return bondsDealIDs;
     }
 
     function getContracts() external view returns(

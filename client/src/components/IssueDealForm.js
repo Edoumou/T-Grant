@@ -9,7 +9,7 @@ import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
 import "../users.css";
 import "../manager.css";
-import { setLoading } from "../store";
+import { setLoading, setShowIssueDealForm } from "../store";
 
 function IssueDealForm() {
     const [loader, setLoader] = useState(true);
@@ -80,6 +80,9 @@ function IssueDealForm() {
             maturityDate: bonds.dealToIssue.maturityDate
         }
 
+        setLoader(true);
+        dispatch(setLoading(true));
+
         await bankContract.methods.issue(
             bonds.dealToIssue.dealID,
             bond,
@@ -97,6 +100,8 @@ function IssueDealForm() {
             });
 
         setBondContractDeployed(false);
+        setShowBondForm(false);
+        dispatch(setShowIssueDealForm(false));
     }
 
     const goToExplorer = () => {
@@ -106,72 +111,73 @@ function IssueDealForm() {
 
     return (
         <>
-            <div>
-                <Table padded>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHeaderCell textAlign="left">Deal ID</TableHeaderCell>
-                            <TableHeaderCell textAlign="left">Issuer</TableHeaderCell>
-                            <TableHeaderCell textAlign="left">Country</TableHeaderCell>
-                            <TableHeaderCell textAlign="right">Volume</TableHeaderCell>
-                            <TableHeaderCell textAlign="center">Coupon Rate</TableHeaderCell>
-                            <TableHeaderCell textAlign="right">Maturity Date</TableHeaderCell>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        <TableRow>
-                            <TableCell>{bonds.dealToIssue.dealID}</TableCell>
-                            <TableCell warning>{bonds.issuerNameForDealToIssue}</TableCell>
-                            <TableCell>{bonds.countryForDealToIssue}</TableCell>
-                            <TableCell positive textAlign="right">{Formate(bonds.dealToIssue.debtAmount)} {bonds.currencyForDealToIssue}</TableCell>
-                            <TableCell warning textAlign="center">{bonds.dealToIssue.couponRate / 100}%</TableCell>
-                            <TableCell textAlign="right">{(new Date(bonds.dealToIssue.maturityDate * 1000)).toLocaleDateString()}</TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
-            </div>
-            {
-                showBondForm &&
-                <div className="deploy-bond-contract">
-                    <div className="deploy-bond-head">
-                        Deploy the Bond Contract for {bonds.dealToIssue.dealID}
+            { showBondForm &&
+                <>
+                    <div>
+                        <Table padded>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHeaderCell textAlign="left">Deal ID</TableHeaderCell>
+                                    <TableHeaderCell textAlign="left">Issuer</TableHeaderCell>
+                                    <TableHeaderCell textAlign="left">Country</TableHeaderCell>
+                                    <TableHeaderCell textAlign="right">Volume</TableHeaderCell>
+                                    <TableHeaderCell textAlign="center">Coupon Rate</TableHeaderCell>
+                                    <TableHeaderCell textAlign="right">Maturity Date</TableHeaderCell>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                <TableRow>
+                                    <TableCell>{bonds.dealToIssue.dealID}</TableCell>
+                                    <TableCell warning>{bonds.issuerNameForDealToIssue}</TableCell>
+                                    <TableCell>{bonds.countryForDealToIssue}</TableCell>
+                                    <TableCell positive textAlign="right">{Formate(bonds.dealToIssue.debtAmount)} {bonds.currencyForDealToIssue}</TableCell>
+                                    <TableCell warning textAlign="center">{bonds.dealToIssue.couponRate / 100}%</TableCell>
+                                    <TableCell textAlign="right">{(new Date(bonds.dealToIssue.maturityDate * 1000)).toLocaleDateString()}</TableCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
                     </div>
-                    <br></br>
-                    <br></br>
-                    <div className="deal-button">
-                        <Modal
-                            size="tiny"
-                            open={open}
-                            trigger={
-                                <Button type='submit' color="vk" fluid size='large' onClick={deploy}>
-                                    Deploy
+                    <div className="deploy-bond-contract">
+                        <div className="deploy-bond-head">
+                            Deploy the Bond Contract for {bonds.dealToIssue.dealID}
+                        </div>
+                        <br></br>
+                        <br></br>
+                        <div className="deal-button">
+                            <Modal
+                                size="tiny"
+                                open={open}
+                                trigger={
+                                    <Button type='submit' color="vk" fluid size='large' onClick={deploy}>
+                                        Deploy
+                                    </Button>
+                                }
+                                onClose={() => setOpen(false)}
+                                onOpen={() => setOpen(true)}
+                            >
+                                <ModalContent>
+                                    <div style={{ textAlign: 'center' }}>
+                                        <h3>{loadingMessage}</h3>
+                                        {
+                                            loader ?
+                                                <Button inverted basic loading size="massive">Loading</Button>
+                                            :
+                                                <p style={{ color: 'green' }}><strong>transaction processed successfully</strong></p>
+                                        }
+                                    </div>
+                                </ModalContent>
+                                <ModalActions>
+                                <Button basic floated="left" onClick={goToExplorer}>
+                                    <strong>Check on Topos Explorer</strong>
                                 </Button>
-                            }
-                            onClose={() => setOpen(false)}
-                            onOpen={() => setOpen(true)}
-                        >
-                            <ModalContent>
-                                <div style={{ textAlign: 'center' }}>
-                                    <h3>{loadingMessage}</h3>
-                                    {
-                                        loader ?
-                                            <Button inverted basic loading size="massive">Loading</Button>
-                                        :
-                                            <p style={{ color: 'green' }}><strong>transaction processed successfully</strong></p>
-                                    }
-                                </div>
-                            </ModalContent>
-                            <ModalActions>
-                            <Button basic floated="left" onClick={goToExplorer}>
-                                <strong>Check on Topos Explorer</strong>
-                            </Button>
-                            <Button color='black' onClick={() => setOpen(false)}>
-                                Go to Dashboard
-                            </Button>
-                            </ModalActions>
-                        </Modal>
+                                <Button color='black' onClick={() => setOpen(false)}>
+                                    Go to Dashboard
+                                </Button>
+                                </ModalActions>
+                            </Modal>
+                        </div>
                     </div>
-                </div>
+                </>
             }
             {
                 bondContractDeployed &&
@@ -181,7 +187,7 @@ function IssueDealForm() {
                     </div>
                     <br></br>
                     <br></br>
-                    <div className="deal-head">
+                    <div className="manager-head">
                             Issue Bonds for {bonds.dealToIssue.dealID}
                         </div>
                         <div className="deal-form">

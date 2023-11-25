@@ -9,6 +9,7 @@ import IssuersList from "./IssuersList";
 import InvestorsList from "./InvestorsList";
 import SelectDealToDeploy from "./SelectDealToDeploy";
 import IssueDealForm from "./IssueDealForm";
+import ManagerListOfBonds from "./ManagerListOfBonds";
 
 function IssueBonds() {
     const connection = useSelector(state => {
@@ -48,7 +49,7 @@ function IssueBonds() {
                                     </>
                             }
                             <div>
-
+                                <ManagerListOfBonds />
                             </div>
                         </GridColumn>
                     </GridRow>
