@@ -41,8 +41,8 @@ function ListOfApprovedDeals() {
                 <TableCell textAlign="left"><a href={deal.prospectusURI} target="_blank"><strong>{deal.dealID.toLowerCase()}</strong></a></TableCell>
                 <TableCell textAlign="center">{bonds.issuersForApprovedDeals[index].creditRating}</TableCell>
                 <TableCell textAlign="center">{Formate(bonds.issuersForApprovedDeals[index].carbonCredit)}</TableCell>
-                <TableCell positive textAlign="right">{Formate(deal.debtAmount)} {bonds.bondSymbols[index]}</TableCell>
-                <TableCell positive textAlign="right">{Formate(deal.denomination)} {bonds.bondSymbols[index]}</TableCell>
+                <TableCell positive textAlign="right">{Formate(deal.debtAmount)} {bonds.tokenSymbolForApprovedDeals[index]}</TableCell>
+                <TableCell positive textAlign="right">{Formate(deal.denomination)} {bonds.tokenSymbolForApprovedDeals[index]}</TableCell>
                 <TableCell warning textAlign="center">{deal.couponRate / 100}%</TableCell>
                 <TableCell textAlign="center">{deal.couponFrequency}</TableCell>
                 <TableCell warning textAlign="center">{couponType[index]}</TableCell>
@@ -57,7 +57,7 @@ function ListOfApprovedDeals() {
                                     deal.dealID,
                                     deal.debtAmount,
                                     deal.denomination,
-                                    bonds.bondSymbols[index],
+                                    bonds.tokenSymbolForApprovedDeals[index],
                                     bonds.issuersNameForApprovedDeals[index],
                                     deal.couponRate,
                                     deal.maturityDate

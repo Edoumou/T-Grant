@@ -48,24 +48,19 @@ function IssuerListOfDeals() {
         }
     });
 
-    const issuerDealsReversed = issuerDeals.reverse();
-    const symbolsReversed = symbols.reverse();
-    const statusReversed = status.reverse();
-    const couponTypeReversed = couponType.reverse();
-
-    const renderedDeals = issuerDealsReversed.map((deal, index) => {
+    const renderedDeals = issuerDeals.map((deal, index) => {
         return (
             <TableRow key={index}>
                 <TableCell textAlign="center">{deal.dealID}</TableCell>
                 <TableCell textAlign="left"><a href={deal.prospectusURI} target="_blank"><strong>{deal.dealID.toLowerCase()}</strong></a></TableCell>
                 <TableCell textAlign="left">{FormateAddress(deal.issuerAddress)}</TableCell>
-                <TableCell positive textAlign="right">{Formate(deal.debtAmount)} {symbolsReversed[index]}</TableCell>
-                <TableCell positive textAlign="right">{Formate(deal.denomination)} {symbolsReversed[index]}</TableCell>
+                <TableCell positive textAlign="right">{Formate(deal.debtAmount)} {symbols[index]}</TableCell>
+                <TableCell positive textAlign="right">{Formate(deal.denomination)} {symbols[index]}</TableCell>
                 <TableCell warning textAlign="center">{deal.couponRate / 100}%</TableCell>
                 <TableCell textAlign="center">{deal.couponFrequency}</TableCell>
-                <TableCell warning textAlign="center">{couponTypeReversed[index]}</TableCell>
+                <TableCell warning textAlign="center">{couponType[index]}</TableCell>
                 <TableCell positive textAlign="right">{(new Date(deal.maturityDate * 1000)).toLocaleDateString()}</TableCell>
-                <TableCell textAlign="center">{statusReversed[index]}</TableCell>
+                <TableCell textAlign="center">{symbols[index]}</TableCell>
             </TableRow>
         );
     });

@@ -11,7 +11,7 @@ import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
 import "../users.css";
 import "../manager.css";
-import { setBonds, setBondsCurrency, setBondsDealIDs, setBondsIssuers, setLoading, setShowIssueDealForm } from "../store";
+import { setApprovedDeals, setBonds, setBondsCurrency, setBondsDealIDs, setBondsIssuers, setIssuersForApprovedDelas, setIssuersNameForApprovedDeals, setLoading, setShowIssueDealForm, setTokenSymbolForApprovedDeals } from "../store";
 
 function IssueDealForm() {
     const [loader, setLoader] = useState(true);
@@ -101,8 +101,39 @@ function IssueDealForm() {
                 dispatch(setLoading(false));
             });
 
+        let deals = await bankContract.methods.getListOfDeals().call({ from: account });
         let newBonds = await bankContract.methods.getListOfBonds().call({ from: account });
         let bondsDealIDs = await bankContract.methods.getListOfBondsDealIDs().call({ from: account });
+
+        //=== store bonds currency symbols
+        let approvedDeals = [];
+        let issuersForApprovedDeals = [];
+        let issuersNameForApprovedDeals = [];
+        let tokenSymbolForApprovedDeals = [];
+        let dealsToIssue = [];
+        for(let i = 0; i < deals.length; i++) {
+            let tokenAddress = deals[i].currency;
+            let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
+
+            let issuer = await issuerContract.methods.issuers(deals[i].issuerAddress).call({ from: account });
+
+            if(deals[i].status === "2") {
+                let issuerForApprovedDeals = issuer;
+
+                let dealID = deals[i].dealID;
+                let dealDebtAmount = deals[i].debtAmount;
+                let totalAmountInvested = await bankContract.methods.totalAmountInvestedForDeal(dealID).call({ from: account });
+
+                approvedDeals.push(deals[i]);
+                issuersForApprovedDeals.push(issuerForApprovedDeals);
+                issuersNameForApprovedDeals.push(issuer.name);
+                tokenSymbolForApprovedDeals.push(tokenSymbol);
+
+                if (dealDebtAmount === totalAmountInvested) {
+                    dealsToIssue.push(dealID);
+                }
+            }
+        }
 
         //============= HERE HERE
         let bondsIssuers = [];
@@ -120,14 +151,18 @@ function IssueDealForm() {
           bondsCurrency.push(tokenSymbol);
         }
 
-        setBondContractDeployed(false);
-        setShowBondForm(false);
-        dispatch(setShowIssueDealForm(false));
-
+        dispatch(setApprovedDeals(approvedDeals));
+        dispatch(setIssuersForApprovedDelas(issuersForApprovedDeals));
+        dispatch(setIssuersNameForApprovedDeals(issuersNameForApprovedDeals));
+        dispatch(setTokenSymbolForApprovedDeals(tokenSymbolForApprovedDeals));
         dispatch(setBonds(newBonds));
         dispatch(setBondsDealIDs(bondsDealIDs));
         dispatch(setBondsIssuers(bondsIssuers));
         dispatch(setBondsCurrency(bondsCurrency));
+
+        setBondContractDeployed(false);
+        setShowBondForm(false);
+        dispatch(setShowIssueDealForm(false));
     }
 
     const goToExplorer = () => {

@@ -11,6 +11,8 @@ import Formate from "../utils/Formate";
 import FormateAddress from "../utils/FormateAddress";
 import Addresses from "../../src/addresses/addr.json";
 import { setLoading } from "../store";
+import "../users.css";
+import "../manager.css";
 
 function MintTokens() {
     const [tokenAddress, setTokenAddress] = useState('');

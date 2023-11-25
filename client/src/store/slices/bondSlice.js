@@ -27,7 +27,6 @@ const bondSlice = createSlice({
         issuerNameForDealToIssue: '',
         countryForDealToIssue: '',
         currencyForDealToIssue: '',
-        currencyForDealToIssue: '',
         showIssueDealForm: false
     },
     reducers: {
