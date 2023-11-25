@@ -42,11 +42,7 @@ function IssueBonds() {
                         </GridColumn>
                         <GridColumn width={12}>
                             {
-                                bonds.showIssueDealForm ?
-                                    <IssueDealForm />
-                                :
-                                    <>
-                                    </>
+                                bonds.showIssueDealForm && <IssueDealForm />
                             }
                             <div>
                                 <ManagerListOfBonds />

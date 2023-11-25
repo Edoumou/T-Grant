@@ -26,27 +26,37 @@ function ManagerListOfBonds() {
     });
 
     return (
-        <div className="tab-scroll">
-            <Table padded>
-                <TableHeader className="header-sticky">
-                    <TableRow>
-                        <TableHeaderCell textAlign="left">Deal ID</TableHeaderCell>
-                        <TableHeaderCell textAlign="left">Issuer</TableHeaderCell>
-                        <TableHeaderCell textAlign="left">ISIN</TableHeaderCell>
-                        <TableHeaderCell textAlign="left">Name</TableHeaderCell>
-                        <TableHeaderCell textAlign="left">Symbol</TableHeaderCell>
-                        <TableHeaderCell textAlign="right">Volume</TableHeaderCell>
-                        <TableHeaderCell textAlign="right">Denomination</TableHeaderCell>
-                        <TableHeaderCell textAlign="center">Coupon</TableHeaderCell>
-                        <TableHeaderCell textAlign="center">Frequency</TableHeaderCell>
-                        <TableHeaderCell textAlign="right">Maturity</TableHeaderCell>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {renderedBonds}
-                </TableBody>
-            </Table>
-        </div>
+        <>
+            {
+                bonds.bonds.length > 0 &&
+                <>
+                    <div className="managerDealList">
+                        <strong>List of Bonds Issued</strong>
+                    </div>
+                    <div className="tab-scroll">
+                        <Table padded>
+                            <TableHeader className="header-sticky">
+                                <TableRow>
+                                    <TableHeaderCell textAlign="left">Deal ID</TableHeaderCell>
+                                    <TableHeaderCell textAlign="left">Issuer</TableHeaderCell>
+                                    <TableHeaderCell textAlign="left">ISIN</TableHeaderCell>
+                                    <TableHeaderCell textAlign="left">Name</TableHeaderCell>
+                                    <TableHeaderCell textAlign="left">Symbol</TableHeaderCell>
+                                    <TableHeaderCell textAlign="right">Volume</TableHeaderCell>
+                                    <TableHeaderCell textAlign="right">Denomination</TableHeaderCell>
+                                    <TableHeaderCell textAlign="center">Coupon</TableHeaderCell>
+                                    <TableHeaderCell textAlign="center">Frequency</TableHeaderCell>
+                                    <TableHeaderCell textAlign="right">Maturity</TableHeaderCell>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {renderedBonds}
+                            </TableBody>
+                        </Table>
+                    </div>
+                </>
+            }
+        </>
     )
 }
 

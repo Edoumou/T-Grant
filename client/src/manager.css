@@ -90,6 +90,7 @@
 }
 
 .deploy-bond-contract {
+  color: white;
   margin-top: 50px;
   text-align: center;
 }
@@ -102,6 +103,18 @@
 }
 
 .bond-conctract-deployed {
+  color: white;
   margin-top: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
+}
+
+.issue-bonds-head {
+  margin-bottom: 3px;
+}
+
+.bond-form {
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-bottom: 10px;
+  font-size: calc(2px + 2vmin);
 }

@@ -57,6 +57,10 @@ function DealForm() {
         let { web3, account } = await web3Connection();
         let contract = await getContract(web3, BankJSON, Addresses.ToposBankContract);
         let tokenCallContract = await getContract(web3, TokenCallJSON, Addresses.TokenCallContract);
+
+        setLoadingMessage('');
+        setLoader(true);
+        dispatch(setLoading(true));
         
         let deals = await contract.methods.getListOfDeals().call({ from: account });
         

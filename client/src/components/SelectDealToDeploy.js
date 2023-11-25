@@ -47,8 +47,8 @@ function SelectDealToDeploy() {
         dispatch(setDealToIssue(deal));
         dispatch(setIssuerNameForDealToIssue(issuer.name));
         dispatch(setCountryForDealToIssue(issuer.country));
-        dispatch(setShowIssueDealForm(true));
         dispatch(setCurrencyForDealToIssue(tokenSymbol));
+        dispatch(setShowIssueDealForm(true));
     }
 
     return (
