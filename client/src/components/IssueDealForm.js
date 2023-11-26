@@ -246,75 +246,75 @@ function IssueDealForm() {
                     <br></br>
                     <div className="issue-bonds-head">
                             Issue Bonds for {bonds.dealToIssue.dealID}
-                        </div>
-                        <div className="deal-form">
-                            <Grid stackable columns={3}>
-                                <GridRow>
-                                    <GridColumn>
-                                        <Input
-                                            fluid
-                                            size="mini"
-                                            placeholder='Bond ISIN'
-                                            value={bondISIN}
-                                            onChange={e => setBondISIN(e.target.value)}
-                                        />
-                                    </GridColumn>
-                                    <GridColumn>
-                                        <Input
-                                            fluid
-                                            size="mini"
-                                            placeholder='Bond Name'
-                                            value={bondName}
-                                            onChange={e => setBondName(e.target.value)}
-                                        />
-                                    </GridColumn>
-                                    <GridColumn>
-                                        <Input
-                                            fluid
-                                            size="mini"
-                                            placeholder='Bond Symbol'
-                                            value={bondSymbol}
-                                            onChange={e => setBondSymbol(e.target.value)}
-                                        />
-                                    </GridColumn>
-                                </GridRow>
-                            </Grid>
-                        </div>
-                        <br></br>
-                        <br></br>
-                        <div className="deal-button">
-                            <Modal
-                                size="tiny"
-                                open={open}
-                                trigger={
-                                    <Button type='submit' color="vk" fluid size='large' onClick={issue}>
-                                        Submit
-                                    </Button>
-                                }
-                                onClose={() => setOpen(false)}
-                                onOpen={() => setOpen(true)}
-                            >
-                                <Modal.Content>
-                                    <div style={{ textAlign: 'center' }}>
-                                        <h3>{loadingMessage}</h3>
-                                        {
-                                            loader ?
-                                                <Button inverted basic loading size="massive">Loading</Button>
-                                            :
-                                                <p style={{ color: 'green' }}><strong>transaction processed successfully</strong></p>
-                                        }
-                                    </div>
-                                </Modal.Content>
-                                <Modal.Actions>
-                                <Button basic floated="left" onClick={goToExplorer}>
-                                    <strong>Check on Topos Explorer</strong>
+                    </div>
+                    <div className="deal-form">
+                        <Grid stackable columns={3}>
+                            <GridRow>
+                                <GridColumn>
+                                    <Input
+                                        fluid
+                                        size="mini"
+                                        placeholder='Bond ISIN'
+                                        value={bondISIN}
+                                        onChange={e => setBondISIN(e.target.value)}
+                                    />
+                                </GridColumn>
+                                <GridColumn>
+                                    <Input
+                                        fluid
+                                        size="mini"
+                                        placeholder='Bond Name'
+                                        value={bondName}
+                                        onChange={e => setBondName(e.target.value)}
+                                    />
+                                </GridColumn>
+                                <GridColumn>
+                                    <Input
+                                        fluid
+                                        size="mini"
+                                        placeholder='Bond Symbol'
+                                        value={bondSymbol}
+                                        onChange={e => setBondSymbol(e.target.value)}
+                                    />
+                                </GridColumn>
+                            </GridRow>
+                        </Grid>
+                    </div>
+                    <br></br>
+                    <br></br>
+                    <div className="deal-button">
+                        <Modal
+                            size="tiny"
+                            open={open}
+                            trigger={
+                                <Button type='submit' color="vk" fluid size='large' onClick={issue}>
+                                    Submit
                                 </Button>
-                                <Button color='black' onClick={() => setOpen(false)}>
-                                    Go to Dashboard
-                                </Button>
-                                </Modal.Actions>
-                            </Modal>
-                        </div>
+                            }
+                            onClose={() => setOpen(false)}
+                            onOpen={() => setOpen(true)}
+                        >
+                            <Modal.Content>
+                                <div style={{ textAlign: 'center' }}>
+                                    <h3>{loadingMessage}</h3>
+                                    {
+                                        loader ?
+                                            <Button inverted basic loading size="massive">Loading</Button>
+                                        :
+                                            <p style={{ color: 'green' }}><strong>transaction processed successfully</strong></p>
+                                    }
+                                </div>
+                            </Modal.Content>
+                            <Modal.Actions>
+                            <Button basic floated="left" onClick={goToExplorer}>
+                                <strong>Check on Topos Explorer</strong>
+                            </Button>
+                            <Button color='black' onClick={() => setOpen(false)}>
+                                Go to Dashboard
+                            </Button>
+                            </Modal.Actions>
+                        </Modal>
+                    </div>
                 </div>
             }
         </>

@@ -12,7 +12,6 @@ function ManagerListOfBonds() {
         return (
             <TableRow key={index}>
                 <TableCell textAlign="left">{bonds.bondsDealIDs[index]}</TableCell>
-                <TableCell textAlign="left">{bonds.bondsIssuers[index].name}</TableCell>
                 <TableCell textAlign="left">{bond.isin}</TableCell>
                 <TableCell textAlign="left">{bond.name}</TableCell>
                 <TableCell textAlign="left">{bond.symbol}</TableCell>
@@ -38,7 +37,6 @@ function ManagerListOfBonds() {
                             <TableHeader className="header-sticky">
                                 <TableRow>
                                     <TableHeaderCell textAlign="left">Deal ID</TableHeaderCell>
-                                    <TableHeaderCell textAlign="left">Issuer</TableHeaderCell>
                                     <TableHeaderCell textAlign="left">ISIN</TableHeaderCell>
                                     <TableHeaderCell textAlign="left">Name</TableHeaderCell>
                                     <TableHeaderCell textAlign="left">Symbol</TableHeaderCell>
