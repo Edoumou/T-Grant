@@ -5,7 +5,6 @@ import { Table, TableRow, TableHeader, TableHeaderCell, TableBody, TableCell, Bu
 import BankJSON from "../contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
-import FormateAddress from "../utils/FormateAddress";
 import Addresses from "../../src/addresses/addr.json";
 import "../users.css";
 import "../manager.css";
@@ -38,7 +37,7 @@ function ListOfApprovedDeals() {
             <TableRow key={index}>
                 <TableCell textAlign="left">{deal.dealID}</TableCell>
                 <TableCell textAlign="left">{bonds.issuersNameForApprovedDeals[index]}</TableCell>
-                <TableCell textAlign="left"><a href={deal.prospectusURI} target="_blank"><strong>{deal.dealID.toLowerCase()}</strong></a></TableCell>
+                <TableCell textAlign="left"><a href={deal.prospectusURI} target="_blank" rel="noopener noreferrer"><strong>{deal.dealID.toLowerCase()}</strong></a></TableCell>
                 <TableCell textAlign="center">{bonds.issuersForApprovedDeals[index].creditRating}</TableCell>
                 <TableCell textAlign="center">{Formate(bonds.issuersForApprovedDeals[index].carbonCredit)}</TableCell>
                 <TableCell positive textAlign="right">{Formate(deal.debtAmount)} {bonds.tokenSymbolForApprovedDeals[index]}</TableCell>

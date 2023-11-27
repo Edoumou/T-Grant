@@ -41,6 +41,7 @@ abstract contract BondData {
         address walletAddress;
         StakeHolderStatus status;
         uint256 index;
+        string logoURI;
     }
 
     struct Investor {

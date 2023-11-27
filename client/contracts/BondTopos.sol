@@ -143,9 +143,8 @@ contract BondTopos is IERC7092, BondStorage, IBonds {
     }
 
     function _issue(BondData.Bond calldata _bond) internal virtual {
-        uint256 _issueVolume = _bond.issueVolume;
         uint256 _totalAmountInvested = IToposBank(toposBankContract).getTotalAmounInvested(dealID);
-        require(_issueVolume ==  _totalAmountInvested, "INVALID_IISUE_VOLUME");
+        require(_bond.issueVolume ==  _totalAmountInvested);
 
         BondData.DealInvestment[] memory _dealInvestment = IToposBank(toposBankContract).getDealInvestment(dealID);
 
@@ -156,15 +155,15 @@ contract BondTopos is IERC7092, BondStorage, IBonds {
             address investor = _dealInvestment[i].investor;
             uint256 principal = _dealInvestment[i].amount;
 
-            require(investor != address(0), "INVALID_INVESTOR_ADDRESS");
+            require(investor != address(0));
             require(
-                principal != 0 && (principal * _denomination) * _denomination == 0,
-                "INVALID_AMOUNT"
+                principal != 0 && (principal * _denomination) * _denomination == 0
             );
 
             volume += principal;
             principals[investor] = principal;
             isInvestor[investor] = true;
+            investorsIDs[investor] = i;
  
             listOfInvestors.push(
                 BondData.DealInvestment({
@@ -178,20 +177,13 @@ contract BondTopos is IERC7092, BondStorage, IBonds {
         bonds[dealID].issueDate = block.timestamp;
         bondStatus = BondData.BondStatus.ISSUED;
 
-        uint256 _maturityDate = bonds[dealID].maturityDate;
-        require(_maturityDate > block.timestamp);
-        require(volume == _totalAmountInvested, "INVALID_TOTAL_AMOUNT");
+        require(bonds[dealID].maturityDate > block.timestamp);
+        require(volume == _totalAmountInvested);
     }
 
     function _redeem() internal virtual {
-        require(
-            bondStatus == BondData.BondStatus.ISSUED,
-            "BONDS_NOT_ISSUED"
-        );
-        require(
-            block.timestamp > bonds[dealID].maturityDate,
-            "WAIT_TILL_MATURITY"
-        );
+        require(bondStatus == BondData.BondStatus.ISSUED);
+        require(block.timestamp > bonds[dealID].maturityDate);
 
         bondStatus = BondData.BondStatus.REDEEMED;
 
@@ -210,9 +202,9 @@ contract BondTopos is IERC7092, BondStorage, IBonds {
         address _spender,
         uint256 _amount
     ) internal virtual {
-        require(_owner != address(0), "INVALID_ADDRESS");
-        require(_spender != address(0), "INVALID_SPENDER_ADDRESS");
-        require(_amount > 0, "INVALID_AMOUNT");
+        require(_owner != address(0));
+        require(_spender != address(0));
+        require(_amount > 0);
 
         uint256 principal = principals[_owner];
         uint256 approval = approvals[_owner][_spender];
@@ -220,9 +212,9 @@ contract BondTopos is IERC7092, BondStorage, IBonds {
         uint256 _maturityDate = bonds[dealID].maturityDate;
         uint256 balance = principal / _denomination;
 
-        require(block.timestamp < _maturityDate, "BONDS_MATURED");
-        require(_amount <= balance, "INSUFFICIENT_BALANCE");
-        require((_amount * _denomination) % _denomination == 0, "INVALID_AMOUNT");
+        require(block.timestamp < _maturityDate, "matured");
+        require(_amount <= balance);
+        require((_amount * _denomination) % _denomination == 0);
 
         approvals[_owner][_spender] = approval + _amount;
 
@@ -234,17 +226,17 @@ contract BondTopos is IERC7092, BondStorage, IBonds {
         address _spender,
         uint256 _amount
     ) internal virtual {
-        require(_owner != address(0), "INVALID_ADDRESS");
-        require(_spender != address(0), "INVALID_SPENDER_ADDRESS");
-        require(_amount > 0, "INVALID_AMOUNT");
+        require(_owner != address(0));
+        require(_spender != address(0));
+        require(_amount > 0);
 
         uint256 approval = approvals[_owner][_spender];
         uint256 _denomination = bonds[dealID].denomination;
         uint256 _maturityDate = bonds[dealID].maturityDate;
 
-        require(block.timestamp < _maturityDate, "BONDS_MATURED");
-        require(_amount <= approval, "INSUFFICIENT_ALLOWANCE");
-        require((_amount * _denomination) % _denomination == 0, "INVALID_AMOUNT");
+        require(block.timestamp < _maturityDate);
+        require(_amount <= approval);
+        require((_amount * _denomination) % _denomination == 0);
 
         approvals[_owner][_spender] = approval - _amount;
 
@@ -257,27 +249,80 @@ contract BondTopos is IERC7092, BondStorage, IBonds {
         uint256 _amount,
         bytes calldata _data
     ) internal virtual {
-        require(_from != address(0), "INVALID_ADDRESS");
-        require(_to != address(0), "INVALID_RECIPIENT_ADDRESS");
-        require(_amount > 0, "INVALID_AMOUNT");
+        require(_from != address(0));
+        require(_to != address(0));
+        require(_amount > 0);
 
         uint256 principal = principals[_from];
         uint256 _denomination = bonds[dealID].denomination;
         uint256 _maturityDate = bonds[dealID].maturityDate;
         uint256 balance = principal / _denomination;
 
-        require(block.timestamp < _maturityDate, "BONDS_MATURED");
-        require(_amount <= balance, "INSUFFICIENT_BALANCE");
-        require((_amount * _denomination) % _denomination == 0, "INVALID_AMOUNT");
+        require(block.timestamp < _maturityDate, "matured");
+        require(_amount <= balance);
+        require((_amount * _denomination) % _denomination == 0);
 
         _beforeBondTransfer(_from, _to, _amount, _data);
 
         uint256 principalTo = principals[_to];
         unchecked {
-            uint256 principalToTransfer = principal * _denomination;
+            uint256 principalToTransfer = _amount * _denomination;
 
             principals[_from] = principal - principalToTransfer;
             principals[_to] = principalTo + principalToTransfer;
+
+            if(_amount == balance) {
+                isInvestor[_from] = false;
+
+                if(!isInvestor[_to]) {
+                    isInvestor[_to] = true;
+
+                    listOfInvestors[investorsIDs[_from]] = BondData.DealInvestment({
+                        investor: _to,
+                        amount: principals[_to]
+                    });
+                } else {
+                    listOfInvestors[investorsIDs[_from]] = BondData.DealInvestment({
+                        investor: _from,
+                        amount: 0
+                    });
+
+                    listOfInvestors[investorsIDs[_to]] = BondData.DealInvestment({
+                        investor: _to,
+                        amount: principals[_to]
+                    });
+                }
+            } else {
+                if(!isInvestor[_to]) {
+                    uint256 id = investorsIDs[_from];
+
+                    listOfInvestors[id] = BondData.DealInvestment({
+                        investor: _from,
+                        amount: principals[_from]
+                    });
+
+                    isInvestor[_to] = true;
+
+                    listOfInvestors.push(
+                        BondData.DealInvestment(
+                            {
+                                investor: _to,
+                                amount: principals[_to]
+                            }
+                        )
+                    );
+                } else {
+                    listOfInvestors[investorsIDs[_from]] = BondData.DealInvestment({
+                        investor: _from,
+                        amount: principals[_from]
+                    });
+
+                    listOfInvestors[investorsIDs[_to]] = BondData.DealInvestment({
+                        investor: _to,
+                        amount: principals[_to]
+                    });
+                }
+            }
         }
 
         _afterBondTransfer(_from, _to, _amount, _data);
@@ -291,7 +336,7 @@ contract BondTopos is IERC7092, BondStorage, IBonds {
         uint256 _amount
     ) internal virtual {
         uint256 currentApproval = approvals[_from][_spender];
-        require(_amount <= currentApproval, "INSUFFICIENT_ALLOWANCE");
+        require(_amount <= currentApproval);
 
         unchecked {
             approvals[_from][_spender] = currentApproval - _amount;
