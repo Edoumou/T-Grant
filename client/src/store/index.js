@@ -50,8 +50,20 @@ import {
     setTokenAddresses,
     setDeals
 } from "./slices/connectionSlice";
-import { issuerReducer, setIssuerRequest, setListOfIssuers, setShowForm, setIssuerDealsCurrencySymbols } from "./slices/issuerSlice";
-import { investorReducer, setInvestorRequest, setListOfInvestors } from "./slices/investorSlice";
+import {
+    issuerReducer,
+    setIssuerRequest,
+    setListOfIssuers,
+    setShowForm,
+    setIssuerDealsCurrencySymbols
+} from "./slices/issuerSlice";
+import {
+    investorReducer,
+    setInvestorRequest,
+    setListOfInvestors,
+    setInvestorBonds,
+    setInvestorBondsIssuers
+} from "./slices/investorSlice";
 
 
 /**
@@ -120,5 +132,7 @@ export {
     setIssuerDealsCurrencySymbols,
     setInvestorRequest,
     setListOfIssuers,
-    setListOfInvestors
+    setListOfInvestors,
+    setInvestorBonds,
+    setInvestorBondsIssuers
 }
