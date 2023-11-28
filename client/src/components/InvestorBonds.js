@@ -38,19 +38,10 @@ function InvestorBonds() {
                         <hr></hr>
                         <br></br>
                         <CardDescription className="card-desc" textAlign='left'>
-                            isin: <span style={{ paddingLeft: 5, color:'grey' }}><strong>{bonds[index].isin}</strong></span> 
+                            Coupon Rate: <span style={{ paddingLeft: 5, color:'grey' }}><strong>{bonds[index].couponRate / 100}%</strong></span>
                             <br></br>
                             <br></br>
-                            coupon rate: <span style={{ paddingLeft: 5, color:'grey' }}><strong>{bonds[index].couponRate / 100}%</strong></span>
-                            <br></br>
-                            <br></br>
-                            denomination: <span style={{ paddingLeft: 5, color:'grey' }}><strong>{Formate(bonds[index].denomination)} {bonds[index].tokenSymbol}</strong></span>
-                            <br></br>
-                            <br></br>
-                            coupon frequency: <span style={{ paddingLeft: 5, color:'grey' }}><strong>{bonds[index].couponFrequency}</strong></span>
-                            <br></br>
-                            <br></br>
-                            maturity date: <span style={{ paddingLeft: 5, color:'grey' }}>
+                            Maturity Date: <span style={{ paddingLeft: 5, color:'grey' }}>
                                     <strong>
                                         {(new Date(bonds[index].maturityDate * 1000)).toLocaleDateString()}
                                     </strong>
