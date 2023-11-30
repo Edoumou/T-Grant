@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import BondCallJSON from "../contracts/artifacts/contracts/BondCall.sol/BondCall.json";
 import BankJSON from "../contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
+import BondCallJSON from "../contracts/artifacts/contracts/BondCall.sol/BondCall.json";
+import TokenCallJSON from "../contracts/artifacts/contracts/tests/tokens/TokenCall.sol/TokenCall.json";
+import IssuerJSON from "../contracts/artifacts/contracts/Topos/Bank/Issuer.sol/Issuer.json";
 import { Button, Card, CardContent, CardDescription, CardMeta, Grid, GridColumn, GridRow, Image, Input, List, ListContent, ListDescription, ListIcon, ListItem, Modal, ModalActions, ModalContent } from "semantic-ui-react";
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
@@ -9,7 +11,7 @@ import Addresses from "../addresses/addr.json";
 import Formate from "../utils/Formate";
 import "../users.css";
 import "../manager.css";
-import { setLoading } from "../store";
+import { setInvestorBonds, setInvestorBondsIssuers, setLoading } from "../store";
 
 function InvestorBonds() {
     const [bondClicked, setBondClicked] = useState(false);
@@ -159,11 +161,83 @@ function InvestorBonds() {
         setLoader(false);
         setAmountToAppove('');
         setRecipientAddress('');
-        setShowApprove((!showApprove));
     }
 
     const transfer = async () => {
+        let { web3, account } = await web3Connection();
+        let bankContract = await getContract(web3, BankJSON, Addresses.ToposBankContract);
+        let bondCallContract = await getContract(web3, BondCallJSON, Addresses.BondCallContract);
+        let tokenCallContract = await getContract(web3, TokenCallJSON, Addresses.TokenCallContract);
+        let issuerContract = await getContract(web3, IssuerJSON, Addresses.IssuerContract);
 
+        let deals = await bankContract.methods.getListOfDeals().call({ from: account });
+        let dealBondContract = await bankContract.methods.dealBondContracts(bondDealID).call({ from: account });
+
+        await bondCallContract.methods.transfer(
+            recipientAddress,
+            amountToTransfer,
+            '0x',
+            dealBondContract
+        ).send({ from: account })
+            .on('transactionHash', hash => {
+                setLoadingMessage('Waiting for Transfer Confirmation! ⌛️');
+                setExplorerLink(`https://topos.blockscout.testnet-1.topos.technology/tx/${hash}`);
+                dispatch(setLoading(true));
+            })
+            .on('receipt', receipt => {
+                setLoadingMessage('Bonds Transferred! ✅');
+                setLoader(false);
+                dispatch(setLoading(false));
+            });
+
+        setLoadingMessage('');
+        setLoader(false);
+        setAmountToTransfer('');
+        setRecipientAddress('');
+
+        let investorBonds = [];
+        let investorBondsIssuers = [];
+        for(let i = 0; i < deals.length; i++) {
+            if(deals[i].status === "4") {
+                let dealID = deals[i].dealID;
+                let tokenAddress = deals[i].currency;
+                let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
+                let issuer = await issuerContract.methods.issuers(deals[i].issuerAddress).call({ from: account });
+                let address = await bankContract.methods.dealBondContracts(dealID).call({ from: account });
+
+                let principal = await bondCallContract.methods.principalOf(account, address).call({ from: account });
+
+                if(principal !== '0') {
+                    let isin = await bondCallContract.methods.isin(address).call({ from: account });
+                    let denomination = await bondCallContract.methods.denomination(address).call({ from: account });
+                    let couponRate = await bondCallContract.methods.couponRate(address).call({ from: account });
+                    let couponFrequency = await bondCallContract.methods.couponFrequency(address).call({ from: account });
+                    let maturityDate = await bondCallContract.methods.maturityDate(address).call({ from: account });
+                    let symbol = await bondCallContract.methods.symbol(address).call({ from: account });
+                    let name = await bondCallContract.methods.name(address).call({ from: account });
+
+                    investorBonds.push(
+                        {
+                        isin: isin,
+                        dealID: dealID,
+                        name: name,
+                        symbol: symbol,
+                        denomination: denomination.toString(),
+                        couponRate: couponRate.toString(),
+                        couponFrequency: couponFrequency.toString(),
+                        maturityDate: maturityDate.toString(),
+                        principal: principal.toString(),
+                        tokenSymbol: tokenSymbol
+                        }
+                    );
+
+                    investorBondsIssuers.push(issuer);
+                }
+            }
+        }
+
+        dispatch(setInvestorBonds(investorBonds));
+        dispatch(setInvestorBondsIssuers(investorBondsIssuers));
     }
 
     const transferFrom = async () => {
@@ -172,6 +246,9 @@ function InvestorBonds() {
 
     const cancel = async () => {
         setBondClicked(!bondClicked);
+        setShowApprove(false);
+        setShowTransfer(false);
+        setShowTransferFrom(false);
     }
 
     const goToExplorer = () => {
@@ -180,7 +257,7 @@ function InvestorBonds() {
     }
 
     const setApprove = async () => {
-        setShowApprove((true));
+        setShowApprove(!showApprove);
         setShowTransfer(false);
         setShowTransferFrom(false);
     };
@@ -247,78 +324,6 @@ function InvestorBonds() {
                                                                     <ListIcon name='caret down' size='large' />
                                                                     <ListContent>
                                                                         <ListDescription>Approve Bonds</ListDescription>
-                                                                            <div className="list-card">
-                                                                                <List relaxed='very'>
-                                                                                    <ListItem>
-                                                                                        <ListContent>
-                                                                                            <Image
-                                                                                                floated='right'
-                                                                                                size='tiny'
-                                                                                                src={issuerLogo}
-                                                                                            />
-                                                                                        </ListContent>
-                                                                                    </ListItem>
-                                                                                    <ListItem>
-                                                                                        <ListContent>
-                                                                                            <h4>Your Balance:</h4> <span>{Formate(principal / denomination)} {bondSymbol}</span>
-                                                                                        </ListContent>
-                                                                                    </ListItem>
-                                                                                </List>
-                                                                                <br></br>
-                                                                                <br></br>
-                                                                                <Input
-                                                                                    fluid
-                                                                                    size="large"
-                                                                                    placeholder='Account to Approve'
-                                                                                    value={recipientAddress}
-                                                                                    onChange={e => setRecipientAddress(e.target.value)}
-                                                                                />
-                                                                                <br></br>
-                                                                                <Input
-                                                                                    fluid
-                                                                                    action={bondSymbol}
-                                                                                    size="large"
-                                                                                    placeholder='Amount to Approve'
-                                                                                    value={amountToApprove}
-                                                                                    onChange={e => setAmountToAppove(e.target.value)}
-                                                                                />
-                                                                                <br></br>
-                                                                                <Modal
-                                                                                    size="tiny"
-                                                                                    open={open}
-                                                                                    trigger={
-                                                                                        <Button type='submit' primary fluid size='large' onClick={approve}>
-                                                                                            Approve
-                                                                                        </Button>
-                                                                                    }
-                                                                                    onClose={() => setOpen(false)}
-                                                                                    onOpen={() => setOpen(true)}
-                                                                                >
-                                                                                    <ModalContent>
-                                                                                        <div style={{ textAlign: 'center' }}>
-                                                                                            <h3>{loadingMessage}</h3>
-                                                                                            {
-                                                                                                loader ?
-                                                                                                    <Button inverted basic loading size="massive">processing</Button>
-                                                                                                :
-                                                                                                    <p style={{ color: 'green' }}><strong>transaction processed successfully</strong></p>
-                                                                                            }
-                                                                                        </div>
-                                                                                    </ModalContent>
-                                                                                    <ModalActions>
-                                                                                        <Button basic floated="left" onClick={goToExplorer}>
-                                                                                            <strong>Check on Topos Explorer</strong>
-                                                                                        </Button>
-                                                                                        <Button color='black' onClick={() => setOpen(false)}>
-                                                                                            Go to Dashboard
-                                                                                        </Button>
-                                                                                    </ModalActions>
-                                                                                </Modal>
-                                                                                <br></br>
-                                                                                <Button color="red" onClick={cancel}>
-                                                                                    Cancel
-                                                                                </Button>
-                                                                            </div>
                                                                     </ListContent>
                                                                 </>
                                                             :
@@ -330,6 +335,81 @@ function InvestorBonds() {
                                                                 </>
                                                         }
                                                     </ListItem>
+                                                    {
+                                                        showApprove &&
+                                                            <div className="list-card-action ">
+                                                                <List relaxed='very'>
+                                                                    <ListItem>
+                                                                        <ListContent>
+                                                                            <Image
+                                                                                floated='right'
+                                                                                size='tiny'
+                                                                                src={issuerLogo}
+                                                                            />
+                                                                        </ListContent>
+                                                                    </ListItem>
+                                                                    <ListItem>
+                                                                        <ListContent>
+                                                                            <h4>Your Balance:</h4> <span>{Formate(principal / denomination)} {bondSymbol}</span>
+                                                                        </ListContent>
+                                                                    </ListItem>
+                                                                </List>
+                                                                <br></br>
+                                                                <br></br>
+                                                                <Input
+                                                                    fluid
+                                                                    size="large"
+                                                                    placeholder='Account to Approve'
+                                                                    value={recipientAddress}
+                                                                    onChange={e => setRecipientAddress(e.target.value)}
+                                                                />
+                                                                <br></br>
+                                                                <Input
+                                                                    fluid
+                                                                    action={bondSymbol}
+                                                                    size="large"
+                                                                    placeholder='Amount to Approve'
+                                                                    value={amountToApprove}
+                                                                    onChange={e => setAmountToAppove(e.target.value)}
+                                                                />
+                                                                <br></br>
+                                                                <Modal
+                                                                    size="tiny"
+                                                                    open={open}
+                                                                    trigger={
+                                                                        <Button type='submit' primary fluid size='large' onClick={approve}>
+                                                                            Approve
+                                                                        </Button>
+                                                                    }
+                                                                    onClose={() => setOpen(false)}
+                                                                    onOpen={() => setOpen(true)}
+                                                                >
+                                                                    <ModalContent>
+                                                                        <div style={{ textAlign: 'center' }}>
+                                                                            <h3>{loadingMessage}</h3>
+                                                                            {
+                                                                                loader ?
+                                                                                    <Button inverted basic loading size="massive">processing</Button>
+                                                                                :
+                                                                                    <p style={{ color: 'green' }}><strong>transaction processed successfully</strong></p>
+                                                                            }
+                                                                        </div>
+                                                                    </ModalContent>
+                                                                    <ModalActions>
+                                                                        <Button basic floated="left" onClick={goToExplorer}>
+                                                                            <strong>Check on Topos Explorer</strong>
+                                                                        </Button>
+                                                                        <Button color='black' onClick={() => setOpen(false)}>
+                                                                            Go to Dashboard
+                                                                        </Button>
+                                                                    </ModalActions>
+                                                                </Modal>
+                                                                <br></br>
+                                                                <Button color="red" onClick={cancel}>
+                                                                    Cancel
+                                                                </Button>
+                                                            </div>
+                                                    }
                                                     <ListItem onClick={setTransfer}>
                                                         {
                                                             showTransfer ?
@@ -337,77 +417,6 @@ function InvestorBonds() {
                                                                     <ListIcon name='caret down' size='large' />
                                                                     <ListContent>
                                                                         <ListDescription>Transfer Bonds</ListDescription>
-                                                                            <div className="list-card">
-                                                                                <List relaxed='very'>
-                                                                                    <ListItem>
-                                                                                        <ListContent>
-                                                                                            <Image
-                                                                                                floated='right'
-                                                                                                size='tiny'
-                                                                                                src={issuerLogo}
-                                                                                            />
-                                                                                        </ListContent>
-                                                                                    </ListItem>
-                                                                                    <ListItem>
-                                                                                        <ListContent>
-                                                                                            <h4>Your Balance:</h4> <span>{Formate(principal / denomination)} {bondSymbol}</span>
-                                                                                        </ListContent>
-                                                                                    </ListItem>
-                                                                                </List>
-                                                                                <br></br>
-                                                                                <Input
-                                                                                    fluid
-                                                                                    size="large"
-                                                                                    placeholder='Recipient Address'
-                                                                                    value={recipientAddress}
-                                                                                    onChange={e => setRecipientAddress(e.target.value)}
-                                                                                />
-                                                                                <br></br>
-                                                                                <Input
-                                                                                    fluid
-                                                                                    action={bondSymbol}
-                                                                                    size="large"
-                                                                                    placeholder='Amount to Transfer'
-                                                                                    value={amountToTransfer}
-                                                                                    onChange={e => setAmountToTransfer(e.target.value)}
-                                                                                />
-                                                                                <br></br>
-                                                                                <Modal
-                                                                                    size="tiny"
-                                                                                    open={open}
-                                                                                    trigger={
-                                                                                        <Button type='submit' primary fluid size='large' onClick={transfer}>
-                                                                                            Transfer
-                                                                                        </Button>
-                                                                                    }
-                                                                                    onClose={() => setOpen(false)}
-                                                                                    onOpen={() => setOpen(true)}
-                                                                                >
-                                                                                    <ModalContent>
-                                                                                        <div style={{ textAlign: 'center' }}>
-                                                                                            <h3>{loadingMessage}</h3>
-                                                                                            {
-                                                                                                loader ?
-                                                                                                    <Button inverted basic loading size="massive">processing</Button>
-                                                                                                :
-                                                                                                    <p style={{ color: 'green' }}><strong>transaction processed successfully</strong></p>
-                                                                                            }
-                                                                                        </div>
-                                                                                    </ModalContent>
-                                                                                    <ModalActions>
-                                                                                        <Button basic floated="left" onClick={goToExplorer}>
-                                                                                            <strong>Check on Topos Explorer</strong>
-                                                                                        </Button>
-                                                                                        <Button color='black' onClick={() => setOpen(false)}>
-                                                                                            Go to Dashboard
-                                                                                        </Button>
-                                                                                    </ModalActions>
-                                                                                </Modal>
-                                                                                <br></br>
-                                                                                <Button color="red" onClick={cancel}>
-                                                                                    Cancel
-                                                                                </Button>
-                                                                            </div>
                                                                     </ListContent>
                                                                 </>
                                                             :
@@ -419,6 +428,80 @@ function InvestorBonds() {
                                                                 </>
                                                         }
                                                     </ListItem>
+                                                    {
+                                                        showTransfer &&
+                                                            <div className="list-card-action">
+                                                                <List relaxed='very'>
+                                                                    <ListItem>
+                                                                        <ListContent>
+                                                                            <Image
+                                                                                floated='right'
+                                                                                size='tiny'
+                                                                                src={issuerLogo}
+                                                                            />
+                                                                        </ListContent>
+                                                                    </ListItem>
+                                                                    <ListItem>
+                                                                        <ListContent>
+                                                                            <h4>Your Balance:</h4> <span>{Formate(principal / denomination)} {bondSymbol}</span>
+                                                                        </ListContent>
+                                                                    </ListItem>
+                                                                </List>
+                                                                <br></br>
+                                                                <Input
+                                                                    fluid
+                                                                    size="large"
+                                                                    placeholder='Recipient Address'
+                                                                    value={recipientAddress}
+                                                                    onChange={e => setRecipientAddress(e.target.value)}
+                                                                />
+                                                                <br></br>
+                                                                <Input
+                                                                    fluid
+                                                                    action={bondSymbol}
+                                                                    size="large"
+                                                                    placeholder='Amount to Transfer'
+                                                                    value={amountToTransfer}
+                                                                    onChange={e => setAmountToTransfer(e.target.value)}
+                                                                />
+                                                                <br></br>
+                                                                <Modal
+                                                                    size="tiny"
+                                                                    open={open}
+                                                                    trigger={
+                                                                        <Button type='submit' primary fluid size='large' onClick={transfer}>
+                                                                            Transfer
+                                                                        </Button>
+                                                                    }
+                                                                    onClose={() => setOpen(false)}
+                                                                    onOpen={() => setOpen(true)}
+                                                                >
+                                                                    <ModalContent>
+                                                                        <div style={{ textAlign: 'center' }}>
+                                                                            <h3>{loadingMessage}</h3>
+                                                                            {
+                                                                                loader ?
+                                                                                    <Button inverted basic loading size="massive">processing</Button>
+                                                                                :
+                                                                                    <p style={{ color: 'green' }}><strong>transaction processed successfully</strong></p>
+                                                                            }
+                                                                        </div>
+                                                                    </ModalContent>
+                                                                    <ModalActions>
+                                                                        <Button basic floated="left" onClick={goToExplorer}>
+                                                                            <strong>Check on Topos Explorer</strong>
+                                                                        </Button>
+                                                                        <Button color='black' onClick={() => setOpen(false)}>
+                                                                            Go to Dashboard
+                                                                        </Button>
+                                                                    </ModalActions>
+                                                                </Modal>
+                                                                <br></br>
+                                                                <Button color="red" onClick={cancel}>
+                                                                    Cancel
+                                                                </Button>
+                                                            </div>
+                                                    }
                                                     <ListItem onClick={setTransferFrom}>
                                                         {
                                                             showTransferFrom ?
@@ -426,81 +509,6 @@ function InvestorBonds() {
                                                                     <ListIcon name='caret down' size='large' />
                                                                     <ListContent>
                                                                         <ListDescription>Transfer From an Account</ListDescription>
-                                                                            <div className="list-card">
-                                                                                <List relaxed='very'>
-                                                                                    <ListItem>
-                                                                                        <ListContent>
-                                                                                            <Image
-                                                                                                floated='right'
-                                                                                                size='tiny'
-                                                                                                src={issuerLogo}
-                                                                                            />
-                                                                                        </ListContent>
-                                                                                    </ListItem>
-                                                                                </List>
-                                                                                <br></br>
-                                                                                <br></br>
-                                                                                <Input
-                                                                                    fluid
-                                                                                    size="large"
-                                                                                    placeholder='Token Owner Address'
-                                                                                    value={tokenOwnerAddress}
-                                                                                    onChange={e => setTokenOwnerAddress(e.target.value)}
-                                                                                />
-                                                                                <br></br>
-                                                                                <Input
-                                                                                    fluid
-                                                                                    size="large"
-                                                                                    placeholder='Recipient Address'
-                                                                                    value={recipientAddress}
-                                                                                    onChange={e => setRecipientAddress(e.target.value)}
-                                                                                />
-                                                                                <br></br>
-                                                                                <Input
-                                                                                    fluid
-                                                                                    action={bondSymbol}
-                                                                                    size="large"
-                                                                                    placeholder='Amount to transfer'
-                                                                                    value={amountToTransfer}
-                                                                                    onChange={e => setAmountToTransfer(e.target.value)}
-                                                                                />
-                                                                                <br></br>
-                                                                                <Modal
-                                                                                    size="tiny"
-                                                                                    open={open}
-                                                                                    trigger={
-                                                                                        <Button type='submit' primary fluid size='large' onClick={transferFrom}>
-                                                                                            transfer
-                                                                                        </Button>
-                                                                                    }
-                                                                                    onClose={() => setOpen(false)}
-                                                                                    onOpen={() => setOpen(true)}
-                                                                                >
-                                                                                    <ModalContent>
-                                                                                        <div style={{ textAlign: 'center' }}>
-                                                                                            <h3>{loadingMessage}</h3>
-                                                                                            {
-                                                                                                loader ?
-                                                                                                    <Button inverted basic loading size="massive">processing</Button>
-                                                                                                :
-                                                                                                    <p style={{ color: 'green' }}><strong>transaction processed successfully</strong></p>
-                                                                                            }
-                                                                                        </div>
-                                                                                    </ModalContent>
-                                                                                    <ModalActions>
-                                                                                        <Button basic floated="left" onClick={goToExplorer}>
-                                                                                            <strong>Check on Topos Explorer</strong>
-                                                                                        </Button>
-                                                                                        <Button color='black' onClick={() => setOpen(false)}>
-                                                                                            Go to Dashboard
-                                                                                        </Button>
-                                                                                    </ModalActions>
-                                                                                </Modal>
-                                                                                <br></br>
-                                                                                <Button color="red" onClick={cancel}>
-                                                                                    Cancel
-                                                                                </Button>
-                                                                            </div>
                                                                     </ListContent>
                                                                 </>
                                                             :
@@ -512,6 +520,84 @@ function InvestorBonds() {
                                                                 </>
                                                         }
                                                     </ListItem>
+                                                    {
+                                                        showTransferFrom &&
+                                                            <div className="list-card-action">
+                                                                <List relaxed='very'>
+                                                                    <ListItem>
+                                                                        <ListContent>
+                                                                            <Image
+                                                                                floated='right'
+                                                                                size='tiny'
+                                                                                src={issuerLogo}
+                                                                            />
+                                                                        </ListContent>
+                                                                    </ListItem>
+                                                                </List>
+                                                                <br></br>
+                                                                <br></br>
+                                                                <Input
+                                                                    fluid
+                                                                    size="large"
+                                                                    placeholder='Token Owner Address'
+                                                                    value={tokenOwnerAddress}
+                                                                    onChange={e => setTokenOwnerAddress(e.target.value)}
+                                                                />
+                                                                <br></br>
+                                                                <Input
+                                                                    fluid
+                                                                    size="large"
+                                                                    placeholder='Recipient Address'
+                                                                    value={recipientAddress}
+                                                                    onChange={e => setRecipientAddress(e.target.value)}
+                                                                />
+                                                                <br></br>
+                                                                <Input
+                                                                    fluid
+                                                                    action={bondSymbol}
+                                                                    size="large"
+                                                                    placeholder='Amount to transfer'
+                                                                    value={amountToTransfer}
+                                                                    onChange={e => setAmountToTransfer(e.target.value)}
+                                                                />
+                                                                <br></br>
+                                                                <Modal
+                                                                    size="tiny"
+                                                                    open={open}
+                                                                    trigger={
+                                                                        <Button type='submit' primary fluid size='large' onClick={transferFrom}>
+                                                                            transfer
+                                                                        </Button>
+                                                                    }
+                                                                    onClose={() => setOpen(false)}
+                                                                    onOpen={() => setOpen(true)}
+                                                                >
+                                                                    <ModalContent>
+                                                                        <div style={{ textAlign: 'center' }}>
+                                                                            <h3>{loadingMessage}</h3>
+                                                                            {
+                                                                                loader ?
+                                                                                    <Button inverted basic loading size="massive">processing</Button>
+                                                                                :
+                                                                                    <p style={{ color: 'green' }}><strong>transaction processed successfully</strong></p>
+                                                                            }
+                                                                        </div>
+                                                                    </ModalContent>
+                                                                    <ModalActions>
+                                                                        <Button basic floated="left" onClick={goToExplorer}>
+                                                                            <strong>Check on Topos Explorer</strong>
+                                                                        </Button>
+                                                                        <Button color='black' onClick={() => setOpen(false)}>
+                                                                            Go to Dashboard
+                                                                        </Button>
+                                                                    </ModalActions>
+                                                                </Modal>
+                                                                <br></br>
+                                                                <Button color="red" onClick={cancel}>
+                                                                    Cancel
+                                                                </Button>
+                                                            </div>
+                                                    }
                                                 </List>
                                             </CardContent>
                                         </Card>
