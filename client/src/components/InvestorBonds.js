@@ -19,6 +19,7 @@ function InvestorBonds() {
     const [principal, setPrincipal] = useState('');
     const [amountToTransfer, setAmountToTransfer] = useState('');
     const [amountToApprove, setAmountToAppove] = useState('');
+    const [recipientAddress, setRecipientAddress] = useState('');
     const [explorerLink, setExplorerLink] = useState('');
     const [loader, setLoader] = useState(true);
     const [loadingMessage, setLoadingMessage] = useState('');
@@ -120,6 +121,10 @@ function InvestorBonds() {
 
     }
 
+    const approve = async () => {
+
+    }
+
     const cancel = async () => {
         setBondClicked(!bondClicked);
     }
@@ -194,10 +199,81 @@ function InvestorBonds() {
                                                         {
                                                             showApprove ?
                                                                 <>
-                                                                    <ListIcon name='caret down' size='large' verticalAlign='middle' />
+                                                                    <ListIcon name='caret down' size='large' />
                                                                     <ListContent>
                                                                         <ListDescription>Approve Bonds</ListDescription>
-                                                                        Describe Everything
+                                                                            <div className="list-card">
+                                                                                <List relaxed='very'>
+                                                                                    <ListItem>
+                                                                                        <ListContent>
+                                                                                            <Image
+                                                                                                floated='right'
+                                                                                                size='tiny'
+                                                                                                src={issuerLogo}
+                                                                                            />
+                                                                                        </ListContent>
+                                                                                    </ListItem>
+                                                                                    <ListItem>
+                                                                                        <ListContent>
+                                                                                            <h4>Your Balance:</h4> <span>{Formate(principal / denomination)} {bondSymbol}</span>
+                                                                                        </ListContent>
+                                                                                    </ListItem>
+                                                                                </List>
+                                                                                <br></br>
+                                                                                <br></br>
+                                                                                <Input
+                                                                                    fluid
+                                                                                    size="large"
+                                                                                    placeholder='Recipient Address'
+                                                                                    value={recipientAddress}
+                                                                                    onChange={e => setRecipientAddress(e.target.value)}
+                                                                                />
+                                                                                <br></br>
+                                                                                <Input
+                                                                                    fluid
+                                                                                    action={bondSymbol}
+                                                                                    size="large"
+                                                                                    placeholder='Amount to Approve'
+                                                                                    value={amountToTransfer}
+                                                                                    onChange={e => setAmountToTransfer(e.target.value)}
+                                                                                />
+                                                                                <br></br>
+                                                                                <Modal
+                                                                                    size="tiny"
+                                                                                    open={open}
+                                                                                    trigger={
+                                                                                        <Button type='submit' primary fluid size='large' onClick={approve}>
+                                                                                            Approve
+                                                                                        </Button>
+                                                                                    }
+                                                                                    onClose={() => setOpen(false)}
+                                                                                    onOpen={() => setOpen(true)}
+                                                                                >
+                                                                                    <ModalContent>
+                                                                                        <div style={{ textAlign: 'center' }}>
+                                                                                            <h3>{loadingMessage}</h3>
+                                                                                            {
+                                                                                                loader ?
+                                                                                                    <Button inverted basic loading size="massive">processing</Button>
+                                                                                                :
+                                                                                                    <p style={{ color: 'green' }}><strong>transaction processed successfully</strong></p>
+                                                                                            }
+                                                                                        </div>
+                                                                                    </ModalContent>
+                                                                                    <ModalActions>
+                                                                                        <Button basic floated="left" onClick={goToExplorer}>
+                                                                                            <strong>Check on Topos Explorer</strong>
+                                                                                        </Button>
+                                                                                        <Button color='black' onClick={() => setOpen(false)}>
+                                                                                            Go to Dashboard
+                                                                                        </Button>
+                                                                                    </ModalActions>
+                                                                                </Modal>
+                                                                                <br></br>
+                                                                                <Button color="red" onClick={cancel}>
+                                                                                    Cancel
+                                                                                </Button>
+                                                                            </div>
                                                                     </ListContent>
                                                                 </>
                                                             :
