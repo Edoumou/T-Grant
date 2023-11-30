@@ -158,6 +158,7 @@ function App() {
           investorBonds.push(
             {
               isin: isin,
+              dealID: dealID,
               name: name,
               symbol: symbol,
               denomination: denomination.toString(),
@@ -293,7 +294,7 @@ function App() {
         dispatch(setBondsIssuers(bondsIssuers));
         dispatch(setBondsCurrency(bondsCurrency));
 
-        //=== Invstors boonds
+        //=== Invstors bonds
         let investorBonds = [];
         let investorBondsIssuers = [];
         let investorsBondsCurrencies = [];
@@ -319,6 +320,7 @@ function App() {
               investorBonds.push(
                 {
                   isin: isin,
+                  dealID: dealID,
                   name: name,
                   symbol: symbol,
                   denomination: denomination.toString(),

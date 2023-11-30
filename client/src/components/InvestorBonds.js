@@ -1,15 +1,23 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import BondCallJSON from "../contracts/artifacts/contracts/BondCall.sol/BondCall.json";
+import BankJSON from "../contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
 import { Button, Card, CardContent, CardDescription, CardMeta, Grid, GridColumn, GridRow, Image, Input, List, ListContent, ListDescription, ListIcon, ListItem, Modal, ModalActions, ModalContent } from "semantic-ui-react";
+import { web3Connection } from "../utils/web3Connection";
+import { getContract } from "../utils/getContract";
+import Addresses from "../addresses/addr.json";
 import Formate from "../utils/Formate";
 import "../users.css";
 import "../manager.css";
+import { setLoading } from "../store";
 
 function InvestorBonds() {
     const [bondClicked, setBondClicked] = useState(false);
     const [open, setOpen] = useState(false);
+    const [selectedDealID, setSelectedDealID] = useState('');
     const [issuerName, setIssuerName] = useState('');
     const [issuerLogo, setIssuerLogo] = useState('');
+    const [bondDealID, setBondDealID] = useState('');
     const [bondName, setBondName] = useState('');
     const [bondSymbol, setBondSymbol] = useState('');
     const [tokenSymbol, setTokenSymbol] = useState('');
@@ -41,9 +49,12 @@ function InvestorBonds() {
         return state.investor.investorBondsIssuers;
     });
 
+    const dispatch = useDispatch();
+
     const makeAction = async (
         _issuerName,
         _issuerLogo,
+        _bondDealID,
         _bondName,
         _couponRate,
         _maturityDate,
@@ -56,6 +67,7 @@ function InvestorBonds() {
 
         setIssuerName(_issuerName);
         setIssuerLogo(_issuerLogo);
+        setBondDealID(_bondDealID);
         setBondName(_bondName);
         setCouponRate(_couponRate);
         setMaturityDate(_maturityDate);
@@ -71,13 +83,14 @@ function InvestorBonds() {
                 <Card onClick={() => makeAction(
                     issuers[index].name,
                     issuers[index].logoURI,
-                    bonds[index].name,
-                    bonds[index].couponRate,
-                    bonds[index].maturityDate,
-                    bonds[index].denomination,
-                    bonds[index].symbol,
-                    bonds[index].tokenSymbol,
-                    bonds[index].principal
+                    bond.dealID,
+                    bond.name,
+                    bond.couponRate,
+                    bond.maturityDate,
+                    bond.denomination,
+                    bond.symbol,
+                    bond.tokenSymbol,
+                    bond.principal
                 )}>
                     <CardContent>
                         <Image
@@ -118,11 +131,42 @@ function InvestorBonds() {
         );
     });
 
+    const approve = async () => {
+        let { web3, account } = await web3Connection();
+        let bankContract = await getContract(web3, BankJSON, Addresses.ToposBankContract);
+        let bondCallContract = await getContract(web3, BondCallJSON, Addresses.BondCallContract);
+
+        let dealBondContract = await bankContract.methods.dealBondContracts(bondDealID).call({ from: account });
+
+
+        await bondCallContract.methods.approve(
+            recipientAddress,
+            amountToApprove,
+            dealBondContract
+        ).send({ from: account })
+            .on('transactionHash', hash => {
+                setLoadingMessage('Waiting for Approval Confirmation! ⌛️');
+                setExplorerLink(`https://topos.blockscout.testnet-1.topos.technology/tx/${hash}`);
+                dispatch(setLoading(true));
+            })
+            .on('receipt', receipt => {
+                setLoadingMessage('Address Approved! ✅');
+                setLoader(false);
+                dispatch(setLoading(false));
+            });
+
+        setLoadingMessage('');
+        setLoader(false);
+        setAmountToAppove('');
+        setRecipientAddress('');
+        setShowApprove((!showApprove));
+    }
+
     const transfer = async () => {
 
     }
 
-    const approve = async () => {
+    const transferFrom = async () => {
 
     }
 
@@ -135,19 +179,19 @@ function InvestorBonds() {
         if (newWindow) newWindow.opener = null;
     }
 
-    const setApprove = async => {
-        setShowApprove((!showApprove));
+    const setApprove = async () => {
+        setShowApprove((true));
         setShowTransfer(false);
         setShowTransferFrom(false);
     };
 
-    const setTransfer = async => {
+    const setTransfer = async () => {
         setShowApprove(false);
         setShowTransfer(!showTransfer);
         setShowTransferFrom(false);
     };
 
-    const setTransferFrom = async => {
+    const setTransferFrom = async () => {
         setShowApprove(false);
         setShowTransfer(false);
         setShowTransferFrom(!showTransferFrom);
@@ -425,7 +469,7 @@ function InvestorBonds() {
                                                                                     size="tiny"
                                                                                     open={open}
                                                                                     trigger={
-                                                                                        <Button type='submit' primary fluid size='large' onClick={transfer}>
+                                                                                        <Button type='submit' primary fluid size='large' onClick={transferFrom}>
                                                                                             transfer
                                                                                         </Button>
                                                                                     }
