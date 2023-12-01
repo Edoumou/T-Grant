@@ -161,6 +161,10 @@ function InvestorBonds() {
         setLoader(false);
         setAmountToAppove('');
         setRecipientAddress('');
+
+        setShowApprove(false);
+        setShowTransfer(false);
+        setShowTransferFrom(false);
     }
 
     const transfer = async () => {
@@ -238,10 +242,92 @@ function InvestorBonds() {
 
         dispatch(setInvestorBonds(investorBonds));
         dispatch(setInvestorBondsIssuers(investorBondsIssuers));
+
+        setShowApprove(false);
+        setShowTransfer(false);
+        setShowTransferFrom(false);
     }
 
     const transferFrom = async () => {
+        let { web3, account } = await web3Connection();
+        let bankContract = await getContract(web3, BankJSON, Addresses.ToposBankContract);
+        let bondCallContract = await getContract(web3, BondCallJSON, Addresses.BondCallContract);
+        let tokenCallContract = await getContract(web3, TokenCallJSON, Addresses.TokenCallContract);
+        let issuerContract = await getContract(web3, IssuerJSON, Addresses.IssuerContract);
 
+        let deals = await bankContract.methods.getListOfDeals().call({ from: account });
+        let dealBondContract = await bankContract.methods.dealBondContracts(bondDealID).call({ from: account });
+
+        await bondCallContract.methods.transferFrom(
+            tokenOwnerAddress,
+            recipientAddress,
+            amountToTransfer,
+            '0x',
+            dealBondContract
+        ).send({ from: account })
+            .on('transactionHash', hash => {
+                setLoadingMessage('Waiting for Transfer Confirmation! ⌛️');
+                setExplorerLink(`https://topos.blockscout.testnet-1.topos.technology/tx/${hash}`);
+                dispatch(setLoading(true));
+            })
+            .on('receipt', receipt => {
+                setLoadingMessage('Bonds Transferred! ✅');
+                setLoader(false);
+                dispatch(setLoading(false));
+            });
+
+        setLoadingMessage('');
+        setLoader(false);
+        setAmountToTransfer('');
+        setRecipientAddress('');
+
+        let investorBonds = [];
+        let investorBondsIssuers = [];
+        for(let i = 0; i < deals.length; i++) {
+            if(deals[i].status === "4") {
+                let dealID = deals[i].dealID;
+                let tokenAddress = deals[i].currency;
+                let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
+                let issuer = await issuerContract.methods.issuers(deals[i].issuerAddress).call({ from: account });
+                let address = await bankContract.methods.dealBondContracts(dealID).call({ from: account });
+
+                let principal = await bondCallContract.methods.principalOf(account, address).call({ from: account });
+
+                if(principal !== '0') {
+                    let isin = await bondCallContract.methods.isin(address).call({ from: account });
+                    let denomination = await bondCallContract.methods.denomination(address).call({ from: account });
+                    let couponRate = await bondCallContract.methods.couponRate(address).call({ from: account });
+                    let couponFrequency = await bondCallContract.methods.couponFrequency(address).call({ from: account });
+                    let maturityDate = await bondCallContract.methods.maturityDate(address).call({ from: account });
+                    let symbol = await bondCallContract.methods.symbol(address).call({ from: account });
+                    let name = await bondCallContract.methods.name(address).call({ from: account });
+
+                    investorBonds.push(
+                        {
+                        isin: isin,
+                        dealID: dealID,
+                        name: name,
+                        symbol: symbol,
+                        denomination: denomination.toString(),
+                        couponRate: couponRate.toString(),
+                        couponFrequency: couponFrequency.toString(),
+                        maturityDate: maturityDate.toString(),
+                        principal: principal.toString(),
+                        tokenSymbol: tokenSymbol
+                        }
+                    );
+
+                    investorBondsIssuers.push(issuer);
+                }
+            }
+        }
+
+        dispatch(setInvestorBonds(investorBonds));
+        dispatch(setInvestorBondsIssuers(investorBondsIssuers));
+
+        setShowApprove(false);
+        setShowTransfer(false);
+        setShowTransferFrom(false);
     }
 
     const cancel = async () => {
