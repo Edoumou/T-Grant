@@ -6,7 +6,7 @@ import InvestorJSON from "../contracts/artifacts/contracts/Topos/Bank/Investor.s
 import FormateAddress from "../utils/FormateAddress";
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
-import Addresses from "../addresses/addr.json"
+import Addresses from "../addresses/addr.json";
 import { setBalance, setListOfInvestors, setLoading } from "../store";
 import "../users.css";
 import "../manager.css";
@@ -198,7 +198,7 @@ function InvestorsList() {
                     </div>
                 :
                     <div  className="list-card-head-no">
-                        There is No Request from Investors
+                        There are No Requests from Investors
                     </div>
             }
         </>

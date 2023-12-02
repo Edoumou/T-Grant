@@ -2,8 +2,13 @@
 pragma solidity ^0.8.0;
 
 import "./IBonds.sol";
+import "../../BondData.sol";
 
 interface IToposBank {
+    function getDeal(
+        string memory _dealID
+    ) external view returns(BondData.Deal memory);
+
     function getTotalAmounInvested(
         string calldata _dealID
     ) external view returns(uint256);

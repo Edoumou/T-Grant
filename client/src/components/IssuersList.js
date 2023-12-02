@@ -208,7 +208,7 @@ function IssuersList() {
                     </div>
                 :
                     <div className="list-card-head-no">
-                        There is No Request from Issuers
+                        There are No Requests from Issuers
                     </div>
             }
         </>

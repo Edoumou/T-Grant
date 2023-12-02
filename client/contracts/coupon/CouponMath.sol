@@ -4,6 +4,8 @@ pragma solidity ^0.8.0;
 import "../IERC7092.sol";
 
 library CouponMath {
+    uint256 constant private NUMBER_OF_SECONDS_IN_YEAR = 31536000;
+
     /**
     * @notice Returns the annual interest earned by an account in bips
     * @param _investor the investor account address
@@ -14,10 +16,9 @@ library CouponMath {
         address _bondContract
     ) external view returns(uint256) {
         uint256 couponRate = IERC7092(_bondContract).couponRate();
-        uint256 denomination = IERC7092(_bondContract).denomination();
         uint256 principal = IERC7092(_bondContract).principalOf(_investor);
 
-        return principal * denomination * couponRate;
+        return principal * couponRate;
     }
 
     /**
@@ -32,19 +33,12 @@ library CouponMath {
         address _bondContract
     ) external view returns(uint256) {
         uint256 couponRate = IERC7092(_bondContract).couponRate();
-        uint256 couponDenomination = IERC7092(_bondContract).denomination();
         uint256 principal = IERC7092(_bondContract).principalOf(_investor);
         uint256 frequency = IERC7092(_bondContract).couponFrequency();
-        uint256 numberOfDays = _numberOfDays();
         //uint256 numberOfDays = _numberOfDays(_bondContract);
 
-        return principal * couponDenomination * couponRate * _duration / (frequency * numberOfDays);
+        return principal * couponRate * _duration / (frequency * NUMBER_OF_SECONDS_IN_YEAR);
     }
-
-    function _numberOfDays() private pure returns(uint256) {
-        return 365;
-    }
-
 
     /**
     * @notice The day count basis is OPTIONAL for the ERC7092 standard.

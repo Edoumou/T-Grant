@@ -33,6 +33,7 @@ import InvestorDeals from './components/InvestorDeals';
 import MintTokens from './components/MintTokens';
 import IssueBonds from './components/IssueBonds';
 import InvestorBonds from './components/InvestorBonds';
+import ManagerCoupons from './components/ManagerCoupons';
 
 function App() {
   const dispatch = useDispatch();
@@ -484,6 +485,13 @@ function App() {
                           as={Link}
                           to='/manager/bonds'
                         />
+                        <MenuItem
+                          name='coupons'
+                          active={connection.activeItem === 'coupons'}
+                          onClick={handleItemClick}
+                          as={Link}
+                          to='/manager/coupons'
+                        />
                       </>
                     : connection.role === "ISSUER" ?
                       <>
@@ -562,6 +570,7 @@ function App() {
                       <Route path='/manager/deals' element={<ManagerDeals />} />
                       <Route path='/manager/issue-bonds' element={<IssueBonds />} />
                       <Route path='/manager/bonds' element={<ManagerBonds />} />
+                      <Route path='/manager/coupons' element={<ManagerCoupons />} />
                     </>
                   : connection.role === "ISSUER" ?
                     <>

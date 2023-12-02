@@ -135,6 +135,8 @@ async function main() {
   await couponPayment.waitForDeployment();
   console.log("Coupon-P:", couponPayment.target || "");
 
+  //=== Topos Treasury
+
   //=== Cp artifacts in `src/contracts` directory
   exec(`cp -R ../client/artifacts ../client/src/contracts`, (err, stdout, stderr) => {
     if(err) {

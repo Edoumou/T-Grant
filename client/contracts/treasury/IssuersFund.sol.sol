@@ -46,8 +46,8 @@ contract IssuersFund is IIssuersFund {
 
         uint256 fees = IToposBank(toposBankContract).getDealFees();
 
-        IERC20(_tokenAddress).transferFrom(address(this), toposTreasury, (fees * 1 ether) / 10000);
-        IERC20(_tokenAddress).transferFrom(address(this), _issuer, (10000 * _amount - fees) * 1 ether / 10000);
+        IERC20(_tokenAddress).transfer(toposTreasury, (fees * 1 ether) / 10_000);
+        IERC20(_tokenAddress).transfer(_issuer, (10000 * _amount - fees) * 1 ether / 10_000);
 
         totalAmount[_dealID] = 0;
     }

@@ -5,6 +5,5 @@ import "../../BondData.sol";
 
 interface IBonds {
     function issue(BondData.Bond calldata _bond) external;
-
     function redeem() external;
 }

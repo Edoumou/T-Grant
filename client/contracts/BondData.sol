@@ -69,6 +69,12 @@ abstract contract BondData {
         uint256 amount;
     }
 
+    struct CouponPaymentReceipt {
+        uint256 issueVolume;
+        uint256 couponRate;
+        uint256 interestPaid;
+    }
+
     error InvalidInvestorAddress(address investor);
     error InvalidDealStatus(string dealID);
     error InvalidAmount(uint256 amount);
