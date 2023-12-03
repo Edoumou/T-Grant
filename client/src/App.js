@@ -28,7 +28,7 @@ import SubmitDeal from './components/SubmitDeal';
 import ManagerRequests from './components/ManagerRequests';
 import ManagerBonds from './components/ManagerBonds';
 import ManagerDeals from './components/ManagerDeals';
-import { setApprovedDeals, setBondSymbols, setBonds, setBondsCurrency, setBondsDealIDs, setBondsIssuers, setDealsToIssue, setIssuersForApprovedDelas, setIssuersName, setIssuersNameForApprovedDeals, setSelectedDealID, setShowInvestForm, setTokenSymbolForApprovedDeals } from './store/slices/bondSlice';
+import { setActiveBondsDealID, setApprovedDeals, setBondSymbols, setBonds, setBondsCurrency, setBondsDealIDs, setBondsIssuers, setDealsToIssue, setIssuersForApprovedDelas, setIssuersName, setIssuersNameForApprovedDeals, setSelectedDealID, setShowInvestForm, setTokenSymbolForApprovedDeals } from './store/slices/bondSlice';
 import InvestorDeals from './components/InvestorDeals';
 import MintTokens from './components/MintTokens';
 import IssueBonds from './components/IssueBonds';
@@ -43,7 +43,6 @@ function App() {
   });
   
   const fetchOnchainData = useCallback(async () => {
-
     let { web3, account } = await web3Connection();
     let coreData = toposData();
 
@@ -135,6 +134,7 @@ function App() {
     
     //=== Invstors boonds
     let investorBonds = [];
+    let activeBondsDealID = [];
     let investorBondsIssuers = [];
     let investorsBondsCurrencies = [];
     for(let i = 0; i < deals.length; i++) {
@@ -143,7 +143,9 @@ function App() {
         let tokenAddress = deals[i].currency;
         let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
         let issuer = await issuerContract.methods.issuers(deals[i].issuerAddress).call({ from: account });
-        let address = await toposBank.methods.dealBondContracts(dealID).call({ from: account });
+        let address = await toposBank.methods.dealBondContracts(dealID).call({ from: account })
+
+        activeBondsDealID.push(dealID);
 
         let principal = await bondCallContract.methods.principalOf(account, address).call({ from: account });
 
@@ -175,8 +177,9 @@ function App() {
         }
       }
     }
-
+    
     dispatch(setInvestorBonds(investorBonds));
+    dispatch(setActiveBondsDealID(activeBondsDealID));
     dispatch(setInvestorBondsIssuers(investorBondsIssuers));
 
     //=== issuers filtering

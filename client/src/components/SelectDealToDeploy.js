@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import 'semantic-ui-css/semantic.min.css';
+import _ from "lodash";
 import { Button, Card, CardContent, Dropdown } from "semantic-ui-react";
 import BankJSON from "../contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
 import IssuerJSON from "../contracts/artifacts/contracts/Topos/Bank/Issuer.sol/Issuer.json";
@@ -9,6 +10,8 @@ import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
 import Addresses from "../../src/addresses/addr.json";
 import { setCountryForDealToIssue, setCurrencyForDealToIssue, setDealToIssue, setIssuerNameForDealToIssue, setShowIssueDealForm } from "../store";
+import "../users.css";
+import "../manager.css";
 
 function SelectDealToDeploy() {
     const [dealID, setDealID] = useState('');
@@ -18,6 +21,11 @@ function SelectDealToDeploy() {
     });
 
     const dispatch = useDispatch();
+
+    const caseSensitiveSearch = (dealOptions, query) => {
+        const re = new RegExp(_.escapeRegExp(query))
+        return dealOptions.filter((opt) => re.test(opt.text))
+    }
 
     const dealOptions = [];
     for (let i = 0; i < bonds.dealsToIssue.length; i++) {
@@ -59,6 +67,7 @@ function SelectDealToDeploy() {
                     <Dropdown
                         placeholder="Select"
                         options={dealOptions}
+                        search={caseSensitiveSearch}
                         value={dealID}
                         onChange={(e, data) => setDealID(data.value)}
                     />

@@ -3,7 +3,7 @@ import 'semantic-ui-css/semantic.min.css';
 
 function ManagerBonds() {
     return (
-        <div className="container">
+        <div className="manager">
             Manager Bonds
         </div>
     );
