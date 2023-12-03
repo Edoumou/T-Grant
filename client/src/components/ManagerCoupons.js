@@ -5,6 +5,7 @@ import SelectDealToDeploy from "./SelectDealToDeploy";
 import SelectBond from "./SelectBond";
 import "../users.css";
 import "../manager.css";
+import ShowSelectedBond from "./ShowSelectedBond";
 
 function ManagerCoupons() {
     const connection = useSelector(state => {
@@ -32,7 +33,7 @@ function ManagerCoupons() {
                             <SelectBond />
                         </GridColumn>
                         <GridColumn width={12}>
-                            Bonds
+                            <ShowSelectedBond />
                         </GridColumn>
                     </GridRow>
                 </Grid>

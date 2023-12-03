@@ -16,7 +16,7 @@ const bondSlice = createSlice({
         issuersName: [],
         bonds: [],
         activeBondsDealID: [],
-        selectedActiveBond: [],
+        selectedActiveBond: {},
         investorsForSelectedActiveDeal: [],
         bondsDealIDs: [],
         bondsIssuers: [],

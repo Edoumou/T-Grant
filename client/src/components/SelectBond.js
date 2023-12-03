@@ -48,29 +48,27 @@ function SelectBond() {
         let address = await bankContract.methods.dealBondContracts(dealID).call({ from: account });
 
         let isin = await bondCallContract.methods.isin(address).call({ from: account });
-          let denomination = await bondCallContract.methods.denomination(address).call({ from: account });
-          let volume = await bondCallContract.methods.issueVolume(address).call({ from: account });
-          let couponRate = await bondCallContract.methods.couponRate(address).call({ from: account });
-          let couponFrequency = await bondCallContract.methods.couponFrequency(address).call({ from: account });
-          let maturityDate = await bondCallContract.methods.maturityDate(address).call({ from: account });
-          let symbol = await bondCallContract.methods.symbol(address).call({ from: account });
-          let name = await bondCallContract.methods.name(address).call({ from: account });
+        let denomination = await bondCallContract.methods.denomination(address).call({ from: account });
+        let volume = await bondCallContract.methods.issueVolume(address).call({ from: account });
+        let couponRate = await bondCallContract.methods.couponRate(address).call({ from: account });
+        let couponFrequency = await bondCallContract.methods.couponFrequency(address).call({ from: account });
+        let maturityDate = await bondCallContract.methods.maturityDate(address).call({ from: account });
+        let symbol = await bondCallContract.methods.symbol(address).call({ from: account });
+        let name = await bondCallContract.methods.name(address).call({ from: account });
 
-          let bond = [];
-          bond.push(
-            {
-              isin: isin,
-              dealID: dealID,
-              name: name,
-              symbol: symbol,
-              denomination: denomination.toString(),
-              issueVolume: volume.toString(),
-              couponRate: couponRate.toString(),
-              couponFrequency: couponFrequency.toString(),
-              maturityDate: maturityDate.toString(),
-              tokenSymbol: tokenSymbol
-            }
-        );
+        let bond = {
+            isin: isin,
+            dealID: dealID,
+            name: name,
+            symbol: symbol,
+            denomination: denomination.toString(),
+            issueVolume: volume.toString(),
+            couponRate: couponRate.toString(),
+            couponFrequency: couponFrequency.toString(),
+            maturityDate: maturityDate.toString(),
+            tokenSymbol: tokenSymbol
+        };
+
         let investors = await bondCallContract.methods.listOfInvestors(address).call({ from: account });
 
         let lisOfInvestors = [];
