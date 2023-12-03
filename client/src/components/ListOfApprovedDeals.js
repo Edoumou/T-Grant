@@ -96,7 +96,7 @@ function ListOfApprovedDeals() {
             {
                 connection.deals.length > 0 ?
                     <div className="tab-scroll">
-                        <Table padded>
+                        <Table padded selectable>
                             <TableHeader className="header-sticky">
                                 <TableRow>
                                     <TableHeaderCell textAlign="left">Deal ID</TableHeaderCell>

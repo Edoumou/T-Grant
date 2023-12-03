@@ -16,7 +16,7 @@ function ShowSelectedBond() {
 
     return (
         <div>
-            <Table padded>
+            <Table padded selectable>
                 <TableHeader>
                     <TableRow>
                         <TableHeaderCell>ISIN</TableHeaderCell>

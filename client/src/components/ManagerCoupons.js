@@ -3,10 +3,10 @@ import { useSelector } from "react-redux";
 import { Grid, GridColumn, GridRow } from "semantic-ui-react";
 import SelectDealToDeploy from "./SelectDealToDeploy";
 import SelectBond from "./SelectBond";
-import "../users.css";
-import "../manager.css";
 import ShowSelectedBond from "./ShowSelectedBond";
 import BondListOfInvestors from "./BondListOfInvestors";
+import "../users.css";
+import "../manager.css";
 
 function ManagerCoupons() {
     const connection = useSelector(state => {

@@ -34,6 +34,7 @@ import MintTokens from './components/MintTokens';
 import IssueBonds from './components/IssueBonds';
 import InvestorBonds from './components/InvestorBonds';
 import ManagerCoupons from './components/ManagerCoupons';
+import DealsFund from './components/DealsFund';
 
 function App() {
   const dispatch = useDispatch();
@@ -143,7 +144,7 @@ function App() {
         let tokenAddress = deals[i].currency;
         let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
         let issuer = await issuerContract.methods.issuers(deals[i].issuerAddress).call({ from: account });
-        let address = await toposBank.methods.dealBondContracts(dealID).call({ from: account })
+        let address = await toposBank.methods.dealBondContracts(dealID).call({ from: account });
 
         activeBondsDealID.push(dealID);
 
@@ -495,6 +496,13 @@ function App() {
                           as={Link}
                           to='/manager/coupons'
                         />
+                        <MenuItem
+                          name='funds'
+                          active={connection.activeItem === 'funds'}
+                          onClick={handleItemClick}
+                          as={Link}
+                          to='/manager/funds'
+                        />
                       </>
                     : connection.role === "ISSUER" ?
                       <>
@@ -574,6 +582,7 @@ function App() {
                       <Route path='/manager/issue-bonds' element={<IssueBonds />} />
                       <Route path='/manager/bonds' element={<ManagerBonds />} />
                       <Route path='/manager/coupons' element={<ManagerCoupons />} />
+                      <Route path='/manager/funds' element={<DealsFund />} />
                     </>
                   : connection.role === "ISSUER" ?
                     <>
