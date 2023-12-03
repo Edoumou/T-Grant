@@ -19,9 +19,9 @@ function SelectBond() {
 
     const dispatch = useDispatch();
 
-    const caseSensitiveSearch = (dealOptions, query) => {
+    const caseSensitiveSearch = (bondsOption, query) => {
         const re = new RegExp(_.escapeRegExp(query))
-        return dealOptions.filter((opt) => re.test(opt.text))
+        return bondsOption.filter((opt) => re.test(opt.text))
     }
 
     const bondsOption = [];
@@ -87,7 +87,9 @@ function SelectBond() {
                     address: investor,
                     principal: principal,
                     balance: balance,
-                    interest: interest
+                    interest: interest,
+                    tokenSymbol: tokenSymbol,
+                    bondSymbol: symbol
                 }
 
                 lisOfInvestors.push(investorData); 
@@ -107,8 +109,8 @@ function SelectBond() {
                         placeholder="Select"
                         options={bondsOption}
                         search={caseSensitiveSearch}
-                        value={dealID}
                         onChange={(e, data) => setDealID(data.value)}
+                        onClick={setSelectedBond}
                     />
                     <br></br>
                     <br></br>
