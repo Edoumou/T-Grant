@@ -21,6 +21,20 @@
   padding-bottom: 5%;
 }
 
+.transfer-fund {
+  width: 30%;
+  margin-left: 35%;
+  margin-top: 150px;
+}
+
+.fund-head {
+  text-align: center;
+  color: white;
+  word-spacing: 2px;
+  font-size: calc(5px + 1.5vmin);
+  margin-bottom: 40px;
+}
+
 .list-card-action {
   padding-bottom: 5%;
   margin-left: 9%;

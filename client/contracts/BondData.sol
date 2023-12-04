@@ -75,6 +75,12 @@ abstract contract BondData {
         uint256 interestPaid;
     }
 
+    struct Listing {
+        address owner;
+        uint256 amount;
+        address bondContract;
+    }
+
     error InvalidInvestorAddress(address investor);
     error InvalidDealStatus(string dealID);
     error InvalidAmount(uint256 amount);

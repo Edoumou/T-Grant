@@ -11,6 +11,7 @@ import RolesJSON from "../src/contracts/artifacts/contracts/utils/Roles.sol/Role
 import IssuerJSON from "../src/contracts/artifacts/contracts/Topos/Bank/Issuer.sol/Issuer.json";
 import InvestorJSON from "../src/contracts/artifacts/contracts/Topos/Bank/Investor.sol/Investor.json";
 import TokenCallJSON from "../src/contracts/artifacts/contracts/tests/tokens/TokenCall.sol/TokenCall.json";
+import IssuersFundJSON from "../src/contracts/artifacts/contracts/treasury/IssuersFund.sol.sol/IssuersFund.json";
 import Addresses from "../src/addresses/addr.json";
 import { web3Connection } from './utils/web3Connection';
 import { getContract } from './utils/getContract';
@@ -28,7 +29,7 @@ import SubmitDeal from './components/SubmitDeal';
 import ManagerRequests from './components/ManagerRequests';
 import ManagerBonds from './components/ManagerBonds';
 import ManagerDeals from './components/ManagerDeals';
-import { setActiveBondsDealID, setApprovedDeals, setBondSymbols, setBonds, setBondsCurrency, setBondsDealIDs, setBondsIssuers, setDealsToIssue, setIssuersForApprovedDelas, setIssuersName, setIssuersNameForApprovedDeals, setSelectedDealID, setShowInvestForm, setTokenSymbolForApprovedDeals } from './store/slices/bondSlice';
+import { setActiveBondsDealID, setApprovedDeals, setBondSymbols, setBonds, setBondsCurrency, setBondsDealIDs, setBondsIssuers, setDealsFund, setDealsToIssue, setIssuersForApprovedDelas, setIssuersName, setIssuersNameForApprovedDeals, setSelectedDealID, setShowInvestForm, setTokenSymbolForApprovedDeals } from './store/slices/bondSlice';
 import InvestorDeals from './components/InvestorDeals';
 import MintTokens from './components/MintTokens';
 import IssueBonds from './components/IssueBonds';
@@ -61,6 +62,7 @@ function App() {
     let investorContract = await getContract(web3, InvestorJSON, Addresses.InvestorContract);
     let tokenCallContract = await getContract(web3, TokenCallJSON, Addresses.TokenCallContract);
     let bondCallContract = await getContract(web3, BondCallJSON, Addresses.BondCallContract);
+    let issuersFundContract = await getContract(web3, IssuersFundJSON, Addresses.IssuersFundContract);
 
     let role = await rolesContract.methods.getRole(account).call({ from: account });
 
@@ -137,7 +139,7 @@ function App() {
     let investorBonds = [];
     let activeBondsDealID = [];
     let investorBondsIssuers = [];
-    let investorsBondsCurrencies = [];
+    let DealsFund = [];
     for(let i = 0; i < deals.length; i++) {
       if(deals[i].status === "4") {
         let dealID = deals[i].dealID;
@@ -147,6 +149,12 @@ function App() {
         let address = await toposBank.methods.dealBondContracts(dealID).call({ from: account });
 
         activeBondsDealID.push(dealID);
+
+        let funds = await issuersFundContract.methods.totalAmount(dealID).call({ from: account });
+
+        if(Number(funds) !== 0) {
+          DealsFund.push(dealID);
+        }
 
         let principal = await bondCallContract.methods.principalOf(account, address).call({ from: account });
 
@@ -182,6 +190,7 @@ function App() {
     dispatch(setInvestorBonds(investorBonds));
     dispatch(setActiveBondsDealID(activeBondsDealID));
     dispatch(setInvestorBondsIssuers(investorBondsIssuers));
+    dispatch(setDealsFund(DealsFund));
 
     //=== issuers filtering
     if (role === "ISSUER") {
@@ -233,6 +242,7 @@ function App() {
     let investorContract = await getContract(web3, InvestorJSON, Addresses.InvestorContract);
     let tokenCallContract = await getContract(web3, TokenCallJSON, Addresses.TokenCallContract);
     let bondCallContract = await getContract(web3, BondCallJSON, Addresses.BondCallContract);
+    let issuersFundContract = await getContract(web3, IssuersFundJSON, Addresses.IssuersFundContract);
 
     if(typeof window.ethereum !== 'undefined') {
       await window.ethereum.on('accountsChanged', async accounts => {
@@ -302,7 +312,7 @@ function App() {
         //=== Invstors bonds
         let investorBonds = [];
         let investorBondsIssuers = [];
-        let investorsBondsCurrencies = [];
+        let DealsFund = [];
         for(let i = 0; i < deals.length; i++) {
           if(deals[i].status === "4") {
             let dealID = deals[i].dealID;
@@ -310,6 +320,12 @@ function App() {
             let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
             let issuer = await issuerContract.methods.issuers(deals[i].issuerAddress).call({ from: account });
             let address = await toposBank.methods.dealBondContracts(dealID).call({ from: account });
+
+            let funds = await issuersFundContract.methods.totalAmount(dealID).call({ from: account });
+
+            if(Number(funds) !== 0) {
+              DealsFund.push(dealID);
+            }
 
             let principal = await bondCallContract.methods.principalOf(account, address).call({ from: account });
 
@@ -344,6 +360,7 @@ function App() {
 
         dispatch(setInvestorBonds(investorBonds));
         dispatch(setInvestorBondsIssuers(investorBondsIssuers));
+        dispatch(setDealsFund(DealsFund));
 
         //=== issuers filtering
         if (role === "ISSUER") {

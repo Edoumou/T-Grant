@@ -44,10 +44,11 @@ contract IssuersFund is IIssuersFund {
     function withdrawFund(string memory _dealID, address _issuer, address _tokenAddress) external onlyBankContract {
         uint256 _amount = totalAmount[_dealID];
 
-        uint256 fees = IToposBank(toposBankContract).getDealFees();
+        uint256 feesRate = IToposBank(toposBankContract).getDealFees();
+        uint256 fees = _amount * feesRate * 1 ether / 10_000;
 
-        IERC20(_tokenAddress).transfer(toposTreasury, (fees * 1 ether) / 10_000);
-        IERC20(_tokenAddress).transfer(_issuer, (10000 * _amount - fees) * 1 ether / 10_000);
+        IERC20(_tokenAddress).transfer(toposTreasury, fees);
+        IERC20(_tokenAddress).transfer(_issuer, (_amount * 1 ether) - fees);
 
         totalAmount[_dealID] = 0;
     }

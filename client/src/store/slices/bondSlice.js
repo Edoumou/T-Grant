@@ -23,6 +23,7 @@ const bondSlice = createSlice({
         bondsCurrency: [],
         issuersNameForApprovedDeals: [],
         approvedDeals: [],
+        dealsFund: [],
         issuersForApprovedDeals: [],
         tokenSymbolForApprovedDeals: [],
         dealsToIssue: [],
@@ -71,6 +72,9 @@ const bondSlice = createSlice({
         },
         setApprovedDeals(state, action) {
             state.approvedDeals = action.payload;
+        },
+        setDealsFund(state, action) {
+            state.dealsFund = action.payload;
         },
         setIssuersForApprovedDelas(state, action) {
             state.issuersForApprovedDeals = action.payload;
@@ -134,6 +138,7 @@ export const {
     setIssuersName,
     setIssuersNameForApprovedDeals,
     setApprovedDeals,
+    setDealsFund,
     setIssuersForApprovedDelas,
     setTokenSymbolForApprovedDeals,
     setDealsToIssue,
