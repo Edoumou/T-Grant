@@ -7,6 +7,7 @@ import ShowSelectedBond from "./ShowSelectedBond";
 import BondListOfInvestors from "./BondListOfInvestors";
 import "../users.css";
 import "../manager.css";
+import BondsCouponsPaid from "./BondsCouponsPaid";
 
 function ManagerCoupons() {
     const connection = useSelector(state => {
@@ -36,6 +37,7 @@ function ManagerCoupons() {
                         <GridColumn width={12}>
                             <ShowSelectedBond />
                             <BondListOfInvestors />
+                            <BondsCouponsPaid />
                         </GridColumn>
                     </GridRow>
                 </Grid>

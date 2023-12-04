@@ -37,6 +37,87 @@
       "type": "function"
     },
     {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_dealID",
+          "type": "string"
+        }
+      ],
+      "name": "getDeal",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "dealID",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "prospectusURI",
+              "type": "string"
+            },
+            {
+              "internalType": "address",
+              "name": "issuerAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "debtAmount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "denomination",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "couponRate",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "couponFrequency",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "maturityDate",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "index",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "currency",
+              "type": "address"
+            },
+            {
+              "internalType": "uint8",
+              "name": "couponType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "enum BondData.DealStatus",
+              "name": "status",
+              "type": "uint8"
+            }
+          ],
+          "internalType": "struct BondData.Deal",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "inputs": [],
       "name": "getDealFees",
       "outputs": [

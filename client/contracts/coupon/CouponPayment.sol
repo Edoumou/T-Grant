@@ -68,7 +68,7 @@ contract CouponPayment {
     }
 
     /**
-    * @notice Pays interests every minute. This is used ONLY for tests 
+    * @notice Pays interests every minute. This is used ONLY for tests, and should be removed in production
     */
     function payInterestEveryMinutes(address _bondContract) external {
         BondData.DealInvestment[] memory investors = IBondStorage(_bondContract).getListOfInvestors();

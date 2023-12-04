@@ -4,6 +4,8 @@ import 'semantic-ui-css/semantic.min.css';
 import { Table, TableBody, TableCell, TableFooter, TableHeader, TableHeaderCell, TableRow } from "semantic-ui-react";
 import Formate from "../utils/Formate";
 import FormateAddress from "../utils/FormateAddress";
+import "../users.css";
+import "../manager.css";
 
 function BondListOfInvestors() {
     let bonds = useSelector(state => {

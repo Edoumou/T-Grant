@@ -254,6 +254,12 @@ contract ToposBank is IToposBank, ToposBankStorage {
         issuersFundContract = _issuerFundContract;
     }
 
+    function getDeal(
+        string memory _dealID
+    ) external view returns(BondData.Deal memory) {
+        return deals[_dealID];
+    }
+
     function getListOfDeals() external view returns(BondData.Deal[] memory) {
         return listOfDeals;
     }

@@ -5,6 +5,8 @@ import { Button, Card, CardContent, Dropdown } from "semantic-ui-react";
 import BankJSON from "../contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
 import BondCallJSON from "../contracts/artifacts/contracts/BondCall.sol/BondCall.json";
 import TokenCallJSON from "../contracts/artifacts/contracts/tests/tokens/TokenCall.sol/TokenCall.json";
+import IssuerJSON from "../contracts/artifacts/contracts/Topos/Bank/Issuer.sol/Issuer.json";
+import CouponPaymentJSON from "../contracts/artifacts/contracts/coupon/CouponPayment.sol/CouponPayment.json";
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
 import Addresses from "../addresses/addr.json";
@@ -40,9 +42,14 @@ function SelectBond() {
         let bankContract = await getContract(web3, BankJSON, Addresses.ToposBankContract);
         let bondCallContract = await getContract(web3, BondCallJSON, Addresses.BondCallContract);
         let tokenCallContract = await getContract(web3, TokenCallJSON, Addresses.TokenCallContract);
+        let issuerContract = await getContract(web3, IssuerJSON, Addresses.IssuerContract);
+        let couponPayment = await getContract(web3, CouponPaymentJSON, Addresses.CouponPaymentContract);
 
         let deal = await bankContract.methods.deals(dealID).call({ from: account });
         let tokenAddress = deal.currency;
+        let issuerAddress = deal.issuerAddress;
+        let issuer = await issuerContract.methods.issuers(issuerAddress).call({ from: account });
+        let logo = issuer.logoURI;
         let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
         
         let address = await bankContract.methods.dealBondContracts(dealID).call({ from: account });
@@ -54,6 +61,8 @@ function SelectBond() {
         let volume = await bondCallContract.methods.issueVolume(address).call({ from: account });
         let couponRate = await bondCallContract.methods.couponRate(address).call({ from: account });
         let maturityDate = await bondCallContract.methods.maturityDate(address).call({ from: account });
+
+        //let listOfInterestsPaid = await couponPayment.methods.getListOfInterestsPaid(address).call({ from: account });
         
         let bond = {
             dealID: dealID,
@@ -64,7 +73,8 @@ function SelectBond() {
             issueVolume: volume.toString(),
             couponRate: couponRate.toString(),
             maturityDate: maturityDate.toString(),
-            tokenSymbol: tokenSymbol
+            tokenSymbol: tokenSymbol,
+            logo: logo
         };
 
         let investors = await bondCallContract.methods.listOfInvestors(address).call({ from: account });
