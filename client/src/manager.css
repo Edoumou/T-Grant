@@ -138,3 +138,10 @@
   margin-bottom: 10px;
   font-size: calc(2px + 2vmin);
 }
+
+.no-approved-deal {
+  color: white;
+  word-spacing: 2px;
+  font-size: calc(5px + 1.5vmin);
+  margin-bottom: 100px;
+}

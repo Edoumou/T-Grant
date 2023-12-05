@@ -94,7 +94,7 @@ function ListOfApprovedDeals() {
                 <strong>List of Approved Deals</strong>
             </div>
             {
-                connection.deals.length > 0 ?
+                bonds.approvedDeals.length > 0 ?
                     <div className="tab-scroll">
                         <Table padded selectable>
                             <TableHeader className="header-sticky">
@@ -119,8 +119,11 @@ function ListOfApprovedDeals() {
                         </Table>
                     </div>
                 :
-                    <div  className="list-card-head-no">
-                        There is No Deal
+                    <div  className="no-approved-deal">
+                        No approved deal has been found.
+                        <br></br>
+                        <br></br>
+                        Come back later
                     </div>
             }
         </>

@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } from "semantic-ui-react";
+import { Image, Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } from "semantic-ui-react";
 import Formate from "../utils/Formate";
 
 function ManagerListOfBonds() {
@@ -11,6 +11,13 @@ function ManagerListOfBonds() {
     const renderedBonds = bonds.bonds.map((bond, index) => {
         return (
             <TableRow key={index}>
+                <TableCell textAlign="left">
+                    <Image
+                        size='tiny'
+                        src= {bonds.bondsIssuers[index].logoURI}
+                    />
+                    
+                </TableCell>
                 <TableCell textAlign="left">{bonds.bondsDealIDs[index]}</TableCell>
                 <TableCell textAlign="left">{bond.isin}</TableCell>
                 <TableCell textAlign="left">{bond.name}</TableCell>
@@ -36,6 +43,7 @@ function ManagerListOfBonds() {
                         <Table padded selectable>
                             <TableHeader className="header-sticky">
                                 <TableRow>
+                                    <TableHeaderCell textAlign="left">Issuer</TableHeaderCell>
                                     <TableHeaderCell textAlign="left">Deal ID</TableHeaderCell>
                                     <TableHeaderCell textAlign="left">ISIN</TableHeaderCell>
                                     <TableHeaderCell textAlign="left">Name</TableHeaderCell>

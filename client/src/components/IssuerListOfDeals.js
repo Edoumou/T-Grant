@@ -60,7 +60,7 @@ function IssuerListOfDeals() {
                 <TableCell textAlign="center">{deal.couponFrequency}</TableCell>
                 <TableCell warning textAlign="center">{couponType[index]}</TableCell>
                 <TableCell positive textAlign="right">{(new Date(deal.maturityDate * 1000)).toLocaleDateString()}</TableCell>
-                <TableCell textAlign="center">{symbols[index]}</TableCell>
+                <TableCell textAlign="center">{status[index]}</TableCell>
             </TableRow>
         );
     });

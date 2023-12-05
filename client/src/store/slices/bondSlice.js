@@ -14,6 +14,7 @@ const bondSlice = createSlice({
         showInvestForm: false,
         bondSymbols: [],
         issuersName: [],
+        issuersLogo: [],
         bonds: [],
         activeBondsDealID: [],
         selectedActiveBond: {},
@@ -66,6 +67,9 @@ const bondSlice = createSlice({
         },
         setIssuersName(state, action) {
             state.issuersName = action.payload;
+        },
+        setIssuersLogo(state, action) {
+            state.issuersLogo = action.payload;
         },
         setIssuersNameForApprovedDeals(state, action) {
             state.issuersNameForApprovedDeals = action.payload;
@@ -136,6 +140,7 @@ export const {
     setShowInvestForm,
     setBondSymbols,
     setIssuersName,
+    setIssuersLogo,
     setIssuersNameForApprovedDeals,
     setApprovedDeals,
     setDealsFund,

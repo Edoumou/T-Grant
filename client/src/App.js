@@ -29,7 +29,7 @@ import SubmitDeal from './components/SubmitDeal';
 import ManagerRequests from './components/ManagerRequests';
 import ManagerBonds from './components/ManagerBonds';
 import ManagerDeals from './components/ManagerDeals';
-import { setActiveBondsDealID, setApprovedDeals, setBondSymbols, setBonds, setBondsCurrency, setBondsDealIDs, setBondsIssuers, setDealsFund, setDealsToIssue, setIssuersForApprovedDelas, setIssuersName, setIssuersNameForApprovedDeals, setSelectedDealID, setShowInvestForm, setTokenSymbolForApprovedDeals } from './store/slices/bondSlice';
+import { setActiveBondsDealID, setApprovedDeals, setBondSymbols, setBonds, setBondsCurrency, setBondsDealIDs, setBondsIssuers, setDealsFund, setDealsToIssue, setIssuersForApprovedDelas, setIssuersLogo, setIssuersName, setIssuersNameForApprovedDeals, setSelectedDealID, setShowInvestForm, setTokenSymbolForApprovedDeals } from './store/slices/bondSlice';
 import InvestorDeals from './components/InvestorDeals';
 import MintTokens from './components/MintTokens';
 import IssueBonds from './components/IssueBonds';
@@ -75,6 +75,7 @@ function App() {
     //=== store bonds currency symbols
     let bondSymbols = [];
     let issuersNames = [];
+    let issuersLogo = [];
     let issuersNameForApprovedDeals = [];
     let approvedDeals = [];
     let issuersForApprovedDeals = [];
@@ -88,6 +89,7 @@ function App() {
 
       bondSymbols.push(tokenSymbol);
       issuersNames.push(issuer.name);
+      issuersLogo.push(issuer.logoURI);
 
       if(deals[i].status === "2") {
         let issuerForApprovedDeals = issuer;
@@ -126,6 +128,7 @@ function App() {
     dispatch(setDealsToIssue(dealsToIssue));
     dispatch(setBondSymbols(bondSymbols));
     dispatch(setIssuersName(issuersNames));
+    dispatch(setIssuersLogo(issuersLogo));
     dispatch(setApprovedDeals(approvedDeals));
     dispatch(setIssuersForApprovedDelas(issuersForApprovedDeals));
     dispatch(setIssuersNameForApprovedDeals(issuersNameForApprovedDeals));
@@ -259,6 +262,7 @@ function App() {
         //=== store bonds currency symbols
         let bondSymbols = [];
         let issuersNames = [];
+        let issuersLogo = [];
         let issuersNameForApprovedDeals = [];
         let approvedDeals = [];
         let issuersForApprovedDeals = [];
@@ -271,6 +275,7 @@ function App() {
 
           bondSymbols.push(tokenSymbol);
           issuersNames.push(issuer.name);
+          issuersLogo.push(issuer.logoURI);
 
           if(deals[i].status === "2") {
             let issuerForApprovedDeals = issuer;
@@ -300,6 +305,7 @@ function App() {
 
         dispatch(setBondSymbols(bondSymbols));
         dispatch(setIssuersName(issuersNames));
+        dispatch(setIssuersLogo(issuersLogo));
         dispatch(setApprovedDeals(approvedDeals));
         dispatch(setIssuersForApprovedDelas(issuersForApprovedDeals));
         dispatch(setIssuersNameForApprovedDeals(issuersNameForApprovedDeals));

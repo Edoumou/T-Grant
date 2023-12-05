@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import 'semantic-ui-css/semantic.min.css';
-import { Table, TableRow, TableCell, TableHeader, TableHeaderCell, TableBody, Icon, Button, Modal, ModalContent, ModalActions } from "semantic-ui-react";
+import { Image, Table, TableRow, TableCell, TableHeader, TableHeaderCell, TableBody, Icon, Button, Modal, ModalContent, ModalActions } from "semantic-ui-react";
 import BankJSON from "../contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
 import TokenCallJSON from "../contracts/artifacts/contracts/tests/tokens/TokenCall.sol/TokenCall.json";
 import IssuerJSON from "../contracts/artifacts/contracts/Topos/Bank/Issuer.sol/Issuer.json";
@@ -290,8 +290,13 @@ function ManagerListOfDeals() {
     const renderedDeals = connection.deals.map((deal, index) => {
         return (
             <TableRow key={index}>
+                <TableCell textAlign="left">
+                    <Image
+                        size='tiny'
+                        src={bonds.issuersLogo[index]}
+                    />
+                </TableCell>
                 <TableCell textAlign="left">{deal.dealID}</TableCell>
-                <TableCell textAlign="left">{bonds.issuersName[index]}</TableCell>
                 <TableCell textAlign="left"><a href={deal.prospectusURI} target="_blank"><strong>{deal.dealID.toLowerCase()}</strong></a></TableCell>
                 <TableCell positive textAlign="right">{Formate(deal.debtAmount)} {bonds.bondSymbols[index]}</TableCell>
                 <TableCell positive textAlign="right">{Formate(deal.denomination)} {bonds.bondSymbols[index]}</TableCell>
@@ -317,8 +322,8 @@ function ManagerListOfDeals() {
                         <Table padded selectable>
                             <TableHeader className="header-sticky">
                                 <TableRow>
-                                    <TableHeaderCell textAlign="left">Deal ID</TableHeaderCell>
                                     <TableHeaderCell textAlign="left">Issuer</TableHeaderCell>
+                                    <TableHeaderCell textAlign="left">Deal ID</TableHeaderCell>
                                     <TableHeaderCell textAlign="left">Prospectus</TableHeaderCell>
                                     <TableHeaderCell textAlign="right">Volume</TableHeaderCell>
                                     <TableHeaderCell textAlign="right">Denomination</TableHeaderCell>
