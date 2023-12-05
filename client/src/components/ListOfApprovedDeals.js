@@ -120,7 +120,7 @@ function ListOfApprovedDeals() {
                     </div>
                 :
                     <div  className="no-approved-deal">
-                        No approved deal has been found.
+                        There are no Deals approved at the moment
                         <br></br>
                         <br></br>
                         Come back later

@@ -181,7 +181,9 @@ function App() {
               couponFrequency: couponFrequency.toString(),
               maturityDate: maturityDate.toString(),
               principal: principal.toString(),
-              tokenSymbol: tokenSymbol
+              tokenSymbol: tokenSymbol,
+              logo: issuer.logoURI,
+              prospectus: deals[i].prospectusURI
             }
           );
 
@@ -355,7 +357,9 @@ function App() {
                   couponFrequency: couponFrequency.toString(),
                   maturityDate: maturityDate.toString(),
                   principal: principal.toString(),
-                  tokenSymbol: tokenSymbol
+                  tokenSymbol: tokenSymbol,
+                  logo: issuer.logoURI,
+                  prospectus: deals[i].prospectusURI
                 }
               );
 

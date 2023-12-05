@@ -10,9 +10,9 @@ import { getContract } from "../utils/getContract";
 import Formate from "../utils/Formate";
 import FormateAddress from "../utils/FormateAddress";
 import Addresses from "../../src/addresses/addr.json";
+import { setApprovedDeals, setBalance, setBondSymbols, setDeals, setIssuersForApprovedDelas, setIssuersNameForApprovedDeals, setLoading, setTokenSymbolForApprovedDeals } from "../store";
 import "../users.css";
 import "../manager.css";
-import { setApprovedDeals, setBalance, setBondSymbols, setDeals, setIssuersForApprovedDelas, setIssuersNameForApprovedDeals, setLoading, setTokenSymbolForApprovedDeals } from "../store";
 
 function ManagerListOfDeals() {
     const connection = useSelector(state => {
