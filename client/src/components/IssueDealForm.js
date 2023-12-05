@@ -143,11 +143,11 @@ function IssueDealForm() {
           let issuerAddress = deal.issuerAddress;
           let currency = deal.currency;
 
-          let issuer = await issuerContract.methods.issuers(issuerAddress).call({ from: account });
+          let _issuer = await issuerContract.methods.issuers(issuerAddress).call({ from: account });
 
           let tokenSymbol = await tokenCallContract.methods.symbol(currency).call({ from: account });
 
-          bondsIssuers.push(issuer);
+          bondsIssuers.push(_issuer);
           bondsCurrency.push(tokenSymbol);
         }
 
@@ -155,10 +155,10 @@ function IssueDealForm() {
         dispatch(setIssuersForApprovedDelas(issuersForApprovedDeals));
         dispatch(setIssuersNameForApprovedDeals(issuersNameForApprovedDeals));
         dispatch(setTokenSymbolForApprovedDeals(tokenSymbolForApprovedDeals));
-        dispatch(setBonds(newBonds));
         dispatch(setBondsDealIDs(bondsDealIDs));
         dispatch(setBondsIssuers(bondsIssuers));
         dispatch(setBondsCurrency(bondsCurrency));
+        dispatch(setBonds(newBonds));
 
         setBondContractDeployed(false);
         setShowBondForm(false);

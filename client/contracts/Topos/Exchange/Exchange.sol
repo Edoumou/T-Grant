@@ -12,9 +12,5 @@ contract Exchange {
     }
 
     function listBonds(BondData.Listing calldata _listing) external {
-        uint256 principal = BondCall(bondCallContract).principalOf(msg.sender, _bondContract);
-        require(principal > 0, "insufficient balance");
-
-        BondCall(bondCallContract).approve(address(this), _amount, _bondContract);
     }
 }

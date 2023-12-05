@@ -32,6 +32,8 @@ function IssuersList() {
         let { web3, account } = await web3Connection();
         let contract = await getContract(web3, IssuerJSON, Addresses.IssuerContract);
 
+        setLoader(true);
+
         await contract.methods.approveIssuer(issuerAccount)
             .send({ from: account })
             .on('transactionHash', hash => {
@@ -56,6 +58,8 @@ function IssuersList() {
     const reject = async issuerAccount => {
         let { web3, account } = await web3Connection();
         let contract = await getContract(web3, IssuerJSON, Addresses.IssuerContract);
+
+        setLoader(true);
 
         await contract.methods.rejectIssuer(issuerAccount)
             .send({ from: account })

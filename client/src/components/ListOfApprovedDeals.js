@@ -126,6 +126,10 @@ function ListOfApprovedDeals() {
                         Come back later
                     </div>
             }
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
         </>
     );
 }

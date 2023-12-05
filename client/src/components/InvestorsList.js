@@ -31,6 +31,8 @@ function InvestorsList() {
         let { web3, account } = await web3Connection();
         let contract = await getContract(web3, InvestorJSON, Addresses.InvestorContract);
 
+        setLoader(true);
+        
         await contract.methods.approveInvestor(investorAccount)
             .send({ from: account })
             .on('transactionHash', hash => {
@@ -55,6 +57,8 @@ function InvestorsList() {
     const reject = async investorAccount => {
         let { web3, account } = await web3Connection();
         let contract = await getContract(web3, InvestorJSON, Addresses.InvestorContract);
+
+        setLoader(true);
 
         await contract.methods.rejectInvestor(investorAccount)
             .send({ from: account })

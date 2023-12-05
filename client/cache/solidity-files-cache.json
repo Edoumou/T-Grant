@@ -37,7 +37,7 @@
       ]
     },
     "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/BondCall.sol": {
-      "lastModificationDate": 1701321721154,
+      "lastModificationDate": 1701713751756,
       "contentHash": "3586c959bcc95ecd52a3c5e7777faf56",
       "sourceName": "contracts/BondCall.sol",
       "solcConfig": {
@@ -111,8 +111,8 @@
       ]
     },
     "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/BondData.sol": {
-      "lastModificationDate": 1701454034673,
-      "contentHash": "891bf002a0d4b2c83e8a8f84a283f987",
+      "lastModificationDate": 1701672298890,
+      "contentHash": "0ebdb16986c009bb764f5440bfc93b18",
       "sourceName": "contracts/BondData.sol",
       "solcConfig": {
         "version": "0.8.19",
@@ -596,8 +596,8 @@
       ]
     },
     "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/treasury/IssuersFund.sol.sol": {
-      "lastModificationDate": 1701480194613,
-      "contentHash": "533ecdc4d1a01a1fe628ab490aeb297a",
+      "lastModificationDate": 1701734154885,
+      "contentHash": "c397eb21cc26ba84eac87f44c4baa05e",
       "sourceName": "contracts/treasury/IssuersFund.sol.sol",
       "solcConfig": {
         "version": "0.8.19",
@@ -1414,6 +1414,79 @@
       ],
       "artifacts": [
         "IAuthentication"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/Topos/Exchange/Exchange.sol": {
+      "lastModificationDate": 1701748000827,
+      "contentHash": "fe657ee17da7eef4d570ced2bbf41a5b",
+      "sourceName": "contracts/Topos/Exchange/Exchange.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../../BondCall.sol",
+        "../../BondData.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Exchange"
+      ]
+    },
+    "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/Topos/Exchange/ExchangeStorage.sol": {
+      "lastModificationDate": 1701659734303,
+      "contentHash": "58cdbf80f3df84024e5e869b4828f4ba",
+      "sourceName": "contracts/Topos/Exchange/ExchangeStorage.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "ExchangeStorage"
       ]
     }
   }

@@ -33,24 +33,29 @@ function InvestorRegisteredDeals() {
         <>
             {
                 investor.investorBonds.length > 0 &&
-                <div className="tab-scroll">
-                    <Table padded selectable>
-                        <TableHeader className="header-sticky">
-                            <TableRow>
-                                <TableHeaderCell textAlign="left">Issuer</TableHeaderCell>
-                                <TableHeaderCell textAlign="left">Deal ID</TableHeaderCell>
-                                <TableHeaderCell textAlign="left">Prospectus</TableHeaderCell>
-                                <TableHeaderCell textAlign="right">Volume</TableHeaderCell>
-                                <TableHeaderCell textAlign="right">Denomination</TableHeaderCell>
-                                <TableHeaderCell textAlign="center">Coupon</TableHeaderCell>
-                                <TableHeaderCell textAlign="right">Maturity</TableHeaderCell>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {renderedDeals}
-                        </TableBody>
-                    </Table>
-                </div>
+                <>
+                    <div className="managerDealList">
+                        Deals you are Registered to
+                    </div>
+                    <div className="tab-scroll">
+                        <Table padded selectable>
+                            <TableHeader className="header-sticky">
+                                <TableRow>
+                                    <TableHeaderCell textAlign="left">Issuer</TableHeaderCell>
+                                    <TableHeaderCell textAlign="left">Deal ID</TableHeaderCell>
+                                    <TableHeaderCell textAlign="left">Prospectus</TableHeaderCell>
+                                    <TableHeaderCell textAlign="right">Volume</TableHeaderCell>
+                                    <TableHeaderCell textAlign="right">Denomination</TableHeaderCell>
+                                    <TableHeaderCell textAlign="center">Coupon</TableHeaderCell>
+                                    <TableHeaderCell textAlign="right">Maturity</TableHeaderCell>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {renderedDeals}
+                            </TableBody>
+                        </Table>
+                    </div>
+                </>
             }
         </>
     );

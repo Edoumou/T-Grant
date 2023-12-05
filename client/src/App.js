@@ -164,6 +164,7 @@ function App() {
         if(principal !== '0') {
           let isin = await bondCallContract.methods.isin(address).call({ from: account });
           let denomination = await bondCallContract.methods.denomination(address).call({ from: account });
+          let volume = await bondCallContract.methods.issueVolume(address).call({ from: account });
           let couponRate = await bondCallContract.methods.couponRate(address).call({ from: account });
           let couponFrequency = await bondCallContract.methods.couponFrequency(address).call({ from: account });
           let maturityDate = await bondCallContract.methods.maturityDate(address).call({ from: account });
@@ -177,6 +178,7 @@ function App() {
               name: name,
               symbol: symbol,
               denomination: denomination.toString(),
+              volume: volume.toString(),
               couponRate: couponRate.toString(),
               couponFrequency: couponFrequency.toString(),
               maturityDate: maturityDate.toString(),
@@ -340,6 +342,7 @@ function App() {
             if(principal !== '0') {
               let isin = await bondCallContract.methods.isin(address).call({ from: account });
               let denomination = await bondCallContract.methods.denomination(address).call({ from: account });
+              let volume = await bondCallContract.methods.issueVolume(address).call({ from: account });
               let couponRate = await bondCallContract.methods.couponRate(address).call({ from: account });
               let couponFrequency = await bondCallContract.methods.couponFrequency(address).call({ from: account });
               let maturityDate = await bondCallContract.methods.maturityDate(address).call({ from: account });
@@ -353,6 +356,7 @@ function App() {
                   name: name,
                   symbol: symbol,
                   denomination: denomination.toString(),
+                  volume: volume.toString(),
                   couponRate: couponRate.toString(),
                   couponFrequency: couponFrequency.toString(),
                   maturityDate: maturityDate.toString(),

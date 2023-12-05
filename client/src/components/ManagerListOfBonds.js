@@ -4,7 +4,7 @@ import { Image, Table, TableBody, TableCell, TableHeader, TableHeaderCell, Table
 import Formate from "../utils/Formate";
 
 function ManagerListOfBonds() {
-    const bonds = useSelector(state => {
+    let bonds = useSelector(state => {
         return state.bond;
     });
 

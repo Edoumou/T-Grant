@@ -45,6 +45,8 @@ function MintTokens() {
         let { web3, account } = await web3Connection();
         let tokenCall = await getContract(web3, TokenCall, Addresses.TokenCallContract);
 
+        setLoader(true);
+
         await tokenCall.methods.mint(account, '1000000000000000000000000', tokenAddress)
             .send({ from: account })
             .on('transactionHash', hash => {
