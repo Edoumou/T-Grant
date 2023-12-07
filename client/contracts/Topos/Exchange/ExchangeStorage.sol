@@ -10,11 +10,18 @@ import "./IExchangeBondsStorage.sol";
 contract ExchangeStorage {
     mapping(address => mapping(string => BondData.Listing)) public investorListing;
 
+    address public owner;
+
     address public bankContract;
     address public bondCallContract;
-    address internal exchangeBondsStorage;
+    address public exchangeBondsStorage;
 
     BondData.Listing[] dealListed;
+    
+    modifier onlyOwner {
+        require(msg.sender == owner, "Only owner");
+        _;
+    }
 
     event BondsListed(string dealID, address seller, uint256 amount, uint256 price);
     event BondsCanceled(string dealID, address seller);

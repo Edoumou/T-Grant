@@ -135,8 +135,24 @@ async function main() {
   await couponPayment.waitForDeployment();
   console.log("Coupon-P:", couponPayment.target || "");
 
-  //=== Topos Treasury
+  //=== Exchange contract
+  const Exchange = await hre.ethers.getContractFactory("Exchange");
+  const exchange = await Exchange.deploy(bank.target, bondCall.target);
+  await exchange.waitForDeployment();
+  console.log("Exchange:", exchange.target || "");
 
+  //=== ExchangeBondsStorage contract
+  const ExchangeBondsStorage = await hre.ethers.getContractFactory("ExchangeBondsStorage");
+  const exchangeBondsStorage = await ExchangeBondsStorage.deploy(
+    bank.target,
+    exchange.target,
+    bondCall.target
+  );
+  await exchangeBondsStorage.waitForDeployment();
+  console.log("Ex Bonds:", exchangeBondsStorage.target || "");
+
+
+  console.log("");
   //=== Cp artifacts in `src/contracts` directory
   exec(`cp -R ../client/artifacts ../client/src/contracts`, (err, stdout, stderr) => {
     if(err) {
@@ -164,7 +180,9 @@ async function main() {
     "CNYTContract": cnyt.target,
     "DAIContract": dai.target,
     "CouponPaymentContract": couponPayment.target,
-    "TokenCallContract": tokenCall.target
+    "TokenCallContract": tokenCall.target,
+    "ExchangeContract": exchange.target,
+    "ExchangeBondsStorageContract": exchangeBondsStorage.target
   };
 
   //=== Write contracts addresses in `addr.json`file

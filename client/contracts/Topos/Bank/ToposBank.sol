@@ -37,15 +37,15 @@ contract ToposBank is IToposBank, ToposBankStorage {
     ) external {
         require(
             IRoles(rolesContract).isIssuer(msg.sender),
-            "ONLY_ISSUERS"
+            "not issuer"
         );
         require(
             msg.sender == _deal.issuerAddress,
-            "INVALID_ISSUER_ADDRESS"
+            "address"
         );
         require(
             deals[_dealID].status == BondData.DealStatus.UNDEFINED,
-            "INVALID_DEAL_STATUS"
+            "status"
         );
 
         deals[_dealID] = _deal;
@@ -66,7 +66,7 @@ contract ToposBank is IToposBank, ToposBankStorage {
     ) external onlyToposManager {
         require(
             deals[_dealID].status == BondData.DealStatus.SUBMITTED,
-            "INVALID_DEAL_STATUS"
+            "status"
         );
 
         deals[_dealID].status = BondData.DealStatus.APPROVED;
@@ -84,7 +84,7 @@ contract ToposBank is IToposBank, ToposBankStorage {
     ) external onlyToposManager {
         require(
             deals[_dealID].status == BondData.DealStatus.SUBMITTED,
-            "INVALID_DEAL_STATUS"
+            "status"
         );
 
         deals[_dealID].status = BondData.DealStatus.REJECTED;
@@ -111,7 +111,7 @@ contract ToposBank is IToposBank, ToposBankStorage {
 
         require(
             _amount != 0 && _amount + totalAmountInvestedForDeal[_dealID] <= deals[_dealID].debtAmount,
-            "INVALID_AMOUNT"
+            "amount"
         );
 
         totalAmountInvestedForDeal[_dealID] = totalAmountInvestedForDeal[_dealID] + _amount;
@@ -228,9 +228,9 @@ contract ToposBank is IToposBank, ToposBankStorage {
 
         require(
             msg.sender == deals[_dealID].issuerAddress || msg.sender == toposManager,
-            "NOT_ISSUER_NOR_TOPOS_MANAGER"
+            "address"
         );
-        require(deals[_dealID].currency != address(0), "INVALID_TOKEN_ADDRESS");
+        require(deals[_dealID].currency != address(0), "token");
 
         IIssuersFund(issuersFundContract).withdrawFund(
             _dealID,
@@ -249,7 +249,7 @@ contract ToposBank is IToposBank, ToposBankStorage {
     function setIssuerFundContract(
         address _issuerFundContract
     ) external onlyToposManager {
-        require(_issuerFundContract != address(0), "INVALID_CONTRACT_ADDRESS");
+        require(_issuerFundContract != address(0));
 
         issuersFundContract = _issuerFundContract;
     }

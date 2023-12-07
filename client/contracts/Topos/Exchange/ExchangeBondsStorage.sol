@@ -59,13 +59,13 @@ contract ExchangeBondsStorage is IExchangeBondsStorage {
 
         require(
             _seller == investorListing[_seller][_dealID].owner,
-            "invalid address"
+            "invalid seller"
         );
 
         uint256 amount = investorListing[_seller][_dealID].amount;
         uint256 index = investorListing[_seller][_dealID].index;
 
-        require(amount > 0, "bonds not listed");
+        require(amount > 0, "invalid amount");
 
         investorListing[_seller][_dealID].amount = 0;
         investorListing[_seller][_dealID].price = 0;
@@ -94,10 +94,10 @@ contract ExchangeBondsStorage is IExchangeBondsStorage {
         address bondContract = IToposBank(bankContract).getDealBondContract(_dealID);
         uint256 maturityDate = BondCall(bondCallContract).maturityDate(bondContract);
 
-        require(seller == _seller, "invalid address");
-        require(amount > 0, "bonds not listed");
-        require(_newPrice != previousPrice, "invalid price");
-        require(block.timestamp < maturityDate, "Bonds matured");
+        require(seller == _seller, "invalid seller");
+        require(amount > 0, "invalid amount");
+        require(_newPrice != previousPrice, "unchanged price");
+        require(block.timestamp < maturityDate, "bonds matured");
 
         investorListing[_seller][_dealID].price = _newPrice;
         dealListed[index] = investorListing[_seller][_dealID];
@@ -112,8 +112,8 @@ contract ExchangeBondsStorage is IExchangeBondsStorage {
         uint256 previousAmount = investorListing[_seller][_dealID].amount;
         address seller = investorListing[_seller][_dealID].owner;
 
-        require(seller == _seller, "invalid address");
-        require(previousAmount > 0, "bonds not listed");
+        require(seller == _seller, "invalid seller");
+        require(previousAmount > 0, "invalid amount");
 
         investorListing[_seller][_dealID].amount = previousAmount + _amountToAdd;
         dealListed[index] = investorListing[_seller][_dealID];
@@ -131,8 +131,8 @@ contract ExchangeBondsStorage is IExchangeBondsStorage {
         uint256 amount = investorListing[_seller][_dealID].amount;
         address seller = investorListing[_seller][_dealID].owner;
 
-        require(seller == _seller, "invalid address");
-        require(amount > 0 && amount >= _amount, "bonds not listed");
+        require(seller == _seller, "invalid seller");
+        require(amount > 0 && amount >= _amount, "invalid amount");
 
         // If all bonds are bought, set to zero listing params
         if (amount == _amount) {

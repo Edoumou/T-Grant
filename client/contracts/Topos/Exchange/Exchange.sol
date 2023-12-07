@@ -8,6 +8,7 @@ contract Exchange is ExchangeStorage {
         address _bankContract,
         address _bondCallContract
     ) {
+        owner = msg.sender;
         bankContract = _bankContract;
         bondCallContract = _bondCallContract;
     }
@@ -40,7 +41,7 @@ contract Exchange is ExchangeStorage {
             bondContract
         );
 
-        require(_amount <= allowance, "insufficient allowance");
+        require(_amount <= allowance, "allowance");
 
         BondCall(bondCallContract).transferFrom(
             msg.sender,
@@ -75,7 +76,7 @@ contract Exchange is ExchangeStorage {
         string memory _dealID,
         uint256 _newPrice
     ) external {
-        require(_newPrice > 0, "invalid price");
+        require(_newPrice > 0, "invalid amount");
 
         IExchangeBondsStorage(exchangeBondsStorage).updatePrice(
             _dealID,
@@ -111,7 +112,7 @@ contract Exchange is ExchangeStorage {
             bondContract
         );
 
-        require(_amountToAdd <= allowance, "insufficient allowance");
+        require(_amountToAdd <= allowance, "allowance");
 
         BondCall(bondCallContract).transferFrom(
             msg.sender,
@@ -141,7 +142,7 @@ contract Exchange is ExchangeStorage {
         uint256 payment = price * 1 ether;
         uint256 buyerBalance = IERC20(currency).balanceOf(msg.sender);
 
-        require(buyerBalance >= payment, "not enough payment tokens");
+        require(buyerBalance >= payment, "balance");
 
         IExchangeBondsStorage(exchangeBondsStorage).buy(
             _dealID,
@@ -162,8 +163,10 @@ contract Exchange is ExchangeStorage {
         return dealListed;
     }
 
-    function setExchangeBondsStorage(address _exchangeBondsStorage) external {
-        require(_exchangeBondsStorage != address(0), "invalid address");
+    function setExchangeBondsStorage(
+        address _exchangeBondsStorage
+    ) external onlyOwner {
+        require(_exchangeBondsStorage != address(0));
 
         exchangeBondsStorage = _exchangeBondsStorage;
     }
