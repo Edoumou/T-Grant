@@ -118,7 +118,15 @@ contract ExchangeBondsStorage is IExchangeBondsStorage {
         require(seller == _seller, "invalid address");
         require(amount > 0 && amount >= _amount, "bonds not listed");
 
-        investorListing[_seller][_dealID].amount = amount - _amount;
+        // If all bonds are bought, set to zero listing params
+        if (amount == _amount) {
+            investorListing[_seller][_dealID].amount = 0;
+            investorListing[_seller][_dealID].price = 0;
+            investorListing[_seller][_dealID].listingTime = 0;
+        } else {
+            investorListing[_seller][_dealID].amount = amount - _amount;
+        }
+
         dealListed[index] = investorListing[_seller][_dealID];
 
         BondCall(bondCallContract).transfer(_buyer, _amount, bytes('0x0'), bondContract);
