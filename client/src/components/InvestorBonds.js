@@ -29,6 +29,7 @@ function InvestorBonds() {
     const [principal, setPrincipal] = useState('');
     const [amountToTransfer, setAmountToTransfer] = useState('');
     const [amountToApprove, setAmountToAppove] = useState('');
+    const [bondPrice, setBondPrice] = useState('');
     const [tokenOwnerAddress, setTokenOwnerAddress] = useState('');
     const [recipientAddress, setRecipientAddress] = useState('');
     const [explorerLink, setExplorerLink] = useState('');
@@ -38,6 +39,7 @@ function InvestorBonds() {
     const [showApprove, setShowApprove] = useState(false);
     const [showTransfer, setShowTransfer] = useState(false);
     const [showTransferFrom, setShowTransferFrom] = useState(false);
+    const [showListBonds, setShowListBonds] = useState(false);
 
     const connection = useSelector(state => {
         return state.connection;
@@ -330,6 +332,10 @@ function InvestorBonds() {
         setShowTransferFrom(false);
     }
 
+    const listBonds = async () => {
+
+    }
+
     const cancel = async () => {
         setBondClicked(!bondClicked);
         setShowApprove(false);
@@ -346,19 +352,29 @@ function InvestorBonds() {
         setShowApprove(!showApprove);
         setShowTransfer(false);
         setShowTransferFrom(false);
+        setShowListBonds(false);
     };
 
     const setTransfer = async () => {
         setShowApprove(false);
         setShowTransfer(!showTransfer);
         setShowTransferFrom(false);
+        setShowListBonds(false);
     };
 
     const setTransferFrom = async () => {
         setShowApprove(false);
         setShowTransfer(false);
         setShowTransferFrom(!showTransferFrom);
+        setShowListBonds(false);
     };
+
+    const setListBonds = async () => {
+        setShowApprove(false);
+        setShowTransfer(false);
+        setShowTransferFrom(false);
+        setShowListBonds(!showListBonds);
+    }
 
     return (
         <div className="manager">
@@ -402,7 +418,7 @@ function InvestorBonds() {
                                     <div className="list-card">
                                         <Card fluid>
                                             <CardContent>
-                                                <List relaxed>
+                                                <List relaxed animated size="large">
                                                     <ListItem onClick={setApprove}>
                                                         {
                                                             showApprove ?
@@ -666,6 +682,105 @@ function InvestorBonds() {
                                                                                     <Button inverted basic loading size="massive">processing</Button>
                                                                                 :
                                                                                     <p style={{ color: 'green' }}><strong>transaction processed successfully</strong></p>
+                                                                            }
+                                                                        </div>
+                                                                    </ModalContent>
+                                                                    <ModalActions>
+                                                                        <Button basic floated="left" onClick={goToExplorer}>
+                                                                            <strong>Check on Topos Explorer</strong>
+                                                                        </Button>
+                                                                        <Button color='black' onClick={() => setOpen(false)}>
+                                                                            Go to Dashboard
+                                                                        </Button>
+                                                                    </ModalActions>
+                                                                </Modal>
+                                                                <br></br>
+                                                                <Button color="red" onClick={cancel}>
+                                                                    Cancel
+                                                                </Button>
+                                                            </div>
+                                                    }
+                                                    <ListItem onClick={setListBonds}>
+                                                        {
+                                                            showListBonds ?
+                                                                <>
+                                                                    <ListIcon name='caret down' size='large' />
+                                                                    <ListContent>
+                                                                        <ListDescription>List Bonds on Exchange</ListDescription>
+                                                                    </ListContent>
+                                                                </>
+                                                            :
+                                                                <>
+                                                                    <ListIcon name='caret right' size='large' verticalAlign='middle' />
+                                                                    <ListContent>
+                                                                        <ListDescription>List Bonds on Exchange</ListDescription>
+                                                                    </ListContent>
+                                                                </>
+                                                        }
+                                                    </ListItem>
+                                                    {
+                                                        showListBonds &&
+                                                            <div className="list-card-action">
+                                                                <List relaxed='very'>
+                                                                    <ListItem>
+                                                                        <ListContent>
+                                                                            <Image
+                                                                                floated='right'
+                                                                                size='tiny'
+                                                                                src={issuerLogo}
+                                                                            />
+                                                                        </ListContent>
+                                                                    </ListItem>
+                                                                    <ListItem>
+                                                                        <ListContent>
+                                                                            <h4>Bond Denomination:</h4> <span>{Formate(denomination)} {tokenSymbol}</span>
+                                                                        </ListContent>
+                                                                    </ListItem>
+                                                                    <ListItem>
+                                                                        <ListContent>
+                                                                            <h4>Your Balance:</h4> <span>{Formate(principal / denomination)} {bondSymbol}</span>
+                                                                        </ListContent>
+                                                                    </ListItem>
+                                                                </List>
+                                                                <br></br>
+                                                                <br></br>
+                                                                <Input
+                                                                    fluid
+                                                                    action={bondSymbol}
+                                                                    size="large"
+                                                                    placeholder='Amount to List'
+                                                                    value={amountToTransfer}
+                                                                    onChange={e => setAmountToTransfer(e.target.value)}
+                                                                />
+                                                                <br></br>
+                                                                <Input
+                                                                    fluid
+                                                                    action={tokenSymbol}
+                                                                    size="large"
+                                                                    placeholder='Price'
+                                                                    value={bondPrice}
+                                                                    onChange={e => setBondPrice(e.target.value)}
+                                                                />
+                                                                <br></br>
+                                                                <Modal
+                                                                    size="tiny"
+                                                                    open={open}
+                                                                    trigger={
+                                                                        <Button type='submit' primary fluid size='large' onClick={listBonds}>
+                                                                            List
+                                                                        </Button>
+                                                                    }
+                                                                    onClose={() => setOpen(false)}
+                                                                    onOpen={() => setOpen(true)}
+                                                                >
+                                                                    <ModalContent>
+                                                                        <div style={{ textAlign: 'center' }}>
+                                                                            <h3>{loadingMessage}</h3>
+                                                                            {
+                                                                                loader ?
+                                                                                    <Button inverted basic loading size="massive">processing</Button>
+                                                                                :
+                                                                                    <p style={{ color: 'green' }}><strong>Bonds Listed successfully</strong></p>
                                                                             }
                                                                         </div>
                                                                     </ModalContent>
