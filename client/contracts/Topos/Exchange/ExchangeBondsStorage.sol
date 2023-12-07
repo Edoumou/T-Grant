@@ -103,6 +103,22 @@ contract ExchangeBondsStorage is IExchangeBondsStorage {
         dealListed[index] = investorListing[_seller][_dealID];
     }
 
+    function increaseAmount(
+        string memory _dealID,
+        address _seller,
+        uint256 _amountToAdd
+    ) external onlyExchangeContract {
+        uint256 index = investorListing[_seller][_dealID].index;
+        uint256 previousAmount = investorListing[_seller][_dealID].amount;
+        address seller = investorListing[_seller][_dealID].owner;
+
+        require(seller == _seller, "invalid address");
+        require(previousAmount > 0, "bonds not listed");
+
+        investorListing[_seller][_dealID].amount = previousAmount + _amountToAdd;
+        dealListed[index] = investorListing[_seller][_dealID];
+    }
+
     function buy(
         string memory _dealID,
         address _seller,

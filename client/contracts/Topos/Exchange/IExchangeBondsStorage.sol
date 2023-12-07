@@ -28,4 +28,10 @@ interface IExchangeBondsStorage {
         address _buyer,
         uint256 _amount
     ) external;
+
+    function increaseAmount(
+        string memory _dealID,
+        address _seller,
+        uint256 _amountToAdd
+    ) external;
 }

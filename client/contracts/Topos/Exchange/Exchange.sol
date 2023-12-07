@@ -34,6 +34,14 @@ contract Exchange is ExchangeStorage {
             _price
         );
 
+        uint256 allowance = BondCall(bondCallContract).allowance(
+            msg.sender,
+            address(this),
+            bondContract
+        );
+
+        require(_amount <= allowance, "insufficient allowance");
+
         BondCall(bondCallContract).transferFrom(
             msg.sender,
             exchangeBondsStorage,
@@ -46,10 +54,10 @@ contract Exchange is ExchangeStorage {
     }
 
     /**
-    * @notice Cancels a listing
+    * @notice Unlists bonds from exchange
     * @param _dealID bond deal ID
     */
-    function cancelListing(string memory _dealID) external {
+    function unlistBonds(string memory _dealID) external {
         IExchangeBondsStorage(exchangeBondsStorage).cancelBonds(
             _dealID,
             msg.sender
@@ -60,8 +68,8 @@ contract Exchange is ExchangeStorage {
 
     /**
     * @notice Updates the price of a listing
-    * @param _newPrice new price
     * @param _dealID bond deal ID
+    * @param _newPrice new price
     */
     function updateDealPrice(
         string memory _dealID,
@@ -76,6 +84,44 @@ contract Exchange is ExchangeStorage {
         );
 
         emit PriceUpdated(_dealID, msg.sender, _newPrice);
+    }
+
+    /**
+    * Increases the amount of bonds listed
+    * @param _dealID bond deal ID
+    * @param _amountToAdd amount of tokens to add to the listing
+    */
+    function increaseListingAmount(
+        string memory _dealID,
+        uint256 _amountToAdd
+    ) external {
+        address bondContract = IToposBank(bankContract).getDealBondContract(_dealID);
+
+        require(_amountToAdd > 0, "invalid amount");
+
+        IExchangeBondsStorage(exchangeBondsStorage).increaseAmount(
+            _dealID,
+            msg.sender,
+            _amountToAdd
+        );
+
+        uint256 allowance = BondCall(bondCallContract).allowance(
+            msg.sender,
+            address(this),
+            bondContract
+        );
+
+        require(_amountToAdd <= allowance, "insufficient allowance");
+
+        BondCall(bondCallContract).transferFrom(
+            msg.sender,
+            exchangeBondsStorage,
+            _amountToAdd,
+            bytes('0x0'),
+            bondContract
+        );
+
+        emit AmountIncreased(_dealID, msg.sender, _amountToAdd);
     }
 
     /**

@@ -20,4 +20,5 @@ contract ExchangeStorage {
     event BondsCanceled(string dealID, address seller);
     event PriceUpdated(string dealID, address seller, uint256 newPrice);
     event BondBought(string dealID, address seller, address buyer, uint256 amount);
+    event AmountIncreased(string dealID, address seller, uint256 amountToAdd);
 }
