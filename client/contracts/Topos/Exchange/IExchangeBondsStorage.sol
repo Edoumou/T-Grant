@@ -21,4 +21,11 @@ interface IExchangeBondsStorage {
         address _seller,
         uint256 _newPrice
     ) external;
+
+    function buy(
+        string memory _dealID,
+        address _seller,
+        address _buyer,
+        uint256 _amount
+    ) external;
 }

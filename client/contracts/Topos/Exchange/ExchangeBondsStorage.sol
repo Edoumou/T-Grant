@@ -80,4 +80,47 @@ contract ExchangeBondsStorage is IExchangeBondsStorage {
             bondContract
         );
     }
+
+    function updatePrice(
+        string memory _dealID,
+        address _seller,
+        uint256 _newPrice
+    ) external onlyExchangeContract {
+        uint256 previousPrice = investorListing[_seller][_dealID].price;
+        uint256 index = investorListing[_seller][_dealID].index;
+        uint256 amount = investorListing[_seller][_dealID].amount;
+        address seller = investorListing[_seller][_dealID].owner;
+
+        address bondContract = IToposBank(bankContract).getDealBondContract(_dealID);
+        uint256 maturityDate = BondCall(bondCallContract).maturityDate(bondContract);
+
+        require(seller == _seller, "invalid address");
+        require(amount > 0, "bonds not listed");
+        require(_newPrice != previousPrice, "invalid price");
+        require(block.timestamp < maturityDate, "Bonds matured");
+
+        investorListing[_seller][_dealID].price = _newPrice;
+        dealListed[index] = investorListing[_seller][_dealID];
+    }
+
+    function buy(
+        string memory _dealID,
+        address _seller,
+        address _buyer,
+        uint256 _amount
+    ) external onlyExchangeContract {
+        address bondContract = IToposBank(bankContract).getDealBondContract(_dealID);
+
+        uint256 index = investorListing[_seller][_dealID].index;
+        uint256 amount = investorListing[_seller][_dealID].amount;
+        address seller = investorListing[_seller][_dealID].owner;
+
+        require(seller == _seller, "invalid address");
+        require(amount > 0 && amount >= _amount, "bonds not listed");
+
+        investorListing[_seller][_dealID].amount = amount - _amount;
+        dealListed[index] = investorListing[_seller][_dealID];
+
+        BondCall(bondCallContract).transfer(_buyer, _amount, bytes('0x0'), bondContract);
+    }
 }
