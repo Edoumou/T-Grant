@@ -81,6 +81,7 @@ abstract contract BondData {
         uint256 amount;
         uint256 price;
         uint256 index;
+        uint256 listingTime;
     }
 
     error InvalidInvestorAddress(address investor);
