@@ -145,3 +145,29 @@
   font-size: calc(5px + 1.5vmin);
   margin-bottom: 100px;
 }
+
+.exchange {
+  margin-top: 0px;
+  padding-top: 10px;
+  padding-right: 50px;
+  padding-left: 50px;
+  background-color: rgb(21, 22, 44);
+  min-height: 100vh;
+}
+
+.exchangelList {
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 40px;
+  color: white;
+  font-size: calc(5px + 1.5vmin);
+  text-transform: uppercase;
+}
+
+.exchange-tab-scroll {
+  width: 94%;
+  margin-left: 3%;
+  margin-right: 3%;
+  max-height: 1200px;
+  overflow: scroll;
+}

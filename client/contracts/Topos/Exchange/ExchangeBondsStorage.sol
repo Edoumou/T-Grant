@@ -146,4 +146,11 @@ contract ExchangeBondsStorage is IExchangeBondsStorage {
 
         IERC7092(bondContract).transfer(_buyer, _amount, bytes('0x0'));
     }
+
+    /**
+    * @notice Returns the array of all listings
+    */
+    function getDealsListed() external view returns(BondData.Listing[] memory) {
+        return dealListed;
+    }
 }

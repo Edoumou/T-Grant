@@ -13,6 +13,7 @@ import InvestorJSON from "../src/contracts/artifacts/contracts/Topos/Bank/Invest
 import TokenCallJSON from "../src/contracts/artifacts/contracts/tests/tokens/TokenCall.sol/TokenCall.json";
 import IssuersFundJSON from "../src/contracts/artifacts/contracts/treasury/IssuersFund.sol.sol/IssuersFund.json";
 import ExchangeJSON from "../src/contracts/artifacts/contracts/Topos/Exchange/Exchange.sol/Exchange.json";
+import ExchangeBondsStorageJSON from "../src/contracts/artifacts/contracts/Topos/Exchange/ExchangeBondsStorage.sol/ExchangeBondsStorage.json";
 import Addresses from "../src/addresses/addr.json";
 import { web3Connection } from './utils/web3Connection';
 import { getContract } from './utils/getContract';
@@ -37,6 +38,7 @@ import IssueBonds from './components/IssueBonds';
 import InvestorBonds from './components/InvestorBonds';
 import ManagerCoupons from './components/ManagerCoupons';
 import DealsFund from './components/DealsFund';
+import Exchange from './components/Exchange';
 
 function App() {
   const dispatch = useDispatch();
@@ -65,6 +67,7 @@ function App() {
     let bondCallContract = await getContract(web3, BondCallJSON, Addresses.BondCallContract);
     let issuersFundContract = await getContract(web3, IssuersFundJSON, Addresses.IssuersFundContract);
     let exchangeContract = await getContract(web3, ExchangeJSON, Addresses.ExchangeContract);
+    let exchangeBondsStorage = await getContract(web3, ExchangeBondsStorageJSON, Addresses.ExchangeBondsStorageContract);
 
     let role = await rolesContract.methods.getRole(account).call({ from: account });
 
@@ -73,7 +76,7 @@ function App() {
     let deals = await toposBank.methods.getListOfDeals().call({ from: account });
     let bonds = await toposBank.methods.getListOfBonds().call({ from: account });
     let bondsDealIDs = await toposBank.methods.getListOfBondsDealIDs().call({ from: account });
-    let listOfBondsListed = await exchangeContract.methods.getDealsListed().call({ from: account });
+    let listOfBondsListed = await exchangeBondsStorage.methods.getDealsListed().call({ from: account });
 
     //=== store bonds currency symbols
     let bondSymbols = [];
@@ -255,6 +258,7 @@ function App() {
     let bondCallContract = await getContract(web3, BondCallJSON, Addresses.BondCallContract);
     let issuersFundContract = await getContract(web3, IssuersFundJSON, Addresses.IssuersFundContract);
     let exchangeContract = await getContract(web3, ExchangeJSON, Addresses.ExchangeContract);
+    let exchangeBondsStorage = await getContract(web3, ExchangeBondsStorageJSON, Addresses.ExchangeBondsStorageContract);
 
     if(typeof window.ethereum !== 'undefined') {
       await window.ethereum.on('accountsChanged', async accounts => {
@@ -267,7 +271,7 @@ function App() {
         let deals = await toposBank.methods.getListOfDeals().call({ from: account });
         let bonds = await toposBank.methods.getListOfBonds().call({ from: account });
         let bondsDealIDs = await toposBank.methods.getListOfBondsDealIDs().call({ from: account });
-        let listOfBondsListed = await exchangeContract.methods.getDealsListed().call({ from: account });
+        let listOfBondsListed = await exchangeBondsStorage.methods.getDealsListed().call({ from: account });
 
         //=== store bonds currency symbols
         let bondSymbols = [];
@@ -571,6 +575,13 @@ function App() {
                           to='/investor/bonds'
                         />
                         <MenuItem
+                          name='exchange'
+                          active={connection.activeItem === 'exchange'}
+                          onClick={handleItemClick}
+                          as={Link}
+                          to='/exchange'
+                        />
+                        <MenuItem
                           name='mint tokens'
                           active={connection.activeItem === 'mint tokens'}
                           onClick={handleItemClick}
@@ -630,6 +641,7 @@ function App() {
                     <>
                       <Route path='/investor/deals' element={<InvestorDeals />} />
                       <Route path='/investor/bonds' element={<InvestorBonds />} />
+                      <Route path='/exchange' element={<Exchange />} />
                       <Route path='/investor/mint-tokens' element={<MintTokens />} />
                     </>
                   :

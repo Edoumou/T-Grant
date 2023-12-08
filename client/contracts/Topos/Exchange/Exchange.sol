@@ -151,13 +151,6 @@ contract Exchange is ExchangeStorage {
         emit BondBought(_dealID, _seller, msg.sender, _amount);
     }
 
-    /**
-    * @notice Returns the array of all listings
-    */
-    function getDealsListed() external view returns(BondData.Listing[] memory) {
-        return dealListed;
-    }
-
     function setExchangeBondsStorage(
         address _exchangeBondsStorage
     ) external onlyOwner {

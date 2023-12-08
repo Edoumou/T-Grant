@@ -15,8 +15,6 @@ contract ExchangeStorage {
     address public bankContract;
     address public bondCallContract;
     address public exchangeBondsStorage;
-
-    BondData.Listing[] dealListed;
     
     modifier onlyOwner {
         require(msg.sender == owner, "Only owner");
