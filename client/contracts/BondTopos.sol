@@ -130,7 +130,7 @@ contract BondTopos is IERC7092, BondStorage, IBonds {
         uint256 _amount,
         bytes calldata _data
     ) external mustBeApproved(_to) returns(bool) {
-        address _spender = tx.origin;
+        address _spender = msg.sender;
 
         _spendAllowance(_from, _spender, _amount);
         _transfer(_from, _to, _amount, _data);

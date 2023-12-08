@@ -360,7 +360,7 @@ function InvestorBonds() {
             dealBondContract
         ).send({ from: account })
             .on('transactionHash', hash => {
-                setLoadingMessage('Approving the Echange Contract! ⌛️');
+                setLoadingMessage('Approving the Exchange Contract! ⌛️');
                 setExplorerLink(`https://topos.blockscout.testnet-1.topos.technology/tx/${hash}`);
                 dispatch(setLoading(true));
             })

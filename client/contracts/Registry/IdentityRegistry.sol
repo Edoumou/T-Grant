@@ -21,16 +21,16 @@ contract IdentityRegistry is IIdentityRegistry {
         owner = msg.sender;
     }
 
+    enum RegistrationStatus {UNDEFINED, VERIFIED}
+
+    error AlreadyVerified();
+    error InvalidAddress(address caller);
+
     function setAuthenticationContract(address _authenticationContract) external {
         require(msg.sender == owner, "ONLY_OWNER");
 
         authenticationContract = _authenticationContract;
     }
-
-    enum RegistrationStatus {UNDEFINED, VERIFIED}
-
-    error AlreadyVerified();
-    error InvalidAddress(address caller);
 
     /**
     * @notice Registers a smart contract to allow it to receive bonds.

@@ -26,10 +26,9 @@ contract Exchange is ExchangeStorage {
     ) external {
         address bondContract = IToposBank(bankContract).getDealBondContract(_dealID);
 
-        uint256 allowance = BondCall(bondCallContract).allowance(
+        uint256 allowance = IERC7092(bondContract).allowance(
             msg.sender,
-            address(this),
-            bondContract
+            address(this)
         );
 
         require(_amount <= allowance, "allowance");
@@ -42,12 +41,11 @@ contract Exchange is ExchangeStorage {
             _price
         );
 
-        BondCall(bondCallContract).transferFrom(
+        IERC7092(bondContract).transferFrom(
             msg.sender,
             exchangeBondsStorage,
             _amount,
-            bytes('0x0'),
-            bondContract
+            bytes('0x0')
         );
 
         emit BondsListed(_dealID, msg.sender, _amount, _price);
@@ -105,20 +103,18 @@ contract Exchange is ExchangeStorage {
             _amountToAdd
         );
 
-        uint256 allowance = BondCall(bondCallContract).allowance(
+        uint256 allowance = IERC7092(bondContract).allowance(
             msg.sender,
-            address(this),
-            bondContract
+            address(this)
         );
 
         require(_amountToAdd <= allowance, "allowance");
 
-        BondCall(bondCallContract).transferFrom(
+        IERC7092(bondContract).transferFrom(
             msg.sender,
             exchangeBondsStorage,
             _amountToAdd,
-            bytes('0x0'),
-            bondContract
+            bytes('0x0')
         );
 
         emit AmountIncreased(_dealID, msg.sender, _amountToAdd);
@@ -136,7 +132,7 @@ contract Exchange is ExchangeStorage {
         uint256 _amount
     ) external {
         address bondContract = IToposBank(bankContract).getDealBondContract(_dealID);
-        address currency = BondCall(bondCallContract).currency(bondContract);
+        address currency = IERC7092(bondContract).currency();
         uint256 price = investorListing[_seller][_dealID].price;
         uint256 payment = price * 1 ether;
         uint256 buyerBalance = IERC20(currency).balanceOf(msg.sender);
@@ -150,7 +146,7 @@ contract Exchange is ExchangeStorage {
             _amount
         );
 
-        IERC20(currency).transfer(_seller, payment);
+        IERC20(currency).transferFrom(msg.sender, _seller, payment);
 
         emit BondBought(_dealID, _seller, msg.sender, _amount);
     }

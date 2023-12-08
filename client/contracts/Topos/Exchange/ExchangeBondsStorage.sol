@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: CC0-1.0
 pragma solidity ^0.8.0;
 
+import "../../IERC7092.sol";
 import "../../BondData.sol";
 import "../../BondCall.sol";
 import "../interfaces/IToposBank.sol";
@@ -73,11 +74,10 @@ contract ExchangeBondsStorage is IExchangeBondsStorage {
 
         dealListed[index] = investorListing[_seller][_dealID];
 
-        BondCall(bondCallContract).transfer(
+        IERC7092(bondContract).transfer(
             _seller,
             amount,
-            bytes('0x0'),
-            bondContract
+            bytes('0x0')
         );
     }
 
@@ -92,7 +92,7 @@ contract ExchangeBondsStorage is IExchangeBondsStorage {
         address seller = investorListing[_seller][_dealID].owner;
 
         address bondContract = IToposBank(bankContract).getDealBondContract(_dealID);
-        uint256 maturityDate = BondCall(bondCallContract).maturityDate(bondContract);
+        uint256 maturityDate = IERC7092(bondContract).maturityDate();
 
         require(seller == _seller, "invalid seller");
         require(amount > 0, "invalid amount");
@@ -145,6 +145,6 @@ contract ExchangeBondsStorage is IExchangeBondsStorage {
 
         dealListed[index] = investorListing[_seller][_dealID];
 
-        BondCall(bondCallContract).transfer(_buyer, _amount, bytes('0x0'), bondContract);
+        IERC7092(bondContract).transfer(_buyer, _amount, bytes('0x0'));
     }
 }

@@ -22,37 +22,49 @@ async function main() {
     );
     await tx1.wait();
 
-    let tx2 = await roles.setToposContracts(
+    let tx2 = await registry.registerContract(
+        Addresses.ExchangeContract,
+        { from: deployer }
+    );
+    await tx2.wait();
+
+    let tx3 = await registry.registerContract(
+        Addresses.ExchangeBondsStorageContract,
+        { from: deployer }
+    );
+    await tx3.wait();
+
+    let tx4 = await roles.setToposContracts(
         Addresses.ToposBankContract,
         Addresses.IssuerContract,
         Addresses.InvestorContract,
         { from: deployer }
     );
-    await tx2.wait();
-
-    let tx3 = await exchange.setExchangeBondsStorage(Addresses.ExchangeBondsStorageContract ,{from: deployer});
-    await tx3.wait();
-
-    let tx4 = await tokenCall.addTokenAddress(Addresses.USDCContract, { from: deployer });
     await tx4.wait();
-    
-    let tx5 = await tokenCall.addTokenAddress(Addresses.USDTContract, { from: deployer });
+
+    let tx5 = await exchange.setExchangeBondsStorage(Addresses.ExchangeBondsStorageContract ,{from: deployer});
     await tx5.wait();
-    
-    let tx6 = await tokenCall.addTokenAddress(Addresses.EURCContract, { from: deployer });
+
+    let tx6 = await tokenCall.addTokenAddress(Addresses.USDCContract, { from: deployer });
     await tx6.wait();
     
-    let tx7 = await tokenCall.addTokenAddress(Addresses.EURTContract, { from: deployer });
+    let tx7 = await tokenCall.addTokenAddress(Addresses.USDTContract, { from: deployer });
     await tx7.wait();
     
-    let tx8 = await tokenCall.addTokenAddress(Addresses.CNYCContract, { from: deployer });
+    let tx8 = await tokenCall.addTokenAddress(Addresses.EURCContract, { from: deployer });
     await tx8.wait();
     
-    let tx9 = await tokenCall.addTokenAddress(Addresses.CNYTContract, { from: deployer });
+    let tx9 = await tokenCall.addTokenAddress(Addresses.EURTContract, { from: deployer });
     await tx9.wait();
     
-    let tx10 = await tokenCall.addTokenAddress(Addresses.DAIContract, { from: deployer });
+    let tx10 = await tokenCall.addTokenAddress(Addresses.CNYCContract, { from: deployer });
     await tx10.wait();
+    
+    let tx11 = await tokenCall.addTokenAddress(Addresses.CNYTContract, { from: deployer });
+    await tx11.wait();
+    
+    let tx12 = await tokenCall.addTokenAddress(Addresses.DAIContract, { from: deployer });
+    await tx12.wait();
 
     let myIssuer = await roles.issuerContract({ from: deployer });
     let myInvestor = await roles.investorContract({ from: deployer });
