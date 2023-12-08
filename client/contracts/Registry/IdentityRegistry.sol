@@ -33,6 +33,19 @@ contract IdentityRegistry is IIdentityRegistry {
     error InvalidAddress(address caller);
 
     /**
+    * @notice Registers a smart contract to allow it to receive bonds.
+    *         Example: The Exchange contract must be registered
+    * @param _contractAddress Contract address to register
+    */
+    function registerContract(
+        address _contractAddress
+    ) external {
+        require(msg.sender == owner, "only owner");
+
+        _status[_contractAddress] = RegistrationStatus.VERIFIED;
+    }
+
+    /**
     * @notice Registers a stakeholder.
     * @notice Changes the status to VERIFIED
     * @param _identityID Identity ID provided by the Identity Registry
@@ -55,7 +68,6 @@ contract IdentityRegistry is IIdentityRegistry {
 
         kwcPassed[_identityID] = true;
         _status[msg.sender] = RegistrationStatus.VERIFIED;
-
 
         _stakeholders[msg.sender] = RegistryData.Stakeholder(
             {

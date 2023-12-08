@@ -4,6 +4,7 @@ import BankJSON from "../contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/
 import BondCallJSON from "../contracts/artifacts/contracts/BondCall.sol/BondCall.json";
 import TokenCallJSON from "../contracts/artifacts/contracts/tests/tokens/TokenCall.sol/TokenCall.json";
 import IssuerJSON from "../contracts/artifacts/contracts/Topos/Bank/Issuer.sol/Issuer.json";
+import ExchangeJSON from "../contracts/artifacts/contracts/Topos/Exchange/Exchange.sol/Exchange.json";
 import { Button, Card, CardContent, CardDescription, CardMeta, Grid, GridColumn, GridRow, Image, Input, List, ListContent, ListDescription, ListIcon, ListItem, Modal, ModalActions, ModalContent } from "semantic-ui-react";
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
@@ -11,7 +12,7 @@ import Addresses from "../addresses/addr.json";
 import Formate from "../utils/Formate";
 import "../users.css";
 import "../manager.css";
-import { setInvestorBonds, setInvestorBondsIssuers, setLoading } from "../store";
+import { setActiveBondsDealID, setDealsListed, setInvestorBonds, setInvestorBondsIssuers, setLoading } from "../store";
 
 function InvestorBonds() {
     const [bondClicked, setBondClicked] = useState(false);
@@ -167,6 +168,7 @@ function InvestorBonds() {
         setShowApprove(false);
         setShowTransfer(false);
         setShowTransferFrom(false);
+        setShowListBonds(false);
     }
 
     const transfer = async () => {
@@ -248,6 +250,7 @@ function InvestorBonds() {
         setShowApprove(false);
         setShowTransfer(false);
         setShowTransferFrom(false);
+        setShowListBonds(false);
     }
 
     const transferFrom = async () => {
@@ -330,10 +333,118 @@ function InvestorBonds() {
         setShowApprove(false);
         setShowTransfer(false);
         setShowTransferFrom(false);
+        setShowListBonds(false);
     }
 
     const listBonds = async () => {
+        let { web3, account } = await web3Connection();
+        let bankContract = await getContract(web3, BankJSON, Addresses.ToposBankContract);
+        let exchangeContract = await getContract(web3, ExchangeJSON, Addresses.ExchangeContract);
+        let bondCallContract = await getContract(web3, BondCallJSON, Addresses.BondCallContract);
+        let issuerContract = await getContract(web3, IssuerJSON, Addresses.IssuerContract);
+        let tokenCallContract = await getContract(web3, TokenCallJSON, Addresses.TokenCallContract);
 
+
+        let deals = await bankContract.methods.getListOfDeals().call({ from: account });
+        let dealBondContract = await bankContract.methods.dealBondContracts(bondDealID).call({ from: account });
+
+        console.log('deal ID:', bondDealID);
+        console.log('bond contract:', dealBondContract);
+
+        setLoadingMessage('Transaction in Process! ⌛️');
+        setLoader(true);
+
+        await bondCallContract.methods.approve(
+            Addresses.ExchangeContract,
+            amountToTransfer,
+            dealBondContract
+        ).send({ from: account })
+            .on('transactionHash', hash => {
+                setLoadingMessage('Approving the Echange Contract! ⌛️');
+                setExplorerLink(`https://topos.blockscout.testnet-1.topos.technology/tx/${hash}`);
+                dispatch(setLoading(true));
+            })
+            .on('receipt', receipt => {
+                setLoadingMessage('Exchange Contract Approved! ✅');
+            });
+
+        await exchangeContract.methods.listBonds(
+            bondDealID,
+            amountToTransfer,
+            bondPrice
+        ).send({ from: account })
+            .on('transactionHash', hash => {
+                setLoadingMessage('Listing Bonds on Exchange! ⌛️');
+                setExplorerLink(`https://topos.blockscout.testnet-1.topos.technology/tx/${hash}`);
+                dispatch(setLoading(true));
+            })
+            .on('receipt', receipt => {
+                setLoadingMessage('Bonds Listed successfully! ✅');
+                setLoader(false);
+                dispatch(setLoading(false));
+            });
+
+        setLoadingMessage('');
+        setLoader(false);
+        setAmountToTransfer('');
+        setBondPrice('');
+
+        let listOfBondsListed = await exchangeContract.methods.getDealsListed().call({ from: account });
+
+        //=== Invstors bonds
+        let investorBonds = [];
+        let investorBondsIssuers = [];
+        for(let i = 0; i < deals.length; i++) {
+            if(deals[i].status === "4") {
+                let dealID = deals[i].dealID;
+                let tokenAddress = deals[i].currency;
+                let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
+                let issuer = await issuerContract.methods.issuers(deals[i].issuerAddress).call({ from: account });
+                let address = await bankContract.methods.dealBondContracts(dealID).call({ from: account });
+
+                let principal = await bondCallContract.methods.principalOf(account, address).call({ from: account });
+
+                if(principal !== '0') {
+                    let isin = await bondCallContract.methods.isin(address).call({ from: account });
+                    let denomination = await bondCallContract.methods.denomination(address).call({ from: account });
+                    let volume = await bondCallContract.methods.issueVolume(address).call({ from: account });
+                    let couponRate = await bondCallContract.methods.couponRate(address).call({ from: account });
+                    let couponFrequency = await bondCallContract.methods.couponFrequency(address).call({ from: account });
+                    let maturityDate = await bondCallContract.methods.maturityDate(address).call({ from: account });
+                    let symbol = await bondCallContract.methods.symbol(address).call({ from: account });
+                    let name = await bondCallContract.methods.name(address).call({ from: account });
+
+                    investorBonds.push(
+                        {
+                            isin: isin,
+                            dealID: dealID,
+                            name: name,
+                            symbol: symbol,
+                            denomination: denomination.toString(),
+                            volume: volume.toString(),
+                            couponRate: couponRate.toString(),
+                            couponFrequency: couponFrequency.toString(),
+                            maturityDate: maturityDate.toString(),
+                            principal: principal.toString(),
+                            tokenSymbol: tokenSymbol,
+                            logo: issuer.logoURI,
+                            prospectus: deals[i].prospectusURI
+                        }
+                    );
+
+                    investorBondsIssuers.push(issuer);
+                }
+            }
+        }
+
+        dispatch(setInvestorBonds(investorBonds));
+        dispatch(setInvestorBondsIssuers(investorBondsIssuers));
+        dispatch(setDealsListed(listOfBondsListed));
+
+        setShowApprove(false);
+        setShowTransfer(false);
+        setShowTransferFrom(false);
+        setShowListBonds(false);
     }
 
     const cancel = async () => {
@@ -767,7 +878,7 @@ function InvestorBonds() {
                                                                     open={open}
                                                                     trigger={
                                                                         <Button type='submit' primary fluid size='large' onClick={listBonds}>
-                                                                            List
+                                                                            List on Exchange
                                                                         </Button>
                                                                     }
                                                                     onClose={() => setOpen(false)}

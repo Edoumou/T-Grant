@@ -26,6 +26,13 @@ contract Exchange is ExchangeStorage {
     ) external {
         address bondContract = IToposBank(bankContract).getDealBondContract(_dealID);
 
+        uint256 allowance = BondCall(bondCallContract).allowance(
+            msg.sender,
+            address(this),
+            bondContract
+        );
+
+        require(_amount <= allowance, "allowance");
         require(_amount > 0, "invalid amount");
 
         IExchangeBondsStorage(exchangeBondsStorage).depositBonds(
@@ -34,14 +41,6 @@ contract Exchange is ExchangeStorage {
             _amount,
             _price
         );
-
-        uint256 allowance = BondCall(bondCallContract).allowance(
-            msg.sender,
-            address(this),
-            bondContract
-        );
-
-        require(_amount <= allowance, "allowance");
 
         BondCall(bondCallContract).transferFrom(
             msg.sender,

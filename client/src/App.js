@@ -12,6 +12,7 @@ import IssuerJSON from "../src/contracts/artifacts/contracts/Topos/Bank/Issuer.s
 import InvestorJSON from "../src/contracts/artifacts/contracts/Topos/Bank/Investor.sol/Investor.json";
 import TokenCallJSON from "../src/contracts/artifacts/contracts/tests/tokens/TokenCall.sol/TokenCall.json";
 import IssuersFundJSON from "../src/contracts/artifacts/contracts/treasury/IssuersFund.sol.sol/IssuersFund.json";
+import ExchangeJSON from "../src/contracts/artifacts/contracts/Topos/Exchange/Exchange.sol/Exchange.json";
 import Addresses from "../src/addresses/addr.json";
 import { web3Connection } from './utils/web3Connection';
 import { getContract } from './utils/getContract';
@@ -29,7 +30,7 @@ import SubmitDeal from './components/SubmitDeal';
 import ManagerRequests from './components/ManagerRequests';
 import ManagerBonds from './components/ManagerBonds';
 import ManagerDeals from './components/ManagerDeals';
-import { setActiveBondsDealID, setApprovedDeals, setBondSymbols, setBonds, setBondsCurrency, setBondsDealIDs, setBondsIssuers, setDealsFund, setDealsToIssue, setIssuersForApprovedDelas, setIssuersLogo, setIssuersName, setIssuersNameForApprovedDeals, setSelectedDealID, setShowInvestForm, setTokenSymbolForApprovedDeals } from './store/slices/bondSlice';
+import { setActiveBondsDealID, setApprovedDeals, setBondSymbols, setBonds, setBondsCurrency, setBondsDealIDs, setBondsIssuers, setDealsFund, setDealsListed, setDealsToIssue, setIssuersForApprovedDelas, setIssuersLogo, setIssuersName, setIssuersNameForApprovedDeals, setSelectedDealID, setShowInvestForm, setTokenSymbolForApprovedDeals } from './store/slices/bondSlice';
 import InvestorDeals from './components/InvestorDeals';
 import MintTokens from './components/MintTokens';
 import IssueBonds from './components/IssueBonds';
@@ -63,6 +64,7 @@ function App() {
     let tokenCallContract = await getContract(web3, TokenCallJSON, Addresses.TokenCallContract);
     let bondCallContract = await getContract(web3, BondCallJSON, Addresses.BondCallContract);
     let issuersFundContract = await getContract(web3, IssuersFundJSON, Addresses.IssuersFundContract);
+    let exchangeContract = await getContract(web3, ExchangeJSON, Addresses.ExchangeContract);
 
     let role = await rolesContract.methods.getRole(account).call({ from: account });
 
@@ -71,6 +73,7 @@ function App() {
     let deals = await toposBank.methods.getListOfDeals().call({ from: account });
     let bonds = await toposBank.methods.getListOfBonds().call({ from: account });
     let bondsDealIDs = await toposBank.methods.getListOfBondsDealIDs().call({ from: account });
+    let listOfBondsListed = await exchangeContract.methods.getDealsListed().call({ from: account });
 
     //=== store bonds currency symbols
     let bondSymbols = [];
@@ -137,8 +140,9 @@ function App() {
     dispatch(setBondsDealIDs(bondsDealIDs));
     dispatch(setBondsIssuers(bondsIssuers));
     dispatch(setBondsCurrency(bondsCurrency));
+    dispatch(setDealsListed(listOfBondsListed));
     
-    //=== Invstors boonds
+    //=== Invstors bonds
     let investorBonds = [];
     let activeBondsDealID = [];
     let investorBondsIssuers = [];
@@ -250,6 +254,7 @@ function App() {
     let tokenCallContract = await getContract(web3, TokenCallJSON, Addresses.TokenCallContract);
     let bondCallContract = await getContract(web3, BondCallJSON, Addresses.BondCallContract);
     let issuersFundContract = await getContract(web3, IssuersFundJSON, Addresses.IssuersFundContract);
+    let exchangeContract = await getContract(web3, ExchangeJSON, Addresses.ExchangeContract);
 
     if(typeof window.ethereum !== 'undefined') {
       await window.ethereum.on('accountsChanged', async accounts => {
@@ -262,6 +267,7 @@ function App() {
         let deals = await toposBank.methods.getListOfDeals().call({ from: account });
         let bonds = await toposBank.methods.getListOfBonds().call({ from: account });
         let bondsDealIDs = await toposBank.methods.getListOfBondsDealIDs().call({ from: account });
+        let listOfBondsListed = await exchangeContract.methods.getDealsListed().call({ from: account });
 
         //=== store bonds currency symbols
         let bondSymbols = [];
@@ -318,6 +324,7 @@ function App() {
         dispatch(setBondsDealIDs(bondsDealIDs));
         dispatch(setBondsIssuers(bondsIssuers));
         dispatch(setBondsCurrency(bondsCurrency));
+        dispatch(setDealsListed(listOfBondsListed));
 
         //=== Invstors bonds
         let investorBonds = [];
