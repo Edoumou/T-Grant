@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Card, CardContent, Dropdown, Grid, GridColumn, GridRow, Modal, Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } from "semantic-ui-react";
+import { Image, Button, Card, CardContent, Dropdown, Grid, GridColumn, GridRow, Modal, Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } from "semantic-ui-react";
 import "../users.css";
 import "../manager.css";
 import Formate from "../utils/Formate";
@@ -20,10 +20,31 @@ function Exchange() {
     const renderedBonds = bonds.dealsListed.map((list, index) => {
         return (
             <TableRow key={index}>
-                <TableCell>{list.dealID}</TableCell>
-                <TableCell>{FormateAddress(list.owner)}</TableCell>
-                <TableCell>{Formate(list.amount)}</TableCell>
-                <TableCell>{Formate(list.price)}</TableCell>
+                <TableCell textAlign="left">
+                    <Image
+                        size='tiny'
+                        src={list.logo}
+                    />
+                </TableCell>
+                <TableCell textAlign='center'>{list.dealID}</TableCell>
+                <TableCell textAlign='center'>{FormateAddress(list.seller)}</TableCell>
+                <TableCell textAlign='center'>{list.bondSymbol}</TableCell>
+                <TableCell textAlign='center'>{Formate(list.quantity)}</TableCell>
+                <TableCell textAlign='center'>{Formate(list.coupon / 100)}%</TableCell>
+                <TableCell textAlign='center'>{(new Date(list.maturityDate * 1000)).toLocaleDateString()}</TableCell>
+                <TableCell textAlign='center'>{Formate(list.denomination)} {list.tokenSymbol}</TableCell>
+                {
+                    Number(list.price) > Number(list.denomination) ?
+                        <TableCell textAlign='center'>
+                            <span style={{ color: "red" }}><strong>{Formate(list.price)}</strong></span> {list.tokenSymbol}
+                        </TableCell>
+                    : Number(list.price) < Number(list.denomination) ?
+                        <TableCell textAlign='center'>
+                            <span style={{ color: "green" }}><strong>{Formate(list.price)}</strong></span> {list.tokenSymbol}
+                        </TableCell>
+                    :
+                        <TableCell textAlign='center'>{Formate(list.price)} {list.tokenSymbol}</TableCell>
+                }
             </TableRow>
         );
     })
@@ -52,10 +73,15 @@ function Exchange() {
                         <Table padded selectable inverted>
                             <TableHeader className="header-sticky">
                                 <TableRow>
-                                    <TableHeaderCell>Deal ID</TableHeaderCell>
-                                    <TableHeaderCell>Seller</TableHeaderCell>
-                                    <TableHeaderCell>Qty</TableHeaderCell>
-                                    <TableHeaderCell>Price</TableHeaderCell>
+                                    <TableHeaderCell>Issuer</TableHeaderCell>
+                                    <TableHeaderCell textAlign='center'>Deal ID</TableHeaderCell>
+                                    <TableHeaderCell textAlign='center'>Seller</TableHeaderCell>
+                                    <TableHeaderCell textAlign='center'>Symbol</TableHeaderCell>
+                                    <TableHeaderCell textAlign='center'>Qty</TableHeaderCell>
+                                    <TableHeaderCell textAlign='center'>Coupon</TableHeaderCell>
+                                    <TableHeaderCell textAlign='center'>Maturity</TableHeaderCell>
+                                    <TableHeaderCell textAlign='center'>Par Value</TableHeaderCell>
+                                    <TableHeaderCell textAlign='center'>Price</TableHeaderCell>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>

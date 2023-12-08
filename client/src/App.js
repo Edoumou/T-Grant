@@ -131,6 +131,41 @@ function App() {
       bondsCurrency.push(tokenSymbol);
     }
 
+    //=== Exchange
+    let bondsListed = [];
+    for(let i = 0; i < listOfBondsListed.length; i++) {
+      let dealID = listOfBondsListed[i].dealID;
+      let deal = await toposBank.methods.deals(dealID).call({ from: account });
+      let bondContract = await toposBank.methods.dealBondContracts(dealID).call({ from: account });
+      
+      let tokenAddress = deal.currency;
+      let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
+      let bondSymbol = await bondCallContract.methods.symbol(bondContract).call({ from: account });
+      let denomination = await bondCallContract.methods.denomination(bondContract).call({ from: account });
+      let maturityDate = await bondCallContract.methods.maturityDate(bondContract).call({ from: account });
+      let coupon = await bondCallContract.methods.couponRate(bondContract).call({ from: account });
+
+      let issuer = await issuerContract.methods.issuers(deal.issuerAddress).call({ from: account });
+
+      if(Number(listOfBondsListed[i].amount) !== 0) {
+        let data = {
+          dealID: dealID,
+          seller: listOfBondsListed[i].owner,
+          quantity: listOfBondsListed[i].amount,
+          price: listOfBondsListed[i].price,
+          index: listOfBondsListed[i].index,
+          tokenSymbol: tokenSymbol,
+          bondSymbol: bondSymbol,
+          logo: issuer.logoURI,
+          denomination: denomination,
+          maturityDate: maturityDate,
+          coupon: coupon
+        }
+
+        bondsListed.push(data);
+      } 
+    }
+
     dispatch(setDealsToIssue(dealsToIssue));
     dispatch(setBondSymbols(bondSymbols));
     dispatch(setIssuersName(issuersNames));
@@ -143,7 +178,7 @@ function App() {
     dispatch(setBondsDealIDs(bondsDealIDs));
     dispatch(setBondsIssuers(bondsIssuers));
     dispatch(setBondsCurrency(bondsCurrency));
-    dispatch(setDealsListed(listOfBondsListed));
+    dispatch(setDealsListed(bondsListed));
     
     //=== Invstors bonds
     let investorBonds = [];
@@ -317,6 +352,41 @@ function App() {
           bondsCurrency.push(tokenSymbol);
         }
 
+        //=== Exchange
+        let bondsListed = [];
+        for(let i = 0; i < listOfBondsListed.length; i++) {
+          let dealID = listOfBondsListed[i].dealID;
+          let deal = await toposBank.methods.deals(dealID).call({ from: account });
+          let bondContract = await toposBank.methods.dealBondContracts(dealID).call({ from: account });
+
+          let tokenAddress = deal.currency;
+          let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
+          let bondSymbol = await bondCallContract.methods.symbol(bondContract).call({ from: account });
+          let denomination = await bondCallContract.methods.denomination(bondContract).call({ from: account });
+          let maturityDate = await bondCallContract.methods.maturityDate(bondContract).call({ from: account });
+          let coupon = await bondCallContract.methods.couponRate(bondContract).call({ from: account });
+
+          let issuer = await issuerContract.methods.issuers(deal.issuerAddress).call({ from: account });
+
+          if(Number(listOfBondsListed[i].amount) !== 0) {
+            let data = {
+              dealID: dealID,
+              seller: listOfBondsListed[i].owner,
+              quantity: listOfBondsListed[i].amount,
+              price: listOfBondsListed[i].price,
+              index: listOfBondsListed[i].index,
+              tokenSymbol: tokenSymbol,
+              bondSymbol: bondSymbol,
+              logo: issuer.logoURI,
+              denomination: denomination,
+              maturityDate: maturityDate,
+              coupon: coupon
+            }
+
+            bondsListed.push(data);
+          } 
+        }
+
         dispatch(setBondSymbols(bondSymbols));
         dispatch(setIssuersName(issuersNames));
         dispatch(setIssuersLogo(issuersLogo));
@@ -328,7 +398,7 @@ function App() {
         dispatch(setBondsDealIDs(bondsDealIDs));
         dispatch(setBondsIssuers(bondsIssuers));
         dispatch(setBondsCurrency(bondsCurrency));
-        dispatch(setDealsListed(listOfBondsListed));
+        dispatch(setDealsListed(bondsListed));
 
         //=== Invstors bonds
         let investorBonds = [];

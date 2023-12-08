@@ -264,9 +264,6 @@ function InvestorBonds() {
         let deals = await bankContract.methods.getListOfDeals().call({ from: account });
         let dealBondContract = await bankContract.methods.dealBondContracts(bondDealID).call({ from: account });
 
-        console.log('deal ID:', bondDealID);
-        console.log('bond contract:', dealBondContract);
-
         setLoadingMessage('Transaction in Process! ⌛️');
         setLoader(true);
 
@@ -353,9 +350,44 @@ function InvestorBonds() {
             }
         }
 
+        let bondsListed = [];
+        for(let i = 0; i < listOfBondsListed.length; i++) {
+            let dealID = listOfBondsListed[i].dealID;
+            let deal = await bankContract.methods.deals(dealID).call({ from: account });
+            let bondContract = await bankContract.methods.dealBondContracts(dealID).call({ from: account });
+
+            let tokenAddress = deal.currency;
+            let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
+            let bondSymbol = await bondCallContract.methods.symbol(bondContract).call({ from: account });
+            let denomination = await bondCallContract.methods.denomination(bondContract).call({ from: account });
+            let maturityDate = await bondCallContract.methods.maturityDate(bondContract).call({ from: account });
+            let coupon = await bondCallContract.methods.couponRate(bondContract).call({ from: account });
+
+            let issuer = await issuerContract.methods.issuers(deal.issuerAddress).call({ from: account });
+
+            if(Number(listOfBondsListed[i].amount) !== 0) {
+                let data = {
+                  dealID: dealID,
+                  seller: listOfBondsListed[i].owner,
+                  quantity: listOfBondsListed[i].amount,
+                  price: listOfBondsListed[i].price,
+                  index: listOfBondsListed[i].index,
+                  tokenSymbol: tokenSymbol,
+                  bondSymbol: bondSymbol,
+                  logo: issuer.logoURI,
+                  denomination: denomination,
+                  maturityDate: maturityDate,
+                  coupon: coupon
+                }
+    
+                bondsListed.push(data);
+            } 
+            
+        }
+
         dispatch(setInvestorBonds(investorBonds));
         dispatch(setInvestorBondsIssuers(investorBondsIssuers));
-        dispatch(setDealsListed(listOfBondsListed));
+        dispatch(setDealsListed(bondsListed));
 
         setShowApprove(false);
         setShowTransfer(false);
