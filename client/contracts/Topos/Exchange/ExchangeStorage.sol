@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: CC0-1.0
 pragma solidity ^0.8.0;
 
+import "../../IERC7092.sol";
 import "../../BondData.sol";
-import "../../BondCall.sol";
 import "../interfaces/IToposBank.sol";
 import "../../tests/tokens/IERC20.sol";
 import "./IExchangeBondsStorage.sol";
