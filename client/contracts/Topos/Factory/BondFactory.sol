@@ -13,7 +13,7 @@ contract BondFactory {
     modifier onlyToposManager {
         require(
             msg.sender == toposManager,
-            "NOT_ALLOWED"
+            "not allowed"
         );
         _;
     }
@@ -31,7 +31,7 @@ contract BondFactory {
         address _toposBankContract,
         string calldata _countryOfIssuance
     ) external onlyToposManager {
-        require(!isBondContract[_dealID], "CONTRACT_ALREADY_DEPLOYED");
+        require(!isBondContract[_dealID], "deployed");
 
         BondTopos bond = new BondTopos{salt: bytes32(abi.encodePacked(_dealID))}(
             _dealID,

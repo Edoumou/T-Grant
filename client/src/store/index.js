@@ -18,15 +18,26 @@ import {
     setShowInvestForm,
     setBondSymbols,
     setIssuersName,
+    setIssuersLogo,
     setIssuersNameForApprovedDeals,
     setApprovedDeals,
+    setDealsFund,
     setIssuersForApprovedDelas,
     setTokenSymbolForApprovedDeals,
     setDealsToIssue,
     setDealToIssue,
     setIssuerNameForDealToIssue,
     setCountryForDealToIssue,
-    setShowIssueDealForm
+    setCurrencyForDealToIssue,
+    setShowIssueDealForm,
+    setBonds,
+    setActiveBondsDealID,
+    setSelectedActiveBond,
+    setInvestorsForSelectedActiveDeal,
+    setBondsDealIDs,
+    setBondsIssuers,
+    setBondsCurrency,
+    setDealsListed
 } from "./slices/bondSlice";
 import { 
     connectionReducer,
@@ -45,8 +56,20 @@ import {
     setTokenAddresses,
     setDeals
 } from "./slices/connectionSlice";
-import { issuerReducer, setIssuerRequest, setListOfIssuers, setShowForm, setIssuerDealsCurrencySymbols } from "./slices/issuerSlice";
-import { investorReducer, setInvestorRequest, setListOfInvestors } from "./slices/investorSlice";
+import {
+    issuerReducer,
+    setIssuerRequest,
+    setListOfIssuers,
+    setShowForm,
+    setIssuerDealsCurrencySymbols
+} from "./slices/issuerSlice";
+import {
+    investorReducer,
+    setInvestorRequest,
+    setListOfInvestors,
+    setInvestorBonds,
+    setInvestorBondsIssuers
+} from "./slices/investorSlice";
 
 
 /**
@@ -79,15 +102,26 @@ export {
     setShowInvestForm,
     setBondSymbols,
     setIssuersName,
+    setIssuersLogo,
     setIssuersNameForApprovedDeals,
     setApprovedDeals,
+    setDealsFund,
     setIssuersForApprovedDelas,
     setTokenSymbolForApprovedDeals,
     setDealsToIssue,
     setDealToIssue,
     setIssuerNameForDealToIssue,
     setCountryForDealToIssue,
+    setCurrencyForDealToIssue,
     setShowIssueDealForm,
+    setBonds,
+    setActiveBondsDealID,
+    setSelectedActiveBond,
+    setInvestorsForSelectedActiveDeal,
+    setBondsDealIDs,
+    setBondsIssuers,
+    setBondsCurrency,
+    setDealsListed,
     setIsVerified,
     setRegistrationStatus,
     setRegistrarOwner,
@@ -110,5 +144,7 @@ export {
     setIssuerDealsCurrencySymbols,
     setInvestorRequest,
     setListOfIssuers,
-    setListOfInvestors
+    setListOfInvestors,
+    setInvestorBonds,
+    setInvestorBondsIssuers
 }

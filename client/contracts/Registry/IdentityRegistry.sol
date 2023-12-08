@@ -21,16 +21,29 @@ contract IdentityRegistry is IIdentityRegistry {
         owner = msg.sender;
     }
 
+    enum RegistrationStatus {UNDEFINED, VERIFIED}
+
+    error AlreadyVerified();
+    error InvalidAddress(address caller);
+
     function setAuthenticationContract(address _authenticationContract) external {
         require(msg.sender == owner, "ONLY_OWNER");
 
         authenticationContract = _authenticationContract;
     }
 
-    enum RegistrationStatus {UNDEFINED, VERIFIED}
+    /**
+    * @notice Registers a smart contract to allow it to receive bonds.
+    *         Example: The Exchange contract must be registered
+    * @param _contractAddress Contract address to register
+    */
+    function registerContract(
+        address _contractAddress
+    ) external {
+        require(msg.sender == owner, "only owner");
 
-    error AlreadyVerified();
-    error InvalidAddress(address caller);
+        _status[_contractAddress] = RegistrationStatus.VERIFIED;
+    }
 
     /**
     * @notice Registers a stakeholder.
@@ -55,7 +68,6 @@ contract IdentityRegistry is IIdentityRegistry {
 
         kwcPassed[_identityID] = true;
         _status[msg.sender] = RegistrationStatus.VERIFIED;
-
 
         _stakeholders[msg.sender] = RegistryData.Stakeholder(
             {

@@ -14,6 +14,7 @@ function IssuerRequest() {
     const [issuerType, setIssuerType] = useState('');
     const [creditRating, setCreditRating] = useState('');
     const [carbonCredit, setCarbonCredit] = useState('');
+    const [logoURI, setLogoURI] = useState('');
     const [loader, setLoader] = useState(true);
     const [explorerLink, setExplorerLink] = useState('');
     const [loadingMessage, setLoadingMessage] = useState('Transaction in Process');
@@ -26,13 +27,18 @@ function IssuerRequest() {
         return state.issuer.issuerRequest;
     });
 
+    const connection = useSelector(state => {
+        return state.connection;
+    });
+
     const options = [
         { key: 1, text: 'GOV', value: 'GOV' },
         { key: 2, text: 'MUNI', value: 'MUNI' },
         { key: 3, text: 'CORP', value: 'CORP' },
-        { key: 4, text: 'CEX', value: 'CEX' },
-        { key: 5, text: 'DEX', value: 'DEX' },
-        { key: 6, text: 'OTHER', value: 'OTHER' },
+        { key: 4, text: 'SME', value: 'SME' },
+        { key: 5, text: 'CEX', value: 'CEX' },
+        { key: 6, text: 'DEX', value: 'DEX' },
+        { key: 7, text: 'OTHER', value: 'OTHER' }
     ];
 
     const request = async () => {
@@ -46,6 +52,7 @@ function IssuerRequest() {
             let issuerTypeToUse = issuerType.trim();
             let creditRatingToUse = creditRating.trim();
             let carbonCreditToUse = carbonCredit.trim();
+            let logoURIToUse = logoURI.trim();
 
             let StakeHolderStatus = {
                 UNDEFINED: '0',
@@ -63,7 +70,8 @@ function IssuerRequest() {
                 carbonCredit: carbonCreditToUse,
                 walletAddress: account,
                 status: StakeHolderStatus.UNDEFINED,
-                index: '0'
+                index: '0',
+                logoURI: logoURIToUse
             }
 
             await contract.methods.requestRegistrationIssuer(issuer)
@@ -77,6 +85,7 @@ function IssuerRequest() {
                     setIssuerType('');
                     setCreditRating('');
                     setCarbonCredit('');
+                    setLogoURI('');
                 })
                 .on('receipt', receipt => {
                     setLoadingMessage('Transaction Completed! ✅');
@@ -89,6 +98,7 @@ function IssuerRequest() {
             setIssuerType('');
             setCreditRating('');
             setCarbonCredit('');
+            setLogoURI('');
             setLoader(false);
         }
 
@@ -98,6 +108,7 @@ function IssuerRequest() {
         setIssuerType('');
         setCreditRating('');
         setCarbonCredit('');
+        setLogoURI('');
         setLoader(false);
 
         let issuerRequest = await contract.methods.issuers(account).call({ from: account });
@@ -116,6 +127,7 @@ function IssuerRequest() {
         setIssuerType('');
         setCreditRating('');
         setCarbonCredit('');
+        setLogoURI('');
 
         const newWindow = window.open(explorerLink, '_blank', 'noopener,noreferrer');
         if (newWindow) newWindow.opener = null;
@@ -187,6 +199,33 @@ function IssuerRequest() {
                                             placeholder='Carbon Credit'
                                             value={carbonCredit}
                                             onChange={e => setCarbonCredit(e.target.value)}
+                                        />
+                                    </GridColumn>
+                                </GridRow>
+                                <GridRow>
+                                    <GridColumn>
+                                        <Input
+                                            fluid
+                                            size="mini"
+                                            placeholder='Issuer Logo'
+                                            value={logoURI}
+                                            onChange={e => setLogoURI(e.target.value)}
+                                        />
+                                    </GridColumn>
+                                    <GridColumn>
+                                        <Input
+                                            fluid
+                                            disabled
+                                            size="mini"
+                                            value={connection.account}
+                                        />
+                                    </GridColumn>
+                                    <GridColumn>
+                                        <Input
+                                            fluid
+                                            disabled
+                                            size="mini"
+                                            value="SUBMISSION"
                                         />
                                     </GridColumn>
                                 </GridRow>

@@ -32,6 +32,8 @@ function IssuersList() {
         let { web3, account } = await web3Connection();
         let contract = await getContract(web3, IssuerJSON, Addresses.IssuerContract);
 
+        setLoader(true);
+
         await contract.methods.approveIssuer(issuerAccount)
             .send({ from: account })
             .on('transactionHash', hash => {
@@ -56,6 +58,8 @@ function IssuersList() {
     const reject = async issuerAccount => {
         let { web3, account } = await web3Connection();
         let contract = await getContract(web3, IssuerJSON, Addresses.IssuerContract);
+
+        setLoader(true);
 
         await contract.methods.rejectIssuer(issuerAccount)
             .send({ from: account })
@@ -187,7 +191,7 @@ function IssuersList() {
             {
                 issuers.length > 0 ?
                     <div className="tab-scroll">
-                        <Table padded>
+                        <Table padded selectable>
                             <TableHeader className="header-sticky">
                                 <TableRow>
                                     <TableHeaderCell>Name</TableHeaderCell>
@@ -208,7 +212,7 @@ function IssuersList() {
                     </div>
                 :
                     <div className="list-card-head-no">
-                        There is No Request from Issuers
+                        There are No Requests from Issuers
                     </div>
             }
         </>

@@ -10,6 +10,7 @@ contract BondStorage {
     mapping(string => BondData.Bond) public bonds;
     mapping(address => uint256) principals;
     mapping(address => bool) public isInvestor;
+    mapping(address => uint256) public investorsIDs;
     mapping(address => mapping(address => uint256)) approvals;
 
     string public dealID;

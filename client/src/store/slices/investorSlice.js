@@ -4,7 +4,10 @@ const investorSlice = createSlice({
     name: 'investor',
     initialState: {
         investorRequest: {},
-        listOfInvestors: []
+        listOfInvestors: [],
+        investorBonds: [],
+        investorBondsIssuers: [],
+        investorsBondsCurrencies: []
     },
     reducers: {
         setInvestorRequest(state, action) {
@@ -12,9 +15,20 @@ const investorSlice = createSlice({
         },
         setListOfInvestors(state, action) {
             state.listOfInvestors = action.payload;
+        },
+        setInvestorBonds(state, action) {
+            state.investorBonds = action.payload;
+        },
+        setInvestorBondsIssuers(state, action) {
+            state.investorBondsIssuers = action.payload;
         }
     }
 });
 
-export const {  setInvestorRequest, setListOfInvestors } = investorSlice.actions;
+export const {
+    setInvestorRequest,
+    setListOfInvestors,
+    setInvestorBonds,
+    setInvestorBondsIssuers
+} = investorSlice.actions;
 export const investorReducer = investorSlice.reducer;

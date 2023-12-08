@@ -5,7 +5,6 @@ import { Table, TableRow, TableHeader, TableHeaderCell, TableBody, TableCell, Bu
 import BankJSON from "../contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
-import FormateAddress from "../utils/FormateAddress";
 import Addresses from "../../src/addresses/addr.json";
 import "../users.css";
 import "../manager.css";
@@ -38,11 +37,11 @@ function ListOfApprovedDeals() {
             <TableRow key={index}>
                 <TableCell textAlign="left">{deal.dealID}</TableCell>
                 <TableCell textAlign="left">{bonds.issuersNameForApprovedDeals[index]}</TableCell>
-                <TableCell textAlign="left"><a href={deal.prospectusURI} target="_blank"><strong>{deal.dealID.toLowerCase()}</strong></a></TableCell>
+                <TableCell textAlign="left"><a href={deal.prospectusURI} target="_blank" rel="noopener noreferrer"><strong>{deal.dealID.toLowerCase()}</strong></a></TableCell>
                 <TableCell textAlign="center">{bonds.issuersForApprovedDeals[index].creditRating}</TableCell>
                 <TableCell textAlign="center">{Formate(bonds.issuersForApprovedDeals[index].carbonCredit)}</TableCell>
-                <TableCell positive textAlign="right">{Formate(deal.debtAmount)} {bonds.bondSymbols[index]}</TableCell>
-                <TableCell positive textAlign="right">{Formate(deal.denomination)} {bonds.bondSymbols[index]}</TableCell>
+                <TableCell positive textAlign="right">{Formate(deal.debtAmount)} {bonds.tokenSymbolForApprovedDeals[index]}</TableCell>
+                <TableCell positive textAlign="right">{Formate(deal.denomination)} {bonds.tokenSymbolForApprovedDeals[index]}</TableCell>
                 <TableCell warning textAlign="center">{deal.couponRate / 100}%</TableCell>
                 <TableCell textAlign="center">{deal.couponFrequency}</TableCell>
                 <TableCell warning textAlign="center">{couponType[index]}</TableCell>
@@ -57,7 +56,7 @@ function ListOfApprovedDeals() {
                                     deal.dealID,
                                     deal.debtAmount,
                                     deal.denomination,
-                                    bonds.bondSymbols[index],
+                                    bonds.tokenSymbolForApprovedDeals[index],
                                     bonds.issuersNameForApprovedDeals[index],
                                     deal.couponRate,
                                     deal.maturityDate
@@ -95,9 +94,9 @@ function ListOfApprovedDeals() {
                 <strong>List of Approved Deals</strong>
             </div>
             {
-                connection.deals.length > 0 ?
+                bonds.approvedDeals.length > 0 ?
                     <div className="tab-scroll">
-                        <Table padded>
+                        <Table padded selectable>
                             <TableHeader className="header-sticky">
                                 <TableRow>
                                     <TableHeaderCell textAlign="left">Deal ID</TableHeaderCell>
@@ -120,10 +119,17 @@ function ListOfApprovedDeals() {
                         </Table>
                     </div>
                 :
-                    <div  className="list-card-head-no">
-                        There is No Deal
+                    <div  className="no-approved-deal">
+                        There are no Deals approved at the moment
+                        <br></br>
+                        <br></br>
+                        Come back later
                     </div>
             }
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
         </>
     );
 }

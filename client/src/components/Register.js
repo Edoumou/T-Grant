@@ -74,6 +74,7 @@ function Register() {
                     await contract.methods.register(identityID, authHash)
                         .send({ from: account })
                         .on('transactionHash', hash => {
+                            setLoader(true);
                             setLoadingMessage('Transaction in Process! ⌛️');
                             setExplorerLink(`https://topos.blockscout.testnet-1.topos.technology/tx/${hash}`);
                             dispatch(setLoading(true));

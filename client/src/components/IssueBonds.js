@@ -3,15 +3,17 @@ import "../users.css";
 import "../manager.css";
 import { Grid, GridColumn, GridRow } from "semantic-ui-react";
 import { useSelector } from "react-redux";
-import IssuerRequierement from "./IssuerRequierement";
-import AccountCheck from "./AccountCheck";
-import IssuersList from "./IssuersList";
-import InvestorsList from "./InvestorsList";
 import SelectDealToDeploy from "./SelectDealToDeploy";
+import IssueDealForm from "./IssueDealForm";
+import ManagerListOfBonds from "./ManagerListOfBonds";
 
 function IssueBonds() {
     const connection = useSelector(state => {
         return state.connection;
+    });
+
+    const bonds = useSelector(state => {
+        return state.bond;
     });
 
     return (
@@ -29,15 +31,18 @@ function IssueBonds() {
                 </Grid>
             </div>
             <div className="manager-body">
-            <Grid stackable columns={2}>
+                <Grid stackable columns={2}>
                     <GridRow>
                         <GridColumn width={4}>
                             <SelectDealToDeploy />
-                            <AccountCheck />
                         </GridColumn>
                         <GridColumn width={12}>
-                            <IssuersList />
-                            <InvestorsList />
+                            {
+                                bonds.showIssueDealForm && <IssueDealForm />
+                            }
+                            <div>
+                                <ManagerListOfBonds />
+                            </div>
                         </GridColumn>
                     </GridRow>
                 </Grid>

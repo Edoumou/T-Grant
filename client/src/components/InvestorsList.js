@@ -6,7 +6,7 @@ import InvestorJSON from "../contracts/artifacts/contracts/Topos/Bank/Investor.s
 import FormateAddress from "../utils/FormateAddress";
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
-import Addresses from "../addresses/addr.json"
+import Addresses from "../addresses/addr.json";
 import { setBalance, setListOfInvestors, setLoading } from "../store";
 import "../users.css";
 import "../manager.css";
@@ -31,6 +31,8 @@ function InvestorsList() {
         let { web3, account } = await web3Connection();
         let contract = await getContract(web3, InvestorJSON, Addresses.InvestorContract);
 
+        setLoader(true);
+        
         await contract.methods.approveInvestor(investorAccount)
             .send({ from: account })
             .on('transactionHash', hash => {
@@ -55,6 +57,8 @@ function InvestorsList() {
     const reject = async investorAccount => {
         let { web3, account } = await web3Connection();
         let contract = await getContract(web3, InvestorJSON, Addresses.InvestorContract);
+
+        setLoader(true);
 
         await contract.methods.rejectInvestor(investorAccount)
             .send({ from: account })
@@ -180,7 +184,7 @@ function InvestorsList() {
             {
                 investors.length > 0 ?
                     <div className="tab-scroll">
-                        <Table padded>
+                        <Table padded selectable>
                             <TableHeader className="header-sticky">
                                 <TableRow>
                                     <TableHeaderCell>Name</TableHeaderCell>
@@ -198,7 +202,7 @@ function InvestorsList() {
                     </div>
                 :
                     <div  className="list-card-head-no">
-                        There is No Request from Investors
+                        There are No Requests from Investors
                     </div>
             }
         </>

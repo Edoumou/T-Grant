@@ -41,6 +41,7 @@ abstract contract BondData {
         address walletAddress;
         StakeHolderStatus status;
         uint256 index;
+        string logoURI;
     }
 
     struct Investor {
@@ -66,6 +67,21 @@ abstract contract BondData {
     struct DealInvestment {
         address investor;
         uint256 amount;
+    }
+
+    struct CouponPaymentReceipt {
+        uint256 issueVolume;
+        uint256 couponRate;
+        uint256 interestPaid;
+    }
+
+    struct Listing {
+        string dealID;
+        address owner;
+        uint256 amount;
+        uint256 price;
+        uint256 index;
+        uint256 listingTime;
     }
 
     error InvalidInvestorAddress(address investor);

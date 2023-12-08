@@ -22,6 +22,7 @@ contract ToposBankStorage {
 
     BondData.Bond[] bonds;
     BondData.Deal[] listOfDeals;
+    string[] bondsDealIDs;
 
     address bondFactoryContract;
 

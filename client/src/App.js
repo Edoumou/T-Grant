@@ -6,10 +6,13 @@ import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom'
 import ToposCoreJSON from '@topos-protocol/topos-smart-contracts/artifacts/contracts/topos-core/ToposCore.sol/ToposCore.json';
 import SubnetRegistratorJSON from '@topos-protocol/topos-smart-contracts/artifacts/contracts/topos-core/SubnetRegistrator.sol/SubnetRegistrator.json';
 import ToposBankJSON from "../src/contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
+import BondCallJSON from "../src/contracts/artifacts/contracts/BondCall.sol/BondCall.json";
 import RolesJSON from "../src/contracts/artifacts/contracts/utils/Roles.sol/Roles.json";
 import IssuerJSON from "../src/contracts/artifacts/contracts/Topos/Bank/Issuer.sol/Issuer.json";
 import InvestorJSON from "../src/contracts/artifacts/contracts/Topos/Bank/Investor.sol/Investor.json";
 import TokenCallJSON from "../src/contracts/artifacts/contracts/tests/tokens/TokenCall.sol/TokenCall.json";
+import IssuersFundJSON from "../src/contracts/artifacts/contracts/treasury/IssuersFund.sol.sol/IssuersFund.json";
+import ExchangeJSON from "../src/contracts/artifacts/contracts/Topos/Exchange/Exchange.sol/Exchange.json";
 import Addresses from "../src/addresses/addr.json";
 import { web3Connection } from './utils/web3Connection';
 import { getContract } from './utils/getContract';
@@ -17,7 +20,7 @@ import { toposData } from './utils/toposData';
 import FormateAddress from './utils/FormateAddress';
 import HeaderLogo from './img/header-logo.png';
 import "./App.css";
-import { setActiveItem, setColor, setIsConnected, setAccount, setRole, setLoggedIn, setIssuerRegistrationStatus, setInvestorRegistrationStatus, setListOfIssuers, setListOfInvestors, setIssuerRequest, setInvestorRequest, setBalance, setTokenSymbols, setDeals, setTokenAddresses, setIssuerDealsCurrencySymbols } from './store';
+import { setActiveItem, setColor, setIsConnected, setAccount, setRole, setLoggedIn, setIssuerRegistrationStatus, setInvestorRegistrationStatus, setListOfIssuers, setListOfInvestors, setIssuerRequest, setInvestorRequest, setBalance, setTokenSymbols, setDeals, setTokenAddresses, setIssuerDealsCurrencySymbols, setInvestorBonds, setInvestorBondsIssuers } from './store';
 import Home from './components/Home';
 import Register from './components/Register';
 import Connect from './components/Connect';
@@ -27,10 +30,13 @@ import SubmitDeal from './components/SubmitDeal';
 import ManagerRequests from './components/ManagerRequests';
 import ManagerBonds from './components/ManagerBonds';
 import ManagerDeals from './components/ManagerDeals';
-import { setApprovedDeals, setBondSymbols, setDealsToIssue, setIssuersForApprovedDelas, setIssuersName, setIssuersNameForApprovedDeals, setSelectedDealID, setShowInvestForm, setTokenSymbolForApprovedDeals } from './store/slices/bondSlice';
+import { setActiveBondsDealID, setApprovedDeals, setBondSymbols, setBonds, setBondsCurrency, setBondsDealIDs, setBondsIssuers, setDealsFund, setDealsListed, setDealsToIssue, setIssuersForApprovedDelas, setIssuersLogo, setIssuersName, setIssuersNameForApprovedDeals, setSelectedDealID, setShowInvestForm, setTokenSymbolForApprovedDeals } from './store/slices/bondSlice';
 import InvestorDeals from './components/InvestorDeals';
 import MintTokens from './components/MintTokens';
 import IssueBonds from './components/IssueBonds';
+import InvestorBonds from './components/InvestorBonds';
+import ManagerCoupons from './components/ManagerCoupons';
+import DealsFund from './components/DealsFund';
 
 function App() {
   const dispatch = useDispatch();
@@ -40,7 +46,6 @@ function App() {
   });
   
   const fetchOnchainData = useCallback(async () => {
-
     let { web3, account } = await web3Connection();
     let coreData = toposData();
 
@@ -57,16 +62,23 @@ function App() {
     let issuerContract = await getContract(web3, IssuerJSON, Addresses.IssuerContract);
     let investorContract = await getContract(web3, InvestorJSON, Addresses.InvestorContract);
     let tokenCallContract = await getContract(web3, TokenCallJSON, Addresses.TokenCallContract);
+    let bondCallContract = await getContract(web3, BondCallJSON, Addresses.BondCallContract);
+    let issuersFundContract = await getContract(web3, IssuersFundJSON, Addresses.IssuersFundContract);
+    let exchangeContract = await getContract(web3, ExchangeJSON, Addresses.ExchangeContract);
 
     let role = await rolesContract.methods.getRole(account).call({ from: account });
 
     let tokenAddresses = await tokenCallContract.methods.getTokenAddresses().call({ from: account });
     let tokenSymbols = await tokenCallContract.methods.getTokenSymbols().call({ from: account });
     let deals = await toposBank.methods.getListOfDeals().call({ from: account });
+    let bonds = await toposBank.methods.getListOfBonds().call({ from: account });
+    let bondsDealIDs = await toposBank.methods.getListOfBondsDealIDs().call({ from: account });
+    let listOfBondsListed = await exchangeContract.methods.getDealsListed().call({ from: account });
 
     //=== store bonds currency symbols
     let bondSymbols = [];
     let issuersNames = [];
+    let issuersLogo = [];
     let issuersNameForApprovedDeals = [];
     let approvedDeals = [];
     let issuersForApprovedDeals = [];
@@ -80,6 +92,7 @@ function App() {
 
       bondSymbols.push(tokenSymbol);
       issuersNames.push(issuer.name);
+      issuersLogo.push(issuer.logoURI);
 
       if(deals[i].status === "2") {
         let issuerForApprovedDeals = issuer;
@@ -99,14 +112,96 @@ function App() {
       }
     }
 
+    //=== Bonds
+    let bondsIssuers = [];
+    let bondsCurrency = [];
+    for(let i = 0; i < bondsDealIDs.length; i++) {
+      let deal = await toposBank.methods.deals(bondsDealIDs[i]).call({ from: account });
+      let issuerAddress = deal.issuerAddress;
+      let currency = deal.currency;
+
+      let issuer = await issuerContract.methods.issuers(issuerAddress).call({ from: account });
+
+      let tokenSymbol = await tokenCallContract.methods.symbol(currency).call({ from: account });
+
+      bondsIssuers.push(issuer);
+      bondsCurrency.push(tokenSymbol);
+    }
+
     dispatch(setDealsToIssue(dealsToIssue));
     dispatch(setBondSymbols(bondSymbols));
     dispatch(setIssuersName(issuersNames));
+    dispatch(setIssuersLogo(issuersLogo));
     dispatch(setApprovedDeals(approvedDeals));
     dispatch(setIssuersForApprovedDelas(issuersForApprovedDeals));
     dispatch(setIssuersNameForApprovedDeals(issuersNameForApprovedDeals));
     dispatch(setTokenSymbolForApprovedDeals(tokenSymbolForApprovedDeals));
+    dispatch(setBonds(bonds));
+    dispatch(setBondsDealIDs(bondsDealIDs));
+    dispatch(setBondsIssuers(bondsIssuers));
+    dispatch(setBondsCurrency(bondsCurrency));
+    dispatch(setDealsListed(listOfBondsListed));
+    
+    //=== Invstors bonds
+    let investorBonds = [];
+    let activeBondsDealID = [];
+    let investorBondsIssuers = [];
+    let DealsFund = [];
+    for(let i = 0; i < deals.length; i++) {
+      if(deals[i].status === "4") {
+        let dealID = deals[i].dealID;
+        let tokenAddress = deals[i].currency;
+        let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
+        let issuer = await issuerContract.methods.issuers(deals[i].issuerAddress).call({ from: account });
+        let address = await toposBank.methods.dealBondContracts(dealID).call({ from: account });
 
+        activeBondsDealID.push(dealID);
+
+        let funds = await issuersFundContract.methods.totalAmount(dealID).call({ from: account });
+
+        if(Number(funds) !== 0) {
+          DealsFund.push(dealID);
+        }
+
+        let principal = await bondCallContract.methods.principalOf(account, address).call({ from: account });
+
+        if(principal !== '0') {
+          let isin = await bondCallContract.methods.isin(address).call({ from: account });
+          let denomination = await bondCallContract.methods.denomination(address).call({ from: account });
+          let volume = await bondCallContract.methods.issueVolume(address).call({ from: account });
+          let couponRate = await bondCallContract.methods.couponRate(address).call({ from: account });
+          let couponFrequency = await bondCallContract.methods.couponFrequency(address).call({ from: account });
+          let maturityDate = await bondCallContract.methods.maturityDate(address).call({ from: account });
+          let symbol = await bondCallContract.methods.symbol(address).call({ from: account });
+          let name = await bondCallContract.methods.name(address).call({ from: account });
+
+          investorBonds.push(
+            {
+              isin: isin,
+              dealID: dealID,
+              name: name,
+              symbol: symbol,
+              denomination: denomination.toString(),
+              volume: volume.toString(),
+              couponRate: couponRate.toString(),
+              couponFrequency: couponFrequency.toString(),
+              maturityDate: maturityDate.toString(),
+              principal: principal.toString(),
+              tokenSymbol: tokenSymbol,
+              logo: issuer.logoURI,
+              prospectus: deals[i].prospectusURI
+            }
+          );
+
+          investorBondsIssuers.push(issuer);
+        }
+      }
+    }
+    
+    dispatch(setInvestorBonds(investorBonds));
+    dispatch(setActiveBondsDealID(activeBondsDealID));
+    dispatch(setInvestorBondsIssuers(investorBondsIssuers));
+    dispatch(setDealsFund(DealsFund));
 
     //=== issuers filtering
     if (role === "ISSUER") {
@@ -124,7 +219,6 @@ function App() {
 
       dispatch(setIssuerDealsCurrencySymbols(issuerDealsCurrencySymbols));
     }
-
     
     let listOfIssuers = await issuerContract.methods.getIssuers().call({ from: account });
     let listOfInvestors = await investorContract.methods.getInvestors().call({ from: account });
@@ -158,6 +252,9 @@ function App() {
     let issuerContract = await getContract(web3, IssuerJSON, Addresses.IssuerContract);
     let investorContract = await getContract(web3, InvestorJSON, Addresses.InvestorContract);
     let tokenCallContract = await getContract(web3, TokenCallJSON, Addresses.TokenCallContract);
+    let bondCallContract = await getContract(web3, BondCallJSON, Addresses.BondCallContract);
+    let issuersFundContract = await getContract(web3, IssuersFundJSON, Addresses.IssuersFundContract);
+    let exchangeContract = await getContract(web3, ExchangeJSON, Addresses.ExchangeContract);
 
     if(typeof window.ethereum !== 'undefined') {
       await window.ethereum.on('accountsChanged', async accounts => {
@@ -168,10 +265,14 @@ function App() {
         let tokenAddresses = await tokenCallContract.methods.getTokenAddresses().call({ from: account });
         let tokenSymbols = await tokenCallContract.methods.getTokenSymbols().call({ from: account });
         let deals = await toposBank.methods.getListOfDeals().call({ from: account });
+        let bonds = await toposBank.methods.getListOfBonds().call({ from: account });
+        let bondsDealIDs = await toposBank.methods.getListOfBondsDealIDs().call({ from: account });
+        let listOfBondsListed = await exchangeContract.methods.getDealsListed().call({ from: account });
 
         //=== store bonds currency symbols
         let bondSymbols = [];
         let issuersNames = [];
+        let issuersLogo = [];
         let issuersNameForApprovedDeals = [];
         let approvedDeals = [];
         let issuersForApprovedDeals = [];
@@ -184,6 +285,7 @@ function App() {
 
           bondSymbols.push(tokenSymbol);
           issuersNames.push(issuer.name);
+          issuersLogo.push(issuer.logoURI);
 
           if(deals[i].status === "2") {
             let issuerForApprovedDeals = issuer;
@@ -195,12 +297,91 @@ function App() {
           }
         }
 
+        //=== Bonds
+        let bondsIssuers = [];
+        let bondsCurrency = [];
+        for(let i = 0; i < bondsDealIDs.length; i++) {
+          let deal = await toposBank.methods.deals(bondsDealIDs[i]).call({ from: account });
+          let issuerAddress = deal.issuerAddress;
+          let currency = deal.currency;
+
+          let issuer = await issuerContract.methods.issuers(issuerAddress).call({ from: account });
+
+          let tokenSymbol = await tokenCallContract.methods.symbol(currency).call({ from: account });
+
+          bondsIssuers.push(issuer);
+          bondsCurrency.push(tokenSymbol);
+        }
+
         dispatch(setBondSymbols(bondSymbols));
         dispatch(setIssuersName(issuersNames));
+        dispatch(setIssuersLogo(issuersLogo));
         dispatch(setApprovedDeals(approvedDeals));
         dispatch(setIssuersForApprovedDelas(issuersForApprovedDeals));
         dispatch(setIssuersNameForApprovedDeals(issuersNameForApprovedDeals));
         dispatch(setTokenSymbolForApprovedDeals(tokenSymbolForApprovedDeals));
+        dispatch(setBonds(bonds));
+        dispatch(setBondsDealIDs(bondsDealIDs));
+        dispatch(setBondsIssuers(bondsIssuers));
+        dispatch(setBondsCurrency(bondsCurrency));
+        dispatch(setDealsListed(listOfBondsListed));
+
+        //=== Invstors bonds
+        let investorBonds = [];
+        let investorBondsIssuers = [];
+        let DealsFund = [];
+        for(let i = 0; i < deals.length; i++) {
+          if(deals[i].status === "4") {
+            let dealID = deals[i].dealID;
+            let tokenAddress = deals[i].currency;
+            let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
+            let issuer = await issuerContract.methods.issuers(deals[i].issuerAddress).call({ from: account });
+            let address = await toposBank.methods.dealBondContracts(dealID).call({ from: account });
+
+            let funds = await issuersFundContract.methods.totalAmount(dealID).call({ from: account });
+
+            if(Number(funds) !== 0) {
+              DealsFund.push(dealID);
+            }
+
+            let principal = await bondCallContract.methods.principalOf(account, address).call({ from: account });
+
+            if(principal !== '0') {
+              let isin = await bondCallContract.methods.isin(address).call({ from: account });
+              let denomination = await bondCallContract.methods.denomination(address).call({ from: account });
+              let volume = await bondCallContract.methods.issueVolume(address).call({ from: account });
+              let couponRate = await bondCallContract.methods.couponRate(address).call({ from: account });
+              let couponFrequency = await bondCallContract.methods.couponFrequency(address).call({ from: account });
+              let maturityDate = await bondCallContract.methods.maturityDate(address).call({ from: account });
+              let symbol = await bondCallContract.methods.symbol(address).call({ from: account });
+              let name = await bondCallContract.methods.name(address).call({ from: account });
+
+              investorBonds.push(
+                {
+                  isin: isin,
+                  dealID: dealID,
+                  name: name,
+                  symbol: symbol,
+                  denomination: denomination.toString(),
+                  volume: volume.toString(),
+                  couponRate: couponRate.toString(),
+                  couponFrequency: couponFrequency.toString(),
+                  maturityDate: maturityDate.toString(),
+                  principal: principal.toString(),
+                  tokenSymbol: tokenSymbol,
+                  logo: issuer.logoURI,
+                  prospectus: deals[i].prospectusURI
+                }
+              );
+
+              investorBondsIssuers.push(issuer);
+            }
+          }
+        }
+
+        dispatch(setInvestorBonds(investorBonds));
+        dispatch(setInvestorBondsIssuers(investorBondsIssuers));
+        dispatch(setDealsFund(DealsFund));
 
         //=== issuers filtering
         if (role === "ISSUER") {
@@ -346,6 +527,20 @@ function App() {
                           as={Link}
                           to='/manager/bonds'
                         />
+                        <MenuItem
+                          name='coupons'
+                          active={connection.activeItem === 'coupons'}
+                          onClick={handleItemClick}
+                          as={Link}
+                          to='/manager/coupons'
+                        />
+                        <MenuItem
+                          name='funds'
+                          active={connection.activeItem === 'funds'}
+                          onClick={handleItemClick}
+                          as={Link}
+                          to='/manager/funds'
+                        />
                       </>
                     : connection.role === "ISSUER" ?
                       <>
@@ -367,6 +562,13 @@ function App() {
                           onClick={handleItemClick}
                           as={Link}
                           to='/investor/deals'
+                        />
+                        <MenuItem
+                          name='bonds'
+                          active={connection.activeItem === 'bonds'}
+                          onClick={handleItemClick}
+                          as={Link}
+                          to='/investor/bonds'
                         />
                         <MenuItem
                           name='mint tokens'
@@ -417,6 +619,8 @@ function App() {
                       <Route path='/manager/deals' element={<ManagerDeals />} />
                       <Route path='/manager/issue-bonds' element={<IssueBonds />} />
                       <Route path='/manager/bonds' element={<ManagerBonds />} />
+                      <Route path='/manager/coupons' element={<ManagerCoupons />} />
+                      <Route path='/manager/funds' element={<DealsFund />} />
                     </>
                   : connection.role === "ISSUER" ?
                     <>
@@ -425,6 +629,7 @@ function App() {
                   : connection.role === "INVESTOR" ?
                     <>
                       <Route path='/investor/deals' element={<InvestorDeals />} />
+                      <Route path='/investor/bonds' element={<InvestorBonds />} />
                       <Route path='/investor/mint-tokens' element={<MintTokens />} />
                     </>
                   :
