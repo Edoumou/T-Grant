@@ -160,7 +160,8 @@ function App() {
           denomination: denomination,
           maturityDate: maturityDate,
           coupon: coupon,
-          bondContract: bondContract
+          bondContract: bondContract,
+          currencyContract: tokenAddress
         }
 
         bondsListed.push(data);
@@ -382,7 +383,8 @@ function App() {
               denomination: denomination,
               maturityDate: maturityDate,
               coupon: coupon,
-              bondContract: bondContract
+              bondContract: bondContract,
+              currencyContract: tokenAddress
             }
 
             bondsListed.push(data);

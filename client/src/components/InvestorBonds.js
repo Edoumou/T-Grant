@@ -255,7 +255,7 @@ function InvestorBonds() {
         let { web3, account } = await web3Connection();
         let bankContract = await getContract(web3, BankJSON, Addresses.ToposBankContract);
         let exchangeContract = await getContract(web3, ExchangeJSON, Addresses.ExchangeContract);
-        let ecchangeBondsStorage = await getContract(web3, ExchangeBondsStorageJSON, Addresses.ExchangeBondsStorageContract);
+        let exchangeBondsStorage = await getContract(web3, ExchangeBondsStorageJSON, Addresses.ExchangeBondsStorageContract);
         let bondCallContract = await getContract(web3, BondCallJSON, Addresses.BondCallContract);
         let issuerContract = await getContract(web3, IssuerJSON, Addresses.IssuerContract);
         let tokenCallContract = await getContract(web3, TokenCallJSON, Addresses.TokenCallContract);
@@ -302,7 +302,7 @@ function InvestorBonds() {
         setAmountToTransfer('');
         setBondPrice('');
 
-        let listOfBondsListed = await ecchangeBondsStorage.methods.getDealsListed().call({ from: account });
+        let listOfBondsListed = await exchangeBondsStorage.methods.getDealsListed().call({ from: account });
 
         //=== Invstors bonds
         let investorBonds = [];
@@ -378,7 +378,8 @@ function InvestorBonds() {
                   denomination: denomination,
                   maturityDate: maturityDate,
                   coupon: coupon,
-                  bondContract: bondContract
+                  bondContract: bondContract,
+                  currencyContract: tokenAddress
                 }
     
                 bondsListed.push(data);

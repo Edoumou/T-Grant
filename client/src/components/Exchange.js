@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Image, Button, Card, CardContent, Dropdown, Grid, GridColumn, GridRow, Modal, Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow, Label } from "semantic-ui-react";
 import "../users.css";
@@ -8,6 +8,9 @@ import FormateAddress from "../utils/FormateAddress";
 import { Link } from "react-router-dom";
 
 function Exchange() {
+    const [bondSelected, setBondSelected] = useState({});
+    const [showBuyBondsForm, setShowBuyBondsForm] = useState(false);
+    
     const connection = useSelector(state => {
         return state.connection;
     });
@@ -18,8 +21,11 @@ function Exchange() {
 
     const dispatch = useDispatch();
 
-    const buyBonds = async () => {
-        console.log('Buy Bonds')
+    const buyBonds = async (index) => {
+        setBondSelected(bonds.dealsListed[index]);
+        setShowBuyBondsForm(true);
+
+        console.log('bond:', bonds.dealsListed[index]);
     }
 
     const renderedBonds = bonds.dealsListed.map((list, index) => {
@@ -66,7 +72,7 @@ function Exchange() {
                             as='a'
                             ribbon='right'
                             color="orange"
-                            onClick={buyBonds}
+                            onClick={() => buyBonds(index)}
                         >
                             <strong>Buy</strong>
                         </Label>
@@ -95,29 +101,44 @@ function Exchange() {
                     Bond Markets
                 </div>
                 {
-                    bonds.dealsListed.length > 0 &&
-                    <div className="exchange-tab-scroll">
-                        <Table padded selectable inverted>
-                            <TableHeader className="header-sticky">
-                                <TableRow>
-                                    <TableHeaderCell>Issuer</TableHeaderCell>
-                                    <TableHeaderCell textAlign='center'>Bond Contract</TableHeaderCell>
-                                    <TableHeaderCell textAlign='center'>Deal ID</TableHeaderCell>
-                                    <TableHeaderCell textAlign='center'>Seller</TableHeaderCell>
-                                    <TableHeaderCell textAlign='center'>Symbol</TableHeaderCell>
-                                    <TableHeaderCell textAlign='center'>Qty</TableHeaderCell>
-                                    <TableHeaderCell textAlign='center'>Coupon</TableHeaderCell>
-                                    <TableHeaderCell textAlign='center'>Maturity</TableHeaderCell>
-                                    <TableHeaderCell textAlign='center'>Par Value</TableHeaderCell>
-                                    <TableHeaderCell textAlign='center'>Price</TableHeaderCell>
-                                    <TableHeaderCell textAlign='center'></TableHeaderCell>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {renderedBonds}
-                            </TableBody>
-                        </Table>
-                    </div>
+                    showBuyBondsForm ?
+                        <>
+                        </>
+                    :
+                        <>
+                            {
+                                bonds.dealsListed.length > 0 ?
+                                    <div className="exchange-tab-scroll">
+                                        <Table padded selectable inverted>
+                                            <TableHeader className="header-sticky">
+                                                <TableRow>
+                                                    <TableHeaderCell>Issuer</TableHeaderCell>
+                                                    <TableHeaderCell textAlign='center'>Bond Contract</TableHeaderCell>
+                                                    <TableHeaderCell textAlign='center'>Deal ID</TableHeaderCell>
+                                                    <TableHeaderCell textAlign='center'>Seller</TableHeaderCell>
+                                                    <TableHeaderCell textAlign='center'>Symbol</TableHeaderCell>
+                                                    <TableHeaderCell textAlign='center'>Qty</TableHeaderCell>
+                                                    <TableHeaderCell textAlign='center'>Coupon</TableHeaderCell>
+                                                    <TableHeaderCell textAlign='center'>Maturity</TableHeaderCell>
+                                                    <TableHeaderCell textAlign='center'>Par Value</TableHeaderCell>
+                                                    <TableHeaderCell textAlign='center'>Price</TableHeaderCell>
+                                                    <TableHeaderCell textAlign='center'></TableHeaderCell>
+                                                </TableRow>
+                                            </TableHeader>
+                                            <TableBody>
+                                                {renderedBonds}
+                                            </TableBody>
+                                        </Table>
+                                    </div>
+                                :
+                                    <div  className="no-approved-deal">
+                                        There are no Bonds Listed on the Exchange at the moment
+                                        <br></br>
+                                        <br></br>
+                                        Come back later
+                                    </div>
+                            }
+                        </>
                 }
             </div>
         </div>
