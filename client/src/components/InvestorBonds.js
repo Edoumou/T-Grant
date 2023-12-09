@@ -377,7 +377,8 @@ function InvestorBonds() {
                   logo: issuer.logoURI,
                   denomination: denomination,
                   maturityDate: maturityDate,
-                  coupon: coupon
+                  coupon: coupon,
+                  bondContract: bondContract
                 }
     
                 bondsListed.push(data);

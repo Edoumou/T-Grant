@@ -1,10 +1,11 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Image, Button, Card, CardContent, Dropdown, Grid, GridColumn, GridRow, Modal, Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } from "semantic-ui-react";
+import { Image, Button, Card, CardContent, Dropdown, Grid, GridColumn, GridRow, Modal, Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow, Label } from "semantic-ui-react";
 import "../users.css";
 import "../manager.css";
 import Formate from "../utils/Formate";
 import FormateAddress from "../utils/FormateAddress";
+import { Link } from "react-router-dom";
 
 function Exchange() {
     const connection = useSelector(state => {
@@ -17,6 +18,10 @@ function Exchange() {
 
     const dispatch = useDispatch();
 
+    const buyBonds = async () => {
+        console.log('Buy Bonds')
+    }
+
     const renderedBonds = bonds.dealsListed.map((list, index) => {
         return (
             <TableRow key={index}>
@@ -26,8 +31,17 @@ function Exchange() {
                         src={list.logo}
                     />
                 </TableCell>
+                <TableCell textAlign='center'>
+                    <a href={`https://topos.blockscout.testnet-1.topos.technology/address/${list.bondContract}`} target="_blank">
+                        {FormateAddress(list.bondContract)}
+                    </a>
+                </TableCell>
                 <TableCell textAlign='center'>{list.dealID}</TableCell>
-                <TableCell textAlign='center'>{FormateAddress(list.seller)}</TableCell>
+                <TableCell textAlign='center'>
+                    <a href={`https://topos.blockscout.testnet-1.topos.technology/address/${list.seller}`} target="_blank">
+                        {FormateAddress(list.seller)}
+                    </a>
+                </TableCell>
                 <TableCell textAlign='center'>{list.bondSymbol}</TableCell>
                 <TableCell textAlign='center'>{Formate(list.quantity)}</TableCell>
                 <TableCell textAlign='center'>{Formate(list.coupon / 100)}%</TableCell>
@@ -45,6 +59,19 @@ function Exchange() {
                     :
                         <TableCell textAlign='center'>{Formate(list.price)} {list.tokenSymbol}</TableCell>
                 }
+                <TableCell>
+                    {
+                        connection.account.toLowerCase() !== list.seller.toLowerCase() &&
+                        <Label
+                            as='a'
+                            ribbon='right'
+                            color="orange"
+                            onClick={buyBonds}
+                        >
+                            <strong>Buy</strong>
+                        </Label>
+                    }
+                </TableCell>
             </TableRow>
         );
     })
@@ -74,6 +101,7 @@ function Exchange() {
                             <TableHeader className="header-sticky">
                                 <TableRow>
                                     <TableHeaderCell>Issuer</TableHeaderCell>
+                                    <TableHeaderCell textAlign='center'>Bond Contract</TableHeaderCell>
                                     <TableHeaderCell textAlign='center'>Deal ID</TableHeaderCell>
                                     <TableHeaderCell textAlign='center'>Seller</TableHeaderCell>
                                     <TableHeaderCell textAlign='center'>Symbol</TableHeaderCell>
@@ -82,6 +110,7 @@ function Exchange() {
                                     <TableHeaderCell textAlign='center'>Maturity</TableHeaderCell>
                                     <TableHeaderCell textAlign='center'>Par Value</TableHeaderCell>
                                     <TableHeaderCell textAlign='center'>Price</TableHeaderCell>
+                                    <TableHeaderCell textAlign='center'></TableHeaderCell>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>

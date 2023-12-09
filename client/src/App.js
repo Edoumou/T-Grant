@@ -159,7 +159,8 @@ function App() {
           logo: issuer.logoURI,
           denomination: denomination,
           maturityDate: maturityDate,
-          coupon: coupon
+          coupon: coupon,
+          bondContract: bondContract
         }
 
         bondsListed.push(data);
@@ -380,7 +381,8 @@ function App() {
               logo: issuer.logoURI,
               denomination: denomination,
               maturityDate: maturityDate,
-              coupon: coupon
+              coupon: coupon,
+              bondContract: bondContract
             }
 
             bondsListed.push(data);
