@@ -358,6 +358,7 @@ function InvestorBonds() {
 
             let tokenAddress = deal.currency;
             let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
+            let bondName = await bondCallContract.methods.name(bondContract).call({ from: account });
             let bondSymbol = await bondCallContract.methods.symbol(bondContract).call({ from: account });
             let denomination = await bondCallContract.methods.denomination(bondContract).call({ from: account });
             let maturityDate = await bondCallContract.methods.maturityDate(bondContract).call({ from: account });
@@ -373,6 +374,7 @@ function InvestorBonds() {
                   price: listOfBondsListed[i].price,
                   index: listOfBondsListed[i].index,
                   tokenSymbol: tokenSymbol,
+                  bondName: bondName,
                   bondSymbol: bondSymbol,
                   logo: issuer.logoURI,
                   denomination: denomination,

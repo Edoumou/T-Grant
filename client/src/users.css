@@ -352,3 +352,27 @@
     color: white;
     font-size: calc(3px + 1.3vmin);
 }
+
+.buy-bond-head {
+    margin-top: 50px;
+    margin-bottom: 40px;
+    color: white;
+    text-align: center;
+}
+
+.buy-bond-body {
+    color: white;
+    width: 30%;
+    margin-left: 35%;
+    margin-right: auto;
+}
+
+.buy-bond-button {
+    display: flex;
+    justify-content: center;
+}
+
+.can-buy-color {
+    color: rgb(177, 118, 8);
+    font-size: calc(2px + 1.7vmin);
+}
