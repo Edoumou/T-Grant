@@ -3,6 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Image, Button, Card, CardContent, Dropdown, Grid, GridColumn, GridRow, Modal, Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow, Label, List, ListContent, ListItem, ModalContent, Input, ModalActions } from "semantic-ui-react";
 import TokenCallJSON from "../../src/contracts/artifacts/contracts/tests/tokens/TokenCall.sol/TokenCall.json";
+import BankJSON from "../../src/contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
+import ExchangeJSON from "../../src/contracts/artifacts/contracts/Topos/Exchange/Exchange.sol/Exchange.json";
+import ExchangeBondsStorageJSON from "../../src/contracts/artifacts/contracts/Topos/Exchange/ExchangeBondsStorage.sol/ExchangeBondsStorage.json";
 import Formate from "../utils/Formate";
 import FormateAddress from "../utils/FormateAddress";
 import Addresses from "../addresses/addr.json";
@@ -10,16 +13,17 @@ import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
 import "../users.css";
 import "../manager.css";
+import { setLoading } from "../store";
 
 function Exchange() {
     const [open, setOpen] = useState(false);
-    const [bondSelected, setBondSelected] = useState({});
-    const [showBuyBondsForm, setShowBuyBondsForm] = useState(false);
     const [explorerLink, setExplorerLink] = useState('');
     const [loader, setLoader] = useState(true);
     const [loadingMessage, setLoadingMessage] = useState('');
+    const [bondSelected, setBondSelected] = useState({});
+    const [showBuyBondsForm, setShowBuyBondsForm] = useState(false);
     const [buyerTokenBalance, setBuyerTokenBalance] = useState('');
-    const [amountToBuy, setAmountAmountToBuy] = useState(''); 
+    const [amountToBuy, setAmountAmountToBuy] = useState('');
     
     const connection = useSelector(state => {
         return state.connection;
@@ -31,7 +35,7 @@ function Exchange() {
 
     const dispatch = useDispatch();
 
-    const buyBonds = async (index) => {
+    const setBond = async (index) => {
         let { web3, account } = await web3Connection();
         let tokenCallContract = await getContract(web3, TokenCallJSON, Addresses.TokenCallContract);
 
@@ -92,7 +96,7 @@ function Exchange() {
                             as='a'
                             ribbon='right'
                             color="orange"
-                            onClick={() => buyBonds(index)}
+                            onClick={() => setBond(index)}
                         >
                             <strong>Buy</strong>
                         </Label>
@@ -102,8 +106,29 @@ function Exchange() {
         );
     });
 
-    const buy = async () => {
+    const buyBond = async () => {
+        let { web3, account } = await web3Connection();
+        let bankContract = await getContract(web3, BankJSON, Addresses.ToposBankContract);
+        let exchangeContract = await getContract(web3, ExchangeJSON, Addresses.ExchangeContract);
+        let exchangeBondsStorage = await getContract(web3, ExchangeBondsStorageJSON, Addresses.ExchangeBondsStorageContract);
+        let tokenCallContract = await getContract(web3, TokenCallJSON, Addresses.TokenCallContract);
 
+        await exchangeContract.methods.buyBonds(
+            bondSelected.dealID, bondSelected.seller, amountToBuy + ''
+        ).send({ from: account })
+            .on('transactionHash', hash => {
+                setLoadingMessage('Transaction in Process! ⌛️');
+                setExplorerLink(`https://topos.blockscout.testnet-1.topos.technology/tx/${hash}`);
+                dispatch(setLoading(true));
+            })
+            .on('receipt', receipt => {
+                setLoadingMessage('Transaction Completed! ✅');
+                setLoader(false);
+                dispatch(setLoading(false));
+            });
+
+        setAmountAmountToBuy('');
+        setShowBuyBondsForm(false);
     }
 
     const cancel = async () => {
@@ -197,7 +222,7 @@ function Exchange() {
                                     size="tiny"
                                     open={open}
                                     trigger={
-                                        <Button type='submit' primary fluid size='large' onClick={buy}>
+                                        <Button type='submit' primary fluid size='large' onClick={buyBond}>
                                             Buy
                                         </Button>
                                     }
@@ -248,7 +273,7 @@ function Exchange() {
                                                     <TableHeaderCell textAlign='center'>Deal ID</TableHeaderCell>
                                                     <TableHeaderCell textAlign='center'>Seller</TableHeaderCell>
                                                     <TableHeaderCell textAlign='center'>Symbol</TableHeaderCell>
-                                                    <TableHeaderCell textAlign='center'>Qty</TableHeaderCell>
+                                                    <TableHeaderCell textAlign='center'>Quantity</TableHeaderCell>
                                                     <TableHeaderCell textAlign='center'>Coupon</TableHeaderCell>
                                                     <TableHeaderCell textAlign='center'>Maturity</TableHeaderCell>
                                                     <TableHeaderCell textAlign='center'>Par Value</TableHeaderCell>

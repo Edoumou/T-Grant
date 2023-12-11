@@ -134,7 +134,7 @@ contract Exchange is ExchangeStorage {
         address bondContract = IToposBank(bankContract).getDealBondContract(_dealID);
         address currency = IERC7092(bondContract).currency();
         uint256 price = investorListing[_seller][_dealID].price;
-        uint256 payment = price * 1 ether;
+        uint256 payment = _amount * price * 1 ether;
         uint256 buyerBalance = IERC20(currency).balanceOf(msg.sender);
 
         require(buyerBalance >= payment, "balance");
