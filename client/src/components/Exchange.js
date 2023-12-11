@@ -3,7 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Image, Button, Card, CardContent, Dropdown, Grid, GridColumn, GridRow, Modal, Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow, Label, List, ListContent, ListItem, ModalContent, Input, ModalActions } from "semantic-ui-react";
 import TokenCallJSON from "../../src/contracts/artifacts/contracts/tests/tokens/TokenCall.sol/TokenCall.json";
+import BondCallJSON from "../../src/contracts/artifacts/contracts/BondCall.sol/BondCall.json";
 import BankJSON from "../../src/contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
+import IssuerJSON from "../../src/contracts/artifacts/contracts/Topos/Bank/Issuer.sol/Issuer.json";
 import ExchangeJSON from "../../src/contracts/artifacts/contracts/Topos/Exchange/Exchange.sol/Exchange.json";
 import ExchangeBondsStorageJSON from "../../src/contracts/artifacts/contracts/Topos/Exchange/ExchangeBondsStorage.sol/ExchangeBondsStorage.json";
 import Formate from "../utils/Formate";
@@ -13,7 +15,7 @@ import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
 import "../users.css";
 import "../manager.css";
-import { setLoading } from "../store";
+import { setDealsListed, setInvestorBonds, setInvestorBondsIssuers, setLoading } from "../store";
 
 function Exchange() {
     const [open, setOpen] = useState(false);
@@ -112,6 +114,8 @@ function Exchange() {
         let exchangeContract = await getContract(web3, ExchangeJSON, Addresses.ExchangeContract);
         let exchangeBondsStorage = await getContract(web3, ExchangeBondsStorageJSON, Addresses.ExchangeBondsStorageContract);
         let tokenCallContract = await getContract(web3, TokenCallJSON, Addresses.TokenCallContract);
+        let bondCallContract = await getContract(web3, BondCallJSON, Addresses.BondCallContract);
+        let issuerContract = await getContract(web3, IssuerJSON, Addresses.IssuerContract);
 
         await exchangeContract.methods.buyBonds(
             bondSelected.dealID, bondSelected.seller, amountToBuy + ''
@@ -127,8 +131,98 @@ function Exchange() {
                 dispatch(setLoading(false));
             });
 
+        let deals = await bankContract.methods.getListOfDeals().call({ from: account });
+        let listOfBondsListed = await exchangeBondsStorage.methods.getDealsListed().call({ from: account });
+
+        let bondsListed = [];
+        for(let i = 0; i < listOfBondsListed.length; i++) {
+            let dealID = listOfBondsListed[i].dealID;
+            let deal = await bankContract.methods.deals(dealID).call({ from: account });
+            let bondContract = await bankContract.methods.dealBondContracts(dealID).call({ from: account });
+            
+            let tokenAddress = deal.currency;
+            let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
+            let bondName = await bondCallContract.methods.name(bondContract).call({ from: account });
+            let bondSymbol = await bondCallContract.methods.symbol(bondContract).call({ from: account });
+            let denomination = await bondCallContract.methods.denomination(bondContract).call({ from: account });
+            let maturityDate = await bondCallContract.methods.maturityDate(bondContract).call({ from: account });
+            let coupon = await bondCallContract.methods.couponRate(bondContract).call({ from: account });
+
+            let issuer = await issuerContract.methods.issuers(deal.issuerAddress).call({ from: account });
+
+            if(Number(listOfBondsListed[i].amount) !== 0) {
+                let data = {
+                dealID: dealID,
+                seller: listOfBondsListed[i].owner,
+                quantity: listOfBondsListed[i].amount,
+                price: listOfBondsListed[i].price,
+                index: listOfBondsListed[i].index,
+                tokenSymbol: tokenSymbol,
+                bondName: bondName,
+                bondSymbol: bondSymbol,
+                logo: issuer.logoURI,
+                denomination: denomination,
+                maturityDate: maturityDate,
+                coupon: coupon,
+                bondContract: bondContract,
+                currencyContract: tokenAddress
+                }
+
+                bondsListed.push(data);
+            } 
+        }
+        
+        let investorBonds = [];
+        let investorBondsIssuers = [];
+        for(let i = 0; i < deals.length; i++) {
+            if(deals[i].status === "4") {
+                let dealID = deals[i].dealID;
+                let tokenAddress = deals[i].currency;
+                let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
+                let issuer = await issuerContract.methods.issuers(deals[i].issuerAddress).call({ from: account });
+                let address = await bankContract.methods.dealBondContracts(dealID).call({ from: account });
+
+                let principal = await bondCallContract.methods.principalOf(account, address).call({ from: account });
+
+                if(principal !== '0') {
+                    let isin = await bondCallContract.methods.isin(address).call({ from: account });
+                    let denomination = await bondCallContract.methods.denomination(address).call({ from: account });
+                    let volume = await bondCallContract.methods.issueVolume(address).call({ from: account });
+                    let couponRate = await bondCallContract.methods.couponRate(address).call({ from: account });
+                    let couponFrequency = await bondCallContract.methods.couponFrequency(address).call({ from: account });
+                    let maturityDate = await bondCallContract.methods.maturityDate(address).call({ from: account });
+                    let symbol = await bondCallContract.methods.symbol(address).call({ from: account });
+                    let name = await bondCallContract.methods.name(address).call({ from: account });
+
+                    investorBonds.push(
+                        {
+                        isin: isin,
+                        dealID: dealID,
+                        name: name,
+                        symbol: symbol,
+                        denomination: denomination.toString(),
+                        volume: volume.toString(),
+                        couponRate: couponRate.toString(),
+                        couponFrequency: couponFrequency.toString(),
+                        maturityDate: maturityDate.toString(),
+                        principal: principal.toString(),
+                        tokenSymbol: tokenSymbol,
+                        logo: issuer.logoURI,
+                        prospectus: deals[i].prospectusURI
+                        }
+                    );
+
+                    investorBondsIssuers.push(issuer);
+                }
+            }
+        }
+
         setAmountAmountToBuy('');
         setShowBuyBondsForm(false);
+
+        dispatch(setDealsListed(bondsListed));
+        dispatch(setInvestorBonds(investorBonds));
+        dispatch(setInvestorBondsIssuers(investorBondsIssuers));
     }
 
     const cancel = async () => {

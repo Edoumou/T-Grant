@@ -153,4 +153,11 @@ contract ExchangeBondsStorage is IExchangeBondsStorage {
     function getDealsListed() external view returns(BondData.Listing[] memory) {
         return dealListed;
     }
+
+    function getInvestorListing(
+        address _seller,
+        string memory _dealID
+    ) external view returns(BondData.Listing memory) {
+        return investorListing[_seller][_dealID];
+    }
 }

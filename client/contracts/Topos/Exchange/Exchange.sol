@@ -131,9 +131,10 @@ contract Exchange is ExchangeStorage {
         address _seller,
         uint256 _amount
     ) external {
+        BondData.Listing memory listing = IExchangeBondsStorage(exchangeBondsStorage).getInvestorListing(_seller, _dealID);
         address bondContract = IToposBank(bankContract).getDealBondContract(_dealID);
         address currency = IERC7092(bondContract).currency();
-        uint256 price = investorListing[_seller][_dealID].price;
+        uint256 price = listing.price;
         uint256 payment = _amount * price * 1 ether;
         uint256 buyerBalance = IERC20(currency).balanceOf(msg.sender);
 
