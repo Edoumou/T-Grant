@@ -8,6 +8,13 @@ import BankJSON from "../../src/contracts/artifacts/contracts/Topos/Bank/ToposBa
 import IssuerJSON from "../../src/contracts/artifacts/contracts/Topos/Bank/Issuer.sol/Issuer.json";
 import ExchangeJSON from "../../src/contracts/artifacts/contracts/Topos/Exchange/Exchange.sol/Exchange.json";
 import ExchangeBondsStorageJSON from "../../src/contracts/artifacts/contracts/Topos/Exchange/ExchangeBondsStorage.sol/ExchangeBondsStorage.json";
+import USDCJSON from "../../src/contracts/artifacts/contracts/tests/tokens/assets/USDC.sol/USDC.json";
+import USDTJSON from "../../src/contracts/artifacts/contracts/tests/tokens/assets/USDT.sol/USDT.json";
+import EURCJSON from "../../src/contracts/artifacts/contracts/tests/tokens/assets/EURC.sol/EURC.json";
+import EURTJSON from "../../src/contracts/artifacts/contracts/tests/tokens/assets/EURT.sol/EURT.json";
+import CNYCJSON from "../../src/contracts/artifacts/contracts/tests/tokens/assets/CNYC.sol/CNYC.json";
+import CNYTJSON from "../../src/contracts/artifacts/contracts/tests/tokens/assets/CNYT.sol/CNYT.json";
+import DAIJSON from "../../src/contracts/artifacts/contracts/tests/tokens/assets/DAI.sol/DAI.json";
 import Formate from "../utils/Formate";
 import FormateAddress from "../utils/FormateAddress";
 import Addresses from "../addresses/addr.json";
@@ -47,7 +54,6 @@ function Exchange() {
         ).call({ from: account });
 
         balance = web3.utils.fromWei(balance, 'ether');
-
 
         setBondSelected(bonds.dealsListed[index]);
         setShowBuyBondsForm(true);
@@ -117,16 +123,55 @@ function Exchange() {
         let bondCallContract = await getContract(web3, BondCallJSON, Addresses.BondCallContract);
         let issuerContract = await getContract(web3, IssuerJSON, Addresses.IssuerContract);
 
-        await exchangeContract.methods.buyBonds(
-            bondSelected.dealID, bondSelected.seller, amountToBuy + ''
-        ).send({ from: account })
+
+        let tokenContract = null;
+
+        if(bondSelected.tokenSymbol === "USDC") {
+            tokenContract = await getContract(web3, USDCJSON, Addresses.USDCContract);
+        }
+        if(bondSelected.tokenSymbol === "USDT") {
+            tokenContract = await getContract(web3, USDTJSON, Addresses.USDTContract);
+        }
+        if(bondSelected.tokenSymbol === "EURC") {
+            tokenContract = await getContract(web3, EURCJSON, Addresses.EURCContract);
+        }
+        if(bondSelected.tokenSymbol === "EURT") {
+            tokenContract = await getContract(web3, EURTJSON, Addresses.EURTContract);
+        }
+        if(bondSelected.tokenSymbol === "CNYC") {
+            tokenContract = await getContract(web3, CNYCJSON, Addresses.CNYCContract);
+        }
+        if(bondSelected.tokenSymbol === "CNYT") {
+            tokenContract = await getContract(web3, CNYTJSON, Addresses.CNYTContract);
+        }
+        if(bondSelected.tokenSymbol === "DAI") {
+            tokenContract = await getContract(web3, DAIJSON, Addresses.DAIContract);
+        }
+
+        let amount = amountToBuy * bondSelected.price;
+        amount = web3.utils.toWei(amount + '', 'ether');
+
+        await tokenContract.methods.approve(Addresses.ExchangeContract, amount)
+            .send({ from: account })
             .on('transactionHash', hash => {
-                setLoadingMessage('Transaction in Process! ⌛️');
+                setLoadingMessage('Approve Exchange Contract in Process! ⌛️');
                 setExplorerLink(`https://topos.blockscout.testnet-1.topos.technology/tx/${hash}`);
                 dispatch(setLoading(true));
             })
             .on('receipt', receipt => {
-                setLoadingMessage('Transaction Completed! ✅');
+                setLoadingMessage('Approve Exchange Contract Completed! ✅');
+            }); 
+
+        await exchangeContract.methods.buyBonds(
+            bondSelected.dealID, bondSelected.seller, amountToBuy
+        ).send({ from: account })
+            .on('transactionHash', hash => {
+                setLoadingMessage('Buying Bonds in Process! ⌛️');
+                setExplorerLink(`https://topos.blockscout.testnet-1.topos.technology/tx/${hash}`);
+                dispatch(setLoading(true));
+            })
+            .on('receipt', receipt => {
+                setLoadingMessage(`You have bought ${amountToBuy} ${bondSelected.bondSymbol}! ✅`);
                 setLoader(false);
                 dispatch(setLoading(false));
             });
@@ -171,7 +216,7 @@ function Exchange() {
                 bondsListed.push(data);
             } 
         }
-        
+
         let investorBonds = [];
         let investorBondsIssuers = [];
         for(let i = 0; i < deals.length; i++) {

@@ -95,7 +95,7 @@ contract BondTopos is IERC7092, BondStorage, IBonds {
     function approve(
         address _spender,
         uint256 _amount
-    ) external mustBeApproved(_spender) returns(bool) {
+    ) external returns(bool) {
         address _owner = tx.origin;
 
         _approve(_owner, _spender, _amount);
@@ -117,7 +117,7 @@ contract BondTopos is IERC7092, BondStorage, IBonds {
         uint256 _amount,
         bytes calldata _data
     ) external mustBeApproved(_to) returns(bool) {
-        address _from = tx.origin;
+        address _from = msg.sender;
 
         _transfer(_from, _to, _amount, _data);
 

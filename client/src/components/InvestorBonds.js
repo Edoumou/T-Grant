@@ -180,7 +180,22 @@ function InvestorBonds() {
         let deals = await bankContract.methods.getListOfDeals().call({ from: account });
         let dealBondContract = await bankContract.methods.dealBondContracts(bondDealID).call({ from: account });
 
-        await bondCallContract.methods.transfer(
+        await bondCallContract.methods.approve(
+            Addresses.BondCallContract,
+            amountToTransfer,
+            dealBondContract
+        ).send({ from: account })
+            .on('transactionHash', hash => {
+                setLoadingMessage('Approving BondCall Contract! ⌛️');
+                setExplorerLink(`https://topos.blockscout.testnet-1.topos.technology/tx/${hash}`);
+                dispatch(setLoading(true));
+            })
+            .on('receipt', receipt => {
+                setLoadingMessage('BondCall Contract Approved! ✅');
+            });
+
+        await bondCallContract.methods.transferFrom(
+            account,
             recipientAddress,
             amountToTransfer,
             '0x',
