@@ -376,3 +376,10 @@
     color: rgb(177, 118, 8);
     font-size: calc(2px + 1.7vmin);
 }
+
+.edit-bond-body {
+    color: white;
+    width: 70%;
+    margin-left: 15%;
+    margin-right: auto;
+}

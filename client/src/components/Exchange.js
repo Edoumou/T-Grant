@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { Image, Button, Card, CardContent, Dropdown, Grid, GridColumn, GridRow, Modal, Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow, Label, List, ListContent, ListItem, ModalContent, Input, ModalActions } from "semantic-ui-react";
+import { Image, Button, Card, CardContent, Dropdown, Grid, GridColumn, GridRow, Modal, Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow, Label, List, ListContent, ListItem, ModalContent, Input, ModalActions, Icon } from "semantic-ui-react";
 import TokenCallJSON from "../../src/contracts/artifacts/contracts/tests/tokens/TokenCall.sol/TokenCall.json";
 import BondCallJSON from "../../src/contracts/artifacts/contracts/BondCall.sol/BondCall.json";
 import BankJSON from "../../src/contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
@@ -31,6 +31,7 @@ function Exchange() {
     const [loadingMessage, setLoadingMessage] = useState('');
     const [bondSelected, setBondSelected] = useState({});
     const [showBuyBondsForm, setShowBuyBondsForm] = useState(false);
+    const [showEditBondsForm, setShowEditBondsForm] = useState(false);
     const [buyerTokenBalance, setBuyerTokenBalance] = useState('');
     const [amountToBuy, setAmountAmountToBuy] = useState('');
     
@@ -57,7 +58,24 @@ function Exchange() {
 
         setBondSelected(bonds.dealsListed[index]);
         setShowBuyBondsForm(true);
+        setShowEditBondsForm(false);
         setBuyerTokenBalance(balance);
+    }
+
+    const setEdit = async (index) => {
+        let { web3, account } = await web3Connection();
+        let tokenCallContract = await getContract(web3, TokenCallJSON, Addresses.TokenCallContract);
+
+        let balance = await tokenCallContract.methods.balanceOf(
+            account,
+            bonds.dealsListed[index].currencyContract
+        ).call({ from: account });
+
+        balance = web3.utils.fromWei(balance, 'ether');
+
+        setBondSelected(bonds.dealsListed[index]);
+        setShowBuyBondsForm(false);
+        setShowEditBondsForm(true);
     }
 
     const renderedBonds = bonds.dealsListed.map((list, index) => {
@@ -99,15 +117,24 @@ function Exchange() {
                 }
                 <TableCell>
                     {
-                        connection.account.toLowerCase() !== list.seller.toLowerCase() &&
-                        <Label
-                            as='a'
-                            ribbon='right'
-                            color="orange"
-                            onClick={() => setBond(index)}
-                        >
-                            <strong>Buy</strong>
-                        </Label>
+                        connection.account.toLowerCase() !== list.seller.toLowerCase() ?
+                            <Label
+                                as='a'
+                                ribbon='right'
+                                color="orange"
+                                onClick={() => setBond(index)}
+                            >
+                                <strong>Buy</strong>
+                            </Label>
+                        :
+                            <Label
+                                as='a'
+                                ribbon='right'
+                                color="teal"
+                                onClick={() => setEdit(index)}
+                            >
+                                <strong>Edit</strong>
+                            </Label>
                     }
                 </TableCell>
             </TableRow>
@@ -270,8 +297,33 @@ function Exchange() {
         dispatch(setInvestorBondsIssuers(investorBondsIssuers));
     }
 
+    const unlistBond = async () => {
+        let { web3, account } = await web3Connection();
+        let bankContract = await getContract(web3, BankJSON, Addresses.ToposBankContract);
+        let exchangeContract = await getContract(web3, ExchangeJSON, Addresses.ExchangeContract);
+        let exchangeBondsStorage = await getContract(web3, ExchangeBondsStorageJSON, Addresses.ExchangeBondsStorageContract);
+        let tokenCallContract = await getContract(web3, TokenCallJSON, Addresses.TokenCallContract);
+        let bondCallContract = await getContract(web3, BondCallJSON, Addresses.BondCallContract);
+        let issuerContract = await getContract(web3, IssuerJSON, Addresses.IssuerContract);
+
+        await exchangeContract.methods.unlistBonds(
+            bondSelected.dealID
+        ).send({ from: account })
+            .on('transactionHash', hash => {
+                setLoadingMessage('Unlisting Bonds in Process! ⌛️');
+                setExplorerLink(`https://topos.blockscout.testnet-1.topos.technology/tx/${hash}`);
+                dispatch(setLoading(true));
+            })
+            .on('receipt', receipt => {
+                setLoadingMessage(`You have unlisted ${amountToBuy} ${bondSelected.bondSymbol}! ✅`);
+                setLoader(false);
+                dispatch(setLoading(false));
+            });
+    }
+
     const cancel = async () => {
         setShowBuyBondsForm(false);
+        setShowEditBondsForm(false);
     }
 
     const goToExplorer = () => {
@@ -298,7 +350,7 @@ function Exchange() {
                     showBuyBondsForm ?
                         <>
                             <div className="buy-bond-head">
-                                <h2>{bondSelected.bondName} Bond</h2>
+                                <h2>{bondSelected.bondName} - Bond</h2>
                                 <hr style={{ width: 450, marginTop: 20 }}></hr>
                             </div>
                             <div className="buy-bond-body">
@@ -388,6 +440,68 @@ function Exchange() {
                                         </Button>
                                     </ModalActions>
                                 </Modal>
+                                <br></br>
+                                <div className="buy-bond-button">
+                                    <Button color="red" onClick={cancel}>
+                                        Cancel
+                                    </Button>
+                                </div>
+                            </div>
+                        </>
+                    : showEditBondsForm ?
+                        <>
+                            <div className="buy-bond-head">
+                                <h2>{bondSelected.bondName} - Bond</h2>
+                                <hr style={{ width: 450, marginTop: 20 }}></hr>
+                            </div>
+                            <div className="edit-bond-body">
+                                <Grid columns={3}>
+                                    <GridRow>
+                                        <GridColumn textAlign='left'>
+                                            <h4>Update Price</h4>
+                                        </GridColumn>
+                                        <GridColumn textAlign='center'>
+                                            <h4>Increase Amount</h4>
+                                        </GridColumn>
+                                        <GridColumn textAlign='right'>
+                                            <h4>Unlist Bonds</h4>
+                                            <Modal
+                                                size="tiny"
+                                                open={open}
+                                                trigger={
+                                                    <Button type='submit' primary size='large' onClick={unlistBond}>
+                                                        Unlist
+                                                    </Button>
+                                                }
+                                                onClose={() => setOpen(false)}
+                                                onOpen={() => setOpen(true)}
+                                            >
+                                                <ModalContent>
+                                                    <div style={{ textAlign: 'center' }}>
+                                                        <h3>{loadingMessage}</h3>
+                                                        {
+                                                            loader ?
+                                                                <Button inverted basic loading size="massive">unlisting Bonds</Button>
+                                                            :
+                                                                <p style={{ color: 'green' }}><strong>Bonds Unlisted successfully</strong></p>
+                                                        }
+                                                    </div>
+                                                </ModalContent>
+                                                <ModalActions>
+                                                    <Button basic floated="left" onClick={goToExplorer}>
+                                                        <strong>Check on Topos Explorer</strong>
+                                                    </Button>
+                                                    <Button color='black' onClick={() => setOpen(false)}>
+                                                        Go to Dashboard
+                                                    </Button>
+                                                </ModalActions>
+                                            </Modal>
+                                        </GridColumn>
+                                    </GridRow>
+                                </Grid>
+                                <br></br>
+                                <br></br>
+                                <br></br>
                                 <br></br>
                                 <div className="buy-bond-button">
                                     <Button color="red" onClick={cancel}>
