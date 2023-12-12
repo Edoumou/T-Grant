@@ -34,6 +34,7 @@ function Exchange() {
     const [showEditBondsForm, setShowEditBondsForm] = useState(false);
     const [buyerTokenBalance, setBuyerTokenBalance] = useState('');
     const [amountToBuy, setAmountAmountToBuy] = useState('');
+    const [newPrice, setNewPrice] = useState('');
     
     const connection = useSelector(state => {
         return state.connection;
@@ -413,6 +414,123 @@ function Exchange() {
         dispatch(setInvestorBondsIssuers(investorBondsIssuers));
     }
 
+    const updatePrice = async () => {
+        let { web3, account } = await web3Connection();
+        let bankContract = await getContract(web3, BankJSON, Addresses.ToposBankContract);
+        let exchangeContract = await getContract(web3, ExchangeJSON, Addresses.ExchangeContract);
+        let exchangeBondsStorage = await getContract(web3, ExchangeBondsStorageJSON, Addresses.ExchangeBondsStorageContract);
+        let tokenCallContract = await getContract(web3, TokenCallJSON, Addresses.TokenCallContract);
+        let bondCallContract = await getContract(web3, BondCallJSON, Addresses.BondCallContract);
+        let issuerContract = await getContract(web3, IssuerJSON, Addresses.IssuerContract);
+
+        await exchangeContract.methods.updateDealPrice(
+            bondSelected.dealID, newPrice
+        ).send({ from: account })
+            .on('transactionHash', hash => {
+                setLoadingMessage('Updating Bonds Price in Process! ⌛️');
+                setExplorerLink(`https://topos.blockscout.testnet-1.topos.technology/tx/${hash}`);
+                dispatch(setLoading(true));
+            })
+            .on('receipt', receipt => {
+                setLoadingMessage(`Bonds Price Updated! ✅`);
+                setLoader(false);
+                dispatch(setLoading(false));
+            });
+
+        let deals = await bankContract.methods.getListOfDeals().call({ from: account });
+        let listOfBondsListed = await exchangeBondsStorage.methods.getDealsListed().call({ from: account });
+
+        let bondsListed = [];
+        for(let i = 0; i < listOfBondsListed.length; i++) {
+            let dealID = listOfBondsListed[i].dealID;
+            let deal = await bankContract.methods.deals(dealID).call({ from: account });
+            let bondContract = await bankContract.methods.dealBondContracts(dealID).call({ from: account });
+            
+            let tokenAddress = deal.currency;
+            let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
+            let bondName = await bondCallContract.methods.name(bondContract).call({ from: account });
+            let bondSymbol = await bondCallContract.methods.symbol(bondContract).call({ from: account });
+            let denomination = await bondCallContract.methods.denomination(bondContract).call({ from: account });
+            let maturityDate = await bondCallContract.methods.maturityDate(bondContract).call({ from: account });
+            let coupon = await bondCallContract.methods.couponRate(bondContract).call({ from: account });
+
+            let issuer = await issuerContract.methods.issuers(deal.issuerAddress).call({ from: account });
+
+            if(Number(listOfBondsListed[i].amount) !== 0) {
+                let data = {
+                dealID: dealID,
+                seller: listOfBondsListed[i].owner,
+                quantity: listOfBondsListed[i].amount,
+                price: listOfBondsListed[i].price,
+                index: listOfBondsListed[i].index,
+                tokenSymbol: tokenSymbol,
+                bondName: bondName,
+                bondSymbol: bondSymbol,
+                logo: issuer.logoURI,
+                denomination: denomination,
+                maturityDate: maturityDate,
+                coupon: coupon,
+                bondContract: bondContract,
+                currencyContract: tokenAddress
+                }
+
+                bondsListed.push(data);
+            } 
+        }
+
+        let investorBonds = [];
+        let investorBondsIssuers = [];
+        for(let i = 0; i < deals.length; i++) {
+            if(deals[i].status === "4") {
+                let dealID = deals[i].dealID;
+                let tokenAddress = deals[i].currency;
+                let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
+                let issuer = await issuerContract.methods.issuers(deals[i].issuerAddress).call({ from: account });
+                let address = await bankContract.methods.dealBondContracts(dealID).call({ from: account });
+
+                let principal = await bondCallContract.methods.principalOf(account, address).call({ from: account });
+
+                if(principal !== '0') {
+                    let isin = await bondCallContract.methods.isin(address).call({ from: account });
+                    let denomination = await bondCallContract.methods.denomination(address).call({ from: account });
+                    let volume = await bondCallContract.methods.issueVolume(address).call({ from: account });
+                    let couponRate = await bondCallContract.methods.couponRate(address).call({ from: account });
+                    let couponFrequency = await bondCallContract.methods.couponFrequency(address).call({ from: account });
+                    let maturityDate = await bondCallContract.methods.maturityDate(address).call({ from: account });
+                    let symbol = await bondCallContract.methods.symbol(address).call({ from: account });
+                    let name = await bondCallContract.methods.name(address).call({ from: account });
+
+                    investorBonds.push(
+                        {
+                        isin: isin,
+                        dealID: dealID,
+                        name: name,
+                        symbol: symbol,
+                        denomination: denomination.toString(),
+                        volume: volume.toString(),
+                        couponRate: couponRate.toString(),
+                        couponFrequency: couponFrequency.toString(),
+                        maturityDate: maturityDate.toString(),
+                        principal: principal.toString(),
+                        tokenSymbol: tokenSymbol,
+                        logo: issuer.logoURI,
+                        prospectus: deals[i].prospectusURI
+                        }
+                    );
+
+                    investorBondsIssuers.push(issuer);
+                }
+            }
+        }
+
+        setNewPrice('');
+        setShowEditBondsForm(false);
+
+        dispatch(setDealsListed(bondsListed));
+        dispatch(setInvestorBonds(investorBonds));
+        dispatch(setInvestorBondsIssuers(investorBondsIssuers));
+    }
+
     const cancel = async () => {
         setShowBuyBondsForm(false);
         setShowEditBondsForm(false);
@@ -549,8 +667,51 @@ function Exchange() {
                             <div className="edit-bond-body">
                                 <Grid columns={3}>
                                     <GridRow>
-                                        <GridColumn textAlign='left'>
-                                            <h4>Update Price</h4>
+                                        <GridColumn textAlign='center'>
+                                            <h4>Current Price:</h4>
+                                            <span>{Formate(bondSelected.price)} {bondSelected.tokenSymbol}</span>
+                                            <br></br>
+                                            <br></br>
+                                            <Input
+                                                fluid
+                                                action={bondSelected.tokenSymbol}
+                                                size="large"
+                                                placeholder='New Price'
+                                                value={newPrice}
+                                                onChange={e => setNewPrice(e.target.value)}
+                                            />
+                                            <br></br>
+                                            <Modal
+                                                size="tiny"
+                                                open={open}
+                                                trigger={
+                                                    <Button type='submit' primary fluid size='large' onClick={updatePrice}>
+                                                        Update Price
+                                                    </Button>
+                                                }
+                                                onClose={() => setOpen(false)}
+                                                onOpen={() => setOpen(true)}
+                                            >
+                                                <ModalContent>
+                                                    <div style={{ textAlign: 'center' }}>
+                                                        <h3>{loadingMessage}</h3>
+                                                        {
+                                                            loader ?
+                                                                <Button inverted basic loading size="massive">Updating Price</Button>
+                                                            :
+                                                                <p style={{ color: 'green' }}><strong>Price Updated successfully</strong></p>
+                                                        }
+                                                    </div>
+                                                </ModalContent>
+                                                <ModalActions>
+                                                    <Button basic floated="left" onClick={goToExplorer}>
+                                                        <strong>Check on Topos Explorer</strong>
+                                                    </Button>
+                                                    <Button color='black' onClick={() => setOpen(false)}>
+                                                        Go to Dashboard
+                                                    </Button>
+                                                </ModalActions>
+                                            </Modal>
                                         </GridColumn>
                                         <GridColumn textAlign='center'>
                                             <h4>Increase Amount</h4>
