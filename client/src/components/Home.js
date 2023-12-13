@@ -1,53 +1,66 @@
 import React from "react";
 import 'semantic-ui-css/semantic.min.css';
-import { Grid, GridColumn, GridRow } from "semantic-ui-react";
+import { Image, Grid, GridColumn, GridRow, Segment } from "semantic-ui-react";
+import IssuerImg from '../../src/img/issuer.png';
+import InvestorImg from '../../src/img/investor.png';
+import SmartContractImg from '../../src/img/smartContract.png';
+import InterestsImg from '../../src/img/interests.png';
+import WalletImg from '../../src/img/wallet.png';
+import PlatformTokenImg from '../../src/img/platformToken.png';
 
 function Home() {
     return (
-        <div className="container">
-            <Grid columns={2}>
-                <GridRow>
-                    <GridColumn width={8}>
-                        <div className="text-card">
-                            <div className="text-card-header">
-                                Issue security tokens
-                            </div>
-                            <p className="text-card-p">
-                                SecurTok helps companies issue security tokens on the Blockchain
-                                through a set of smart contracts created with stadards like ERC-7092.
-                                <br></br>
-                                <br></br>
-                                Develop and tests smart contracts with tools like Truffle, Hardhat, web3.js,
-                                ganache, etc...
-                                <br></br>
-                                <br></br>
-                                Deployment on testnet to test contracts before they go live. Deployment on
-                                mainnet once contracts have been tested and audited.
-                            </p>
-                        </div>
-                    </GridColumn>
-                    <GridColumn width={8}>
-                        <div className="text-card">
-                            <div className="text-card-header">
-                                Manage security tokens
-                            </div>
-                            <p className="text-card-p">
-                                SecurTok helps companies manage their security tokens on the Blockchain
-                                by providing a set of tools and services necessary to level up their
-                                needs.
-                                <br></br>
-                                <br></br>
-                                Develop and tests smart contracts with tools like Truffle, Hardhat, web3.js,
-                                ganache, etc...
-                                <br></br>
-                                <br></br>
-                                Deployment on testnet to test contracts before they go live. Deployment on
-                                mainnet once contracts have been tested and audited.
-                            </p>
-                        </div>
-                    </GridColumn>
-                </GridRow>
-            </Grid>
+        <div className="manager">
+            <div className="home-desc">
+                <div style={{ width: 80 }}>
+                    <Image src={IssuerImg} floated="left" size='tiny' />
+                </div>
+                <div style={{ width: 80 }}>
+                    <Image src={InvestorImg} size='tiny' />
+                </div>
+                <div style={{ width: 80 }}>
+                    <Image src={SmartContractImg} floated="right" size='tiny' />
+                </div>
+            </div>
+            <div className="home-process">
+                <div style={{ width: 300, textAlign: 'center' }}>
+                    <p>
+                        Issue bonds tokens on blockchain with the financial bonds standard ERC-7092.
+                        Tokenize your assets
+                    </p>
+                </div>
+                <div style={{ width: 300, textAlign: 'center' }}>
+                    <p>Invest in bonds in a secure and decentralized way, with lower minimum investment</p>
+                </div>
+                <div style={{ width: 300, textAlign: 'center' }}>
+                    <p>Automate bonds management with the use of smart-contracts deployed on the blockchcain</p>
+                </div>
+            </div>
+
+            <div className="home-desc">
+                <div style={{ width: 80 }}>
+                    <Image src={InterestsImg} floated="left" size='tiny' />
+                </div>
+                <div style={{ width: 80 }}>
+                    <Image src={PlatformTokenImg} size='tiny' />
+                </div>
+                <div style={{ width: 80 }}>
+                    <Image src={WalletImg} floated="right" size='tiny' />
+                </div>
+            </div>
+            <div className="home-process">
+                <div style={{ width: 300, textAlign: 'center' }}>
+                    <p>
+                        Earn fixed and floating interests by investing in fixed income instruments on our platform
+                    </p>
+                </div>
+                <div style={{ width: 300, textAlign: 'center' }}>
+                    <p>Earn our native tokens by investing on bonds through investment pools listed on our platform</p>
+                </div>
+                <div style={{ width: 300, textAlign: 'center' }}>
+                    <p>Manage your tokens directly in your wallet without the need of custodies or other intermediaries</p>
+                </div>
+            </div>
         </div>
     );
 }

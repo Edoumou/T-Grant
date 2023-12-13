@@ -18,6 +18,10 @@
   min-height: 20vh;
   background-size: cover;
   background-position: top;
+  position: sticky;
+  top: 0px;
+  margin: 0;
+  z-index: 99;
 }
 
 .App-link {

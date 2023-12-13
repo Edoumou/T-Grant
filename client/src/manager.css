@@ -171,3 +171,24 @@
   max-height: 1200px;
   overflow: scroll;
 }
+
+.home-desc {
+  color: white;
+  margin-top: 120px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.home-img-desc {
+  text-align: center;
+}
+
+.home-process {
+  color: white;
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-around;
+  font-size: calc(5px + 1.5vmin);
+  word-spacing: 1.5px;
+  text-align: justify;
+}
