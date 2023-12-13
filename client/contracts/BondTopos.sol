@@ -270,58 +270,25 @@ contract BondTopos is IERC7092, BondStorage, IBonds {
 
             principals[_from] = principal - principalToTransfer;
             principals[_to] = principalTo + principalToTransfer;
+            
+            if(!isInvestor[_to]) {
+                isInvestor[_to] = true;
 
-            if(_amount == balance) {
-                isInvestor[_from] = false;
+                listOfInvestors[investorsIDs[_from]].amount = principals[_from];
 
-                if(!isInvestor[_to]) {
-                    isInvestor[_to] = true;
+                listOfInvestors.push(
+                    BondData.DealInvestment(
+                        {
+                            investor: _to,
+                            amount: principals[_to]
+                        }
+                    )
+                );
 
-                    listOfInvestors[investorsIDs[_from]] = BondData.DealInvestment({
-                        investor: _to,
-                        amount: principals[_to]
-                    });
-                } else {
-                    listOfInvestors[investorsIDs[_from]] = BondData.DealInvestment({
-                        investor: _from,
-                        amount: 0
-                    });
-
-                    listOfInvestors[investorsIDs[_to]] = BondData.DealInvestment({
-                        investor: _to,
-                        amount: principals[_to]
-                    });
-                }
+                investorsIDs[_to] = listOfInvestors.length - 1;
             } else {
-                if(!isInvestor[_to]) {
-                    uint256 id = investorsIDs[_from];
-
-                    listOfInvestors[id] = BondData.DealInvestment({
-                        investor: _from,
-                        amount: principals[_from]
-                    });
-
-                    isInvestor[_to] = true;
-
-                    listOfInvestors.push(
-                        BondData.DealInvestment(
-                            {
-                                investor: _to,
-                                amount: principals[_to]
-                            }
-                        )
-                    );
-                } else {
-                    listOfInvestors[investorsIDs[_from]] = BondData.DealInvestment({
-                        investor: _from,
-                        amount: principals[_from]
-                    });
-
-                    listOfInvestors[investorsIDs[_to]] = BondData.DealInvestment({
-                        investor: _to,
-                        amount: principals[_to]
-                    });
-                }
+                listOfInvestors[investorsIDs[_from]].amount = principals[_from];
+                listOfInvestors[investorsIDs[_to]].amount = principals[_to];
             }
         }
 
