@@ -11,9 +11,9 @@ import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
 import Addresses from "../addresses/addr.json";
 import Formate from "../utils/Formate";
+import { setActiveBondsDealID, setDealsListed, setInvestorBonds, setInvestorBondsIssuers, setLoading } from "../store";
 import "../users.css";
 import "../manager.css";
-import { setActiveBondsDealID, setDealsListed, setInvestorBonds, setInvestorBondsIssuers, setLoading } from "../store";
 
 function InvestorBonds() {
     const [bondClicked, setBondClicked] = useState(false);

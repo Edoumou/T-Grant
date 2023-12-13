@@ -4,6 +4,31 @@
   "sourceName": "contracts/Topos/interfaces/IBonds.sol",
   "abi": [
     {
+      "inputs": [],
+      "name": "getListOfInvestors",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "investor",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct BondData.DealInvestment[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "inputs": [
         {
           "components": [

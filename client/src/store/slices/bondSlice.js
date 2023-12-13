@@ -33,7 +33,8 @@ const bondSlice = createSlice({
         countryForDealToIssue: '',
         currencyForDealToIssue: '',
         showIssueDealForm: false,
-        dealsListed: []
+        dealsListed: [],
+        couponsPaid: [],
     },
     reducers: {
         setSelectedDealID(state, action) {
@@ -128,6 +129,9 @@ const bondSlice = createSlice({
         },
         setDealsListed(state, action) {
             state.dealsListed = action.payload;
+        },
+        setCouponsPaid(state, action) {
+            state.couponsPaid = action.payload;
         }
     }
 });
@@ -163,6 +167,7 @@ export const {
     setBondsDealIDs,
     setBondsIssuers,
     setBondsCurrency,
-    setDealsListed
+    setDealsListed,
+    setCouponsPaid
 } = bondSlice.actions;
 export const bondReducer = bondSlice.reducer;

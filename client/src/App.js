@@ -623,6 +623,13 @@ function App() {
                           as={Link}
                           to='/manager/funds'
                         />
+                        <MenuItem
+                          name='mint tokens'
+                          active={connection.activeItem === 'mint tokens'}
+                          onClick={handleItemClick}
+                          as={Link}
+                          to='/investor/mint-tokens'
+                        />
                       </>
                     : connection.role === "ISSUER" ?
                       <>
@@ -710,6 +717,7 @@ function App() {
                       <Route path='/manager/bonds' element={<ManagerBonds />} />
                       <Route path='/manager/coupons' element={<ManagerCoupons />} />
                       <Route path='/manager/funds' element={<DealsFund />} />
+                      <Route path='/investor/mint-tokens' element={<MintTokens />} />
                     </>
                   : connection.role === "ISSUER" ?
                     <>
