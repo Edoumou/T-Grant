@@ -20,9 +20,9 @@ import FormateAddress from "../utils/FormateAddress";
 import Addresses from "../addresses/addr.json";
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
+import { setDealsListed, setInvestorBonds, setInvestorBondsIssuers, setLoading } from "../store";
 import "../users.css";
 import "../manager.css";
-import { setDealsListed, setInvestorBonds, setInvestorBondsIssuers, setLoading } from "../store";
 
 function Exchange() {
     const [open, setOpen] = useState(false);

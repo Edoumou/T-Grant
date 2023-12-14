@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import 'semantic-ui-css/semantic.min.css';
-import { Menu, MenuItem, Image, Button, Modal, Icon } from 'semantic-ui-react';
+import { Menu, MenuItem, Image, Button, Modal, Icon, Segment } from 'semantic-ui-react';
 import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
 import ToposCoreJSON from '@topos-protocol/topos-smart-contracts/artifacts/contracts/topos-core/ToposCore.sol/ToposCore.json';
 import SubnetRegistratorJSON from '@topos-protocol/topos-smart-contracts/artifacts/contracts/topos-core/SubnetRegistrator.sol/SubnetRegistrator.json';
@@ -39,6 +39,7 @@ import InvestorBonds from './components/InvestorBonds';
 import ManagerCoupons from './components/ManagerCoupons';
 import DealsFund from './components/DealsFund';
 import Exchange from './components/Exchange';
+import BondMarket from './components/BondMarket';
 
 function App() {
   const dispatch = useDispatch();
@@ -96,7 +97,7 @@ function App() {
       bondSymbols.push(tokenSymbol);
       issuersNames.push(issuer.name);
       issuersLogo.push(issuer.logoURI);
-
+      
       if(deals[i].status === "2") {
         let issuerForApprovedDeals = issuer;
 
@@ -543,6 +544,13 @@ function App() {
                 <>
                   <MenuItem
                       position='right'
+                      name='bond market'
+                      active={connection.activeItem === 'bond market'}
+                      onClick={handleItemClick}
+                      as={Link}
+                      to='/bond-market'
+                  />
+                  <MenuItem
                       name='register'
                       active={connection.activeItem === 'register'}
                       onClick={handleItemClick}
@@ -752,12 +760,27 @@ function App() {
               </>
             :
               <>
+                <Route path='/bond-market' element={<BondMarket />}/>
                 <Route path='/connect' element={<Connect />}/>
                 <Route path='/register' element={<Register />}/>
               </>
           }
         </Routes>
       </BrowserRouter>
+      <div className='footer'>
+          <Segment inverted>
+            <Icon name='phone' />
+            <a href="tel:+33758404077">
+              (+33) 7 58 40 40 77
+            </a>
+            <span className='mail-foot'>
+              <Icon name='mail' />
+              <a href="mailto:saimelgwlanold@gmail.com">
+                saimelgwlanold@gmail.com
+              </a>
+            </span>
+          </Segment>
+      </div>
     </div>
   );
 }

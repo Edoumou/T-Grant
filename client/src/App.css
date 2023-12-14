@@ -48,3 +48,19 @@
 .container {
   margin: 5%;
 }
+
+.footer {
+  font-size: 50px;
+  font-weight: 400;
+  text-align: center;
+  background-image: linear-gradient(
+      to right bottom,
+      rgba(18, 27, 4, 0.9),
+      rgba(11, 43, 57, 0.9)
+    ),
+    url(./img/head-cover.jpeg);
+}
+
+.mail-foot {
+  padding-left: 50px;
+}

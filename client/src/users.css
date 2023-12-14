@@ -21,6 +21,7 @@
     padding-bottom: 50px;
     font-size: 25px;
     text-align: center;
+    min-height: 100vh;
 }
 
 .sign-out {
@@ -78,6 +79,7 @@
     margin-right: 100px;
     text-align: center;
     font-weight: 600;
+    min-height: 100vh;
 }
 
 .issuer-request {

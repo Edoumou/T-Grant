@@ -5,13 +5,14 @@ import BankJSON from "../contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/
 import BondFactoryJSON from "../contracts/artifacts/contracts/Topos/Factory/BondFactory.sol/BondFactory.json";
 import IssuerJSON from "../contracts/artifacts/contracts/Topos/Bank/Issuer.sol/Issuer.json";
 import TokenCallJSON from "../contracts/artifacts/contracts/tests/tokens/TokenCall.sol/TokenCall.json";
+import IssuersFundJSON from "../contracts/artifacts/contracts/treasury/IssuersFund.sol.sol/IssuersFund.json";
 import Formate from "../utils/Formate";
 import Addresses from "../addresses/addr.json";
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
+import { setApprovedDeals, setBonds, setBondsCurrency, setBondsDealIDs, setBondsIssuers, setDealsFund, setIssuersForApprovedDelas, setIssuersNameForApprovedDeals, setLoading, setShowIssueDealForm, setTokenSymbolForApprovedDeals } from "../store";
 import "../users.css";
 import "../manager.css";
-import { setApprovedDeals, setBonds, setBondsCurrency, setBondsDealIDs, setBondsIssuers, setIssuersForApprovedDelas, setIssuersNameForApprovedDeals, setLoading, setShowIssueDealForm, setTokenSymbolForApprovedDeals } from "../store";
 
 function IssueDealForm() {
     const [loader, setLoader] = useState(true);
@@ -64,6 +65,7 @@ function IssueDealForm() {
         let bankContract = await getContract(web3, BankJSON, Addresses.ToposBankContract);
         let issuerContract = await getContract(web3, IssuerJSON, Addresses.IssuerContract);
         let tokenCallContract = await getContract(web3, TokenCallJSON, Addresses.TokenCallContract);
+        let issuersFundContract = await getContract(web3, IssuersFundJSON, Addresses.IssuersFundContract);
 
         let issueDate = Date.now() / 1000;
 
@@ -111,16 +113,18 @@ function IssueDealForm() {
         let issuersNameForApprovedDeals = [];
         let tokenSymbolForApprovedDeals = [];
         let dealsToIssue = [];
+        let DealsFund = [];
         for(let i = 0; i < deals.length; i++) {
+            let dealID = deals[i].dealID;
             let tokenAddress = deals[i].currency;
             let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
 
             let issuer = await issuerContract.methods.issuers(deals[i].issuerAddress).call({ from: account });
+            let funds = await issuersFundContract.methods.totalAmount(dealID).call({ from: account });
 
             if(deals[i].status === "2") {
                 let issuerForApprovedDeals = issuer;
 
-                let dealID = deals[i].dealID;
                 let dealDebtAmount = deals[i].debtAmount;
                 let totalAmountInvested = await bankContract.methods.totalAmountInvestedForDeal(dealID).call({ from: account });
 
@@ -131,6 +135,12 @@ function IssueDealForm() {
 
                 if (dealDebtAmount === totalAmountInvested) {
                     dealsToIssue.push(dealID);
+                }
+            }
+
+            if(deals[i].status === "4") {
+                if(Number(funds) !== 0) {
+                    DealsFund.push(dealID);
                 }
             }
         }
@@ -151,6 +161,7 @@ function IssueDealForm() {
           bondsCurrency.push(tokenSymbol);
         }
 
+        dispatch(setDealsFund(DealsFund));
         dispatch(setApprovedDeals(approvedDeals));
         dispatch(setIssuersForApprovedDelas(issuersForApprovedDeals));
         dispatch(setIssuersNameForApprovedDeals(issuersNameForApprovedDeals));

@@ -13,7 +13,7 @@ import DAIJSON from "../../src/contracts/artifacts/contracts/tests/tokens/assets
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
 import { Button, Card, CardContent, Input, Image, List, ListContent, ListItem, Modal, ModalActions, ModalContent } from "semantic-ui-react";
-import { setApprovedDeals, setIssuersForApprovedDelas, setIssuersNameForApprovedDeals, setLoading, setSelectedDealID, setSelectedDealRemainingAmount, setShowInvestForm, setTokenSymbolForApprovedDeals } from "../store";
+import { setApprovedDeals, setDealsToIssue, setIssuersForApprovedDelas, setIssuersNameForApprovedDeals, setLoading, setSelectedDealID, setSelectedDealRemainingAmount, setShowInvestForm, setTokenSymbolForApprovedDeals } from "../store";
 import Addresses from "../addresses/addr.json";
 import "../manager.css";
 import "../users.css";
@@ -105,6 +105,7 @@ function InvestInDeal() {
         let approvedDeals = [];
         let issuersForApprovedDeals = [];
         let tokenSymbolForApprovedDeals = [];
+        let dealsToIssue = [];
         for(let i = 0; i < deals.length; i++) {
           let tokenAddress = deals[i].currency;
           let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
@@ -114,10 +115,18 @@ function InvestInDeal() {
           if(deals[i].status === "2") {
             let issuerForApprovedDeals = issuer;
 
+            let dealID = deals[i].dealID;
+            let dealDebtAmount = deals[i].debtAmount;
+            let totalAmountInvested = await bankContract.methods.totalAmountInvestedForDeal(dealID).call({ from: account });
+
             approvedDeals.push(deals[i]);
             issuersForApprovedDeals.push(issuerForApprovedDeals);
             issuersNameForApprovedDeals.push(issuer.name);
             tokenSymbolForApprovedDeals.push(tokenSymbol);
+
+            if (dealDebtAmount === totalAmountInvested) {
+                dealsToIssue.push(dealID);
+            }
           }
         }
 
@@ -126,6 +135,7 @@ function InvestInDeal() {
 
         setAmount('');
 
+        dispatch(setDealsToIssue(dealsToIssue));
         dispatch(setApprovedDeals(approvedDeals));
         dispatch(setIssuersForApprovedDelas(issuersForApprovedDeals));
         dispatch(setIssuersNameForApprovedDeals(issuersNameForApprovedDeals));
