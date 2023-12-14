@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import "../IERC7092.sol";
 import "../tests/tokens/IERC20.sol";
 import "../BondData.sol";
-import "../Topos/interfaces/IBondStorage.sol";
+import "../Topos/interfaces/IBonds.sol";
 import "./CouponMath.sol";
 
 contract CouponPayment {
@@ -23,7 +23,7 @@ contract CouponPayment {
     }
 
     function payAnnualInterest(address _bondContract) external onlyToposManager {
-        BondData.DealInvestment[] memory investors = IBondStorage(_bondContract).getListOfInvestors();
+        BondData.DealInvestment[] memory investors = IBonds(_bondContract).getListOfInvestors();
         address currencyOfCoupon = IERC7092(_bondContract).currency();
 
         for(uint256 i; i < investors.length; i++) {
@@ -43,7 +43,7 @@ contract CouponPayment {
         uint256 _duration,
         address _bondContract
     ) external onlyToposManager {
-        BondData.DealInvestment[] memory investors = IBondStorage(_bondContract).getListOfInvestors();
+        BondData.DealInvestment[] memory investors = IBonds(_bondContract).getListOfInvestors();
         address currencyOfCoupon = IERC7092(_bondContract).currency();
         uint256 issueVolume = IERC7092(_bondContract).issueVolume();
         uint256 couponRate = IERC7092(_bondContract).couponRate();
@@ -68,10 +68,11 @@ contract CouponPayment {
     }
 
     /**
-    * @notice Pays interests every minute. This is used ONLY for tests, and should be removed in production
+    * @notice Pays interests for a duration equals to one day.
+    *         This is used ONLY for tests, and should be removed in production
     */
-    function payInterestEveryMinutes(address _bondContract) external {
-        BondData.DealInvestment[] memory investors = IBondStorage(_bondContract).getListOfInvestors();
+    function payInterestEveryMinutes(address _bondContract) external onlyToposManager {
+        BondData.DealInvestment[] memory investors = IBonds(_bondContract).getListOfInvestors();
         uint256 issueVolume = IERC7092(_bondContract).issueVolume();
         uint256 couponRate = IERC7092(_bondContract).couponRate();
         address currencyOfCoupon = IERC7092(_bondContract).currency();
@@ -81,7 +82,7 @@ contract CouponPayment {
             address investor = investors[i].investor;
             uint256 principal = investors[i].amount;
 
-            uint256 interest = (principal * 1 ether) * couponRate * 120 / (10_000 * 31536000);
+            uint256 interest = (principal * 1 ether) * couponRate * 86400 / (10_000 * 31536000);
 
             IERC20(currencyOfCoupon).transfer(investor, interest);
 
@@ -104,7 +105,7 @@ contract CouponPayment {
     }
 
     function totalAnnualInterestToPay(address _bondContract) external view returns(uint256) {
-        BondData.DealInvestment[] memory investors = IBondStorage(_bondContract).getListOfInvestors();
+        BondData.DealInvestment[] memory investors = IBonds(_bondContract).getListOfInvestors();
 
         uint256 total;
 
@@ -120,7 +121,7 @@ contract CouponPayment {
     }
 
     function totalInterestToPay(uint256 _duration, address _bondContract) external view returns(uint256) {
-        BondData.DealInvestment[] memory investors = IBondStorage(_bondContract).getListOfInvestors();
+        BondData.DealInvestment[] memory investors = IBonds(_bondContract).getListOfInvestors();
 
         uint256 total;
 

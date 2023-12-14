@@ -131,10 +131,11 @@ contract Exchange is ExchangeStorage {
         address _seller,
         uint256 _amount
     ) external {
+        BondData.Listing memory listing = IExchangeBondsStorage(exchangeBondsStorage).getInvestorListing(_seller, _dealID);
         address bondContract = IToposBank(bankContract).getDealBondContract(_dealID);
         address currency = IERC7092(bondContract).currency();
-        uint256 price = investorListing[_seller][_dealID].price;
-        uint256 payment = price * 1 ether;
+        uint256 price = listing.price;
+        uint256 payment = _amount * price * 1 ether;
         uint256 buyerBalance = IERC20(currency).balanceOf(msg.sender);
 
         require(buyerBalance >= payment, "balance");
@@ -149,13 +150,6 @@ contract Exchange is ExchangeStorage {
         IERC20(currency).transferFrom(msg.sender, _seller, payment);
 
         emit BondBought(_dealID, _seller, msg.sender, _amount);
-    }
-
-    /**
-    * @notice Returns the array of all listings
-    */
-    function getDealsListed() external view returns(BondData.Listing[] memory) {
-        return dealListed;
     }
 
     function setExchangeBondsStorage(

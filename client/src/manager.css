@@ -3,7 +3,7 @@
     padding-top: 10px;
     padding-right: 50px;
     padding-left: 50px;
-    background-color: rgb(6, 4, 133);
+    background-color: rgb(16, 24, 96);
     min-height: 100vh;
 }
 
@@ -144,4 +144,51 @@
   word-spacing: 2px;
   font-size: calc(5px + 1.5vmin);
   margin-bottom: 100px;
+}
+
+.exchange {
+  margin-top: 0px;
+  padding-top: 10px;
+  padding-right: 50px;
+  padding-left: 50px;
+  background-color: rgb(21, 22, 44);
+  min-height: 100vh;
+}
+
+.exchangelList {
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 60px;
+  color: white;
+  font-size: calc(5px + 1.5vmin);
+  text-transform: uppercase;
+}
+
+.exchange-tab-scroll {
+  width: 94%;
+  margin-left: 3%;
+  margin-right: 3%;
+  max-height: 1200px;
+  overflow: scroll;
+}
+
+.home-desc {
+  color: white;
+  margin-top: 120px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.home-img-desc {
+  text-align: center;
+}
+
+.home-process {
+  color: white;
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-around;
+  font-size: calc(5px + 1.5vmin);
+  word-spacing: 1.5px;
+  text-align: justify;
 }

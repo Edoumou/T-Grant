@@ -10,7 +10,9 @@ import CouponPaymentJSON from "../contracts/artifacts/contracts/coupon/CouponPay
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
 import Addresses from "../addresses/addr.json";
-import { setInvestorsForSelectedActiveDeal, setSelectedActiveBond } from "../store";
+import { setCouponsPaid, setInvestorsForSelectedActiveDeal, setSelectedActiveBond } from "../store";
+import "../users.css";
+import "../manager.css";
 
 function SelectBond() {
     const [dealID, setDealID] = useState('');
@@ -62,7 +64,7 @@ function SelectBond() {
         let couponRate = await bondCallContract.methods.couponRate(address).call({ from: account });
         let maturityDate = await bondCallContract.methods.maturityDate(address).call({ from: account });
 
-        //let listOfInterestsPaid = await couponPayment.methods.getListOfInterestsPaid(address).call({ from: account });
+        let listOfInterestsPaid = await couponPayment.methods.getListOfInterestsPaid(address).call({ from: account });
         
         let bond = {
             dealID: dealID,
@@ -74,7 +76,8 @@ function SelectBond() {
             couponRate: couponRate.toString(),
             maturityDate: maturityDate.toString(),
             tokenSymbol: tokenSymbol,
-            logo: logo
+            logo: logo,
+            bondContract: address
         };
 
         let investors = await bondCallContract.methods.listOfInvestors(address).call({ from: account });
@@ -106,6 +109,7 @@ function SelectBond() {
 
         dispatch(setSelectedActiveBond(bond));
         dispatch(setInvestorsForSelectedActiveDeal(lisOfInvestors));
+        dispatch(setCouponsPaid(listOfInterestsPaid));
     }
 
     return (

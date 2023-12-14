@@ -24,12 +24,12 @@ function InvestorRequest() {
     });
 
     const options = [
-        { key: 1, text: 'PERSONAL', value: 'Personal Investors' },
+        { key: 1, text: 'RETAIL', value: 'Retail Investors' },
         { key: 2, text: 'ANGEL INV', value: 'Angel Investors' },
-        { key: 3, text: 'VC', value: 'Venture Capitalist' },
+        { key: 3, text: 'VC', value: 'Venture Capitalists' },
         { key: 4, text: 'P2P LEND', value: 'Peer-to-peer lenders' },
         { key: 5, text: 'INCUBATOR', value: 'Incubators' },
-        { key: 6, text: 'FINANCIAL INST', value: 'Financial Institues' },
+        { key: 6, text: 'FINANCIAL INST', value: 'Financial Institutes' },
         { key: 7, text: 'CORPORATION', value: 'Corporate investors' },
     ];
 
@@ -177,8 +177,6 @@ function InvestorRequest() {
                                 </Button>
                                 </Modal.Actions>
                             </Modal>
-
-
                         </div>
                     </>
                 :

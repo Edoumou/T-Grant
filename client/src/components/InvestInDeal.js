@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import BankJSON from "../contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
-import TokenCallJSON from "../contracts/artifacts/contracts/tests/tokens/TokenCall.sol/TokenCall.json";
-import IssuerJSON from "../contracts/artifacts/contracts/Topos/Bank/Issuer.sol/Issuer.json";
-import USDCJSON from "../contracts/artifacts/contracts/tests/tokens/assets/USDC.sol/USDC.json";
-import USDTJSON from "../contracts/artifacts/contracts/tests/tokens/assets/USDT.sol/USDT.json";
-import EURCJSON from "../contracts/artifacts/contracts/tests/tokens/assets/EURC.sol/EURC.json";
-import EURTJSON from "../contracts/artifacts/contracts/tests/tokens/assets/EURT.sol/EURT.json";
-import CNYCJSON from "../contracts/artifacts/contracts/tests/tokens/assets/CNYC.sol/CNYC.json";
-import CNYTJSON from "../contracts/artifacts/contracts/tests/tokens/assets/CNYT.sol/CNYT.json";
-import DAIJSON from "../contracts/artifacts/contracts/tests/tokens/assets/DAI.sol/DAI.json";
+import BankJSON from "../../src/contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
+import TokenCallJSON from "../../src/contracts/artifacts/contracts/tests/tokens/TokenCall.sol/TokenCall.json";
+import IssuerJSON from "../../src/contracts/artifacts/contracts/Topos/Bank/Issuer.sol/Issuer.json";
+import USDCJSON from "../../src/contracts/artifacts/contracts/tests/tokens/assets/USDC.sol/USDC.json";
+import USDTJSON from "../../src/contracts/artifacts/contracts/tests/tokens/assets/USDT.sol/USDT.json";
+import EURCJSON from "../../src/contracts/artifacts/contracts/tests/tokens/assets/EURC.sol/EURC.json";
+import EURTJSON from "../../src/contracts/artifacts/contracts/tests/tokens/assets/EURT.sol/EURT.json";
+import CNYCJSON from "../../src/contracts/artifacts/contracts/tests/tokens/assets/CNYC.sol/CNYC.json";
+import CNYTJSON from "../../src/contracts/artifacts/contracts/tests/tokens/assets/CNYT.sol/CNYT.json";
+import DAIJSON from "../../src/contracts/artifacts/contracts/tests/tokens/assets/DAI.sol/DAI.json";
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
 import { Button, Card, CardContent, Input, Image, List, ListContent, ListItem, Modal, ModalActions, ModalContent } from "semantic-ui-react";
-import { setApprovedDeals, setIssuersForApprovedDelas, setIssuersNameForApprovedDeals, setLoading, setSelectedDealID, setSelectedDealRemainingAmount, setShowInvestForm, setTokenSymbolForApprovedDeals } from "../store";
+import { setApprovedDeals, setDealsToIssue, setIssuersForApprovedDelas, setIssuersNameForApprovedDeals, setLoading, setSelectedDealID, setSelectedDealRemainingAmount, setShowInvestForm, setTokenSymbolForApprovedDeals } from "../store";
 import Addresses from "../addresses/addr.json";
 import "../manager.css";
 import "../users.css";
@@ -72,7 +72,6 @@ function InvestInDeal() {
 
         let deal = await bankContract.methods.deals(bonds.selectedDealID).call({ from: account });
         let amountToApprove = web3.utils.toWei(amount, 'ether');
-        
 
         await tokenContract.methods.approve(Addresses.ToposBankContract, amountToApprove)
             .send({ from: account })
@@ -106,6 +105,7 @@ function InvestInDeal() {
         let approvedDeals = [];
         let issuersForApprovedDeals = [];
         let tokenSymbolForApprovedDeals = [];
+        let dealsToIssue = [];
         for(let i = 0; i < deals.length; i++) {
           let tokenAddress = deals[i].currency;
           let tokenSymbol = await tokenCallContract.methods.symbol(tokenAddress).call({ from: account });
@@ -115,10 +115,18 @@ function InvestInDeal() {
           if(deals[i].status === "2") {
             let issuerForApprovedDeals = issuer;
 
+            let dealID = deals[i].dealID;
+            let dealDebtAmount = deals[i].debtAmount;
+            let totalAmountInvested = await bankContract.methods.totalAmountInvestedForDeal(dealID).call({ from: account });
+
             approvedDeals.push(deals[i]);
             issuersForApprovedDeals.push(issuerForApprovedDeals);
             issuersNameForApprovedDeals.push(issuer.name);
             tokenSymbolForApprovedDeals.push(tokenSymbol);
+
+            if (dealDebtAmount === totalAmountInvested) {
+                dealsToIssue.push(dealID);
+            }
           }
         }
 
@@ -127,6 +135,7 @@ function InvestInDeal() {
 
         setAmount('');
 
+        dispatch(setDealsToIssue(dealsToIssue));
         dispatch(setApprovedDeals(approvedDeals));
         dispatch(setIssuersForApprovedDelas(issuersForApprovedDeals));
         dispatch(setIssuersNameForApprovedDeals(issuersNameForApprovedDeals));

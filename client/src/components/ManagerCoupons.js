@@ -8,10 +8,15 @@ import BondListOfInvestors from "./BondListOfInvestors";
 import "../users.css";
 import "../manager.css";
 import BondsCouponsPaid from "./BondsCouponsPaid";
+import PayInterests from "./PayInterests";
 
 function ManagerCoupons() {
     const connection = useSelector(state => {
         return state.connection;
+    });
+
+    const bonds = useSelector(state => {
+        return state.bond;
     });
 
     return(
@@ -33,6 +38,10 @@ function ManagerCoupons() {
                     <GridRow>
                         <GridColumn width={4}>
                             <SelectBond />
+                            {
+                                Number(bonds.selectedActiveBond.issueVolume) > 0 &&
+                                <PayInterests />
+                            }
                         </GridColumn>
                         <GridColumn width={12}>
                             <ShowSelectedBond />

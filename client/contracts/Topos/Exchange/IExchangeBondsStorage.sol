@@ -34,4 +34,9 @@ interface IExchangeBondsStorage {
         address _seller,
         uint256 _amountToAdd
     ) external;
+
+    function getInvestorListing(
+        address _seller,
+        string memory _dealID
+    ) external view returns(BondData.Listing memory);
 }

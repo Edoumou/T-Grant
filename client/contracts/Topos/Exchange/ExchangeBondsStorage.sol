@@ -2,7 +2,6 @@
 pragma solidity ^0.8.0;
 
 import "../../IERC7092.sol";
-import "../../BondData.sol";
 import "../interfaces/IToposBank.sol";
 import "./IExchangeBondsStorage.sol";
 
@@ -145,5 +144,19 @@ contract ExchangeBondsStorage is IExchangeBondsStorage {
         dealListed[index] = investorListing[_seller][_dealID];
 
         IERC7092(bondContract).transfer(_buyer, _amount, bytes('0x0'));
+    }
+
+    /**
+    * @notice Returns the array of all listings
+    */
+    function getDealsListed() external view returns(BondData.Listing[] memory) {
+        return dealListed;
+    }
+
+    function getInvestorListing(
+        address _seller,
+        string memory _dealID
+    ) external view returns(BondData.Listing memory) {
+        return investorListing[_seller][_dealID];
     }
 }

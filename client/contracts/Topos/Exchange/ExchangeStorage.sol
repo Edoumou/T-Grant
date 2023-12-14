@@ -8,15 +8,11 @@ import "../../tests/tokens/IERC20.sol";
 import "./IExchangeBondsStorage.sol";
 
 contract ExchangeStorage {
-    mapping(address => mapping(string => BondData.Listing)) public investorListing;
-
     address public owner;
 
     address public bankContract;
     address public bondCallContract;
     address public exchangeBondsStorage;
-
-    BondData.Listing[] dealListed;
     
     modifier onlyOwner {
         require(msg.sender == owner, "Only owner");

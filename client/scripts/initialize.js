@@ -22,12 +22,6 @@ async function main() {
     );
     await tx1.wait();
 
-    let tx2 = await registry.registerContract(
-        Addresses.ExchangeContract,
-        { from: deployer }
-    );
-    await tx2.wait();
-
     let tx3 = await registry.registerContract(
         Addresses.ExchangeBondsStorageContract,
         { from: deployer }

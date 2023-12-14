@@ -37,7 +37,8 @@ import {
     setBondsDealIDs,
     setBondsIssuers,
     setBondsCurrency,
-    setDealsListed
+    setDealsListed,
+    setCouponsPaid
 } from "./slices/bondSlice";
 import { 
     connectionReducer,
@@ -122,6 +123,7 @@ export {
     setBondsIssuers,
     setBondsCurrency,
     setDealsListed,
+    setCouponsPaid,
     setIsVerified,
     setRegistrationStatus,
     setRegistrarOwner,

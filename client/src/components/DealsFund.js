@@ -8,9 +8,9 @@ import Formate from "../utils/Formate";
 import Addresses from "../addresses/addr.json";
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
+import { setDealsFund, setLoading } from "../store";
 import "../users.css";
 import "../manager.css";
-import { setDealsFund, setLoading } from "../store";
 
 function DealsFund() {
     const [dealID, setDealID] = useState('');

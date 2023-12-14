@@ -95,7 +95,7 @@ contract BondTopos is IERC7092, BondStorage, IBonds {
     function approve(
         address _spender,
         uint256 _amount
-    ) external mustBeApproved(_spender) returns(bool) {
+    ) external returns(bool) {
         address _owner = tx.origin;
 
         _approve(_owner, _spender, _amount);
@@ -117,7 +117,7 @@ contract BondTopos is IERC7092, BondStorage, IBonds {
         uint256 _amount,
         bytes calldata _data
     ) external mustBeApproved(_to) returns(bool) {
-        address _from = tx.origin;
+        address _from = msg.sender;
 
         _transfer(_from, _to, _amount, _data);
 
@@ -270,58 +270,25 @@ contract BondTopos is IERC7092, BondStorage, IBonds {
 
             principals[_from] = principal - principalToTransfer;
             principals[_to] = principalTo + principalToTransfer;
+            
+            if(!isInvestor[_to]) {
+                isInvestor[_to] = true;
 
-            if(_amount == balance) {
-                isInvestor[_from] = false;
+                listOfInvestors[investorsIDs[_from]].amount = principals[_from];
 
-                if(!isInvestor[_to]) {
-                    isInvestor[_to] = true;
+                listOfInvestors.push(
+                    BondData.DealInvestment(
+                        {
+                            investor: _to,
+                            amount: principals[_to]
+                        }
+                    )
+                );
 
-                    listOfInvestors[investorsIDs[_from]] = BondData.DealInvestment({
-                        investor: _to,
-                        amount: principals[_to]
-                    });
-                } else {
-                    listOfInvestors[investorsIDs[_from]] = BondData.DealInvestment({
-                        investor: _from,
-                        amount: 0
-                    });
-
-                    listOfInvestors[investorsIDs[_to]] = BondData.DealInvestment({
-                        investor: _to,
-                        amount: principals[_to]
-                    });
-                }
+                investorsIDs[_to] = listOfInvestors.length - 1;
             } else {
-                if(!isInvestor[_to]) {
-                    uint256 id = investorsIDs[_from];
-
-                    listOfInvestors[id] = BondData.DealInvestment({
-                        investor: _from,
-                        amount: principals[_from]
-                    });
-
-                    isInvestor[_to] = true;
-
-                    listOfInvestors.push(
-                        BondData.DealInvestment(
-                            {
-                                investor: _to,
-                                amount: principals[_to]
-                            }
-                        )
-                    );
-                } else {
-                    listOfInvestors[investorsIDs[_from]] = BondData.DealInvestment({
-                        investor: _from,
-                        amount: principals[_from]
-                    });
-
-                    listOfInvestors[investorsIDs[_to]] = BondData.DealInvestment({
-                        investor: _to,
-                        amount: principals[_to]
-                    });
-                }
+                listOfInvestors[investorsIDs[_from]].amount = principals[_from];
+                listOfInvestors[investorsIDs[_to]].amount = principals[_to];
             }
         }
 
