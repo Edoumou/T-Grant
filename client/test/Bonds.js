@@ -1,5 +1,6 @@
 const { expect } = require("chai");
 const hre = require("hardhat");
+const Web3 = require('web3');
 
 describe("Tokenized Bonds", async () => {
     let registry;
@@ -85,62 +86,66 @@ describe("Tokenized Bonds", async () => {
                 bondCall.target
             ]
         );
+
+        await bank.setIssuerFundContract(funds.target);
+        await registry.setAuthenticationContract(authentication.target);
+        await registry.registerContract(exchangeStorage.target);
+        await roles.setToposContracts(bank.target, issuer, investor);
+
+        await tokenCall.addTokenAddress(usdc.target);
+        await tokenCall.addTokenAddress(usdt.target);
+        await tokenCall.addTokenAddress(eurc.target);
+        await tokenCall.addTokenAddress(eurt.target);
+        await tokenCall.addTokenAddress(cnyc.target);
+        await tokenCall.addTokenAddress(cnyt.target);
+        await tokenCall.addTokenAddress(dai.target);
     });
 
     it("Checks deployment", async () => {
-        expect(registry.target).not.to.equal('');
-        expect(authentication.target).not.to.equal('');
-        expect(roles.target).not.to.equal('');
-        expect(bondCall.target).not.to.equal('');
-        expect(bank.target).not.to.equal('');
-        expect(issuer.target).not.to.equal('');
-        expect(investor.target).not.to.equal('');
-        expect(treasury.target).not.to.equal('');
-        expect(funds.target).not.to.equal('');
-        expect(factory.target).not.to.equal('');
-        expect(usdc.target).not.to.equal('');
-        expect(usdt.target).not.to.equal('');
-        expect(eurc.target).not.to.equal('');
-        expect(eurt.target).not.to.equal('');
-        expect(cnyc.target).not.to.equal('');
-        expect(cnyt.target).not.to.equal('');
-        expect(tokenCall.target).not.to.equal('');
-        expect(couponMath.target).not.to.equal('');
-        expect(couponPayment.target).not.to.equal('');
-        expect(exchange.target).not.to.equal('');
-        expect(exchangeStorage.target).not.to.equal('');
+        let zeroAddress = '0x0000000000000000000000000000000000000000';
+
+        expect(registry.target).not.to.equal(zeroAddress);
+        expect(authentication.target).not.to.equal(zeroAddress);
+        expect(roles.target).not.to.equal(zeroAddress);
+        expect(bondCall.target).not.to.equal(zeroAddress);
+        expect(bank.target).not.to.equal(zeroAddress);
+        expect(issuer.target).not.to.equal(zeroAddress);
+        expect(investor.target).not.to.equal(zeroAddress);
+        expect(treasury.target).not.to.equal(zeroAddress);
+        expect(funds.target).not.to.equal(zeroAddress);
+        expect(factory.target).not.to.equal(zeroAddress);
+        expect(usdc.target).not.to.equal(zeroAddress);
+        expect(usdt.target).not.to.equal(zeroAddress);
+        expect(eurc.target).not.to.equal(zeroAddress);
+        expect(eurt.target).not.to.equal(zeroAddress);
+        expect(cnyc.target).not.to.equal(zeroAddress);
+        expect(cnyt.target).not.to.equal(zeroAddress);
+        expect(tokenCall.target).not.to.equal(zeroAddress);
+        expect(couponMath.target).not.to.equal(zeroAddress);
+        expect(couponPayment.target).not.to.equal(zeroAddress);
+        expect(exchange.target).not.to.equal(zeroAddress);
+        expect(exchangeStorage.target).not.to.equal(zeroAddress);
     });
 
-    it("Set Funds contract addresse in Bank", async () => {
-        await bank.setIssuerFundContract(funds.target);
-
+    it("Checks Funds contract addresse in Bank", async () => {
         let fundsContract = await bank.issuersFundContract();
 
         expect(fundsContract).to.equal(funds.target);
     });
-    
-    it("Set Auth contract addresse in Identity Registry", async () => {
-        await registry.setAuthenticationContract(authentication.target);
 
+    it("Checks Auth contract addresse in Identity Registry", async () => {
         let authContract = await registry.authenticationContract();
 
         expect(authContract).to.equal(authentication.target);
     });
 
-    it("Allows the Exchange Bonds Storage to manage bonds", async () => {
-        let isVerifiedBefore = await registry.isVerified(exchangeStorage.target);
-
-        await registry.registerContract(exchangeStorage.target);
-
-        let isVerifiedAfter = await registry.isVerified(exchangeStorage.target);
-
-        expect(isVerifiedBefore).to.be.false;
-        expect(isVerifiedAfter).to.be.true;
+    it("Checks if the Exchange Bonds Storage can manage bonds", async () => {
+        let isVerified = await registry.isVerified(exchangeStorage.target);
+        
+        expect(isVerified).to.be.true;
     });
 
-    it("Sets contracts addresses in the Roles contract", async () => {
-        await roles.setToposContracts(bank.target, issuer, investor);
-
+    it("Checks addresses in the Roles contract", async () => {
         let banContract = await roles.toposBankContract();
         let issuerContract = await roles.issuerContract();
         let investorContract = await roles.investorContract();
@@ -158,15 +163,7 @@ describe("Tokenized Bonds", async () => {
         expect(exchangeStorageContract).to.equal(exchangeStorage.target);
     });
 
-    it("Adds payment tokens addresses in Token Call contract", async () => {
-        await tokenCall.addTokenAddress(usdc.target);
-        await tokenCall.addTokenAddress(usdt.target);
-        await tokenCall.addTokenAddress(eurc.target);
-        await tokenCall.addTokenAddress(eurt.target);
-        await tokenCall.addTokenAddress(cnyc.target);
-        await tokenCall.addTokenAddress(cnyt.target);
-        await tokenCall.addTokenAddress(dai.target);
-
+    it("Checks payment tokens addresses in Token Call contract", async () => {
         let tokensAddress = await tokenCall.getTokenAddresses();
 
         expect(tokensAddress[0]).to.equal(usdc.target);
@@ -177,4 +174,46 @@ describe("Tokenized Bonds", async () => {
         expect(tokensAddress[5]).to.equal(cnyt.target);
         expect(tokensAddress[6]).to.equal(dai.target);
     });
+    
+    it("Registers Topos manager", async () => {
+        let authHash = await AuthenticationHash('123456', deployer);
+        let identyHash = await RegistrationHash(deployer, 'Manager', '0102030405', 'manager@topos.com');
+
+        await registry.register(identyHash, authHash);
+    });
+
+    it("Registers issuers", async () => {
+
+    });
+
+    it("Registers investors", async () => {
+
+    });
 });
+
+const AuthenticationHash = async (digiCode, signer) => {
+    let signedMessage = await SignData(digiCode, signer);
+
+    let message = digiCode + signer.address;
+    let messageHash = hre.ethers.hashMessage(message)
+
+    let hash = hre.ethers.hashMessage(signedMessage + messageHash);
+
+    return hash;
+}
+
+const RegistrationHash = async (signer, fullname, phone, email) => {
+    let hash = hre.ethers.hashMessage(signer.address + fullname + phone + email);
+
+    return hash;
+}
+
+const SignData = async (digicode, signer) => {
+    let signedData = await signer.signMessage(digicode);
+
+    return signedData;
+}
+
+const web3Connection = async () => {
+    return new Web3('http://127.0.0.1:8545/');
+}
