@@ -72,7 +72,7 @@ To compile and deploy the contract on Topos Subnet, we first need to get some `T
 ```
 
 ## Tests
-To test smart contracts, run the following command in `/client` folder
+To run tests, type the following command in `/client` folder
 
 ```
     npx hardhat test test/Bonds.js
