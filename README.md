@@ -71,6 +71,13 @@ To compile and deploy the contract on Topos Subnet, we first need to get some `T
     $ sh deploy.sh 
 ```
 
+## Tests
+To test smart contracts, run the following command in `/client` folder
+
+```
+    npx hardhat test test/Bonds.js
+```
+
 ## Lauch the Dapp
 
 To launch the Dapp, you first need to add the Topos to your Metamask, [check here](https://docs.topos.technology/content/module-2/1-ERC20-Messaging.html). Once Topos subnet is added to Metamask, run the following command in `/client` folder
