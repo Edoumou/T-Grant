@@ -41,6 +41,8 @@ describe("Tokenized Bonds", async () => {
 
     let maturityDate = Date.now() + 120;
 
+    let zeroAddress = '0x0000000000000000000000000000000000000000';
+
     beforeEach(async () => {
         [deployer, amazon, ggvcapital, user0, ...users] = await hre.ethers.getSigners();
 
@@ -183,8 +185,6 @@ describe("Tokenized Bonds", async () => {
     });
 
     it("Checks deployment", async () => {
-        let zeroAddress = '0x0000000000000000000000000000000000000000';
-
         expect(registry.target).not.to.equal(zeroAddress);
         expect(authentication.target).not.to.equal(zeroAddress);
         expect(roles.target).not.to.equal(zeroAddress);
@@ -332,6 +332,109 @@ describe("Tokenized Bonds", async () => {
         expect(
             bank.connect(user0).registerForDeal("DEAL-001", "1000000")
         ).to.rejectedWith(Error, "ACCOUNT_NOT_AAPROVED");
+    });
+
+    it("Deploys a bond contract", async () => {
+        await tokenCall.connect(ggvcapital).mint(
+            ggvcapital.address,
+            "1000000000000000000000000",
+            usdc.target
+        );
+
+        await usdc.connect(ggvcapital).approve(bank.target, "1000000000000000000000000");
+        await bank.connect(ggvcapital).registerForDeal("DEAL-001", "1000000");
+
+        let isBondBefore = await factory.connect(deployer).isBondContract("DEAL-001");
+        let bondContractBefore = await bank.connect(deployer).dealBondContracts("DEAL-001");
+
+        await factory.connect(deployer).DeployBondContract(
+            "DEAL-001",
+            amazon.address,
+            bank.target,
+            "US"
+        );
+
+        let isBondAfter = await factory.connect(deployer).isBondContract("DEAL-001");
+        let bondContractAfter = await bank.connect(deployer).dealBondContracts("DEAL-001");
+
+        expect(isBondBefore).to.be.false;
+        expect(isBondAfter).to.be.true;
+        expect(bondContractBefore).to.equal(zeroAddress);
+        expect(bondContractAfter).not.to.equal(zeroAddress);
+    });
+
+    it("Issues Bonds to investors", async () => {
+        await tokenCall.connect(ggvcapital).mint(
+            ggvcapital.address,
+            "1000000000000000000000000",
+            usdc.target
+        );
+
+        await usdc.connect(ggvcapital).approve(bank.target, "1000000000000000000000000");
+        await bank.connect(ggvcapital).registerForDeal("DEAL-001", "1000000");
+
+        await factory.connect(deployer).DeployBondContract(
+            "DEAL-001",
+            amazon.address,
+            bank.target,
+            "US"
+        );
+
+        let bondContract = await bank.connect(deployer).dealBondContracts("DEAL-001");
+
+        let issueDate = Date.now();
+        let _maturityDate = issueDate + 120;
+
+        let principalBefore = await bondCall.principalOf(ggvcapital.address, bondContract);
+
+        let bond = {
+            isin: "US90QE431HJK",
+            name: "Amazon 2025",
+            symbol: "AMZ25",
+            currency: usdc.target,
+            denomination: "100",
+            issueVolume: "1000000",
+            couponRate: "250",
+            couponType: "1",
+            couponFrequency: "2",
+            issueDate: Math.floor(issueDate) + '',
+            maturityDate: _maturityDate
+        }
+
+        await bank.connect(deployer).issue(
+            "DEAL-001",
+            bond,
+            bondContract
+        );
+
+        let isin = await bondCall.isin(bondContract);
+        let name = await bondCall.name(bondContract);
+        let symbol = await bondCall.symbol(bondContract);
+        let currency = await bondCall.currency(bondContract);
+        let denomination = await bondCall.denomination(bondContract);
+        let issueVolume = await bondCall.issueVolume(bondContract);
+        let couponRate = await bondCall.couponRate(bondContract);
+        let couponType = await bondCall.couponType(bondContract);
+        let couponFrequency = await bondCall.couponFrequency(bondContract);
+        let dateOfIssue = await bondCall.issueDate(bondContract);
+        let dateToMature = await bondCall.maturityDate(bondContract);
+
+        let principalAfter = await bondCall.principalOf(ggvcapital.address, bondContract);
+        let balance = await principalAfter / denomination;
+
+        expect(isin).to.equal("US90QE431HJK");
+        expect(name).to.equal("Amazon 2025");
+        expect(symbol).to.equal("AMZ25");
+        expect(currency).to.equal(usdc.target);
+        expect(denomination).to.equal("100");
+        expect(issueVolume).to.equal("1000000");
+        expect(couponRate).to.equal("250");
+        expect(couponType).to.equal("1");
+        expect(couponFrequency).to.equal("2");
+        expect(principalBefore).to.equal("0");
+
+        expect(principalAfter).to.equal("1000000");
+        expect(balance).to.equal("10000");
     });
 });
 
