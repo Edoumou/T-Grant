@@ -1,6 +1,10 @@
-const { expect } = require("chai");
+const chai = require("chai");
+const chaiAsPromised = require("chai-as-promised");
 const hre = require("hardhat");
 const Web3 = require('web3');
+
+chai.use(chaiAsPromised);
+const expect = chai.expect;
 
 describe("Tokenized Bonds", async () => {
     let registry;
@@ -44,7 +48,7 @@ describe("Tokenized Bonds", async () => {
     let zeroAddress = '0x0000000000000000000000000000000000000000';
 
     beforeEach(async () => {
-        [deployer, amazon, ggvcapital, user0, ...users] = await hre.ethers.getSigners();
+        [deployer, amazon, ggvcapital, accel, user0, ...users] = await hre.ethers.getSigners();
 
         registry = await hre.ethers.deployContract("IdentityRegistry");
         authentication = await hre.ethers.deployContract("Authentication", [registry.target]);
@@ -124,11 +128,15 @@ describe("Tokenized Bonds", async () => {
 
         await registry.connect(amazon).register(identyHash, authHash);
         
-        // Register an account that will be used as investor
-        authHash = await AuthenticationHash('123456', ggvcapital);
-        identyHash = await RegistrationHash(ggvcapital, 'GGV Capital', '0102030405', 'info@ggvc.com');
+        // Register accounts that will be used as investor
+        let authHashGGVC = await AuthenticationHash('123456', ggvcapital);
+        let identyHashGGVC = await RegistrationHash(ggvcapital, 'GGV Capital', '0102030405', 'info@ggvc.com');
 
-        await registry.connect(ggvcapital).register(identyHash, authHash);
+        let authHashACCEL = await AuthenticationHash('123456', accel);
+        let identyHashACCEL = await RegistrationHash(accel, 'Accel', '0102030405', 'info@accel.com');
+
+        await registry.connect(ggvcapital).register(identyHashGGVC, authHashGGVC);
+        await registry.connect(accel).register(identyHashACCEL, authHashACCEL);
 
         // Issuer-Investor submit a request to become issuer-investor
         let issuerData = {
@@ -153,12 +161,23 @@ describe("Tokenized Bonds", async () => {
             index: "0"
         }
 
+        let investorData2 = {
+            name: "Accel",
+            country: "US",
+            investorType: "Angel Investor",
+            walletAddress: accel.address,
+            status: StakeHolderStatus.UNDEFINED,
+            index: "0"
+        }
+
         await issuer.connect(amazon).requestRegistrationIssuer(issuerData);
         await investor.connect(ggvcapital).requestRegistrationInvestor(investorData);
+        await investor.connect(accel).requestRegistrationInvestor(investorData2);
 
-        // Manager approves the above issuer and investor
+        // Manager approves the above issuer and investors
         await issuer.connect(deployer).approveIssuer(amazon.address);
         await investor.connect(deployer).approveInvestor(ggvcapital.address);
+        await investor.connect(deployer).approveInvestor(accel.address);
 
         // Issuer Submits a Deal
         let deals = await bank.connect(amazon).getListOfDeals();
@@ -416,8 +435,6 @@ describe("Tokenized Bonds", async () => {
         let couponRate = await bondCall.couponRate(bondContract);
         let couponType = await bondCall.couponType(bondContract);
         let couponFrequency = await bondCall.couponFrequency(bondContract);
-        let dateOfIssue = await bondCall.issueDate(bondContract);
-        let dateToMature = await bondCall.maturityDate(bondContract);
 
         let principalAfter = await bondCall.principalOf(ggvcapital.address, bondContract);
         let balance = await principalAfter / denomination;
@@ -435,6 +452,418 @@ describe("Tokenized Bonds", async () => {
 
         expect(principalAfter).to.equal("1000000");
         expect(balance).to.equal("10000");
+    });
+
+    it("Transfers Bonds", async () => {
+        await tokenCall.connect(ggvcapital).mint(
+            ggvcapital.address,
+            "1000000000000000000000000",
+            usdc.target
+        );
+
+        let principal = "1000000";
+
+        await usdc.connect(ggvcapital).approve(bank.target, "1000000000000000000000000");
+        await bank.connect(ggvcapital).registerForDeal("DEAL-001", principal);
+
+        await factory.connect(deployer).DeployBondContract(
+            "DEAL-001",
+            amazon.address,
+            bank.target,
+            "US"
+        );
+
+        let bondContract = await bank.connect(deployer).dealBondContracts("DEAL-001");
+
+        let issueDate = Date.now();
+        let _maturityDate = issueDate + 120;
+
+        let bond = {
+            isin: "US90QE431HJK",
+            name: "Amazon 2025",
+            symbol: "AMZ25",
+            currency: usdc.target,
+            denomination: "100",
+            issueVolume: "1000000",
+            couponRate: "250",
+            couponType: "1",
+            couponFrequency: "2",
+            issueDate: Math.floor(issueDate) + '',
+            maturityDate: _maturityDate
+        }
+
+        await bank.connect(deployer).issue(
+            "DEAL-001",
+            bond,
+            bondContract
+        );
+
+        let denomination = await bondCall.denomination(bondContract);
+
+        let ggvcPrincipalBefore = await bondCall.principalOf(ggvcapital.address, bondContract);
+        let accelPrincipalBefore = await bondCall.principalOf(accel.address, bondContract);
+
+        let amountToTransfer = "3000";
+        let principalToTransfer = Number(amountToTransfer) * Number(denomination);
+
+        await bondCall.connect(ggvcapital).approve(
+            bondCall.target,
+            amountToTransfer,
+            bondContract
+        );
+
+        await bondCall.connect(ggvcapital).transferFrom(
+            ggvcapital.address,
+            accel.address,
+            amountToTransfer,
+            "0x",
+            bondContract
+        );
+
+        let ggvcPrincipalAfter = await bondCall.principalOf(ggvcapital.address, bondContract);
+        let accelPrincipalAfter = await bondCall.principalOf(accel.address, bondContract);
+
+        expect(ggvcPrincipalBefore).to.equal(principal);
+        expect(accelPrincipalBefore).to.equal("0");
+        expect(ggvcPrincipalAfter).to.equal(Number(ggvcPrincipalBefore) - principalToTransfer);
+        expect(accelPrincipalAfter).to.equal(principalToTransfer);
+    });
+
+    it("Lists bonds on Exchange", async () => {
+        await tokenCall.connect(ggvcapital).mint(
+            ggvcapital.address,
+            "1000000000000000000000000",
+            usdc.target
+        );
+
+        let principal = "1000000";
+
+        await usdc.connect(ggvcapital).approve(bank.target, "1000000000000000000000000");
+        await bank.connect(ggvcapital).registerForDeal("DEAL-001", principal);
+
+        await factory.connect(deployer).DeployBondContract(
+            "DEAL-001",
+            amazon.address,
+            bank.target,
+            "US"
+        );
+
+        let bondContract = await bank.connect(deployer).dealBondContracts("DEAL-001");
+
+        let issueDate = Date.now();
+        let _maturityDate = issueDate + 120;
+
+        let bond = {
+            isin: "US90QE431HJK",
+            name: "Amazon 2025",
+            symbol: "AMZ25",
+            currency: usdc.target,
+            denomination: "100",
+            issueVolume: "1000000",
+            couponRate: "250",
+            couponType: "1",
+            couponFrequency: "2",
+            issueDate: Math.floor(issueDate) + '',
+            maturityDate: _maturityDate
+        }
+
+        await bank.connect(deployer).issue(
+            "DEAL-001",
+            bond,
+            bondContract
+        );
+
+        let denomination = await bondCall.denomination(bondContract);
+
+        let ggvcPrincipalBefore = await bondCall.principalOf(ggvcapital.address, bondContract);
+        let exchangePrincipalBefore = await bondCall.principalOf(exchangeStorage.target, bondContract);
+
+        let amountTolist = "3000";
+        let price = "95";
+        let principalToList = Number(amountTolist) * Number(denomination);
+
+        await bondCall.connect(ggvcapital).approve(
+            exchange.target,
+            amountTolist,
+            bondContract
+        );
+
+        await exchange.connect(ggvcapital).listBonds(
+            "DEAL-001",
+            amountTolist,
+            price
+        );
+
+        let listing = await exchangeStorage.investorListing(
+            ggvcapital.address,
+            "DEAL-001"
+        );
+
+        let ggvcPrincipalAfter = await bondCall.principalOf(ggvcapital.address, bondContract);
+        let exchangePrincipalAfter = await bondCall.principalOf(exchangeStorage.target, bondContract);
+
+        expect(listing.amount).to.equal(amountTolist);
+        expect(listing.price).to.equal(price);
+        expect(ggvcPrincipalBefore).to.equal(principal);
+        expect(exchangePrincipalBefore).to.equal("0");
+        expect(ggvcPrincipalAfter).to.equal(Number(ggvcPrincipalBefore) - principalToList);
+        expect(exchangePrincipalAfter).to.equal(principalToList);
+    });
+
+    it("Unlists bonds from the exchange", async () => {
+        await tokenCall.connect(ggvcapital).mint(
+            ggvcapital.address,
+            "1000000000000000000000000",
+            usdc.target
+        );
+
+        let principal = "1000000";
+
+        await usdc.connect(ggvcapital).approve(bank.target, "1000000000000000000000000");
+        await bank.connect(ggvcapital).registerForDeal("DEAL-001", principal);
+
+        await factory.connect(deployer).DeployBondContract(
+            "DEAL-001",
+            amazon.address,
+            bank.target,
+            "US"
+        );
+
+        let bondContract = await bank.connect(deployer).dealBondContracts("DEAL-001");
+
+        let issueDate = Date.now();
+        let _maturityDate = issueDate + 120;
+
+        let bond = {
+            isin: "US90QE431HJK",
+            name: "Amazon 2025",
+            symbol: "AMZ25",
+            currency: usdc.target,
+            denomination: "100",
+            issueVolume: "1000000",
+            couponRate: "250",
+            couponType: "1",
+            couponFrequency: "2",
+            issueDate: Math.floor(issueDate) + '',
+            maturityDate: _maturityDate
+        }
+
+        await bank.connect(deployer).issue(
+            "DEAL-001",
+            bond,
+            bondContract
+        );
+
+        let denomination = await bondCall.denomination(bondContract);
+
+        let amountTolist = "3000";
+        let price = "95";
+        let principalToList = Number(amountTolist) * Number(denomination);
+
+        await bondCall.connect(ggvcapital).approve(
+            exchange.target,
+            amountTolist,
+            bondContract
+        );
+
+        await exchange.connect(ggvcapital).listBonds(
+            "DEAL-001",
+            amountTolist,
+            price
+        );
+
+        let listingBeforeCancel = await exchangeStorage.investorListing(
+            ggvcapital.address,
+            "DEAL-001"
+        );
+
+        let ggvcPrincipalBefore = await bondCall.principalOf(ggvcapital.address, bondContract);
+        let exchangePrincipalBefore = await bondCall.principalOf(exchangeStorage.target, bondContract);
+
+        await exchange.connect(ggvcapital).unlistBonds("DEAL-001");
+
+        let ggvcPrincipalAfter = await bondCall.principalOf(ggvcapital.address, bondContract);
+        let exchangePrincipalAfter = await bondCall.principalOf(exchangeStorage.target, bondContract);
+
+        let listingAfterCancel = await exchangeStorage.investorListing(
+            ggvcapital.address,
+            "DEAL-001"
+        );
+
+        expect(listingBeforeCancel.amount).to.equal(amountTolist);
+        expect(listingBeforeCancel.price).to.equal(price);
+        expect(listingAfterCancel.amount).to.equal("0");
+        expect(listingAfterCancel.price).to.equal("0");
+        expect(ggvcPrincipalBefore).to.equal(Number(principal) - principalToList);
+        expect(exchangePrincipalBefore).to.equal(principalToList);
+        expect(ggvcPrincipalAfter).to.equal(Number(ggvcPrincipalBefore) + principalToList);
+        expect(exchangePrincipalAfter).to.equal(Number(exchangePrincipalBefore) - principalToList);
+    });
+
+    it("Updates bonds price on exchange", async () => {
+        await tokenCall.connect(ggvcapital).mint(
+            ggvcapital.address,
+            "1000000000000000000000000",
+            usdc.target
+        );
+
+        let principal = "1000000";
+
+        await usdc.connect(ggvcapital).approve(bank.target, "1000000000000000000000000");
+        await bank.connect(ggvcapital).registerForDeal("DEAL-001", principal);
+
+        await factory.connect(deployer).DeployBondContract(
+            "DEAL-001",
+            amazon.address,
+            bank.target,
+            "US"
+        );
+
+        let bondContract = await bank.connect(deployer).dealBondContracts("DEAL-001");
+
+        let issueDate = Date.now();
+        let _maturityDate = issueDate + 120;
+
+        let bond = {
+            isin: "US90QE431HJK",
+            name: "Amazon 2025",
+            symbol: "AMZ25",
+            currency: usdc.target,
+            denomination: "100",
+            issueVolume: "1000000",
+            couponRate: "250",
+            couponType: "1",
+            couponFrequency: "2",
+            issueDate: Math.floor(issueDate) + '',
+            maturityDate: _maturityDate
+        }
+
+        await bank.connect(deployer).issue(
+            "DEAL-001",
+            bond,
+            bondContract
+        );
+
+        let amountTolist = "3000";
+        let price = "95";
+        let newPrice = "105";
+
+        await bondCall.connect(ggvcapital).approve(
+            exchange.target,
+            amountTolist,
+            bondContract
+        );
+
+        await exchange.connect(ggvcapital).listBonds(
+            "DEAL-001",
+            amountTolist,
+            price
+        );
+
+        let listingBeforeUpdate = await exchangeStorage.investorListing(
+            ggvcapital.address,
+            "DEAL-001"
+        );
+
+        await exchange.connect(ggvcapital).updateDealPrice(
+            "DEAL-001",
+            newPrice
+        );
+
+        let listingAfterUpdate = await exchangeStorage.investorListing(
+            ggvcapital.address,
+            "DEAL-001"
+        );
+
+        expect(listingBeforeUpdate.price).to.equal(price);
+        expect(listingAfterUpdate.price).to.equal(newPrice);
+    });
+
+    it("Increases the amount of bonds listed on exchange", async () => {
+        await tokenCall.connect(ggvcapital).mint(
+            ggvcapital.address,
+            "1000000000000000000000000",
+            usdc.target
+        );
+
+        let principal = "1000000";
+
+        await usdc.connect(ggvcapital).approve(bank.target, "1000000000000000000000000");
+        await bank.connect(ggvcapital).registerForDeal("DEAL-001", principal);
+
+        await factory.connect(deployer).DeployBondContract(
+            "DEAL-001",
+            amazon.address,
+            bank.target,
+            "US"
+        );
+
+        let bondContract = await bank.connect(deployer).dealBondContracts("DEAL-001");
+
+        let issueDate = Date.now();
+        let _maturityDate = issueDate + 120;
+
+        let bond = {
+            isin: "US90QE431HJK",
+            name: "Amazon 2025",
+            symbol: "AMZ25",
+            currency: usdc.target,
+            denomination: "100",
+            issueVolume: "1000000",
+            couponRate: "250",
+            couponType: "1",
+            couponFrequency: "2",
+            issueDate: Math.floor(issueDate) + '',
+            maturityDate: _maturityDate
+        }
+
+        await bank.connect(deployer).issue(
+            "DEAL-001",
+            bond,
+            bondContract
+        );
+
+        let amountTolist = "3000";
+        let price = "95";
+        let newPrice = "105";
+
+        await bondCall.connect(ggvcapital).approve(
+            exchange.target,
+            amountTolist,
+            bondContract
+        );
+
+        await exchange.connect(ggvcapital).listBonds(
+            "DEAL-001",
+            amountTolist,
+            price
+        );
+
+        let listingBeforeUpdate = await exchangeStorage.investorListing(
+            ggvcapital.address,
+            "DEAL-001"
+        );
+
+        let amountToAdd = "2000";
+
+        await bondCall.connect(ggvcapital).approve(
+            exchange.target,
+            amountToAdd,
+            bondContract
+        );
+
+        await exchange.connect(ggvcapital).increaseListingAmount(
+            "DEAL-001",
+            amountToAdd
+        );
+
+        let listingAfterUpdate = await exchangeStorage.investorListing(
+            ggvcapital.address,
+            "DEAL-001"
+        );
+
+        expect(listingBeforeUpdate.amount).to.equal(amountTolist);
+        expect(listingAfterUpdate.amount).to.equal(Number(amountTolist) + Number(amountToAdd));
     });
 });
 
