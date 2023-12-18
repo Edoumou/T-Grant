@@ -194,6 +194,15 @@ contract ToposBank is IToposBank, ToposBankStorage {
 
         IBonds(_bondContract).redeem();
 
+        for(uint256 i; i < dealInvestment[_dealID].length; i++) {
+            uint256 principal = dealInvestment[_dealID][i].amount;
+            address investor = dealInvestment[_dealID][i].investor;
+
+            if (principal != 0) {
+                IERC20(deals[_dealID].currency).transfer(investor, principal * 1 ether);
+            }
+        }
+
         emit BondRedeem(_dealID);
     }
 

@@ -39,7 +39,10 @@ contract IssuersFund is IIssuersFund {
     }
 
     /**
-    *
+    * @notice Tansfer deal funds to issuers
+    * @param _dealID deal ID
+    * @param _issuer issuer account address
+    * @param _tokenAddress payment token address
     */
     function withdrawFund(string memory _dealID, address _issuer, address _tokenAddress) external onlyBankContract {
         uint256 _amount = totalAmount[_dealID];
