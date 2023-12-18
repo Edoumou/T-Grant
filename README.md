@@ -85,3 +85,15 @@ To launch the Dapp, you first need to add the Topos to your Metamask, [check her
 ```
     npm start
 ```
+
+## What is a Bond
+
+A bond is a fixed income instrument that represents a loan made by an investor to a borrower. Bonds are used by companies and governments to borrow money from investors. A bond usually pays interests at regular interval of time, and repays the principal invested at maturity. Each bond must specify the coupon -the interests that investors will be earning-, and the maturity date -the date when the bond will mature-. Some bonds don't pay interests. In that case, the bond is sold at discount to allow investors make a profit.
+
+## How Bonds Work
+
+Traditionally, when a company wants to issue bonds, they hire an investment bank that arranges the deal, issues bonds to investors and transfers the funds to the issuer.
+
+Tokenized bonds are representation of debt issued on the blockchain as a token. Unlike bonds issued in a traditional way where their management is delegated to brokers and custodies, tokenized bonds are held by investors in their wallet. Investors are then responsible for the management of their tokens, lowering then costs related to fees from these entities.
+
+
