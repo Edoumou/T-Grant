@@ -296,7 +296,7 @@
       ]
     },
     "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/BondTopos.sol": {
-      "lastModificationDate": 1702435756835,
+      "lastModificationDate": 1702905879929,
       "contentHash": "f1ee5810791840b95b68fdce89ee6921",
       "sourceName": "contracts/BondTopos.sol",
       "solcConfig": {
@@ -596,8 +596,8 @@
       ]
     },
     "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/treasury/IssuersFund.sol.sol": {
-      "lastModificationDate": 1701734154885,
-      "contentHash": "c397eb21cc26ba84eac87f44c4baa05e",
+      "lastModificationDate": 1702896763182,
+      "contentHash": "eaa319c8dedc1a81d8d6e90f303c3df4",
       "sourceName": "contracts/treasury/IssuersFund.sol.sol",
       "solcConfig": {
         "version": "0.8.19",
@@ -1154,8 +1154,8 @@
       ]
     },
     "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/Topos/Bank/ToposBank.sol": {
-      "lastModificationDate": 1701923106475,
-      "contentHash": "f790dceb75a98e88ce95155a3738b09b",
+      "lastModificationDate": 1702916392592,
+      "contentHash": "182ff77a59497b3bb66976734611d886",
       "sourceName": "contracts/Topos/Bank/ToposBank.sol",
       "solcConfig": {
         "version": "0.8.19",

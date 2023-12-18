@@ -164,7 +164,7 @@ contract ToposBank is IToposBank, ToposBankStorage {
 
         dealBondContracts[_dealID] = _bondContract;
 
-        deals[_dealID].status != BondData.DealStatus.ISSUED;
+        deals[_dealID].status = BondData.DealStatus.ISSUED;
         listOfDeals[deals[_dealID].index].status = BondData.DealStatus.ISSUED;
         issuerDeals[deals[_dealID].issuerAddress].push(deals[_dealID]);
         bondsDealIDs.push(_dealID);
@@ -188,7 +188,7 @@ contract ToposBank is IToposBank, ToposBankStorage {
         if(deals[_dealID].status != BondData.DealStatus.ISSUED)
             revert BondData.InvalidDealStatus(_dealID);
 
-        deals[_dealID].status != BondData.DealStatus.REDEEMED;
+        deals[_dealID].status = BondData.DealStatus.REDEEMED;
         listOfDeals[deals[_dealID].index].status = BondData.DealStatus.REDEEMED;
         issuerDeals[deals[_dealID].issuerAddress][deals[_dealID].index].status = BondData.DealStatus.REDEEMED;
 
