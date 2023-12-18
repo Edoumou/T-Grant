@@ -118,7 +118,7 @@ To issue nad manage tokenized bonds, the following steps have been implemented
 
 - Investors can now manage their bonds through their wallet.
 
-- Registered investors can `transfer`` bonds. They can also `list` a given amount of their bonds on the `Exchange`. 
+- Registered investors can `transfer` bonds. They can also `list` a given amount of their bonds on the `Exchange`.
 
 - Bonds listed on the Exchange can be updated by the `seller`. Operations like increasing the amount listed, updating the bond price or cancelling the listing are possible.
 
