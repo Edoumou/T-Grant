@@ -1,6 +1,7 @@
 const chai = require("chai");
 const chaiAsPromised = require("chai-as-promised");
 const hre = require("hardhat");
+const { time } = require("@nomicfoundation/hardhat-toolbox/network-helpers");
 const Web3 = require('web3');
 
 chai.use(chaiAsPromised);
@@ -31,16 +32,21 @@ describe("Tokenized Bonds", async () => {
     let exchangeStorage;
 
     let deployer;
-    let issuer1;
-    let issuer2;
-    let investor1;
-    let investor2;
 
     let StakeHolderStatus = {
         UNDEFINED: '0',
         SUBMITTED: '1',
         APPROVED: '2',
         REJECTED: '3'
+    }
+
+    DealStatus = {
+        UNDEFINED: '0',
+        SUBMITTED: '1',
+        APPROVED: '2',
+        REJECTED: '3',
+        ISSUED: '4',
+        REDEEMED: '5'
     }
 
     let maturityDate = Date.now() + 120;
@@ -825,7 +831,7 @@ describe("Tokenized Bonds", async () => {
 
         let amountTolist = "3000";
         let price = "95";
-        let newPrice = "105";
+        let amountToAdd = "2000";
 
         await bondCall.connect(ggvcapital).approve(
             exchange.target,
@@ -843,8 +849,6 @@ describe("Tokenized Bonds", async () => {
             ggvcapital.address,
             "DEAL-001"
         );
-
-        let amountToAdd = "2000";
 
         await bondCall.connect(ggvcapital).approve(
             exchange.target,
@@ -864,6 +868,69 @@ describe("Tokenized Bonds", async () => {
 
         expect(listingBeforeUpdate.amount).to.equal(amountTolist);
         expect(listingAfterUpdate.amount).to.equal(Number(amountTolist) + Number(amountToAdd));
+    });
+
+    it("Redeems bonds", async () => {
+        await tokenCall.connect(ggvcapital).mint(
+            ggvcapital.address,
+            "1000000000000000000000000",
+            usdc.target
+        );
+
+        await tokenCall.connect(ggvcapital).mint(
+            bank.target,
+            "1000000000000000000000000",
+            usdc.target
+        );
+
+        let principal = "1000000";
+
+        await usdc.connect(ggvcapital).approve(bank.target, "1000000000000000000000000");
+        await bank.connect(ggvcapital).registerForDeal("DEAL-001", principal);
+
+        await factory.connect(deployer).DeployBondContract(
+            "DEAL-001",
+            amazon.address,
+            bank.target,
+            "US"
+        );
+
+        let bondContract = await bank.connect(deployer).dealBondContracts("DEAL-001");
+
+        let issueDate = Date.now();
+        let _maturityDate = issueDate + 120;
+
+        let bond = {
+            isin: "US90QE431HJK",
+            name: "Amazon 2025",
+            symbol: "AMZ25",
+            currency: usdc.target,
+            denomination: "100",
+            issueVolume: "1000000",
+            couponRate: "250",
+            couponType: "1",
+            couponFrequency: "2",
+            issueDate: Math.floor(issueDate) + '',
+            maturityDate: _maturityDate
+        }
+
+        await bank.connect(deployer).issue(
+            "DEAL-001",
+            bond,
+            bondContract
+        );
+
+        let deal = await bank.deals("DEAL-001");
+        let statusBefore = deal.status;
+
+        await time.increaseTo(issueDate + 150);
+        await bank.connect(deployer).redeem("DEAL-001", bondContract);
+
+        deal = await bank.deals("DEAL-001");
+        let statusAfter = deal.status;
+
+        expect(statusBefore).to.equal(DealStatus.ISSUED);
+        expect(statusAfter).to.equal(DealStatus.REDEEMED);
     });
 });
 
