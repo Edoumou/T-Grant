@@ -1,11 +1,11 @@
 import React from "react";
-import "../users.css";
-import "../manager.css";
-import { Grid, GridColumn, GridRow } from "semantic-ui-react";
 import { useSelector } from "react-redux";
+import { Grid, GridColumn, GridRow } from "semantic-ui-react";
 import SelectDealToDeploy from "./SelectDealToDeploy";
 import IssueDealForm from "./IssueDealForm";
 import ManagerListOfBonds from "./ManagerListOfBonds";
+import "../users.css";
+import "../manager.css";
 
 function IssueBonds() {
     const connection = useSelector(state => {

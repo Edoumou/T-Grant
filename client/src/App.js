@@ -40,6 +40,7 @@ import ManagerCoupons from './components/ManagerCoupons';
 import DealsFund from './components/DealsFund';
 import Exchange from './components/Exchange';
 import BondMarket from './components/BondMarket';
+import RedeemBonds from './components/RedeemBonds';
 
 function App() {
   const dispatch = useDispatch();
@@ -611,11 +612,11 @@ function App() {
                           to='/manager/issue-bonds'
                         />
                         <MenuItem
-                          name='bonds'
-                          active={connection.activeItem === 'bonds'}
+                          name='redeem bonds'
+                          active={connection.activeItem === 'redeem bonds'}
                           onClick={handleItemClick}
                           as={Link}
-                          to='/manager/bonds'
+                          to='/manager/redeem-bonds'
                         />
                         <MenuItem
                           name='coupons'
@@ -736,7 +737,7 @@ function App() {
                       <Route path='/manager/requests' element={<ManagerRequests />} />
                       <Route path='/manager/deals' element={<ManagerDeals />} />
                       <Route path='/manager/issue-bonds' element={<IssueBonds />} />
-                      <Route path='/manager/bonds' element={<ManagerBonds />} />
+                      <Route path='/manager/redeem-bonds' element={<RedeemBonds />} />
                       <Route path='/manager/coupons' element={<ManagerCoupons />} />
                       <Route path='/manager/funds' element={<DealsFund />} />
                       <Route path='/investor/mint-tokens' element={<MintTokens />} />

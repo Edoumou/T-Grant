@@ -164,7 +164,7 @@ contract ToposBank is IToposBank, ToposBankStorage {
 
         dealBondContracts[_dealID] = _bondContract;
 
-        deals[_dealID].status != BondData.DealStatus.ISSUED;
+        deals[_dealID].status = BondData.DealStatus.ISSUED;
         listOfDeals[deals[_dealID].index].status = BondData.DealStatus.ISSUED;
         issuerDeals[deals[_dealID].issuerAddress].push(deals[_dealID]);
         bondsDealIDs.push(_dealID);
@@ -188,11 +188,20 @@ contract ToposBank is IToposBank, ToposBankStorage {
         if(deals[_dealID].status != BondData.DealStatus.ISSUED)
             revert BondData.InvalidDealStatus(_dealID);
 
-        deals[_dealID].status != BondData.DealStatus.REDEEMED;
+        deals[_dealID].status = BondData.DealStatus.REDEEMED;
         listOfDeals[deals[_dealID].index].status = BondData.DealStatus.REDEEMED;
         issuerDeals[deals[_dealID].issuerAddress][deals[_dealID].index].status = BondData.DealStatus.REDEEMED;
 
         IBonds(_bondContract).redeem();
+
+        for(uint256 i; i < dealInvestment[_dealID].length; i++) {
+            uint256 principal = dealInvestment[_dealID][i].amount;
+            address investor = dealInvestment[_dealID][i].investor;
+
+            if (principal != 0) {
+                IERC20(deals[_dealID].currency).transfer(investor, principal * 1 ether);
+            }
+        }
 
         emit BondRedeem(_dealID);
     }

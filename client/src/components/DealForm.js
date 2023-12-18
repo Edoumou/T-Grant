@@ -214,7 +214,7 @@ function DealForm() {
                                 <GridColumn>
                                     <Input
                                         fluid
-                                        type="date"
+                                        type="datetime-local"
                                         size="mini"
                                         placeholder='Maturity Date'
                                         value={maturityDate}

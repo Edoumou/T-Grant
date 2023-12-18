@@ -26,7 +26,10 @@ module.exports = {
   solidity: {
     version: "0.8.19",
     settings: {
-      optimizer: true
+      optimizer: {
+        enabled: true,
+        runs: 1000
+      }
     }
   }
 };

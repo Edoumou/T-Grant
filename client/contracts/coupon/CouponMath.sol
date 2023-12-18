@@ -35,7 +35,6 @@ library CouponMath {
         uint256 couponRate = IERC7092(_bondContract).couponRate();
         uint256 principal = IERC7092(_bondContract).principalOf(_investor);
         uint256 frequency = IERC7092(_bondContract).couponFrequency();
-        //uint256 numberOfDays = _numberOfDays(_bondContract);
 
         return principal * couponRate * _duration / (frequency * NUMBER_OF_SECONDS_IN_YEAR);
     }
