@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { Image, Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } from "semantic-ui-react";
 import Formate from "../utils/Formate";
@@ -21,13 +21,21 @@ function BondMarket() {
                     />
                 </TableCell>
                 <TableCell textAlign='center'>
-                    <a href={`https://topos.blockscout.testnet-1.topos.technology/address/${list.bondContract}`} target="_blank">
+                    <a
+                        href={`https://topos.blockscout.testnet-1.topos.technology/address/${list.bondContract}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
                         {FormateAddress(list.bondContract)}
                     </a>
                 </TableCell>
                 <TableCell textAlign='center'>{list.dealID}</TableCell>
                 <TableCell textAlign='center'>
-                    <a href={`https://topos.blockscout.testnet-1.topos.technology/address/${list.seller}`} target="_blank">
+                    <a
+                        href={`https://topos.blockscout.testnet-1.topos.technology/address/${list.seller}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
                         {FormateAddress(list.seller)}
                     </a>
                 </TableCell>

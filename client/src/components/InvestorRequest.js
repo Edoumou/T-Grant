@@ -188,9 +188,6 @@ function InvestorRequest() {
                             <p>
                                 Check again later
                             </p>
-                            <p>
-                                ⏰⏱️⌛️⏱️⏰
-                            </p>  
                         </div>
                     </>
             }   

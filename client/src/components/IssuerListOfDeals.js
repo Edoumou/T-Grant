@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import 'semantic-ui-css/semantic.min.css';
 import { Table, TableRow, TableCell, TableHeader, TableHeaderCell, TableBody, Icon } from "semantic-ui-react";
 import "../users.css";
@@ -52,7 +52,7 @@ function IssuerListOfDeals() {
         return (
             <TableRow key={index}>
                 <TableCell textAlign="center">{deal.dealID}</TableCell>
-                <TableCell textAlign="left"><a href={deal.prospectusURI} target="_blank"><strong>{deal.dealID.toLowerCase()}</strong></a></TableCell>
+                <TableCell textAlign="left"><a href={deal.prospectusURI} target="_blank" rel="noopener noreferrer"><strong>{deal.dealID.toLowerCase()}</strong></a></TableCell>
                 <TableCell textAlign="left">{FormateAddress(deal.issuerAddress)}</TableCell>
                 <TableCell positive textAlign="right">{Formate(deal.debtAmount)} {symbols[index]}</TableCell>
                 <TableCell positive textAlign="right">{Formate(deal.denomination)} {symbols[index]}</TableCell>

@@ -12,7 +12,7 @@ import CNYTJSON from "../../src/contracts/artifacts/contracts/tests/tokens/asset
 import DAIJSON from "../../src/contracts/artifacts/contracts/tests/tokens/assets/DAI.sol/DAI.json";
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
-import { Button, Card, CardContent, Input, Image, List, ListContent, ListItem, Modal, ModalActions, ModalContent } from "semantic-ui-react";
+import { Button, Card, CardContent, Input, List, ListContent, ListItem, Modal, ModalActions, ModalContent } from "semantic-ui-react";
 import { setApprovedDeals, setDealsToIssue, setIssuersForApprovedDelas, setIssuersNameForApprovedDeals, setLoading, setSelectedDealID, setSelectedDealRemainingAmount, setShowInvestForm, setTokenSymbolForApprovedDeals } from "../store";
 import Addresses from "../addresses/addr.json";
 import "../manager.css";
@@ -25,10 +25,6 @@ function InvestInDeal() {
     const [open, setOpen] = useState(false);
     const [explorerLink, setExplorerLink] = useState('');
     const [loadingMessage, setLoadingMessage] = useState('Transaction in Process');
-
-    const connection = useSelector(state => {
-        return state.connection;
-    });
 
     const bonds = useSelector(state => {
         return state.bond;
@@ -70,7 +66,6 @@ function InvestInDeal() {
             return;
         }
 
-        let deal = await bankContract.methods.deals(bonds.selectedDealID).call({ from: account });
         let amountToApprove = web3.utils.toWei(amount, 'ether');
 
         await tokenContract.methods.approve(Addresses.ToposBankContract, amountToApprove)

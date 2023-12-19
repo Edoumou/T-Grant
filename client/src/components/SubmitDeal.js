@@ -10,10 +10,6 @@ function SubmitDeal() {
         return state.connection;
     });
 
-    const issuer = useSelector(state => {
-        return state.issuer;
-    });
-
     let issuerDeals = connection.deals.filter(
         deal => deal.issuerAddress.toLowerCase() === connection.account.toLowerCase()
     );

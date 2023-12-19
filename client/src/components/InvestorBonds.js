@@ -11,28 +11,22 @@ import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
 import Addresses from "../addresses/addr.json";
 import Formate from "../utils/Formate";
-import { setActiveBondsDealID, setDealsListed, setInvestorBonds, setInvestorBondsIssuers, setLoading } from "../store";
+import { setDealsListed, setInvestorBonds, setInvestorBondsIssuers, setLoading } from "../store";
 import "../users.css";
 import "../manager.css";
 
 function InvestorBonds() {
     const [bondClicked, setBondClicked] = useState(false);
     const [open, setOpen] = useState(false);
-    const [selectedDealID, setSelectedDealID] = useState('');
-    const [issuerName, setIssuerName] = useState('');
     const [issuerLogo, setIssuerLogo] = useState('');
     const [bondDealID, setBondDealID] = useState('');
-    const [bondName, setBondName] = useState('');
     const [bondSymbol, setBondSymbol] = useState('');
     const [tokenSymbol, setTokenSymbol] = useState('');
-    const [couponRate, setCouponRate] = useState('');
-    const [maturityDate, setMaturityDate] = useState('');
     const [denomination, setDenomination] = useState('');
     const [principal, setPrincipal] = useState('');
     const [amountToTransfer, setAmountToTransfer] = useState('');
     const [amountToApprove, setAmountToAppove] = useState('');
     const [bondPrice, setBondPrice] = useState('');
-    const [tokenOwnerAddress, setTokenOwnerAddress] = useState('');
     const [recipientAddress, setRecipientAddress] = useState('');
     const [explorerLink, setExplorerLink] = useState('');
     const [loader, setLoader] = useState(true);
@@ -70,12 +64,8 @@ function InvestorBonds() {
     ) => {
         setBondClicked(true);
 
-        setIssuerName(_issuerName);
         setIssuerLogo(_issuerLogo);
         setBondDealID(_bondDealID);
-        setBondName(_bondName);
-        setCouponRate(_couponRate);
-        setMaturityDate(_maturityDate);
         setDenomination(_denomination);
         setBondSymbol(_bondSymbol);
         setTokenSymbol(_tokenSymbol);

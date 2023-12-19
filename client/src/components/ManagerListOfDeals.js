@@ -8,7 +8,6 @@ import IssuerJSON from "../contracts/artifacts/contracts/Topos/Bank/Issuer.sol/I
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
 import Formate from "../utils/Formate";
-import FormateAddress from "../utils/FormateAddress";
 import Addresses from "../../src/addresses/addr.json";
 import { setApprovedDeals, setBalance, setBondSymbols, setDeals, setIssuersForApprovedDelas, setIssuersNameForApprovedDeals, setLoading, setTokenSymbolForApprovedDeals } from "../store";
 import "../users.css";
@@ -19,17 +18,12 @@ function ManagerListOfDeals() {
         return state.connection;
     });
 
-    const issuer = useSelector(state => {
-        return state.issuer;
-    });
-
     const bonds = useSelector(state => {
         return state.bond;
     });
 
     const dispatch = useDispatch();
 
-    const [alertMessage, setAlertMessage] = useState('');
     const [loader, setLoader] = useState(true);
     const [explorerLink, setExplorerLink] = useState('');
     const [loadingMessage, setLoadingMessage] = useState('Transaction in Process');
@@ -297,7 +291,7 @@ function ManagerListOfDeals() {
                     />
                 </TableCell>
                 <TableCell textAlign="left">{deal.dealID}</TableCell>
-                <TableCell textAlign="left"><a href={deal.prospectusURI} target="_blank"><strong>{deal.dealID.toLowerCase()}</strong></a></TableCell>
+                <TableCell textAlign="left"><a href={deal.prospectusURI} target="_blank" rel="noopener noreferrer"><strong>{deal.dealID.toLowerCase()}</strong></a></TableCell>
                 <TableCell positive textAlign="right">{Formate(deal.debtAmount)} {bonds.bondSymbols[index]}</TableCell>
                 <TableCell positive textAlign="right">{Formate(deal.denomination)} {bonds.bondSymbols[index]}</TableCell>
                 <TableCell warning textAlign="center">{deal.couponRate / 100}%</TableCell>

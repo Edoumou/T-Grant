@@ -20,7 +20,15 @@ function BondListOfInvestors() {
     const renderedInvestors = bonds.investorsForSelectedActiveDeal.map((investor, index) => {
         return (
             <TableRow key={index}>
-                <TableCell textAlign="left"><a href={`https://topos.blockscout.testnet-1.topos.technology/address/${investor.address}`} target="_blank">{FormateAddress(investor.address)}</a></TableCell>
+                <TableCell textAlign="left">
+                    <a
+                        href={`https://topos.blockscout.testnet-1.topos.technology/address/${investor.address}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        {FormateAddress(investor.address)}
+                    </a>
+                </TableCell>
                 <TableCell warning textAlign="right">{Formate(investor.principal)} {investor.tokenSymbol}</TableCell>
                 <TableCell positive textAlign="right">{Formate(investor.balance)} {investor.bondSymbol}</TableCell>
                 <TableCell warning textAlign="right">{Formate(investor.interest)} {investor.tokenSymbol}</TableCell>

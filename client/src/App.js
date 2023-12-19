@@ -1,10 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import 'semantic-ui-css/semantic.min.css';
-import { Menu, MenuItem, Image, Button, Modal, Icon, Segment } from 'semantic-ui-react';
+import { Menu, MenuItem, Image, Button, Icon, Segment } from 'semantic-ui-react';
 import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
-import ToposCoreJSON from '@topos-protocol/topos-smart-contracts/artifacts/contracts/topos-core/ToposCore.sol/ToposCore.json';
-import SubnetRegistratorJSON from '@topos-protocol/topos-smart-contracts/artifacts/contracts/topos-core/SubnetRegistrator.sol/SubnetRegistrator.json';
 import ToposBankJSON from "../src/contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
 import BondCallJSON from "../src/contracts/artifacts/contracts/BondCall.sol/BondCall.json";
 import RolesJSON from "../src/contracts/artifacts/contracts/utils/Roles.sol/Roles.json";
@@ -12,16 +10,14 @@ import IssuerJSON from "../src/contracts/artifacts/contracts/Topos/Bank/Issuer.s
 import InvestorJSON from "../src/contracts/artifacts/contracts/Topos/Bank/Investor.sol/Investor.json";
 import TokenCallJSON from "../src/contracts/artifacts/contracts/tests/tokens/TokenCall.sol/TokenCall.json";
 import IssuersFundJSON from "../src/contracts/artifacts/contracts/treasury/IssuersFund.sol.sol/IssuersFund.json";
-import ExchangeJSON from "../src/contracts/artifacts/contracts/Topos/Exchange/Exchange.sol/Exchange.json";
 import ExchangeBondsStorageJSON from "../src/contracts/artifacts/contracts/Topos/Exchange/ExchangeBondsStorage.sol/ExchangeBondsStorage.json";
 import Addresses from "../src/addresses/addr.json";
 import { web3Connection } from './utils/web3Connection';
 import { getContract } from './utils/getContract';
-import { toposData } from './utils/toposData';
 import FormateAddress from './utils/FormateAddress';
 import HeaderLogo from './img/header-logo.png';
 import "./App.css";
-import { setActiveItem, setColor, setIsConnected, setAccount, setRole, setLoggedIn, setIssuerRegistrationStatus, setInvestorRegistrationStatus, setListOfIssuers, setListOfInvestors, setIssuerRequest, setInvestorRequest, setBalance, setTokenSymbols, setDeals, setTokenAddresses, setIssuerDealsCurrencySymbols, setInvestorBonds, setInvestorBondsIssuers } from './store';
+import { setActiveItem, setColor, setAccount, setRole, setLoggedIn, setListOfIssuers, setListOfInvestors, setIssuerRequest, setInvestorRequest, setBalance, setTokenSymbols, setDeals, setTokenAddresses, setIssuerDealsCurrencySymbols, setInvestorBonds, setInvestorBondsIssuers } from './store';
 import Home from './components/Home';
 import Register from './components/Register';
 import Connect from './components/Connect';
@@ -29,7 +25,6 @@ import IssuerRequest from './components/IssuerRequest';
 import InvestorRequest from './components/InvestorRequest';
 import SubmitDeal from './components/SubmitDeal';
 import ManagerRequests from './components/ManagerRequests';
-import ManagerBonds from './components/ManagerBonds';
 import ManagerDeals from './components/ManagerDeals';
 import { setActiveBondsDealID, setApprovedDeals, setBondSymbols, setBonds, setBondsCurrency, setBondsDealIDs, setBondsIssuers, setDealsFund, setDealsListed, setDealsToIssue, setIssuersForApprovedDelas, setIssuersLogo, setIssuersName, setIssuersNameForApprovedDeals, setSelectedDealID, setShowInvestForm, setTokenSymbolForApprovedDeals } from './store/slices/bondSlice';
 import InvestorDeals from './components/InvestorDeals';
@@ -51,16 +46,9 @@ function App() {
   
   const fetchOnchainData = useCallback(async () => {
     let { web3, account } = await web3Connection();
-    let coreData = toposData();
 
     dispatch(setAccount(account));
 
-    //let toposCore = await getContract(web3, ToposCoreJSON, coreData.toposCoreProxyContractAddress);
-    //let subnetRegistrator = await getContract(web3, SubnetRegistratorJSON, coreData.subnetRegistratorContractAddress);
-
-    //const data = await loadOnchainData();
-
-    //=== ToposBank Contract
     let toposBank = await getContract(web3, ToposBankJSON, Addresses.ToposBankContract);
     let rolesContract = await getContract(web3, RolesJSON, Addresses.RolesContract);
     let issuerContract = await getContract(web3, IssuerJSON, Addresses.IssuerContract);
@@ -68,7 +56,6 @@ function App() {
     let tokenCallContract = await getContract(web3, TokenCallJSON, Addresses.TokenCallContract);
     let bondCallContract = await getContract(web3, BondCallJSON, Addresses.BondCallContract);
     let issuersFundContract = await getContract(web3, IssuersFundJSON, Addresses.IssuersFundContract);
-    let exchangeContract = await getContract(web3, ExchangeJSON, Addresses.ExchangeContract);
     let exchangeBondsStorage = await getContract(web3, ExchangeBondsStorageJSON, Addresses.ExchangeBondsStorageContract);
 
     let role = await rolesContract.methods.getRole(account).call({ from: account });
@@ -286,7 +273,7 @@ function App() {
     };
 
     return cleanUp;
-  }, []);
+  }, [dispatch]);
 
   const checkAccountChange = useCallback(async () => {
     let { web3 } = await web3Connection();
@@ -298,7 +285,6 @@ function App() {
     let tokenCallContract = await getContract(web3, TokenCallJSON, Addresses.TokenCallContract);
     let bondCallContract = await getContract(web3, BondCallJSON, Addresses.BondCallContract);
     let issuersFundContract = await getContract(web3, IssuersFundJSON, Addresses.IssuersFundContract);
-    let exchangeContract = await getContract(web3, ExchangeJSON, Addresses.ExchangeContract);
     let exchangeBondsStorage = await getContract(web3, ExchangeBondsStorageJSON, Addresses.ExchangeBondsStorageContract);
 
     if(typeof window.ethereum !== 'undefined') {
@@ -513,7 +499,7 @@ function App() {
     };
 
     return cleanUp;
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     checkAccountChange();

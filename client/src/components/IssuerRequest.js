@@ -276,9 +276,6 @@ function IssuerRequest() {
                             <p>
                                 Check again later
                             </p>
-                            <p>
-                                ⏰⏱️⌛️⏱️⏰
-                            </p>  
                         </div>
                     </>
             }   
