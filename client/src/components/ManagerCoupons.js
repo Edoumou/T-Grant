@@ -1,7 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Grid, GridColumn, GridRow } from "semantic-ui-react";
-import SelectDealToDeploy from "./SelectDealToDeploy";
 import SelectBond from "./SelectBond";
 import ShowSelectedBond from "./ShowSelectedBond";
 import BondListOfInvestors from "./BondListOfInvestors";

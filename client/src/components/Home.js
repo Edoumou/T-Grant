@@ -1,6 +1,6 @@
 import React from "react";
 import 'semantic-ui-css/semantic.min.css';
-import { Image, Grid, GridColumn, GridRow, Segment } from "semantic-ui-react";
+import { Image } from "semantic-ui-react";
 import IssuerImg from '../../src/img/issuer.png';
 import InvestorImg from '../../src/img/investor.png';
 import SmartContractImg from '../../src/img/smartContract.png';

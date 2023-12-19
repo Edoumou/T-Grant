@@ -30,7 +30,6 @@ function DealForm() {
     const [couponType, setCouponType] = useState("");
     const [maturityDate, setMaturityDate] = useState("");
     const [currency, setCurrency] = useState("");
-    const [status, setStatus] = useState("SUBMISSION");
     const [accountAddress, setAccountAddress] = useState(connection.account);
 
     const couponTypeOptions = [
@@ -48,10 +47,6 @@ function DealForm() {
         { key: 6, text: connection.tokenSymbols[5], value: connection.tokenAddresses[5] },
         { key: 7, text: connection.tokenSymbols[6], value: connection.tokenAddresses[6] }
     ];
-
-    const issuer = useSelector(state => {
-        return state.issuer;
-    });
 
     const submiDeal = async () => {
         let { web3, account } = await web3Connection();

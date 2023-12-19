@@ -5,11 +5,10 @@ import { Button, Card, CardContent, Dropdown, Grid, GridColumn, GridRow, Modal }
 import BankJSON from "../contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
 import IssuerJSON from "../contracts/artifacts/contracts/Topos/Bank/Issuer.sol/Issuer.json";
 import TokenCallJSON from "../contracts/artifacts/contracts/tests/tokens/TokenCall.sol/TokenCall.json";
-import Formate from "../utils/Formate";
 import Addresses from "../addresses/addr.json";
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
-import { setActiveBondsDealID, setApprovedDeals, setDealsFund, setIssuersForApprovedDelas, setIssuersNameForApprovedDeals, setLoading, setTokenSymbolForApprovedDeals } from "../store";
+import { setActiveBondsDealID, setApprovedDeals, setIssuersForApprovedDelas, setIssuersNameForApprovedDeals, setLoading, setTokenSymbolForApprovedDeals } from "../store";
 import "../users.css";
 import "../manager.css";
 

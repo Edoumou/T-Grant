@@ -4,7 +4,6 @@ import _ from "lodash";
 import { Button, Card, CardContent, Dropdown, Grid, GridColumn, GridRow, Modal } from "semantic-ui-react";
 import BankJSON from "../contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
 import IssuersFundJSON from "../contracts/artifacts/contracts/treasury/IssuersFund.sol.sol/IssuersFund.json";
-import Formate from "../utils/Formate";
 import Addresses from "../addresses/addr.json";
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";

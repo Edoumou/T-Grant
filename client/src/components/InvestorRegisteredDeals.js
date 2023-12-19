@@ -20,7 +20,7 @@ function InvestorRegisteredDeals() {
                     />
                 </TableCell>
                 <TableCell textAlign="left">{bond.dealID}</TableCell>
-                <TableCell textAlign="left"><a href={bond.prospectus} target="_blank"><strong>{bond.dealID.toLowerCase()}</strong></a></TableCell>
+                <TableCell textAlign="left"><a href={bond.prospectus} target="_blank" rel="noopener noreferrer"><strong>{bond.dealID.toLowerCase()}</strong></a></TableCell>
                 <TableCell positive textAlign="right">{Formate(bond.volume)} {bond.tokenSymbol}</TableCell>
                 <TableCell positive textAlign="right">{Formate(bond.denomination)} {bond.tokenSymbol}</TableCell>
                 <TableCell warning textAlign="center">{bond.couponRate / 100}%</TableCell>

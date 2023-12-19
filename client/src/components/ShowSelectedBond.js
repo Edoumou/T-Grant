@@ -9,11 +9,6 @@ function ShowSelectedBond() {
         return state.bond;
     });
 
-    let totalInterest = 0;
-    for(let i = 0; i < bonds.investorsForSelectedActiveDeal.length; i++) {
-        totalInterest += bonds.investorsForSelectedActiveDeal[i]
-    }
-
     return (
         <div>
             <Table padded selectable>

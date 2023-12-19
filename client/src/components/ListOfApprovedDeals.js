@@ -12,10 +12,6 @@ import Formate from "../utils/Formate";
 import { setSelectedDealCouponRate, setSelectedDealDenomination, setSelectedDealID, setSelectedDealIssuerName, setSelectedDealMaturityDate, setSelectedDealRemainingAmount, setSelectedDealTokenSymbol, setSelectedDealVolume, setShowInvestForm } from "../store";
 
 function ListOfApprovedDeals() {
-    const connection = useSelector(state => {
-        return state.connection;
-    });
-
     const dispatch = useDispatch();
 
     const bonds = useSelector(state => {

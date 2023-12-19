@@ -1,13 +1,10 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import _ from "lodash";
-import { Button, Dropdown, Menu, Modal, ModalActions, ModalContent } from "semantic-ui-react";
-import BankJSON from "../contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
+import { Button, Dropdown, Modal, ModalActions, ModalContent } from "semantic-ui-react";
 import TokenCall from "../contracts/artifacts/contracts/tests/tokens/TokenCall.sol/TokenCall.json";
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
-import Formate from "../utils/Formate";
-import FormateAddress from "../utils/FormateAddress";
 import Addresses from "../../src/addresses/addr.json";
 import { setLoading } from "../store";
 import "../users.css";

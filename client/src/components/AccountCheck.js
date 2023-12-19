@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import 'semantic-ui-css/semantic.min.css';
 import { Button, Card, CardContent, Input, List, ListContent, ListDescription, ListIcon, ListItem } from "semantic-ui-react";
 import "../manager.css";
@@ -12,8 +12,6 @@ function AccountCheck() {
     let [accountToCheck, setAccountToCheck] = useState([]);
     let [accountType, setAccountType] = useState(0);
     let [status, setStatus] = useState("");
-
-    let dispatch = useDispatch();
 
     let issuersList = useSelector(state => {
         return state.issuer.listOfIssuers;

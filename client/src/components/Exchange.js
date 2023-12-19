@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { Image, Button, Card, CardContent, Dropdown, Grid, GridColumn, GridRow, Modal, Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow, Label, List, ListContent, ListItem, ModalContent, Input, ModalActions, Icon } from "semantic-ui-react";
+import { Image, Button, Grid, GridColumn, GridRow, Modal, Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow, Label, List, ListContent, ListItem, ModalContent, Input, ModalActions } from "semantic-ui-react";
 import TokenCallJSON from "../../src/contracts/artifacts/contracts/tests/tokens/TokenCall.sol/TokenCall.json";
 import BondCallJSON from "../../src/contracts/artifacts/contracts/BondCall.sol/BondCall.json";
 import BankJSON from "../../src/contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
@@ -80,15 +79,7 @@ function Exchange() {
 
     const setEdit = async (index) => {
         let { web3, account } = await web3Connection();
-        let tokenCallContract = await getContract(web3, TokenCallJSON, Addresses.TokenCallContract);
         let bondCallContract = await getContract(web3, BondCallJSON, Addresses.BondCallContract);
-
-        let balance = await tokenCallContract.methods.balanceOf(
-            account,
-            bonds.dealsListed[index].currencyContract
-        ).call({ from: account });
-
-        balance = web3.utils.fromWei(balance, 'ether');
 
         let principal = await bondCallContract.methods.principalOf(
             account,
@@ -118,13 +109,21 @@ function Exchange() {
                     />
                 </TableCell>
                 <TableCell textAlign='center'>
-                    <a href={`https://topos.blockscout.testnet-1.topos.technology/address/${list.bondContract}`} target="_blank">
+                    <a
+                        href={`https://topos.blockscout.testnet-1.topos.technology/address/${list.bondContract}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
                         {FormateAddress(list.bondContract)}
                     </a>
                 </TableCell>
                 <TableCell textAlign='center'>{list.dealID}</TableCell>
                 <TableCell textAlign='center'>
-                    <a href={`https://topos.blockscout.testnet-1.topos.technology/address/${list.seller}`} target="_blank">
+                    <a
+                        href={`https://topos.blockscout.testnet-1.topos.technology/address/${list.seller}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
                         {FormateAddress(list.seller)}
                     </a>
                 </TableCell>

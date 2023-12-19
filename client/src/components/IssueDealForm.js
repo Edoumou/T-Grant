@@ -16,7 +16,6 @@ import "../manager.css";
 
 function IssueDealForm() {
     const [loader, setLoader] = useState(true);
-    const [showBondForm, setShowBondForm] = useState(true);
     const [bondContractDeployed, setBondContractDeployed] = useState(false);
     const [bondISIN, setBondISIN] = useState('');
     const [bondName, setBondName] = useState('');
@@ -172,7 +171,6 @@ function IssueDealForm() {
         dispatch(setBonds(newBonds));
 
         setBondContractDeployed(false);
-        setShowBondForm(false);
         dispatch(setShowIssueDealForm(false));
     }
 

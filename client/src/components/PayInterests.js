@@ -96,6 +96,7 @@ function PayInterests() {
             <a
                 href={`https://topos.blockscout.testnet-1.topos.technology/address/${bonds.selectedActiveBond.bondContract}`}
                 target="_blank"
+                rel="noopener noreferrer"
             >
                 {FormateAddress(bonds.selectedActiveBond.bondContract)}
             </a>
