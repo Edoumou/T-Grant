@@ -73,8 +73,8 @@ async function main() {
 
   //=== USDC Contract
   const USDC = await hre.ethers.getContractFactory("USDC");
-  const usdc = await USDC.deploy();;
-  await usdc.waitForDeployment()
+  const usdc = await USDC.deploy();
+  await usdc.waitForDeployment();
   console.log("USDC Tok:", usdc.target || "");
 
   //=== USDT Contract

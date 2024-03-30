@@ -22,12 +22,19 @@ contract BondTopos is IERC7092, BondStorage, IBonds {
         toposBankContract = _toposBankContract;
     }
 
+    /**
+    * @notice Issues bonds to investors
+    * @param _bond Bond Struct see `BondData.sol`
+    */
     function issue(
         BondData.Bond calldata _bond
     ) external onlyToposBankContract {
         _issue(_bond);
     }
 
+    /**
+    * @notice Redeems bonds
+    */
     function redeem() external onlyToposBankContract {
         _redeem();
     }

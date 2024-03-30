@@ -454,6 +454,7 @@ describe("Tokenized Bonds", async () => {
         expect(couponRate).to.equal("250");
         expect(couponType).to.equal("1");
         expect(couponFrequency).to.equal("2");
+
         expect(principalBefore).to.equal("0");
 
         expect(principalAfter).to.equal("1000000");
@@ -955,8 +956,4 @@ const SignData = async (digicode, signer) => {
     let signedData = await signer.signMessage(digicode);
 
     return signedData;
-}
-
-const web3Connection = async () => {
-    return new Web3('http://127.0.0.1:8545/');
 }
