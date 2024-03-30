@@ -1,0 +1,113 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IBonds",
+  "sourceName": "contracts/Topos/interfaces/IBonds.sol",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "getListOfInvestors",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "investor",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct BondData.DealInvestment[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "isin",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "symbol",
+              "type": "string"
+            },
+            {
+              "internalType": "address",
+              "name": "currency",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "denomination",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "issueVolume",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "couponRate",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint8",
+              "name": "couponType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint256",
+              "name": "couponFrequency",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "issueDate",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "maturityDate",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct BondData.Bond",
+          "name": "_bond",
+          "type": "tuple"
+        }
+      ],
+      "name": "issue",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "redeem",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

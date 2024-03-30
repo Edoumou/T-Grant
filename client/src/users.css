@@ -1,0 +1,387 @@
+.add-auth {
+    margin-top: 30px;
+    text-align: center;
+    font-size: calc(10px + 2vmin);
+}
+
+.auth-reg {
+    padding-top: 50px;
+}
+
+.register {
+    width: 30%;
+    min-width: 300px;
+    max-width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.sign-up {
+    padding-top: 100px;
+    padding-bottom: 50px;
+    font-size: 25px;
+    text-align: center;
+    min-height: 100vh;
+}
+
+.sign-out {
+    width: 10px;
+    color: white;
+}
+
+.hover-text {
+    position: relative;
+    right: 40px;
+    top: 20px;
+    color: rgb(217, 135, 53);
+    font-size: 12px;
+    display: none;
+}
+
+.sign-out:hover .hover-text {
+    display: block;
+}
+  
+.signup-form {
+    padding-top: 60px;
+    width: 30%;
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 400px;
+}
+
+.signup-form2 {
+    width: 30%;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: calc(2px + 2vmin);
+    background-color: rgba(8, 56, 67, 0.692);
+}
+
+.signin-onUp {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 100;
+    padding-top: 20px;
+}
+
+.issuer-main {
+    margin-top: 80px;
+    margin-left: 100px;
+    margin-right: 100px;
+    font-weight: 200;
+    font-size: calc(2px + 2vmin);
+}
+
+.deal-main {
+    margin-top: 150px;
+    margin-left: 100px;
+    margin-right: 100px;
+    text-align: center;
+    font-weight: 600;
+    min-height: 100vh;
+}
+
+.issuer-request {
+    margin-left: 60px;
+    margin-right: 80px;
+    margin-top: 80px;
+    font-size: 20px;
+}
+
+.issuer-head {
+    word-spacing: 1px;
+    margin-bottom: 60px;
+    text-transform: uppercase;
+}
+
+.list-issuers {
+    margin-top: 80px;
+    text-align: center;
+}
+
+.issuer-header {
+    word-spacing: 1px;
+    color: rgb(45, 115, 18);
+    font-weight: 600;
+    font-size: calc(10px + 2vmin);
+}
+
+.issuer-tab {
+    margin-top: 80px;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+.issuer-info {
+    color: rgb(92, 90, 12);
+    margin-left: 30px;
+    margin-top: 10px;
+    font-size: calc(1px + 2.1vmin);
+}
+
+.issuer-p {
+    margin-top: 40px;
+    font-size: calc(3px + 2vmin);
+    font-family: "Ubuntu", "Sharp Sans No1", Sans-serif;
+}
+
+.deal-form {
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: calc(2px + 2vmin);
+    background-color: rgba(8, 56, 67, 0.692);
+}
+
+.issuer-deal {
+    margin-top: 80px;
+}
+
+.approve-deal {
+    margin-top: 80px;
+    margin-left: 100px;
+    margin-right: 100px;
+    text-align: center;
+}
+
+.deal-head {
+    word-spacing: 1px;
+    color: rgb(129, 67, 16);
+    font-size: calc(10px + 2vmin);
+    margin-bottom: 40px;
+}
+
+.deal-button {
+    width: 10%;
+    min-width: 100px;
+    margin-left: 45%;
+    margin-bottom: 20px;
+}
+
+.deal-form-label {
+    font-size: calc(6px + 1.6vmin);
+    margin-bottom: 6px;
+}
+
+.investor-deal-form-header {
+    text-align: center;
+    word-spacing: 1px;
+    color: rgb(18, 26, 137);
+    font-weight: 600;
+    font-size: calc(5px + 2vmin);
+    margin-top: 10px;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+}
+
+.investor-deal-form {
+    width: 50%;
+    margin-left: 25%;
+    margin-top: 50px;
+    margin-bottom: 40px;
+}
+
+.inv-deal-main {
+    margin-top: 80px;
+    margin-left: 100px;
+    margin-right: 100px;
+    text-align: center;
+}
+
+.inv-deal-head {
+    word-spacing: 1px;
+    color: rgb(16, 120, 56);
+    font-weight: 600;
+    font-size: calc(5px + 2vmin);
+    text-transform: uppercase;
+}
+
+.investor-deal-head {
+    word-spacing: 1px;
+    padding-top: 15px;
+    margin-bottom: 60px;
+    font-size: calc(5px + 2vmin);
+    color: rgb(16, 120, 56);
+    text-transform: uppercase;
+}
+
+.investor-deal-amount {
+    margin-top: 30px;
+}
+
+.deploy-form {
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 60%;
+    margin-left: 20%;
+    background-color: rgb(70, 70, 69);
+    border-radius: 6px;
+    box-shadow: 0 0.2rem 1rem rgba(8, 56, 67, 0.692);
+}
+
+.bond-address {
+    margin-top: 10px;
+    font-size: calc(4px + 1.2vmin);
+}
+
+.list-issued-bonds {
+    margin-top: 80px;
+}
+
+.issue-bond-main {
+    margin-top: 80px;
+}
+
+.issue-bond-head {
+    word-spacing: 1px;
+    padding-top: 15px;
+    margin-bottom: 60px;
+    font-size: calc(5px + 2vmin);
+    color: rgb(16, 120, 56);
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.deal-bond-head {
+    word-spacing: 1px;
+    padding-top: 15px;
+    margin-bottom: 30px;
+    font-size: calc(5px + 2vmin);
+    color: rgb(16, 120, 56);
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.deal-info {
+    width: 90%;
+    margin-left: 5%;
+    margin-bottom: 40px;
+}
+
+.deal-info-tab {
+    width: 90%;
+    margin-left: 5%;
+    margin-bottom: 40px;
+    padding-top: 20px;
+}
+
+.bond-tab {
+    width: 90%;
+    margin-left: 5%;
+    padding-bottom: 40px;
+}
+
+.user-bond-list {
+    width: 96%;
+    margin-left: 4%;
+    margin-bottom: 40px;
+    padding-top: 20px;
+}
+
+.bond-head {
+    font-weight: 600;
+    text-align: right;
+    color: rgb(7, 34, 115);
+    font-size: calc(2px + 1.6vmin);
+}
+
+.bond-card {
+    margin-bottom: 50px;
+    margin-right: 50px;
+}
+.card-desc {
+    font-size: calc(2px + 1.6vmin);
+}
+
+.inv-deal-p {
+    font-size: calc(3px + 1.6vmin);
+}
+
+.issue-deal-p {
+    text-align: center;
+    margin-bottom: 35px;
+    font-size: calc(4px + 1.8vmin);
+}
+
+.inv-balance {
+    margin-bottom: 10px;
+}
+
+.inv-bal-button {
+    margin-bottom: 60px;
+}
+
+.fund-form {
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 20%;
+    margin-left: 40%;
+    background-color: rgb(70, 70, 69);
+    border-radius: 6px;
+    box-shadow: 0 0.2rem 1rem rgba(8, 56, 67, 0.692);
+}
+
+.fund-tab {
+    width: 30%;
+    margin-left: 35%;
+    margin-top: 100px;
+}
+
+.issuerDealList {
+    text-align: left;
+    margin-top: 20px;
+    margin-bottom: 25px;
+    color: white;
+    font-size: calc(5px + 1.5vmin);
+    text-transform: uppercase;
+}
+
+.tab-scroll {
+    /*height: 232px;*/
+    max-height: 500px;
+    overflow: scroll;
+}
+
+.header-sticky {
+    position: sticky;
+    top: 0px;
+    margin: 0;
+}
+
+.no-deal {
+    text-align: left;
+    margin-top: 50px;
+    color: white;
+    font-size: calc(3px + 1.3vmin);
+}
+
+.buy-bond-head {
+    margin-top: 50px;
+    margin-bottom: 40px;
+    color: white;
+    text-align: center;
+}
+
+.buy-bond-body {
+    color: white;
+    width: 30%;
+    margin-left: 35%;
+    margin-right: auto;
+}
+
+.buy-bond-button {
+    display: flex;
+    justify-content: center;
+}
+
+.can-buy-color {
+    color: rgb(177, 118, 8);
+    font-size: calc(2px + 1.7vmin);
+}
+
+.edit-bond-body {
+    color: white;
+    width: 70%;
+    margin-left: 15%;
+    margin-right: auto;
+}

@@ -1,21 +1,27 @@
 .App {
-  margin-top: 20px;
-  text-align: center;
+  margin: 0;
+  padding: 0;
 }
 
 .App-logo {
   height: 40vmin;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.header {
+  background-image: linear-gradient(
+      to right bottom,
+      rgba(18, 27, 4, 0.9),
+      rgba(11, 43, 57, 0.9)
+    ),
+    url(./img/head-cover.jpeg);
   color: white;
+  min-height: 20vh;
+  background-size: cover;
+  background-position: top;
+  position: sticky;
+  top: 0px;
+  margin: 0;
+  z-index: 99;
 }
 
 .App-link {
@@ -37,4 +43,24 @@
 .header-name {
   text-align: right;
   margin-right: 10px;
+}
+
+.container {
+  margin: 5%;
+}
+
+.footer {
+  font-size: 50px;
+  font-weight: 400;
+  text-align: center;
+  background-image: linear-gradient(
+      to right bottom,
+      rgba(18, 27, 4, 0.9),
+      rgba(11, 43, 57, 0.9)
+    ),
+    url(./img/head-cover.jpeg);
+}
+
+.mail-foot {
+  padding-left: 50px;
 }

@@ -1,0 +1,207 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IToposBank",
+  "sourceName": "contracts/Topos/interfaces/IToposBank.sol",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "getContracts",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "manager",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "roles",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "identityRegistry",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "bondCall",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "issuerFund",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_dealID",
+          "type": "string"
+        }
+      ],
+      "name": "getDeal",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "dealID",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "prospectusURI",
+              "type": "string"
+            },
+            {
+              "internalType": "address",
+              "name": "issuerAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "debtAmount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "denomination",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "couponRate",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "couponFrequency",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "maturityDate",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "index",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "currency",
+              "type": "address"
+            },
+            {
+              "internalType": "uint8",
+              "name": "couponType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "enum BondData.DealStatus",
+              "name": "status",
+              "type": "uint8"
+            }
+          ],
+          "internalType": "struct BondData.Deal",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_dealID",
+          "type": "string"
+        }
+      ],
+      "name": "getDealBondContract",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getDealFees",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_dealID",
+          "type": "string"
+        }
+      ],
+      "name": "getDealInvestment",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "investor",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct BondData.DealInvestment[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_dealID",
+          "type": "string"
+        }
+      ],
+      "name": "getTotalAmounInvested",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}
