@@ -2,10 +2,11 @@
 pragma solidity ^0.8.0;
 
 import "../interfaces/IERC7586.sol";
+import "../../tests/tokens/IERC20.sol";
 
 contract ERC7586 is IERC7586 {
     function fixedInterestPayer() external view returns(address) {
-        
+
     }
 
     function floatingInterestPayer() external view returns(address) {
