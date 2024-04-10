@@ -3,8 +3,20 @@ pragma solidity ^0.8.0;
 
 import "./IRSTypes.sol";
 
-contract IRSStorage {
+abstract contract IRSStorage {
     IRSTypes.IRS irs;
     address fixedPayerContract;
     address floatingPayerContract;
+    address owner;
+    uint8 isActive;
+
+    modifier onlyOwner {
+        require(msg.sender == owner, "Not owner");
+        _;
+    }
+
+    modifier toBeActive {
+        require(isActive == 1, "Not Active");
+        _;
+    }
 }

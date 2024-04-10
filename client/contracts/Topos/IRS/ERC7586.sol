@@ -2,22 +2,22 @@
 pragma solidity ^0.8.0;
 
 import "../interfaces/IERC7586.sol";
-import "../../tests/tokens/IERC20.sol";
-import "../../tests/tokens/ERC20.sol";
-import "./IRSStorage.sol";
+import "../../tests/tokens/ERC20IRS.sol";
 import "./IRSTypes.sol";
 
-contract ERC7586 is IERC7586, IRSStorage, ERC20 {
+contract ERC7586 is IERC7586, ERC20IRS {
     constructor(
         address _fixedPayerContract,
         address _floatingPayerContract,
         string memory _irsTokenName,
         string memory _irsTokenSymbol,
         IRSTypes.IRS memory _irs
-    ) ERC20(_irsTokenName, _irsTokenSymbol) {
+    ) ERC20IRS(_irsTokenName, _irsTokenSymbol) {
         fixedPayerContract = _fixedPayerContract;
         floatingPayerContract = _floatingPayerContract;
         irs = _irs;
+        isActive = 1;
+        owner = msg.sender;
     }
 
     function fixedInterestPayer() external view returns(address) {
@@ -64,11 +64,43 @@ contract ERC7586 is IERC7586, IRSStorage, ERC20 {
         return irs.benchmark;
     }
 
-    function swap() external returns(bool) {
+    /**
+    * @notice this function should be executed automaticaly with protocols like chainlink automation
+    *          Since Chainlink doesn't integrate Topos yet, manual execution is considered (by owner)
+    */
+    function swap() external onlyOwner toBeActive returns(bool) {
+        uint256 fixedRate = irs.swapRate;
+        uint256 flotaingRate = irs.benchmark + irs.spread;
+        uint256 notional = irs.notionalAmount;
 
+        uint256 fixedInterest = notional * fixedRate;
+        uint256 floatingInterest = notional * flotaingRate;
+
+        uint256 interestToTransfer;
+        address _recipient;
+        address _payer;
+
+        if(fixedInterest == floatingInterest) {
+            revert("Noting to swap");
+        } else if (fixedInterest > floatingInterest) {
+            interestToTransfer = fixedInterest - floatingInterest;
+            _recipient = irs.floatingInterestPayer;
+            _payer = irs.fixedInterestPayer;
+        } else {
+            interestToTransfer =  floatingInterest - fixedInterest;
+            _recipient = irs.fixedInterestPayer;
+            _payer = irs.floatingInterestPayer;
+        }
+
+        burn(irs.fixedInterestPayer, 1 ether);
+        burn(irs.floatingInterestPayer, 1 ether);
+
+        IERC20(irs.assetContract).transferFrom(_payer, _recipient, interestToTransfer * 1 ether / 10_000);
+
+        return true;
     }
 
-    function terminateSwap() external {
-
+    function terminateSwap() external toBeActive {
+        isActive == 2;
     }
 }
