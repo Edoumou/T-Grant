@@ -9,12 +9,14 @@ contract ERC7586 is IERC7586, ERC20IRS {
     constructor(
         address _fixedPayerContract,
         address _floatingPayerContract,
+        uint8 _numberOfSwaps,
         string memory _irsTokenName,
         string memory _irsTokenSymbol,
         IRSTypes.IRS memory _irs
     ) ERC20IRS(_irsTokenName, _irsTokenSymbol) {
         fixedPayerContract = _fixedPayerContract;
         floatingPayerContract = _floatingPayerContract;
+        numberOfSwaps = _numberOfSwaps;
         irs = _irs;
         isActive = 1;
         owner = msg.sender;
@@ -64,6 +66,13 @@ contract ERC7586 is IERC7586, ERC20IRS {
         return irs.benchmark;
     }
 
+    function setBenchmark(uint256 _newBenchmark) external onlyOwner toBeActive {
+        uint256 _oldBenchmark = irs.benchmark;
+        irs.benchmark = _newBenchmark;
+
+        emit SetBenchmark(_oldBenchmark, _newBenchmark);
+    }
+
     /**
     * @notice this function should be executed automaticaly with protocols like chainlink automation
     *          Since Chainlink doesn't integrate Topos yet, manual execution is considered (by owner)
@@ -91,6 +100,10 @@ contract ERC7586 is IERC7586, ERC20IRS {
             _recipient = irs.fixedInterestPayer;
             _payer = irs.floatingInterestPayer;
         }
+
+        uint256 _swapCount = swapCount;
+        swapCount = _swapCount + 1;
+        if(swapCount > numberOfOfSwaps) revert("All swaps done!");
 
         burn(irs.fixedInterestPayer, 1 ether);
         burn(irs.floatingInterestPayer, 1 ether);

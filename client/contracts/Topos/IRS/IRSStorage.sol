@@ -9,6 +9,10 @@ abstract contract IRSStorage {
     address floatingPayerContract;
     address owner;
     uint8 isActive;
+    uint8 numberOfOfSwaps;
+    uint8 swapCount;
+
+    event SetBenchmark(uint256 newBenchmark);
 
     modifier onlyOwner {
         require(msg.sender == owner, "Not owner");
