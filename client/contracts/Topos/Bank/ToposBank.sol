@@ -248,11 +248,21 @@ contract ToposBank is IToposBank, ToposBankStorage {
         );
     }
 
+    // MUST only be called by the bond factory contract in production
     function setBondContractAddress(
         string memory _dealID,
         address _bondContractAddress
     ) external {
         dealBondContracts[_dealID] = _bondContractAddress;
+    }
+
+    // MUST only be called by the IRS factory contract in production
+    function setIRSContractAddress(
+        address _fixedPayerContract,
+        address _floatingPayerContract,
+        address _irsContractAddress
+    ) external {
+        irsContracts[_fixedPayerContract][_floatingPayerContract] = _irsContractAddress;
     }
 
     function setIssuerFundContract(

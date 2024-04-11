@@ -35,7 +35,9 @@ contract IRSFactory {
             "Deployed"
         );
 
-        ERC7586 irs = new ERC7586{salt: bytes32(abi.encodePacked())}(
+        ERC7586 irs = new ERC7586{salt: bytes32(abi.encodePacked(
+            _fixedPayerContract, _floatingPayerContract
+        ))}(
             _fixedPayerContract,
             _floatingPayerContract,
             _numberOfSwaps,
@@ -43,5 +45,7 @@ contract IRSFactory {
             _irsTokenSymbol,
             _irs
         );
+
+        isIRSContract[_fixedPayerContract][_floatingPayerContract] = true;
     }
 }
