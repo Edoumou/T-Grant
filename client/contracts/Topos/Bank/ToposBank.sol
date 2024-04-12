@@ -206,6 +206,22 @@ contract ToposBank is IToposBank, ToposBankStorage {
         emit BondRedeem(_dealID);
     }
 
+    /**
+    * @notice Swaps interest rates
+    * @param _swapContract the ERC-7586 IRS swap contract address
+    */
+    function swapIRS(
+        address _swapContract
+    ) external onlyToposManager {
+        IBonds(_swapContract).swap();
+    }
+
+    function endSwapContract(
+        address _swapContract
+    ) external onlyToposManager {
+        IBonds(_swapContract).terminateSwap();
+    }
+
     function getTotalAmounInvested(
         string calldata _dealID
     ) external view returns(uint256) {

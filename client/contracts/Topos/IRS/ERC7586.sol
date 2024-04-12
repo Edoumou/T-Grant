@@ -12,7 +12,8 @@ contract ERC7586 is IERC7586, ERC20IRS {
         uint8 _numberOfSwaps,
         string memory _irsTokenName,
         string memory _irsTokenSymbol,
-        IRSTypes.IRS memory _irs
+        IRSTypes.IRS memory _irs,
+        address _toposBankContract
     ) ERC20IRS(_irsTokenName, _irsTokenSymbol) {
         fixedPayerContract = _fixedPayerContract;
         floatingPayerContract = _floatingPayerContract;
@@ -20,6 +21,11 @@ contract ERC7586 is IERC7586, ERC20IRS {
         irs = _irs;
         isActive = 1;
         owner = msg.sender;
+        toposBankContract = _toposBankContract;
+
+
+        _balances[_irs.fixedInterestPayer] = uint256(_numberOfSwaps);
+        _balances[_irs.floatingInterestPayer] = uint256(_numberOfSwaps);
     }
 
     function fixedInterestPayer() external view returns(address) {
@@ -77,7 +83,7 @@ contract ERC7586 is IERC7586, ERC20IRS {
     * @notice this function should be executed automaticaly with protocols like chainlink automation
     *          Since Chainlink doesn't integrate Topos yet, manual execution is considered (by owner)
     */
-    function swap() external onlyOwner toBeActive returns(bool) {
+    function swap() external onlyToposBank toBeActive returns(bool) {
         uint256 fixedRate = irs.swapRate;
         uint256 flotaingRate = irs.benchmark + irs.spread;
         uint256 notional = irs.notionalAmount;
@@ -101,19 +107,27 @@ contract ERC7586 is IERC7586, ERC20IRS {
             _payer = irs.floatingInterestPayer;
         }
 
-        uint256 _swapCount = swapCount;
+        uint8 _swapCount = swapCount;
         swapCount = _swapCount + 1;
-        if(swapCount > numberOfOfSwaps) revert("All swaps done!");
+        if(swapCount > numberOfSwaps) revert("All swaps done!");
 
         burn(irs.fixedInterestPayer, 1 ether);
         burn(irs.floatingInterestPayer, 1 ether);
 
         IERC20(irs.assetContract).transferFrom(_payer, _recipient, interestToTransfer * 1 ether / 10_000);
 
+        emit Swap(interestToTransfer, _recipient);
+
         return true;
     }
 
-    function terminateSwap() external toBeActive {
+    /**
+    * @notice Terminates the swap contract
+    *         This function must be called by the swap contract owner
+    */
+    function terminateSwap() external onlyToposBank toBeActive {
         isActive == 2;
+
+        emit TerminateSwap(irs.fixedInterestPayer, irs.floatingInterestPayer);
     }
 }

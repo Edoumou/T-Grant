@@ -3,6 +3,7 @@ pragma solidity ^0.8.0;
 
 import "../IRS/ERC7586.sol";
 import "../IRS/IRSTypes.sol";
+import "../interfaces/IDeployBond.sol";
 
 contract IRSFactory {
     mapping(address => mapping(address => bool)) public isIRSContract;
@@ -46,6 +47,11 @@ contract IRSFactory {
             _irs
         );
 
+        IDeployBond(toposBankContract).setIRSContractAddress(
+            _fixedPayerContract,
+            _floatingPayerContract,
+            address(irs)
+        );
         isIRSContract[_fixedPayerContract][_floatingPayerContract] = true;
     }
 }

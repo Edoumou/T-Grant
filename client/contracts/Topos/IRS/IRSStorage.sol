@@ -5,14 +5,15 @@ import "./IRSTypes.sol";
 
 abstract contract IRSStorage {
     IRSTypes.IRS irs;
-    address fixedPayerContract;
-    address floatingPayerContract;
-    address owner;
-    uint8 isActive;
-    uint8 numberOfOfSwaps;
-    uint8 swapCount;
+    address public fixedPayerContract;
+    address public floatingPayerContract;
+    address public owner;
+    address public toposBankContract;
+    uint8 public isActive;
+    uint8 public numberOfSwaps;
+    uint8 public swapCount;
 
-    event SetBenchmark(uint256 newBenchmark);
+    event SetBenchmark(uint256 oldBenchmark, uint256 newBenchmark);
 
     modifier onlyOwner {
         require(msg.sender == owner, "Not owner");
@@ -21,6 +22,11 @@ abstract contract IRSStorage {
 
     modifier toBeActive {
         require(isActive == 1, "Not Active");
+        _;
+    }
+
+    modifier onlyToposBank {
+        require(msg.sender == toposBankContract, "Only Bank Contract");
         _;
     }
 }

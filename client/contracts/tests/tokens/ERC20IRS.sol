@@ -5,8 +5,7 @@ import "./IERC20.sol";
 import "../../Topos/IRS/IRSStorage.sol";
 
 contract ERC20IRS is IERC20, IRSStorage {
-    mapping(address => uint256) private _balances;
-
+    mapping(address => uint256) internal _balances;
     mapping(address => mapping(address => uint256)) private _allowances;
 
     uint256 private _totalSupply;
@@ -102,10 +101,10 @@ contract ERC20IRS is IERC20, IRSStorage {
 
         if(from == irs.fixedInterestPayer) {
             irs.fixedInterestPayer = to;
-        }
-
-        if(from == irs.floatingInterestPayer) {
+        } else if(from == irs.floatingInterestPayer) {
             irs.floatingInterestPayer = to;
+        } else {
+            revert("invalid from address");
         }
 
         emit Transfer(from, to, amount);
