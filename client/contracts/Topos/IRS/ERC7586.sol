@@ -26,6 +26,8 @@ contract ERC7586 is IERC7586, ERC20IRS {
 
         _balances[_irs.fixedInterestPayer] = uint256(_numberOfSwaps);
         _balances[_irs.floatingInterestPayer] = uint256(_numberOfSwaps);
+
+        _totalSupply = 2 * uint256(_numberOfSwaps);
     }
 
     function fixedInterestPayer() external view returns(address) {
