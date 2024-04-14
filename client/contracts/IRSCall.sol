@@ -2,6 +2,8 @@
 pragma solidity ^0.8.0;
 
 import "./tests/tokens/IERC20.sol";
+import "./Topos/interfaces/IIRSStorage.sol";
+import "./Topos/IRS/IRSTypes.sol";
 
 contract IRSCall {
     function name(address _irsContract) external view returns (string memory) {
@@ -12,11 +14,9 @@ contract IRSCall {
         return IERC20(_irsContract).symbol();
     }
 
-    /*
     function decimals(address _irsContract) external view returns(uint8) {
-        return IERC20(_irsContract).
+        return IIRSStorage(_irsContract).decimals();
     }
-    */
 
     function totalSupply(address _irsContract) external view returns(uint256) {
         return IERC20(_irsContract).totalSupply();
@@ -47,14 +47,51 @@ contract IRSCall {
         IERC20(_irsContract).transferFrom(_from, _to, _amount);
     }
 
-    /**
-    *
-    */
     function increaseAllowance(
         address _spender,
         uint256 _addedValue,
         address _irsContract
     ) etxernal {
-        
+        IIRSStorage(_irsContract).increaseAllowance(_spender, _addedValue);
+    }
+
+    function decreaseAllowance(
+        address _spender,
+        uint256 _subtractedValue,
+        address _irsContract
+    ) external {
+        IIRSStorage(_irsContract).decreaseAllowance(_spender, _subtractedValue);
+    }
+
+    function burn(
+        address _account,
+        uint256 _amount,
+        address _irsContract
+    ) external {
+        IIRSStorage(_irsContract).burn(_account, _amount);
+    }
+
+    function getFixedPayerContract(address _irsContract) external view returns(address) {
+        IIRSStorage(_irsContract).getFixedPayerContract();
+    }
+
+    function getFloatingPayerContract(address _irsContract) external view returns(address) {
+        IIRSStorage(_irsContract).getFloatingPayerContract();
+    }
+
+    function getIRSInfo(address _irsContract) external view returns(IRSTypes.IRS memory) {
+        return IIRSStorage(_irsContract).irsInfo();
+    }
+
+    function getNumberOfSwaps(address _irsContract) external view returns(uint8) {
+        return IIRSStorage(_irsContract).getNumberOfSwaps();
+    }
+
+    function getSwapCount(address _irsContract) external view returns(uint8) {
+        return IIRSStorage(_irsContract).getSwapCount();
+    } 
+
+    function isContractActive(address _irsContract) external view returns(uint8) {
+        return IIRSStorage(_irsContract).isContractActive();
     }
 }

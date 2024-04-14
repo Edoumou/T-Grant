@@ -222,6 +222,13 @@ contract ToposBank is IToposBank, ToposBankStorage {
         IBonds(_swapContract).terminateSwap();
     }
 
+    function setIRSBenchmark(
+        uint256 _newBenchmark,
+        address _swapContract
+    ) external onlyToposManager {
+        IBonds(_swapContract).setBenchmark(_newBenchmark);
+    }
+
     function getTotalAmounInvested(
         string calldata _dealID
     ) external view returns(uint256) {

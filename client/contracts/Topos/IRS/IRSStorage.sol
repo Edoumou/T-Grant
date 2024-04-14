@@ -20,7 +20,7 @@ abstract contract IRSStorage {
         _;
     }
 
-    modifier toBeActive {
+    modifier mustBeActive {
         require(isActive == 1, "Not Active");
         _;
     }

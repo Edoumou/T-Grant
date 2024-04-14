@@ -8,5 +8,6 @@ interface IBonds {
     function redeem() external;
     function swap() external;
     function terminateSwap() external;
+    function setBenchmark(uint256 _newBenchmark) external;
     function getListOfInvestors() external view returns(BondData.DealInvestment[] memory);
 }

@@ -74,18 +74,42 @@ contract ERC7586 is IERC7586, ERC20IRS {
         return irs.benchmark;
     }
 
-    function setBenchmark(uint256 _newBenchmark) external onlyOwner toBeActive {
+    function setBenchmark(uint256 _newBenchmark) external onlyToposBank mustBeActive {
         uint256 _oldBenchmark = irs.benchmark;
         irs.benchmark = _newBenchmark;
 
         emit SetBenchmark(_oldBenchmark, _newBenchmark);
     }
 
+    function irsInfo() external view returns(IRSTypes.IRS memory) {
+        return irs;
+    }
+
+    function getFixedPayerContract() external view returns(address) {
+        return fixedPayerContract;
+    }
+
+    function getFloatingPayerContract() external view returns(address) {
+        return floatingPayerContract;
+    }
+
+    function getNumberOfSwaps() external view returns(uint8) {
+        return numberOfSwaps;
+    }
+
+    function getSwapCount() external view returns(uint8) {
+        return swapCount;
+    }
+
+    function isContractActive() external view returns(uint8) {
+        return isActive;
+    }
+
     /**
     * @notice this function should be executed automaticaly with protocols like chainlink automation
     *          Since Chainlink doesn't integrate Topos yet, manual execution is considered (by owner)
     */
-    function swap() external onlyToposBank toBeActive returns(bool) {
+    function swap() external onlyToposBank mustBeActive returns(bool) {
         uint256 fixedRate = irs.swapRate;
         uint256 flotaingRate = irs.benchmark + irs.spread;
         uint256 notional = irs.notionalAmount;
@@ -127,7 +151,7 @@ contract ERC7586 is IERC7586, ERC20IRS {
     * @notice Terminates the swap contract
     *         This function must be called by the swap contract owner
     */
-    function terminateSwap() external onlyToposBank toBeActive {
+    function terminateSwap() external onlyToposBank mustBeActive {
         isActive == 2;
 
         emit TerminateSwap(irs.fixedInterestPayer, irs.floatingInterestPayer);
