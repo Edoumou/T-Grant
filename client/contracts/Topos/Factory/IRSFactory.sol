@@ -29,7 +29,8 @@ contract IRSFactory {
         uint8 _numberOfSwaps,
         string memory _irsTokenName,
         string memory _irsTokenSymbol,
-        IRSTypes.IRS memory _irs
+        IRSTypes.IRS memory _irs,
+        address _toposBankContract
     ) external onlyToposManager {
         require(
             !isIRSContract[_fixedPayerContract][_floatingPayerContract],
@@ -44,7 +45,8 @@ contract IRSFactory {
             _numberOfSwaps,
             _irsTokenName,
             _irsTokenSymbol,
-            _irs
+            _irs,
+            _toposBankContract
         );
 
         IDeployBond(toposBankContract).setIRSContractAddress(

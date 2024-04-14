@@ -6,6 +6,7 @@ import "./ToposBankStorage.sol";
 import "../interfaces/IRoles.sol";
 import "../../tests/tokens/IERC20.sol";
 import "../../treasury/IIssuersFund.sol";
+import "../IRS/IIRS.sol";
 
 contract ToposBank is IToposBank, ToposBankStorage {
     constructor(
@@ -213,20 +214,20 @@ contract ToposBank is IToposBank, ToposBankStorage {
     function swapIRS(
         address _swapContract
     ) external onlyToposManager {
-        IBonds(_swapContract).swap();
+        IIRS(_swapContract).swap();
     }
 
     function endSwapContract(
         address _swapContract
     ) external onlyToposManager {
-        IBonds(_swapContract).terminateSwap();
+        IIRS(_swapContract).terminateSwap();
     }
 
     function setIRSBenchmark(
         uint256 _newBenchmark,
         address _swapContract
     ) external onlyToposManager {
-        IBonds(_swapContract).setBenchmark(_newBenchmark);
+        IIRS(_swapContract).setBenchmark(_newBenchmark);
     }
 
     function getTotalAmounInvested(

@@ -20,6 +20,29 @@
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_fixedPayerContract",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_floatingPayerContract",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_irsContractAddress",
+          "type": "address"
+        }
+      ],
+      "name": "setIRSContractAddress",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
     }
   ],
   "bytecode": "0x",

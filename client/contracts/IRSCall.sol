@@ -51,7 +51,7 @@ contract IRSCall {
         address _spender,
         uint256 _addedValue,
         address _irsContract
-    ) etxernal {
+    ) external {
         IIRSStorage(_irsContract).increaseAllowance(_spender, _addedValue);
     }
 
@@ -72,11 +72,11 @@ contract IRSCall {
     }
 
     function getFixedPayerContract(address _irsContract) external view returns(address) {
-        IIRSStorage(_irsContract).getFixedPayerContract();
+        return IIRSStorage(_irsContract).getFixedPayerContract();
     }
 
     function getFloatingPayerContract(address _irsContract) external view returns(address) {
-        IIRSStorage(_irsContract).getFloatingPayerContract();
+        return IIRSStorage(_irsContract).getFloatingPayerContract();
     }
 
     function getIRSInfo(address _irsContract) external view returns(IRSTypes.IRS memory) {
