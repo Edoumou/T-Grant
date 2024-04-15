@@ -67,14 +67,6 @@ interface IERC7586 {
     function paymentFrequency() external view returns(uint256);
 
     /**
-    *  @notice Returns an array of specific dates on which the interest payments are exchanged. Each date MUST be a Unix timestamp like the one returned by block.timestamp
-    *          The length of the array returned by this function MUST equal the total number of swaps that should be realized
-    *
-    *  OPTIONAL
-    */
-    function paymentDates() external view returns(uint256[] memory);
-
-    /**
     *  @notice Returns the starting date of the swap contract. This is a Unix Timestamp like the one returned by block.timestamp
     */
     function startingDate() external view returns(uint256);
@@ -89,15 +81,6 @@ interface IERC7586 {
     *          Example: value of one the following rates: CF BIRC, EURIBOR, HIBOR, SHIBOR, SOFR, SONIA, TONAR, etc.
     */
     function benchmark() external view returns(uint256);
-
-    /**
-    *  @notice Returns the oracle contract address for the benchmark rate, or the zero address when the two parties agreed to set the benchmark manually.
-    *          This contract SHOULD be used to fetch real time benchmark rate
-    *          Example: Contract address for `CF BIRC`
-    *
-    *  OPTIONAL. The two parties MAY agree to set the benchmark manually
-    */
-    function oracleContractForBenchmark() external view returns(address);
 
     /**
     *  @notice Makes swap calculation and transfers the interest difference to either the `payer` or the `receiver`

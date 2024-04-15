@@ -7,6 +7,7 @@ import "../../Registry/IIdentityRegistry.sol";
 contract ToposBankStorage {
     mapping(string => BondData.Deal) public deals;
     mapping(string => address) public dealBondContracts;
+    mapping(address => mapping(address => address)) irsContracts;
     mapping(string => BondData.DealInvestment[]) public dealInvestment;
     mapping(string => uint256) public totalAmountInvestedForDeal;
     mapping(address => mapping(string => BondData.Investment)) public amountInvested;
@@ -16,9 +17,11 @@ contract ToposBankStorage {
     address public rolesContract;
     address public identityRegistryContract;
     address public bondCallContract;
+    address public irsCallContract;
     address public issuersFundContract;
 
     uint256 public dealFees;
+    uint256 public benchmark;
 
     BondData.Bond[] bonds;
     BondData.Deal[] listOfDeals;

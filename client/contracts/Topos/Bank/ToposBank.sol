@@ -6,6 +6,7 @@ import "./ToposBankStorage.sol";
 import "../interfaces/IRoles.sol";
 import "../../tests/tokens/IERC20.sol";
 import "../../treasury/IIssuersFund.sol";
+import "../IRS/IIRS.sol";
 
 contract ToposBank is IToposBank, ToposBankStorage {
     constructor(
@@ -13,17 +14,23 @@ contract ToposBank is IToposBank, ToposBankStorage {
         address _rolesContract,
         address _identityRegistryContract,
         address _bondCallContract,
+        address _irsCallContract,
         uint256 _dealFees
     ) {
         toposManager = _toposManager;
         rolesContract = _rolesContract;
         identityRegistryContract = _identityRegistryContract;
         bondCallContract = _bondCallContract;
+        irsCallContract = _irsCallContract;
         dealFees = _dealFees;
     }
 
     function setManager(address _toposManager) external onlyToposManager {
         IRoles(rolesContract).setRole("MANAGER", _toposManager);
+    }
+
+    function setBenchmark(uint256 _benchmark) external onlyToposManager {
+        benchmark = _benchmark;
     }
 
     /**
@@ -206,6 +213,29 @@ contract ToposBank is IToposBank, ToposBankStorage {
         emit BondRedeem(_dealID);
     }
 
+    /**
+    * @notice Swaps interest rates
+    * @param _swapContract the ERC-7586 IRS swap contract address
+    */
+    function swapIRS(
+        address _swapContract
+    ) external onlyToposManager {
+        IIRS(_swapContract).swap();
+    }
+
+    function endSwapContract(
+        address _swapContract
+    ) external onlyToposManager {
+        IIRS(_swapContract).terminateSwap();
+    }
+
+    function setIRSBenchmark(
+        uint256 _newBenchmark,
+        address _swapContract
+    ) external onlyToposManager {
+        IIRS(_swapContract).setBenchmark(_newBenchmark);
+    }
+
     function getTotalAmounInvested(
         string calldata _dealID
     ) external view returns(uint256) {
@@ -248,11 +278,21 @@ contract ToposBank is IToposBank, ToposBankStorage {
         );
     }
 
+    // MUST only be called by the bond factory contract in production
     function setBondContractAddress(
         string memory _dealID,
         address _bondContractAddress
     ) external {
         dealBondContracts[_dealID] = _bondContractAddress;
+    }
+
+    // MUST only be called by the IRS factory contract in production
+    function setIRSContractAddress(
+        address _fixedPayerContract,
+        address _floatingPayerContract,
+        address _irsContractAddress
+    ) external {
+        irsContracts[_fixedPayerContract][_floatingPayerContract] = _irsContractAddress;
     }
 
     function setIssuerFundContract(
