@@ -14,17 +14,23 @@ contract ToposBank is IToposBank, ToposBankStorage {
         address _rolesContract,
         address _identityRegistryContract,
         address _bondCallContract,
+        address _irsCallContract,
         uint256 _dealFees
     ) {
         toposManager = _toposManager;
         rolesContract = _rolesContract;
         identityRegistryContract = _identityRegistryContract;
         bondCallContract = _bondCallContract;
+        irsCallContract = _irsCallContract;
         dealFees = _dealFees;
     }
 
     function setManager(address _toposManager) external onlyToposManager {
         IRoles(rolesContract).setRole("MANAGER", _toposManager);
+    }
+
+    function setBenchmark(uint256 _benchmark) external onlyToposManager {
+        benchmark = _benchmark;
     }
 
     /**

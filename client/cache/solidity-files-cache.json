@@ -1077,8 +1077,8 @@
       ]
     },
     "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/Topos/Bank/ToposBankStorage.sol": {
-      "lastModificationDate": 1712845924155,
-      "contentHash": "1f743906feae8a5d3cb5fab8b18065af",
+      "lastModificationDate": 1713216924236,
+      "contentHash": "cf29a91fb743a792a1dfc67b5c186d50",
       "sourceName": "contracts/Topos/Bank/ToposBankStorage.sol",
       "solcConfig": {
         "version": "0.8.19",
@@ -1154,8 +1154,8 @@
       ]
     },
     "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/Topos/Bank/ToposBank.sol": {
-      "lastModificationDate": 1713137333570,
-      "contentHash": "aaa6c75fb3fd9cbd2b695de6dfb3d78f",
+      "lastModificationDate": 1713217011238,
+      "contentHash": "352d0d47c75b7c9db40c4e355ea30480",
       "sourceName": "contracts/Topos/Bank/ToposBank.sol",
       "solcConfig": {
         "version": "0.8.19",

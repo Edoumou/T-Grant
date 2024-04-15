@@ -29,6 +29,12 @@ async function main() {
   await bondCall.waitForDeployment();
   console.log("BondCall:", bondCall.target || "");
 
+  //=== IRSCall Contract
+  const IRSCall = await hre.ethers.getContractFactory("IRSCall");
+  const irsCall = await IRSCall.deploy();
+  await irsCall.waitForDeployment();
+  console.log("IRSCall:", irsCall.target || "");
+
   //=== ToposBank Contract
   const ToposBank = await hre.ethers.getContractFactory("ToposBank");
   const bank = await ToposBank.deploy(
@@ -171,6 +177,7 @@ async function main() {
     "ToposTreasuryContract": toposTreasury.target,
     "IssuersFundContract": issuersFund.target,
     "BondCallContract": bondCall.target,
+    "IRSCallContract": irsCall.target,
     "BondFactoryContract": bondFactory.target,
     "USDCContract": usdc.target,
     "USDTContract": usdt.target,

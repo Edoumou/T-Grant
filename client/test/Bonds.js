@@ -12,6 +12,7 @@ describe("Tokenized Bonds", async () => {
     let authentication;
     let roles;
     let bondCall;
+    let irsCall;
     let bank;
     let issuer;
     let investor;
@@ -60,12 +61,14 @@ describe("Tokenized Bonds", async () => {
         authentication = await hre.ethers.deployContract("Authentication", [registry.target]);
         roles = await hre.ethers.deployContract("Roles");
         bondCall = await hre.ethers.deployContract("BondCall");
+        irsCall = await hre.ethers.deployContract("IRSCall");
         bank = await hre.ethers.deployContract("ToposBank",
             [
                 deployer.address,
                 roles.target,
                 registry.target,
                 bondCall.target,
+                irsCall.target,
                 350
             ]
         );
