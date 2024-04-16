@@ -68,7 +68,15 @@ contract BondTopos is IERC7092, BondStorage, IBonds {
     }
 
     function couponRate() external view returns(uint256) {
-        return bonds[dealID].couponRate;
+        uint256 _benchmark = IToposBank(toposBankContract).getBenchmark();
+        uint256 _couponRate = bonds[dealID].couponRate;
+        uint256 _couponType = bonds[dealID].couponType;
+
+        if(_couponType == 2) {
+            return _couponRate + _benchmark;
+        } else {
+           return _couponRate; 
+        }
     }
 
     function couponType() external view returns(uint8) {

@@ -33,6 +33,10 @@ contract ToposBank is IToposBank, ToposBankStorage {
         benchmark = _benchmark;
     }
 
+    function getBenchmark() external view returns(uint256) {
+        return benchmark;
+    }
+
     /**
     * @notice Submits a deal. Can be called only by registered issuers
     * @param _dealID the deal ID
