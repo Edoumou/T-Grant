@@ -981,7 +981,7 @@ describe("Tokenized Bonds", async () => {
         expect(statusAfter).to.equal(DealStatus.REDEEMED);
     });
 
-    it.only("Issues two bond contracts", async () => {
+    it.only("Issues a fixed rate and a floating rate bond contracts", async () => {
         await tokenCall.connect(ggvcapital).mint(
             ggvcapital.address,
             "5000000000000000000000000",
@@ -1013,6 +1013,11 @@ describe("Tokenized Bonds", async () => {
         let _maturityDate1 = issueDate + 120;
         let _maturityDate2 = issueDate + 350;
 
+        let _coupon1 = '250';
+        let _coupon2 = '100';
+        let benchmark = await bank.getBenchmark();
+        let couponTot2 = Number(_coupon2) + Number(benchmark);
+
         let bond1 = {
             isin: "US90QE431HJK",
             name: "Amazon 2025",
@@ -1020,7 +1025,7 @@ describe("Tokenized Bonds", async () => {
             currency: usdc.target,
             denomination: "100",
             issueVolume: "1000000",
-            couponRate: "250",
+            couponRate: _coupon1,
             couponType: "1",
             couponFrequency: "2",
             issueDate: Math.floor(issueDate) + '',
@@ -1034,7 +1039,7 @@ describe("Tokenized Bonds", async () => {
             currency: usdc.target,
             denomination: "100",
             issueVolume: "3000000",
-            couponRate: "150",
+            couponRate: _coupon2,
             couponType: "2",
             couponFrequency: "2",
             issueDate: Math.floor(issueDate) + '',
@@ -1056,8 +1061,8 @@ describe("Tokenized Bonds", async () => {
         let couponRate1 = await bondCall.couponRate(bondContract1);
         let couponRate2 = await bondCall.couponRate(bondContract2);
 
-        console.log(couponRate1.toString());
-        console.log(couponRate2.toString());
+        expect(couponRate1).to.equal(_coupon1);
+        expect(couponRate2).to.equal(couponTot2);
     });
 });
 
