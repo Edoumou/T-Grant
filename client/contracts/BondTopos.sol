@@ -157,6 +157,10 @@ contract BondTopos is IERC7092, BondStorage, IBonds {
         return listOfInvestors;
     }
 
+    function bankContract() external view returns(address) {
+        return toposBankContract;
+    }
+
     function _issue(BondData.Bond calldata _bond) internal virtual {
         uint256 _totalAmountInvested = IToposBank(toposBankContract).getTotalAmounInvested(dealID);
         require(_bond.issueVolume ==  _totalAmountInvested);
