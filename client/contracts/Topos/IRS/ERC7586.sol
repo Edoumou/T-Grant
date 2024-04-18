@@ -141,8 +141,6 @@ contract ERC7586 is IERC7586, ERC20IRS {
         burn(irs.fixedInterestPayer, 1 ether);
         burn(irs.floatingInterestPayer, 1 ether);
 
-        numberOfSwaps = uint8(_totalSupply);
-
         IERC20(irs.assetContract).transferFrom(_payer, _recipient, interestToTransfer * 1 ether / 10_000);
 
         emit Swap(interestToTransfer, _recipient);
