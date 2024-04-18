@@ -1148,11 +1148,12 @@ describe("Tokenized Bonds", async () => {
 
         let irsName = "IRS Amazon 2025 Tesla 2030";
         let irsSymbol = "AMZ25-TSLA30";
+        let numberOfSwaps = "2";
 
         await irsFactory.connect(deployer).deployIRSContract(
             bondContract2,
             bondContract1,
-            "2",
+            numberOfSwaps,
             irsName,
             irsSymbol,
             irs,
@@ -1171,9 +1172,8 @@ describe("Tokenized Bonds", async () => {
         
         expect(name).to.equal(irsName);
         expect(symbol).to.equal(irsSymbol);
-
-        console.log(amazonBalance.toString());
-        console.log(teslaBalance.toString());
+        expect(Number(amazonBalance.toString())/1e18).to.equal(Number(numberOfSwaps));
+        expect(Number(teslaBalance.toString())/1e18).to.equal(Number(numberOfSwaps));
 
         /*
         await bank.connect(deployer).issue(

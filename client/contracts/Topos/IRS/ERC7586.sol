@@ -23,9 +23,10 @@ contract ERC7586 is IERC7586, ERC20IRS {
         owner = msg.sender;
         toposBankContract = _toposBankContract;
 
+        uint256 balance = uint256(_numberOfSwaps) * 1 ether;
 
-        _balances[_irs.fixedInterestPayer] = uint256(_numberOfSwaps);
-        _balances[_irs.floatingInterestPayer] = uint256(_numberOfSwaps);
+        _balances[_irs.fixedInterestPayer] = balance;
+        _balances[_irs.floatingInterestPayer] = balance;
 
         _totalSupply = 2 * uint256(_numberOfSwaps);
     }
