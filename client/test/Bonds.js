@@ -19,6 +19,7 @@ describe("Tokenized Bonds", async () => {
     let treasury;
     let funds;
     let factory;
+    let irsFactory;
     let usdc;
     let usdt;
     let eurc;
@@ -82,6 +83,7 @@ describe("Tokenized Bonds", async () => {
             ]
         );
         factory = await hre.ethers.deployContract("BondFactory", [bank.target]);
+        irsFactory = await hre.ethers.deployContract("IRSFactory", [bank.target]);
         usdc = await hre.ethers.deployContract("USDC");
         usdt = await hre.ethers.deployContract("USDT");
         eurc = await hre.ethers.deployContract("EURC");
@@ -981,7 +983,7 @@ describe("Tokenized Bonds", async () => {
         expect(statusAfter).to.equal(DealStatus.REDEEMED);
     });
 
-    it.only("Issues a fixed rate and a floating rate bond contracts", async () => {
+    it("Issues a fixed rate and a floating rate bond contracts", async () => {
         await tokenCall.connect(ggvcapital).mint(
             ggvcapital.address,
             "5000000000000000000000000",
@@ -1063,6 +1065,135 @@ describe("Tokenized Bonds", async () => {
 
         expect(couponRate1).to.equal(_coupon1);
         expect(couponRate2).to.equal(couponTot2);
+    });
+
+    it.only("Deploys an IRS contract", async () => {
+        let _coupon1 = '250';
+        let _coupon2 = '100';
+        let benchmark = await bank.getBenchmark();
+        let couponTot2 = Number(_coupon2) + Number(benchmark);
+
+        await tokenCall.connect(ggvcapital).mint(
+            ggvcapital.address,
+            "5000000000000000000000000",
+            usdc.target
+        );
+
+        await usdc.connect(ggvcapital).approve(bank.target, "5000000000000000000000000");
+        await bank.connect(ggvcapital).registerForDeal("DEAL-001", "1000000");
+        await bank.connect(ggvcapital).registerForDeal("DEAL-002", "3000000");
+
+        await factory.connect(deployer).DeployBondContract(
+            "DEAL-001",
+            amazon.address,
+            bank.target,
+            "US"
+        );
+
+        await factory.connect(deployer).DeployBondContract(
+            "DEAL-002",
+            tesla.address,
+            bank.target,
+            "US"
+        );
+
+        let bondContract1 = await bank.connect(deployer).dealBondContracts("DEAL-001");
+        let bondContract2 = await bank.connect(deployer).dealBondContracts("DEAL-002");
+
+        let issueDate = Date.now();
+        let _maturityDate1 = issueDate + 120;
+        let _maturityDate2 = issueDate + 350;
+
+        let bond1 = {
+            isin: "US90QE431HJK",
+            name: "Amazon 2025",
+            symbol: "AMZ25",
+            currency: usdc.target,
+            denomination: "100",
+            issueVolume: "1000000",
+            couponRate: _coupon1,
+            couponType: "1",
+            couponFrequency: "2",
+            issueDate: Math.floor(issueDate) + '',
+            maturityDate: _maturityDate1
+        }
+
+        let bond2 = {
+            isin: "USNJPA298BGS",
+            name: "Tesla 2030",
+            symbol: "TSLA30",
+            currency: usdc.target,
+            denomination: "100",
+            issueVolume: "3000000",
+            couponRate: _coupon2,
+            couponType: "2",
+            couponFrequency: "2",
+            issueDate: Math.floor(issueDate) + '',
+            maturityDate: _maturityDate2
+        }
+
+        let irs = {
+            fixedInterestPayer: tesla.address,
+            floatingInterestPayer: amazon.address,
+            ratesDecimals: "2",
+            swapRate: "200",
+            spread: "100",
+            assetContract: usdc.target,
+            notionalAmount: "1000000",
+            paymentFrequency: "2",
+            startingDate: issueDate,
+            maturityDate: _maturityDate2,
+            benchmark: benchmark
+        }
+
+        let irsName = "IRS Amazon 2025 Tesla 2030";
+        let irsSymbol = "AMZ25-TSLA30";
+
+        await irsFactory.connect(deployer).deployIRSContract(
+            bondContract2,
+            bondContract1,
+            "2",
+            irsName,
+            irsSymbol,
+            irs,
+            bank.target
+        );
+        
+        let irsContract = await bank.connect(deployer).getIRSContract(
+            bondContract2,
+            bondContract1
+        );
+
+        let name = await irsCall.name(irsContract);
+        let symbol = await irsCall.symbol(irsContract);
+        let amazonBalance = await irsCall.balanceOf(amazon.address, irsContract);
+        let teslaBalance = await irsCall.balanceOf(tesla.address, irsContract);
+        
+        expect(name).to.equal(irsName);
+        expect(symbol).to.equal(irsSymbol);
+
+        console.log(amazonBalance.toString());
+        console.log(teslaBalance.toString());
+
+        /*
+        await bank.connect(deployer).issue(
+            "DEAL-001",
+            bond1,
+            bondContract1
+        );
+
+        await bank.connect(deployer).issue(
+            "DEAL-002",
+            bond2,
+            bondContract2
+        );
+
+        let couponRate1 = await bondCall.couponRate(bondContract1);
+        let couponRate2 = await bondCall.couponRate(bondContract2);
+
+        expect(couponRate1).to.equal(_coupon1);
+        expect(couponRate2).to.equal(couponTot2);
+        */
     });
 });
 

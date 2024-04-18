@@ -319,6 +319,13 @@ contract ToposBank is IToposBank, ToposBankStorage {
         return dealBondContracts[_dealID];
     }
 
+    function getIRSContract(
+        address _fixedPayerContract,
+        address _floatingPayerContract
+    ) external view returns(address) {
+        return irsContracts[_fixedPayerContract][_floatingPayerContract];
+    }
+
     function getListOfDeals() external view returns(BondData.Deal[] memory) {
         return listOfDeals;
     }

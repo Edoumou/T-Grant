@@ -1154,8 +1154,8 @@
       ]
     },
     "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/Topos/Bank/ToposBank.sol": {
-      "lastModificationDate": 1713221592810,
-      "contentHash": "d6ec8438f696380b95d94dde367fd391",
+      "lastModificationDate": 1713403651056,
+      "contentHash": "857ae766760f5dc56fbbb839df7f5383",
       "sourceName": "contracts/Topos/Bank/ToposBank.sol",
       "solcConfig": {
         "version": "0.8.19",
