@@ -1758,8 +1758,8 @@
       ]
     },
     "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/Topos/IRS/ERC7586.sol": {
-      "lastModificationDate": 1713404569862,
-      "contentHash": "7d6bad04ad8458feaf30a503233f1f5c",
+      "lastModificationDate": 1713468156244,
+      "contentHash": "4ad848fa75d2b2bdcc9d1bdf72ac6023",
       "sourceName": "contracts/Topos/IRS/ERC7586.sol",
       "solcConfig": {
         "version": "0.8.19",

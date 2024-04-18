@@ -1303,19 +1303,35 @@ describe("Tokenized Bonds", async () => {
             bondContract2
         );
 
-        let amazonBalanceBefore = await usdc.balanceOf(amazon.address);
-        let teslaBalanceBefore = await usdc.balanceOf(tesla.address);
-
+        let amazonIRSBalanceBefore = await irsCall.balanceOf(amazon.address, irsContract);
+        let teslaIRSBalanceBefore = await irsCall.balanceOf(tesla.address, irsContract);
+        let nbOfSwaps = await irsCall.getNumberOfSwaps(irsContract);
+        let irsTotalSupplyBefore = await irsCall.totalSupply(irsContract);
+        
         await bank.connect(deployer).swapIRS(irsContract);
 
-        let amazonBalanceAfter = await usdc.balanceOf(amazon.address);
-        let teslaBalanceAfter = await usdc.balanceOf(tesla.address);
+        let irsTotalSupplyAfter = await irsCall.totalSupply(irsContract);
 
-        console.log(amazonBalanceBefore.toString());
-        console.log(teslaBalanceBefore.toString());
-        console.log("");
-        console.log(amazonBalanceAfter.toString());
-        console.log(teslaBalanceAfter.toString());
+        let amazonIRSBalanceAfter = await irsCall.balanceOf(amazon.address, irsContract);
+        let teslaIRSBalanceAfter = await irsCall.balanceOf(tesla.address, irsContract);
+
+        expect(Number(nbOfSwaps)).to.equal(Number(numberOfSwaps));
+        expect(
+            Number(irsTotalSupplyAfter) / 1e18
+        ).to.equal(
+            Number(irsTotalSupplyBefore) / 1e18 - 2
+        );
+
+        expect(
+            Number(amazonIRSBalanceAfter) / 1e18
+        ).to.equal(
+            Number(amazonIRSBalanceBefore) / 1e18 - 1
+        );
+        expect(
+            Number(teslaIRSBalanceAfter) / 1e18
+        ).to.equal(
+            Number(teslaIRSBalanceBefore) / 1e18 - 1
+        );
     });
 });
 

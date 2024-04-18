@@ -28,7 +28,7 @@ contract ERC7586 is IERC7586, ERC20IRS {
         _balances[_irs.fixedInterestPayer] = balance;
         _balances[_irs.floatingInterestPayer] = balance;
 
-        _totalSupply = 2 * uint256(_numberOfSwaps);
+        _totalSupply = 2 * balance;
     }
 
     function fixedInterestPayer() external view returns(address) {
@@ -140,6 +140,8 @@ contract ERC7586 is IERC7586, ERC20IRS {
 
         burn(irs.fixedInterestPayer, 1 ether);
         burn(irs.floatingInterestPayer, 1 ether);
+
+        numberOfSwaps = uint8(_totalSupply);
 
         IERC20(irs.assetContract).transferFrom(_payer, _recipient, interestToTransfer * 1 ether / 10_000);
 
