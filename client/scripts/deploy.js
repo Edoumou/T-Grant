@@ -42,6 +42,7 @@ async function main() {
     roles.target,
     registery.target,
     bondCall.target,
+    irsCall.target,
     350
   );
   await bank.waitForDeployment();
