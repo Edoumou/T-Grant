@@ -1068,10 +1068,7 @@ describe("Tokenized Bonds", async () => {
     });
 
     it("Deploys an IRS contract", async () => {
-        let _coupon1 = '250';
-        let _coupon2 = '100';
         let benchmark = await bank.getBenchmark();
-        let couponTot2 = Number(_coupon2) + Number(benchmark);
 
         await tokenCall.connect(ggvcapital).mint(
             ggvcapital.address,
@@ -1101,36 +1098,7 @@ describe("Tokenized Bonds", async () => {
         let bondContract2 = await bank.connect(deployer).dealBondContracts("DEAL-002");
 
         let issueDate = Date.now();
-        let _maturityDate1 = issueDate + 120;
         let _maturityDate2 = issueDate + 350;
-
-        let bond1 = {
-            isin: "US90QE431HJK",
-            name: "Amazon 2025",
-            symbol: "AMZ25",
-            currency: usdc.target,
-            denomination: "100",
-            issueVolume: "1000000",
-            couponRate: _coupon1,
-            couponType: "1",
-            couponFrequency: "2",
-            issueDate: Math.floor(issueDate) + '',
-            maturityDate: _maturityDate1
-        }
-
-        let bond2 = {
-            isin: "USNJPA298BGS",
-            name: "Tesla 2030",
-            symbol: "TSLA30",
-            currency: usdc.target,
-            denomination: "100",
-            issueVolume: "3000000",
-            couponRate: _coupon2,
-            couponType: "2",
-            couponFrequency: "2",
-            issueDate: Math.floor(issueDate) + '',
-            maturityDate: _maturityDate2
-        }
 
         let irs = {
             fixedInterestPayer: tesla.address,
