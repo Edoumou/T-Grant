@@ -78,6 +78,12 @@ async function main() {
   await bondFactory.waitForDeployment();
   console.log("Factory-:", bondFactory.target || "");
 
+  //=== IRSFactory Contract
+  const IRSFactory = await hre.ethers.getContractFactory("IRSFactory");
+  const irsFactory = await IRSFactory.deploy(bank.target);
+  await irsFactory.waitForDeployment();
+  console.log("Factory-:", irsFactory.target || "");
+
   //=== USDC Contract
   const USDC = await hre.ethers.getContractFactory("USDC");
   const usdc = await USDC.deploy();
@@ -180,6 +186,7 @@ async function main() {
     "BondCallContract": bondCall.target,
     "IRSCallContract": irsCall.target,
     "BondFactoryContract": bondFactory.target,
+    "BondFactoryContract": irsFactory.target,
     "USDCContract": usdc.target,
     "USDTContract": usdt.target,
     "EURCContract": eurc.target,
