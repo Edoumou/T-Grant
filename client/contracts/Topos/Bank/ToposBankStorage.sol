@@ -2,6 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "../../BondData.sol";
+import "../IRS/IRSTypes.sol";
 import "../../Registry/IIdentityRegistry.sol";
 
 contract ToposBankStorage {
@@ -26,6 +27,7 @@ contract ToposBankStorage {
     BondData.Bond[] bonds;
     BondData.Deal[] listOfDeals;
     string[] bondsDealIDs;
+    IRSTypes.IRS[] irs;
 
     address bondFactoryContract;
 

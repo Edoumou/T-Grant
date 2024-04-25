@@ -1077,8 +1077,8 @@
       ]
     },
     "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/Topos/Bank/ToposBankStorage.sol": {
-      "lastModificationDate": 1713226309504,
-      "contentHash": "a859c60b5debafb4c5aba1027fcba58e",
+      "lastModificationDate": 1714070703845,
+      "contentHash": "3a8f1a005422eb93e909d031f58c9ecf",
       "sourceName": "contracts/Topos/Bank/ToposBankStorage.sol",
       "solcConfig": {
         "version": "0.8.19",
@@ -1105,6 +1105,7 @@
       },
       "imports": [
         "../../BondData.sol",
+        "../IRS/IRSTypes.sol",
         "../../Registry/IIdentityRegistry.sol"
       ],
       "versionPragmas": [
@@ -1154,7 +1155,7 @@
       ]
     },
     "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/Topos/Bank/ToposBank.sol": {
-      "lastModificationDate": 1713403651056,
+      "lastModificationDate": 1713471683007,
       "contentHash": "857ae766760f5dc56fbbb839df7f5383",
       "sourceName": "contracts/Topos/Bank/ToposBank.sol",
       "solcConfig": {
@@ -1572,7 +1573,7 @@
       ]
     },
     "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/tests/tokens/ERC20IRS.sol": {
-      "lastModificationDate": 1713136595184,
+      "lastModificationDate": 1714070925743,
       "contentHash": "b39878d40c8635feea48a2a71eeab4e5",
       "sourceName": "contracts/tests/tokens/ERC20IRS.sol",
       "solcConfig": {
@@ -1610,7 +1611,7 @@
       ]
     },
     "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/Topos/IRS/IRSStorage.sol": {
-      "lastModificationDate": 1713134913537,
+      "lastModificationDate": 1714070134315,
       "contentHash": "40f8ca666e5d5a5f7bf983aa57c0a70c",
       "sourceName": "contracts/Topos/IRS/IRSStorage.sol",
       "solcConfig": {
@@ -1647,8 +1648,8 @@
       ]
     },
     "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/Topos/IRS/IRSTypes.sol": {
-      "lastModificationDate": 1712619134284,
-      "contentHash": "eb7bcfacdb5695623e7088866bbebd2d",
+      "lastModificationDate": 1714071004552,
+      "contentHash": "a4926943034373f3085397f91ef5cc09",
       "sourceName": "contracts/Topos/IRS/IRSTypes.sol",
       "solcConfig": {
         "version": "0.8.19",
@@ -1719,7 +1720,7 @@
       ]
     },
     "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/IRSCall.sol": {
-      "lastModificationDate": 1713137538357,
+      "lastModificationDate": 1713404009520,
       "contentHash": "002dd52fa1fbbf2fb8dd00a5ea63a6a9",
       "sourceName": "contracts/IRSCall.sol",
       "solcConfig": {
@@ -1758,8 +1759,8 @@
       ]
     },
     "/Users/sam/Documents/Blockchain/Topos/ToposGrant/T-Grant/client/contracts/Topos/IRS/ERC7586.sol": {
-      "lastModificationDate": 1713472779198,
-      "contentHash": "3d08151f114d6629e1654e908e1320ad",
+      "lastModificationDate": 1714071730294,
+      "contentHash": "a44ce2e3e578cee8b69b166b504f9bde",
       "sourceName": "contracts/Topos/IRS/ERC7586.sol",
       "solcConfig": {
         "version": "0.8.19",
@@ -1786,6 +1787,7 @@
       },
       "imports": [
         "../interfaces/IERC7586.sol",
+        "../interfaces/IToposBank.sol",
         "../../tests/tokens/ERC20IRS.sol",
         "./IRSTypes.sol"
       ],

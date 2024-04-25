@@ -6,6 +6,7 @@ abstract contract IRSTypes {
         address fixedInterestPayer;
         address floatingInterestPayer;
         uint8 ratesDecimals;
+        uint8 status;
         uint256 swapRate;
         uint256 spread;
         address assetContract;
