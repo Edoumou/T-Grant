@@ -9,6 +9,7 @@ contract IRSFactory {
     mapping(address => mapping(address => bool)) public isIRSContract;
     address public toposManager;
     address public toposBankContract;
+    uint256 count;
 
     modifier onlyToposManager {
         require(
@@ -49,11 +50,18 @@ contract IRSFactory {
             _toposBankContract
         );
 
+        _irs.status = 1;
+        _irs.index = uint8(count);
+        _irs.irsContract = address(irs);
+
         IDeployBond(toposBankContract).setIRSContractAddress(
             _fixedPayerContract,
             _floatingPayerContract,
-            address(irs)
+            address(irs),
+            _irs
         );
         isIRSContract[_fixedPayerContract][_floatingPayerContract] = true;
+
+        count++;
     }
 }

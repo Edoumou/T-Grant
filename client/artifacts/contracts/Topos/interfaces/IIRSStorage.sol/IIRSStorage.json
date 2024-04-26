@@ -130,6 +130,11 @@
           "components": [
             {
               "internalType": "address",
+              "name": "irsContract",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
               "name": "fixedInterestPayer",
               "type": "address"
             },
@@ -187,6 +192,11 @@
               "internalType": "uint256",
               "name": "benchmark",
               "type": "uint256"
+            },
+            {
+              "internalType": "uint8",
+              "name": "index",
+              "type": "uint8"
             }
           ],
           "internalType": "struct IRSTypes.IRS",

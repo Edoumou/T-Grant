@@ -144,6 +144,11 @@
               "type": "uint8"
             },
             {
+              "internalType": "uint8",
+              "name": "status",
+              "type": "uint8"
+            },
+            {
               "internalType": "uint256",
               "name": "swapRate",
               "type": "uint256"

@@ -52,7 +52,7 @@ function IssueIRS() {
     const deploy = async () => {
         let { web3, account } = await web3Connection();
         let bankContract = await getContract(web3, BankJSON, Addresses.ToposBankContract);
-        let irsFactory = await getContract(web3, IRSFactoryJSON, Addresses.IRSFactory);
+        let irsFactory = await getContract(web3, IRSFactoryJSON, Addresses.IRSFactoryContract);
 
         let fixPayerBondContract = await bankContract.methods.dealBondContracts(fixpayerDealID).call({ from: account });
         let floatingPayerBondContract = await bankContract.methods.dealBondContracts(floatPayerDealID).call({ from: account });
@@ -66,12 +66,16 @@ function IssueIRS() {
 
         let assetContract = fixedRateDeal.currency;
 
+        let _swapRate = Number(fixedInterestRate) * 100;
+        let _spread = Number(floatingInterestSpread) * 100;
+
         let irs = {
-            fixedInterestPayer: fixedRateDeal.issuerAddress,
-            floatingInterestPayer: floatingRateDeal.issuerAddress,
+            fixedInterestPayer: floatingRateDeal.issuerAddress,
+            floatingInterestPayer: fixedRateDeal.issuerAddress,
             ratesDecimals: "2",
-            swapRate: fixedInterestRate,
-            spread: floatingInterestSpread,
+            status: "0",
+            swapRate: _swapRate,
+            spread: _spread,
             assetContract: assetContract,
             notionalAmount: notionalAmount,
             paymentFrequency: paymentFrequency,
@@ -90,7 +94,7 @@ function IssueIRS() {
             bankContract._address
         ).send({ from: account })
             .on('transactionHash', hash => {
-                setLoadingMessage('Transaction in Process! ⌛️');
+                setLoadingMessage('Deploying the IRS contract: ERC-7586! ⌛️');
                 setExplorerLink(`https://topos.blockscout.testnet-1.topos.technology/tx/${hash}`);
                 dispatch(setLoading(true));
             })
@@ -99,6 +103,17 @@ function IssueIRS() {
                 setLoader(false);
                 dispatch(setLoading(false));
             });
+
+            setFixPayerDealID('');
+            setFloatPayerDealID('');
+            setNumberOfSwaps('');
+            setTokenName('');
+            setTokenSymbol('');
+            setFixedInterestrate('');
+            setFloatingInterestSpread('');
+            setNotionalAmount('');
+            setPaymentFrequency('');
+            setMaturityDate('');
     }
 
     return (

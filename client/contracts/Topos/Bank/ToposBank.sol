@@ -294,9 +294,11 @@ contract ToposBank is IToposBank, ToposBankStorage {
     function setIRSContractAddress(
         address _fixedPayerContract,
         address _floatingPayerContract,
-        address _irsContractAddress
+        address _irsContractAddress,
+        IRSTypes.IRS memory _irs
     ) external {
         irsContracts[_fixedPayerContract][_floatingPayerContract] = _irsContractAddress;
+        irs.push(_irs);
     }
 
     function setIssuerFundContract(
@@ -336,6 +338,10 @@ contract ToposBank is IToposBank, ToposBankStorage {
 
     function getListOfBondsDealIDs() external view returns(string[] memory) {
         return bondsDealIDs;
+    }
+
+    function getListOfIRS() external view returns(IRSTypes.IRS[] memory) {
+        return irs;
     }
 
     function getContracts() external view returns(

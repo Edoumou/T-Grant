@@ -3,6 +3,7 @@ pragma solidity ^0.8.0;
 
 abstract contract IRSTypes {
     struct IRS {
+        address irsContract;
         address fixedInterestPayer;
         address floatingInterestPayer;
         uint8 ratesDecimals;
@@ -15,5 +16,6 @@ abstract contract IRSTypes {
         uint256 startingDate;
         uint256 maturityDate;
         uint256 benchmark;
+        uint8 index;
     }
 }

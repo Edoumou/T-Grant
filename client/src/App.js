@@ -67,6 +67,8 @@ function App() {
     let bonds = await toposBank.methods.getListOfBonds().call({ from: account });
     let bondsDealIDs = await toposBank.methods.getListOfBondsDealIDs().call({ from: account });
     let listOfBondsListed = await exchangeBondsStorage.methods.getDealsListed().call({ from: account });
+    let listOfIRS = await toposBank.methods.getListOfIRS().call({ from: account });
+    console.log("IRS:", listOfIRS);
 
     //=== store bonds currency symbols
     let bondSymbols = [];
@@ -539,18 +541,18 @@ function App() {
                       to='/bond-market'
                   />
                   <MenuItem
-                      name='register'
-                      active={connection.activeItem === 'register'}
-                      onClick={handleItemClick}
-                      as={Link}
-                      to='/register'
-                  />
-                  <MenuItem
                       name='connect'
                       active={connection.activeItem === 'connect'}
                       onClick={handleItemClick}
                       as={Link}
                       to='/connect'
+                  />
+                  <MenuItem
+                      name='register'
+                      active={connection.activeItem === 'register'}
+                      onClick={handleItemClick}
+                      as={Link}
+                      to='/register'
                   />
                 </>
               :

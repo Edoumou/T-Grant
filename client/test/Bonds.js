@@ -1101,6 +1101,7 @@ describe("Tokenized Bonds", async () => {
         let _maturityDate2 = issueDate + 350;
 
         let irs = {
+            irsContract: zeroAddress,
             fixedInterestPayer: tesla.address,
             floatingInterestPayer: amazon.address,
             ratesDecimals: "2",
@@ -1112,7 +1113,8 @@ describe("Tokenized Bonds", async () => {
             paymentFrequency: "2",
             startingDate: issueDate,
             maturityDate: _maturityDate2,
-            benchmark: benchmark
+            benchmark: benchmark,
+            index: "0"
         }
 
         let irsName = "IRS Amazon 2025 Tesla 2030";
@@ -1224,6 +1226,7 @@ describe("Tokenized Bonds", async () => {
         }
 
         let irs = {
+            irsContract: zeroAddress,
             fixedInterestPayer: tesla.address,
             floatingInterestPayer: amazon.address,
             ratesDecimals: "2",
@@ -1235,7 +1238,8 @@ describe("Tokenized Bonds", async () => {
             paymentFrequency: "2",
             startingDate: issueDate,
             maturityDate: _maturityDate2,
-            benchmark: benchmark
+            benchmark: benchmark,
+            index: "0"
         }
 
         let irsName = "IRS Amazon 2025 Tesla 2030";
@@ -1380,6 +1384,7 @@ describe("Tokenized Bonds", async () => {
         }
 
         let irs = {
+            irsContract: zeroAddress,
             fixedInterestPayer: tesla.address,
             floatingInterestPayer: amazon.address,
             ratesDecimals: "2",
@@ -1391,7 +1396,8 @@ describe("Tokenized Bonds", async () => {
             paymentFrequency: "2",
             startingDate: issueDate,
             maturityDate: _maturityDate2,
-            benchmark: benchmark
+            benchmark: benchmark,
+            index: "0"
         }
 
         let irsName = "IRS Amazon 2025 Tesla 2030";
@@ -1513,6 +1519,7 @@ describe("Tokenized Bonds", async () => {
         }
 
         let irs = {
+            irsContract: zeroAddress,
             fixedInterestPayer: tesla.address,
             floatingInterestPayer: amazon.address,
             ratesDecimals: "2",
@@ -1524,7 +1531,8 @@ describe("Tokenized Bonds", async () => {
             paymentFrequency: "2",
             startingDate: issueDate,
             maturityDate: _maturityDate2,
-            benchmark: benchmark
+            benchmark: benchmark,
+            index: "0"
         }
 
         let irsName = "IRS Amazon 2025 Tesla 2030";

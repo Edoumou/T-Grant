@@ -186,7 +186,7 @@ async function main() {
     "BondCallContract": bondCall.target,
     "IRSCallContract": irsCall.target,
     "BondFactoryContract": bondFactory.target,
-    "BondFactoryContract": irsFactory.target,
+    "IRSFactoryContract": irsFactory.target,
     "USDCContract": usdc.target,
     "USDTContract": usdt.target,
     "EURCContract": eurc.target,

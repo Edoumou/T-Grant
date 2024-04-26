@@ -26,10 +26,10 @@ contract BondFactory {
     }
 
     function DeployBondContract(
-        string calldata _dealID,
+        string memory _dealID,
         address _issuerWalletAddress,
         address _toposBankContract,
-        string calldata _countryOfIssuance
+        string memory _countryOfIssuance
     ) external onlyToposManager {
         require(!isBondContract[_dealID], "deployed");
 
