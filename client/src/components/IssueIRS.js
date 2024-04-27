@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Card, CardContent, Dropdown, Grid, GridColumn, GridRow, Input } from "semantic-ui-react";
+import { Button, Card, CardContent, Dropdown, Grid, GridColumn, GridRow, Input, Modal } from "semantic-ui-react";
 import _ from "lodash";
 import BankJSON from "../contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
 import IRSFactoryJSON from "../contracts/artifacts/contracts/Topos/Factory/IRSFactory.sol/IRSFactory.json";
@@ -9,7 +9,7 @@ import Addresses from "../addresses/addr.json";
 import "../users.css";
 import "../manager.css";
 import { useDispatch, useSelector } from "react-redux";
-import { setLoading } from "../store";
+import { setListOfIRS, setLoading } from "../store";
 
 function IssueIRS() {
     const dispatch = useDispatch();
@@ -68,8 +68,10 @@ function IssueIRS() {
 
         let _swapRate = Number(fixedInterestRate) * 100;
         let _spread = Number(floatingInterestSpread) * 100;
+        let zeroAddress = '0x0000000000000000000000000000000000000000';
 
         let irs = {
+            irsContract: zeroAddress,
             fixedInterestPayer: floatingRateDeal.issuerAddress,
             floatingInterestPayer: fixedRateDeal.issuerAddress,
             ratesDecimals: "2",
@@ -81,7 +83,8 @@ function IssueIRS() {
             paymentFrequency: paymentFrequency,
             startingDate: _issueDate,
             maturityDate: _maturityDate,
-            benchmark: benchmark
+            benchmark: benchmark,
+            index: 0
         }
 
         await irsFactory.methods.deployIRSContract(
@@ -104,16 +107,24 @@ function IssueIRS() {
                 dispatch(setLoading(false));
             });
 
-            setFixPayerDealID('');
-            setFloatPayerDealID('');
-            setNumberOfSwaps('');
-            setTokenName('');
-            setTokenSymbol('');
-            setFixedInterestrate('');
-            setFloatingInterestSpread('');
-            setNotionalAmount('');
-            setPaymentFrequency('');
-            setMaturityDate('');
+        let listOfIRS = await bankContract.methods.getListOfIRS().call({ from: account });
+        dispatch(setListOfIRS(listOfIRS));
+
+        setFixPayerDealID('');
+        setFloatPayerDealID('');
+        setNumberOfSwaps('');
+        setTokenName('');
+        setTokenSymbol('');
+        setFixedInterestrate('');
+        setFloatingInterestSpread('');
+        setNotionalAmount('');
+        setPaymentFrequency('');
+        setMaturityDate('');
+    }
+
+    const goToExplorer = () => {
+        const newWindow = window.open(explorerLink, '_blank', 'noopener,noreferrer');
+        if (newWindow) newWindow.opener = null;
     }
 
     return (
@@ -210,9 +221,39 @@ function IssueIRS() {
                     />
                     <br></br>
                     <br></br>
-                    <Button type='submit' color="orange" fluid size='large' onClick={deploy}>
-                        Deploy
-                    </Button>
+                    <div className="deal-button2">
+                        <Modal
+                            size="tiny"
+                            open={open}
+                            trigger={
+                                <Button type='submit' color="orange" fluid size='large' onClick={deploy}>
+                                    Deploy
+                                </Button>
+                            }
+                            onClose={() => setOpen(false)}
+                            onOpen={() => setOpen(true)}
+                        >
+                            <Modal.Content>
+                                <div style={{ textAlign: 'center' }}>
+                                    <h3>{loadingMessage}</h3>
+                                    {
+                                        loader ?
+                                            <Button inverted basic loading size="massive">Loading</Button>
+                                        :
+                                            <p style={{ color: 'green' }}><strong>transaction processed successfully</strong></p>
+                                    }
+                                </div>
+                            </Modal.Content>
+                            <Modal.Actions>
+                            <Button basic floated="left" onClick={goToExplorer}>
+                                <strong>Check on Topos Explorer</strong>
+                            </Button>
+                            <Button color='black' onClick={() => setOpen(false)}>
+                                Go to Dashboard
+                            </Button>
+                            </Modal.Actions>
+                        </Modal>
+                    </div>
                 </CardContent>
             </Card>
         </div>

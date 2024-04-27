@@ -17,7 +17,7 @@ import { getContract } from './utils/getContract';
 import FormateAddress from './utils/FormateAddress';
 import HeaderLogo from './img/header-logo.png';
 import "./App.css";
-import { setActiveItem, setColor, setAccount, setRole, setLoggedIn, setListOfIssuers, setListOfInvestors, setIssuerRequest, setInvestorRequest, setBalance, setTokenSymbols, setDeals, setTokenAddresses, setIssuerDealsCurrencySymbols, setInvestorBonds, setInvestorBondsIssuers } from './store';
+import { setActiveItem, setColor, setAccount, setRole, setLoggedIn, setListOfIssuers, setListOfInvestors, setIssuerRequest, setInvestorRequest, setBalance, setTokenSymbols, setDeals, setTokenAddresses, setIssuerDealsCurrencySymbols, setInvestorBonds, setInvestorBondsIssuers, setListOfIRS } from './store';
 import Home from './components/Home';
 import Register from './components/Register';
 import Connect from './components/Connect';
@@ -68,7 +68,6 @@ function App() {
     let bondsDealIDs = await toposBank.methods.getListOfBondsDealIDs().call({ from: account });
     let listOfBondsListed = await exchangeBondsStorage.methods.getDealsListed().call({ from: account });
     let listOfIRS = await toposBank.methods.getListOfIRS().call({ from: account });
-    console.log("IRS:", listOfIRS);
 
     //=== store bonds currency symbols
     let bondSymbols = [];
@@ -175,6 +174,7 @@ function App() {
     dispatch(setBondsIssuers(bondsIssuers));
     dispatch(setBondsCurrency(bondsCurrency));
     dispatch(setDealsListed(bondsListed));
+    dispatch(setListOfIRS(listOfIRS));
     
     //=== Invstors bonds
     let investorBonds = [];
@@ -302,6 +302,7 @@ function App() {
         let bonds = await toposBank.methods.getListOfBonds().call({ from: account });
         let bondsDealIDs = await toposBank.methods.getListOfBondsDealIDs().call({ from: account });
         let listOfBondsListed = await exchangeBondsStorage.methods.getDealsListed().call({ from: account });
+        let listOfIRS = await toposBank.methods.getListOfIRS().call({ from: account });
 
         //=== store bonds currency symbols
         let bondSymbols = [];
@@ -398,6 +399,7 @@ function App() {
         dispatch(setBondsIssuers(bondsIssuers));
         dispatch(setBondsCurrency(bondsCurrency));
         dispatch(setDealsListed(bondsListed));
+        dispatch(setListOfIRS(listOfIRS));
 
         //=== Invstors bonds
         let investorBonds = [];

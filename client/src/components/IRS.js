@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Grid, GridColumn, GridRow } from "semantic-ui-react";
 import IssueIRS from "./IssueIRS";
+import IRSList from "./IRSList";
 
 function IRS() {
     const connection = useSelector(state => {
@@ -29,7 +30,7 @@ function IRS() {
                             <IssueIRS />
                         </GridColumn>
                         <GridColumn width={11}>
-                            Col2
+                            <IRSList />
                         </GridColumn>
                     </GridRow>
                 </Grid>
