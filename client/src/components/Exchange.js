@@ -129,7 +129,7 @@ function Exchange() {
                 </TableCell>
                 <TableCell textAlign='center'>{list.bondSymbol}</TableCell>
                 <TableCell textAlign='center'>{Formate(list.quantity)}</TableCell>
-                <TableCell textAlign='center'>{Formate(list.coupon / 100)}%</TableCell>
+                <TableCell textAlign='center'>{list.coupon / 100}%</TableCell>
                 <TableCell textAlign='center'>{(new Date(list.maturityDate * 1000)).toLocaleDateString()}</TableCell>
                 <TableCell textAlign='center'>{Formate(list.denomination)} {list.tokenSymbol}</TableCell>
                 {

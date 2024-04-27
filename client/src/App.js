@@ -17,7 +17,7 @@ import { getContract } from './utils/getContract';
 import FormateAddress from './utils/FormateAddress';
 import HeaderLogo from './img/header-logo.png';
 import "./App.css";
-import { setActiveItem, setColor, setAccount, setRole, setLoggedIn, setListOfIssuers, setListOfInvestors, setIssuerRequest, setInvestorRequest, setBalance, setTokenSymbols, setDeals, setTokenAddresses, setIssuerDealsCurrencySymbols, setInvestorBonds, setInvestorBondsIssuers, setListOfIRS } from './store';
+import { setActiveItem, setColor, setAccount, setRole, setLoggedIn, setListOfIssuers, setListOfInvestors, setIssuerRequest, setInvestorRequest, setBalance, setTokenSymbols, setDeals, setTokenAddresses, setIssuerDealsCurrencySymbols, setInvestorBonds, setInvestorBondsIssuers, setListOfIRS, setIssuerIRS } from './store';
 import Home from './components/Home';
 import Register from './components/Register';
 import Connect from './components/Connect';
@@ -37,6 +37,7 @@ import Exchange from './components/Exchange';
 import BondMarket from './components/BondMarket';
 import RedeemBonds from './components/RedeemBonds';
 import IRS from './components/IRS';
+import IssuerIRS from './components/IssuerIRS';
 
 function App() {
   const dispatch = useDispatch();
@@ -68,6 +69,9 @@ function App() {
     let bondsDealIDs = await toposBank.methods.getListOfBondsDealIDs().call({ from: account });
     let listOfBondsListed = await exchangeBondsStorage.methods.getDealsListed().call({ from: account });
     let listOfIRS = await toposBank.methods.getListOfIRS().call({ from: account });
+    let issuerIRS = await toposBank.methods.getIssuerIRS(account).call({ from: account });
+
+    
 
     //=== store bonds currency symbols
     let bondSymbols = [];
@@ -175,6 +179,7 @@ function App() {
     dispatch(setBondsCurrency(bondsCurrency));
     dispatch(setDealsListed(bondsListed));
     dispatch(setListOfIRS(listOfIRS));
+    dispatch(setIssuerIRS(issuerIRS));
     
     //=== Invstors bonds
     let investorBonds = [];
@@ -303,6 +308,7 @@ function App() {
         let bondsDealIDs = await toposBank.methods.getListOfBondsDealIDs().call({ from: account });
         let listOfBondsListed = await exchangeBondsStorage.methods.getDealsListed().call({ from: account });
         let listOfIRS = await toposBank.methods.getListOfIRS().call({ from: account });
+        let issuerIRS = await toposBank.methods.getIssuerIRS(account).call({ from: account });
 
         //=== store bonds currency symbols
         let bondSymbols = [];
@@ -400,6 +406,7 @@ function App() {
         dispatch(setBondsCurrency(bondsCurrency));
         dispatch(setDealsListed(bondsListed));
         dispatch(setListOfIRS(listOfIRS));
+        dispatch(setIssuerIRS(issuerIRS));
 
         //=== Invstors bonds
         let investorBonds = [];
@@ -614,7 +621,7 @@ function App() {
                           active={connection.activeItem === 'IRS'}
                           onClick={handleItemClick}
                           as={Link}
-                          to='/manager/IRS'
+                          to='/manager/irs'
                         />
                         <MenuItem
                           name='coupons'
@@ -656,11 +663,25 @@ function App() {
                           to='/issuer/submit-deal'
                         />
                         <MenuItem
+                          name='IRS'
+                          active={connection.activeItem === 'IRS'}
+                          onClick={handleItemClick}
+                          as={Link}
+                          to='/issuer/irs'
+                        />
+                        <MenuItem
                           name='exchange'
                           active={connection.activeItem === 'exchange'}
                           onClick={handleItemClick}
                           as={Link}
                           to='/exchange'
+                        />
+                        <MenuItem
+                          name='mint tokens'
+                          active={connection.activeItem === 'mint tokens'}
+                          onClick={handleItemClick}
+                          as={Link}
+                          to='/issuer/mint-tokens'
                         />
                       </>
                     : connection.role === "INVESTOR" ?
@@ -736,7 +757,7 @@ function App() {
                       <Route path='/manager/deals' element={<ManagerDeals />} />
                       <Route path='/manager/issue-bonds' element={<IssueBonds />} />
                       <Route path='/manager/redeem-bonds' element={<RedeemBonds />} />
-                      <Route path='/manager/IRS' element={<IRS />} />
+                      <Route path='/manager/irs' element={<IRS />} />
                       <Route path='/manager/coupons' element={<ManagerCoupons />} />
                       <Route path='/manager/funds' element={<DealsFund />} />
                       <Route path='/manager/mint-tokens' element={<MintTokens />} />
@@ -745,7 +766,9 @@ function App() {
                   : connection.role === "ISSUER" ?
                     <>
                       <Route path='/issuer/submit-deal' element={<SubmitDeal />} />
+                      <Route path='/issuer/irs' element={<IssuerIRS />} />
                       <Route path='/exchange' element={<Exchange />} />
+                      <Route path='/issuer/mint-tokens' element={<MintTokens />} />
                     </>
                   : connection.role === "INVESTOR" ?
                     <>

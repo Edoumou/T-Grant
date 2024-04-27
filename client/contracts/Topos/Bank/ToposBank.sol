@@ -299,6 +299,9 @@ contract ToposBank is IToposBank, ToposBankStorage {
     ) external {
         irsContracts[_fixedPayerContract][_floatingPayerContract] = _irsContractAddress;
         irs.push(_irs);
+
+        issuerIRS[_irs.fixedInterestPayer].push(_irs);
+        issuerIRS[_irs.floatingInterestPayer].push(_irs);
     }
 
     function setIssuerFundContract(
@@ -342,6 +345,10 @@ contract ToposBank is IToposBank, ToposBankStorage {
 
     function getListOfIRS() external view returns(IRSTypes.IRS[] memory) {
         return irs;
+    }
+
+    function getIssuerIRS(address _account) external view returns(IRSTypes.IRS[] memory) {
+        return issuerIRS[_account];
     }
 
     function getContracts() external view returns(

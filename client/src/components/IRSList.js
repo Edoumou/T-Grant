@@ -6,6 +6,14 @@ import { Button, Modal, ModalActions, ModalContent, Table, TableBody, TableCell,
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
 import BankJSON from "../contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
+import TokenCallJSON from "../../src/contracts/artifacts/contracts/tests/tokens/TokenCall.sol/TokenCall.json";
+import USDCJSON from "../../src/contracts/artifacts/contracts/tests/tokens/assets/USDC.sol/USDC.json";
+import USDTJSON from "../../src/contracts/artifacts/contracts/tests/tokens/assets/USDT.sol/USDT.json";
+import EURCJSON from "../../src/contracts/artifacts/contracts/tests/tokens/assets/EURC.sol/EURC.json";
+import EURTJSON from "../../src/contracts/artifacts/contracts/tests/tokens/assets/EURT.sol/EURT.json";
+import CNYCJSON from "../../src/contracts/artifacts/contracts/tests/tokens/assets/CNYC.sol/CNYC.json";
+import CNYTJSON from "../../src/contracts/artifacts/contracts/tests/tokens/assets/CNYT.sol/CNYT.json";
+import DAIJSON from "../../src/contracts/artifacts/contracts/tests/tokens/assets/DAI.sol/DAI.json";
 import Addresses from "../addresses/addr.json";
 import { setListOfIRS, setLoading } from "../store";
 
@@ -21,7 +29,7 @@ function IRSList() {
     const [loadingMessage, setLoadingMessage] = useState('Transaction in Process');
     const [open, setOpen] = useState(false);
 
-    const swapIRS = async contract => {
+    const swapIRS = async (contract, index) => {
         let { web3, account } = await web3Connection();
         let bankContract = await getContract(web3, BankJSON, Addresses.ToposBankContract);
 
@@ -40,7 +48,7 @@ function IRSList() {
 
         let listOfIRS = await bankContract.methods.getListOfIRS().call({ from: account });
         dispatch(setListOfIRS(listOfIRS));
-}
+    }
 
     const goToExplorer = () => {
         const newWindow = window.open(explorerLink, '_blank', 'noopener,noreferrer');
@@ -81,7 +89,7 @@ function IRSList() {
                             <Button
                                 compact
                                 color='pink'
-                                onClick={() => swapIRS(swap.irsContract)}
+                                onClick={() => swapIRS(swap.irsContract, index)}
                             >
                                 Swap
                             </Button>
@@ -133,6 +141,7 @@ function IRSList() {
                                     <TableHeaderCell textAlign="center">benchmark</TableHeaderCell>
                                     <TableHeaderCell textAlign="right">Notional</TableHeaderCell>
                                     <TableHeaderCell textAlign="right">Maturity Date</TableHeaderCell>
+                                    <TableHeaderCell textAlign="right"></TableHeaderCell>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
