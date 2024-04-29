@@ -17,7 +17,7 @@ import { getContract } from './utils/getContract';
 import FormateAddress from './utils/FormateAddress';
 import HeaderLogo from './img/header-logo.png';
 import "./App.css";
-import { setActiveItem, setColor, setAccount, setRole, setLoggedIn, setListOfIssuers, setListOfInvestors, setIssuerRequest, setInvestorRequest, setBalance, setTokenSymbols, setDeals, setTokenAddresses, setIssuerDealsCurrencySymbols, setInvestorBonds, setInvestorBondsIssuers, setListOfIRS, setIssuerIRS } from './store';
+import { setActiveItem, setColor, setAccount, setRole, setLoggedIn, setListOfIssuers, setListOfInvestors, setIssuerRequest, setInvestorRequest, setBalance, setTokenSymbols, setDeals, setTokenAddresses, setIssuerDealsCurrencySymbols, setInvestorBonds, setInvestorBondsIssuers, setListOfIRS, setIssuerIRS, setBenchmark } from './store';
 import Home from './components/Home';
 import Register from './components/Register';
 import Connect from './components/Connect';
@@ -38,6 +38,7 @@ import BondMarket from './components/BondMarket';
 import RedeemBonds from './components/RedeemBonds';
 import IRS from './components/IRS';
 import IssuerIRS from './components/IssuerIRS';
+import SetBenchmark from './components/SetBenchmark';
 
 function App() {
   const dispatch = useDispatch();
@@ -62,6 +63,7 @@ function App() {
 
     let role = await rolesContract.methods.getRole(account).call({ from: account });
 
+    let benchmark = await toposBank.methods.getBenchmark().call({ from: account });
     let tokenAddresses = await tokenCallContract.methods.getTokenAddresses().call({ from: account });
     let tokenSymbols = await tokenCallContract.methods.getTokenSymbols().call({ from: account });
     let deals = await toposBank.methods.getListOfDeals().call({ from: account });
@@ -165,6 +167,7 @@ function App() {
       } 
     }
 
+    dispatch(setBenchmark(benchmark));
     dispatch(setDealsToIssue(dealsToIssue));
     dispatch(setBondSymbols(bondSymbols));
     dispatch(setIssuersName(issuersNames));
@@ -301,6 +304,7 @@ function App() {
         
         let role = await rolesContract.methods.getRole(account).call({ from: account });
 
+        let benchmark = await toposBank.methods.getBenchmark().call({ from: account });
         let tokenAddresses = await tokenCallContract.methods.getTokenAddresses().call({ from: account });
         let tokenSymbols = await tokenCallContract.methods.getTokenSymbols().call({ from: account });
         let deals = await toposBank.methods.getListOfDeals().call({ from: account });
@@ -393,6 +397,7 @@ function App() {
           } 
         }
 
+        dispatch(setBenchmark(benchmark));
         dispatch(setBondSymbols(bondSymbols));
         dispatch(setIssuersName(issuersNames));
         dispatch(setIssuersLogo(issuersLogo));
@@ -638,6 +643,13 @@ function App() {
                           to='/manager/funds'
                         />
                         <MenuItem
+                          name='benchmark'
+                          active={connection.activeItem === 'benchmark'}
+                          onClick={handleItemClick}
+                          as={Link}
+                          to='/manager/benchmark'
+                        />
+                        <MenuItem
                           name='mint tokens'
                           active={connection.activeItem === 'mint tokens'}
                           onClick={handleItemClick}
@@ -760,6 +772,7 @@ function App() {
                       <Route path='/manager/irs' element={<IRS />} />
                       <Route path='/manager/coupons' element={<ManagerCoupons />} />
                       <Route path='/manager/funds' element={<DealsFund />} />
+                      <Route path='/manager/benchmark' element={<SetBenchmark />} />
                       <Route path='/manager/mint-tokens' element={<MintTokens />} />
                       <Route path='/exchange' element={<Exchange />} />
                     </>

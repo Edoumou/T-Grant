@@ -72,7 +72,7 @@ import {
     setInvestorBondsIssuers
 } from "./slices/investorSlice";
 
-import { irsReducer, setListOfIRS, setIssuerIRS } from "./slices/irsSlice";
+import { irsReducer, setBenchmark, setListOfIRS, setIssuerIRS } from "./slices/irsSlice";
 
 
 /**
@@ -152,6 +152,7 @@ export {
     setListOfInvestors,
     setInvestorBonds,
     setInvestorBondsIssuers,
+    setBenchmark,
     setListOfIRS,
     setIssuerIRS
 }

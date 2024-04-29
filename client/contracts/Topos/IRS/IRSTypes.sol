@@ -18,4 +18,10 @@ abstract contract IRSTypes {
         uint256 benchmark;
         uint8 index;
     }
+
+    struct IRSTransaction {
+        address from;
+        address to;
+        uint256 amount;
+    }
 }
