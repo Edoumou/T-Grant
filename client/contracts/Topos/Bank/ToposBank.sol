@@ -354,7 +354,13 @@ contract ToposBank is IToposBank, ToposBankStorage {
     }
 
     function getIssuerIRS(address _account) external view returns(IRSTypes.IRS[] memory) {
-        return issuerIRS[_account];
+        IRSTypes.IRS[] memory _irs = issuerIRS[_account];
+
+        for(uint256 i; i < _irs.length; i++) {
+            _irs[i].benchmark = benchmark;
+        }
+        
+        return _irs;
     }
 
     function getContracts() external view returns(

@@ -108,7 +108,7 @@ contract ERC7586 is IERC7586, ERC20IRS {
     function swap() external onlyToposBank mustBeActive returns(bool) {
         require(irs.status == 1, "Not Exist or Ended");
         uint256 fixedRate = irs.swapRate;
-        uint256 flotaingRate = irs.benchmark + irs.spread;
+        uint256 flotaingRate = IToposBank(toposBankContract).getBenchmark() + irs.spread;
         uint256 notional = irs.notionalAmount;
 
         uint256 fixedInterest = notional * fixedRate;
