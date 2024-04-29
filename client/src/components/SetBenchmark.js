@@ -6,7 +6,7 @@ import BankJSON from "../contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
 import Addresses from "../addresses/addr.json";
-import { setBenchmark, setLoading } from "../store";
+import { setBenchmark, setListOfIRS, setLoading } from "../store";
 
 function SetBenchmark() {
     const connection = useSelector(state => {
@@ -48,6 +48,9 @@ function SetBenchmark() {
             });
 
         let _newBenchmark = await bankContract.methods.getBenchmark().call({ from: account });
+        let listOfIRS = await bankContract.methods.getListOfIRS().call({ from: account });
+        
+        dispatch(setListOfIRS(listOfIRS));
         dispatch(setBenchmark(_newBenchmark));
 
         setNewBenchmark('');
