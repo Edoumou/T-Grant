@@ -6,14 +6,6 @@ import { Button, Modal, ModalActions, ModalContent, Table, TableBody, TableCell,
 import { web3Connection } from "../utils/web3Connection";
 import { getContract } from "../utils/getContract";
 import BankJSON from "../contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
-import TokenCallJSON from "../../src/contracts/artifacts/contracts/tests/tokens/TokenCall.sol/TokenCall.json";
-import USDCJSON from "../../src/contracts/artifacts/contracts/tests/tokens/assets/USDC.sol/USDC.json";
-import USDTJSON from "../../src/contracts/artifacts/contracts/tests/tokens/assets/USDT.sol/USDT.json";
-import EURCJSON from "../../src/contracts/artifacts/contracts/tests/tokens/assets/EURC.sol/EURC.json";
-import EURTJSON from "../../src/contracts/artifacts/contracts/tests/tokens/assets/EURT.sol/EURT.json";
-import CNYCJSON from "../../src/contracts/artifacts/contracts/tests/tokens/assets/CNYC.sol/CNYC.json";
-import CNYTJSON from "../../src/contracts/artifacts/contracts/tests/tokens/assets/CNYT.sol/CNYT.json";
-import DAIJSON from "../../src/contracts/artifacts/contracts/tests/tokens/assets/DAI.sol/DAI.json";
 import Addresses from "../addresses/addr.json";
 import { setListOfIRS, setLoading } from "../store";
 
@@ -78,7 +70,7 @@ function IRSList() {
                 </TableCell>
                 <TableCell positive textAlign="center">{swap.swapRate / 100}%</TableCell>
                 <TableCell warning textAlign="center">{swap.spread / 100}%</TableCell>
-                <TableCell warning textAlign="center">{swap.benchmark / 100}%</TableCell>
+                <TableCell warning textAlign="center">{irs.benchmark / 100}%</TableCell>
                 <TableCell textAlign="right">{Formate(swap.notionalAmount)}</TableCell>
                 <TableCell positive textAlign="right">{(new Date(swap.maturityDate * 1000)).toLocaleDateString()}</TableCell>
                 <TableCell warning textAlign="center">

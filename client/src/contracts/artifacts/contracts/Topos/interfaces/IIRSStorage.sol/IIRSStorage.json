@@ -80,6 +80,41 @@
     },
     {
       "inputs": [],
+      "name": "getIRSReceipt",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "from",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "to",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "currency",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct IRSTypes.IRSReceipt[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
       "name": "getNumberOfSwaps",
       "outputs": [
         {
@@ -186,11 +221,6 @@
             {
               "internalType": "uint256",
               "name": "maturityDate",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "benchmark",
               "type": "uint256"
             },
             {

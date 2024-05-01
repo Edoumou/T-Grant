@@ -101,6 +101,10 @@ contract ERC7586 is IERC7586, ERC20IRS {
         return isActive;
     }
 
+    function getIRSReceipt() external view returns(IRSTypes.IRSReceipt[] memory) {
+        return irsReceipts;
+    }
+
     /**
     * @notice this function should be executed automaticaly with protocols like chainlink automation
     *          Since Chainlink doesn't integrate Topos yet, manual execution is considered (by owner)
@@ -124,10 +128,28 @@ contract ERC7586 is IERC7586, ERC20IRS {
             interestToTransfer = fixedInterest - floatingInterest;
             _recipient = irs.floatingInterestPayer;
             _payer = irs.fixedInterestPayer;
+
+            irsReceipts.push(
+                IRSTypes.IRSReceipt({
+                    from: _payer,
+                    to: _recipient,
+                    currency: irs.assetContract,
+                    amount: interestToTransfer
+                })
+            );
         } else {
             interestToTransfer =  floatingInterest - fixedInterest;
             _recipient = irs.fixedInterestPayer;
             _payer = irs.floatingInterestPayer;
+
+            irsReceipts.push(
+                IRSTypes.IRSReceipt({
+                    from: _payer,
+                    to: _recipient,
+                    currency: irs.assetContract,
+                    amount: interestToTransfer
+                })
+            );
         }
 
         uint8 _swapCount = swapCount;

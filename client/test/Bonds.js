@@ -1068,8 +1068,6 @@ describe("Tokenized Bonds", async () => {
     });
 
     it("Deploys an IRS contract", async () => {
-        let benchmark = await bank.getBenchmark();
-
         await tokenCall.connect(ggvcapital).mint(
             ggvcapital.address,
             "5000000000000000000000000",
@@ -1113,7 +1111,6 @@ describe("Tokenized Bonds", async () => {
             paymentFrequency: "2",
             startingDate: issueDate,
             maturityDate: _maturityDate2,
-            benchmark: benchmark,
             index: "0"
         }
 
@@ -1152,7 +1149,6 @@ describe("Tokenized Bonds", async () => {
     it("Swaps interest rates", async () => {
         let _coupon1 = '250';
         let _coupon2 = '100';
-        let benchmark = await bank.getBenchmark();
 
         await tokenCall.connect(ggvcapital).mint(
             ggvcapital.address,
@@ -1238,7 +1234,6 @@ describe("Tokenized Bonds", async () => {
             paymentFrequency: "2",
             startingDate: issueDate,
             maturityDate: _maturityDate2,
-            benchmark: benchmark,
             index: "0"
         }
 
@@ -1310,7 +1305,6 @@ describe("Tokenized Bonds", async () => {
     it("Terminates a swap contract", async () => {
         let _coupon1 = '250';
         let _coupon2 = '100';
-        let benchmark = await bank.getBenchmark();
 
         await tokenCall.connect(ggvcapital).mint(
             ggvcapital.address,
@@ -1396,7 +1390,6 @@ describe("Tokenized Bonds", async () => {
             paymentFrequency: "2",
             startingDate: issueDate,
             maturityDate: _maturityDate2,
-            benchmark: benchmark,
             index: "0"
         }
 
@@ -1445,7 +1438,6 @@ describe("Tokenized Bonds", async () => {
     it("Checks more swap than agreed fails", async () => {
         let _coupon1 = '250';
         let _coupon2 = '100';
-        let benchmark = await bank.getBenchmark();
 
         await tokenCall.connect(ggvcapital).mint(
             ggvcapital.address,
@@ -1531,7 +1523,6 @@ describe("Tokenized Bonds", async () => {
             paymentFrequency: "2",
             startingDate: issueDate,
             maturityDate: _maturityDate2,
-            benchmark: benchmark,
             index: "0"
         }
 

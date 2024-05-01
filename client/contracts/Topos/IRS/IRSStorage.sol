@@ -13,6 +13,8 @@ abstract contract IRSStorage {
     uint8 public numberOfSwaps;
     uint8 public swapCount;
 
+    IRSTypes.IRSReceipt[] irsReceipts;
+
     event SetBenchmark(uint256 oldBenchmark, uint256 newBenchmark);
 
     modifier onlyOwner {

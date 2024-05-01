@@ -101,11 +101,6 @@
               "type": "uint256"
             },
             {
-              "internalType": "uint256",
-              "name": "benchmark",
-              "type": "uint256"
-            },
-            {
               "internalType": "uint8",
               "name": "index",
               "type": "uint8"

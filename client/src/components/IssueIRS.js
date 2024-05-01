@@ -56,7 +56,6 @@ function IssueIRS() {
 
         let fixPayerBondContract = await bankContract.methods.dealBondContracts(fixpayerDealID).call({ from: account });
         let floatingPayerBondContract = await bankContract.methods.dealBondContracts(floatPayerDealID).call({ from: account });
-        let benchmark = await bankContract.methods.getBenchmark().call({ from: account });
 
         let _issueDate = Math.floor(Date.now() / 1000) + '';
         let _maturityDate = Date.parse(maturityDate) / 1000;
@@ -83,7 +82,6 @@ function IssueIRS() {
             paymentFrequency: paymentFrequency,
             startingDate: _issueDate,
             maturityDate: _maturityDate,
-            benchmark: benchmark,
             index: 0
         }
 

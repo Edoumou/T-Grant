@@ -89,7 +89,11 @@ contract IRSCall {
 
     function getSwapCount(address _irsContract) external view returns(uint8) {
         return IIRSStorage(_irsContract).getSwapCount();
-    } 
+    }
+
+    function getIRSReceipt(address _irsContract) external view returns(IRSTypes.IRSReceipt[] memory) {
+        return IIRSStorage(_irsContract).getIRSReceipt();
+    }
 
     function isContractActive(address _irsContract) external view returns(uint8) {
         return IIRSStorage(_irsContract).isContractActive();

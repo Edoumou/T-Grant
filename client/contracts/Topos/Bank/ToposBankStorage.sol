@@ -11,9 +11,9 @@ contract ToposBankStorage {
     mapping(address => mapping(address => address)) irsContracts;
     mapping(string => BondData.DealInvestment[]) public dealInvestment;
     mapping(string => uint256) public totalAmountInvestedForDeal;
-    mapping(address => mapping(string => BondData.Investment)) public amountInvested;
-    mapping(address => BondData.Deal[]) public issuerDeals;
-    mapping(address => IRSTypes.IRS[]) public issuerIRS;
+    mapping(address investorAccount => mapping(string => BondData.Investment)) public amountInvested;
+    mapping(address issuerAccount => BondData.Deal[]) public issuerDeals;
+    mapping(address issuerAccount => IRSTypes.IRS[]) public issuerIRS;
 
     address public toposManager;
     address public rolesContract;

@@ -15,13 +15,13 @@ abstract contract IRSTypes {
         uint256 paymentFrequency;
         uint256 startingDate;
         uint256 maturityDate;
-        uint256 benchmark;
         uint8 index;
     }
 
-    struct IRSTransaction {
+    struct IRSReceipt {
         address from;
         address to;
+        address currency;
         uint256 amount;
     }
 }

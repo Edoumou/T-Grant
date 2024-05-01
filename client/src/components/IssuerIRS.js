@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Grid, GridColumn, GridRow, Modal, ModalActions, ModalContent, Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } from "semantic-ui-react";
+import { Button, Grid, GridColumn, GridRow, Label, Modal, ModalActions, ModalContent, Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } from "semantic-ui-react";
+//import BankJSON from "../contracts/artifacts/contracts/IRSCall.sol/IRSCall.json";
+import IRSCallJSON from "../contracts/artifacts/contracts/IRSCall.sol/IRSCall.json";
 import TokenCallJSON from "../../src/contracts/artifacts/contracts/tests/tokens/TokenCall.sol/TokenCall.json";
 import USDCJSON from "../../src/contracts/artifacts/contracts/tests/tokens/assets/USDC.sol/USDC.json";
 import USDTJSON from "../../src/contracts/artifacts/contracts/tests/tokens/assets/USDT.sol/USDT.json";
@@ -31,6 +33,9 @@ function IssuerIRS() {
     const [explorerLink, setExplorerLink] = useState('');
     const [loadingMessage, setLoadingMessage] = useState('Transaction in Process');
     const [open, setOpen] = useState(false);
+    const [showReceipt, setShowReceipt] = useState(false);
+    const [receipt, setReceipt] = useState([]);
+    const [symbol, setSymbol] = useState('');
 
     const approveIRSContract = async (contract, index) => {
         let { web3, account } = await web3Connection();
@@ -98,9 +103,43 @@ function IssuerIRS() {
         setExplorerLink('');
     }
 
+    const loadReceipt = async irsContract => {
+        // Fetch receipt for the selected contract
+        // Store the receipt in the store or maybe in states
+        let { web3, account } = await web3Connection();
+        let irsCallContract = await getContract(web3, IRSCallJSON, Addresses.IRSCallContract);
+        let tokenCallContract = await getContract(web3, TokenCallJSON, Addresses.TokenCallContract);
+
+        let receipt = await irsCallContract.methods.getIRSReceipt(irsContract).call({ from: account });
+
+        let _symbol = await tokenCallContract.methods.symbol(
+            receipt[0].currency
+        ).call({ from: account });
+
+        setReceipt(receipt);
+        setSymbol(_symbol);
+
+        setShowReceipt(!showReceipt);
+    }
+
+    const renderedReceipt = receipt.map((r, index) => {
+        return (
+            <TableRow key={index}>
+                <TableCell textAlign="left">{FormateAddress(r.from)}</TableCell>
+                <TableCell textAlign="left">{FormateAddress(r.to)}</TableCell>
+                <TableCell positive textAlign="right">{Formate(r.amount / 10000)} {symbol}</TableCell>
+            </TableRow>
+        );
+    });
+
     const renderedIRS = irs.issuerIRS.map((swap, index) => {
         return (
             <TableRow key={index}>
+                <TableCell>
+                    <Label ribbon as='a' color="teal" onClick={() => loadReceipt(swap.irsContract)}>
+                        <strong>Check</strong>
+                    </Label>
+                </TableCell>
                 <TableCell textAlign="left">{FormateAddress(swap.floatingInterestPayer)}</TableCell>
                 <TableCell textAlign="left">{FormateAddress(swap.fixedInterestPayer)}</TableCell>
                 <TableCell textAlign="center">
@@ -114,7 +153,7 @@ function IssuerIRS() {
                 </TableCell>
                 <TableCell positive textAlign="center">{swap.swapRate / 100}%</TableCell>
                 <TableCell warning textAlign="center">{swap.spread / 100}%</TableCell>
-                <TableCell warning textAlign="center">{swap.benchmark / 100}%</TableCell>
+                <TableCell warning textAlign="center">{irs.benchmark / 100}%</TableCell>
                 <TableCell textAlign="right">{Formate(swap.notionalAmount)}</TableCell>
                 <TableCell positive textAlign="right">{(new Date(swap.maturityDate * 1000)).toLocaleDateString()}</TableCell>
                 <TableCell warning textAlign="center">
@@ -183,26 +222,84 @@ function IssuerIRS() {
             <br></br>
             {
                 irs.issuerIRS.length > 0 ?
-                    <div className="tab-scroll">
-                        <Table padded selectable>
-                            <TableHeader className="header-sticky">
-                                <TableRow>
-                                    <TableHeaderCell textAlign="left">Payer</TableHeaderCell>
-                                    <TableHeaderCell textAlign="left">Receiver</TableHeaderCell>
-                                    <TableHeaderCell textAlign="center">IRS contract</TableHeaderCell>
-                                    <TableHeaderCell textAlign="center">Swap Rate</TableHeaderCell>
-                                    <TableHeaderCell textAlign="center">Spread</TableHeaderCell>
-                                    <TableHeaderCell textAlign="center">benchmark</TableHeaderCell>
-                                    <TableHeaderCell textAlign="right">Notional</TableHeaderCell>
-                                    <TableHeaderCell textAlign="right">Maturity Date</TableHeaderCell>
-                                    <TableHeaderCell textAlign="right"></TableHeaderCell>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {renderedIRS}
-                            </TableBody>
-                        </Table>
-                    </div>
+                    <>
+                        {
+                            showReceipt ?
+                                <Grid stackable columns={2}>
+                                    <GridRow>
+                                        <GridColumn width={9}>
+                                            <div className="tab-scroll">
+                                                <Table padded selectable>
+                                                    <TableHeader className="header-sticky">
+                                                        <TableRow>
+                                                            <TableHeaderCell />
+                                                            <TableHeaderCell textAlign="left">Payer</TableHeaderCell>
+                                                            <TableHeaderCell textAlign="left">Receiver</TableHeaderCell>
+                                                            <TableHeaderCell textAlign="center">IRS contract</TableHeaderCell>
+                                                            <TableHeaderCell textAlign="center">Swap Rate</TableHeaderCell>
+                                                            <TableHeaderCell textAlign="center">Spread</TableHeaderCell>
+                                                            <TableHeaderCell textAlign="center">benchmark</TableHeaderCell>
+                                                            <TableHeaderCell textAlign="right">Notional</TableHeaderCell>
+                                                            <TableHeaderCell textAlign="right">Maturity Date</TableHeaderCell>
+                                                            <TableHeaderCell textAlign="right"></TableHeaderCell>
+                                                        </TableRow>
+                                                    </TableHeader>
+                                                    <TableBody>
+                                                        {renderedIRS}
+                                                    </TableBody>
+                                                </Table>
+                                            </div>
+                                        </GridColumn>
+                                        <GridColumn width={1} />
+                                        <GridColumn width={6}>
+                                            {
+                                                receipt.length > 0 ?
+                                                    <div className="tab-scroll">
+                                                        <Table padded selectable>
+                                                            <TableHeader className="header-sticky">
+                                                                <TableRow>
+                                                                    <TableHeaderCell textAlign="left">From</TableHeaderCell>
+                                                                    <TableHeaderCell textAlign="left">To</TableHeaderCell>
+                                                                    <TableHeaderCell textAlign="right">Amount</TableHeaderCell>
+                                                                </TableRow>
+                                                            </TableHeader>
+                                                            <TableBody>
+                                                                {renderedReceipt}
+                                                            </TableBody>
+                                                        </Table>
+                                                    </div>
+                                                :
+                                                    <div  className="no-deal">
+                                                        No swap found
+                                                    </div>
+                                            }
+                                        </GridColumn>
+                                    </GridRow>
+                                </Grid>
+                            :
+                                <div className="tab-scroll">
+                                    <Table padded selectable>
+                                        <TableHeader className="header-sticky">
+                                            <TableRow>
+                                                <TableHeaderCell />
+                                                <TableHeaderCell textAlign="left">Payer</TableHeaderCell>
+                                                <TableHeaderCell textAlign="left">Receiver</TableHeaderCell>
+                                                <TableHeaderCell textAlign="center">IRS contract</TableHeaderCell>
+                                                <TableHeaderCell textAlign="center">Swap Rate</TableHeaderCell>
+                                                <TableHeaderCell textAlign="center">Spread</TableHeaderCell>
+                                                <TableHeaderCell textAlign="center">benchmark</TableHeaderCell>
+                                                <TableHeaderCell textAlign="right">Notional</TableHeaderCell>
+                                                <TableHeaderCell textAlign="right">Maturity Date</TableHeaderCell>
+                                                <TableHeaderCell textAlign="right"></TableHeaderCell>
+                                            </TableRow>
+                                        </TableHeader>
+                                        <TableBody>
+                                            {renderedIRS}
+                                        </TableBody>
+                                    </Table>
+                                </div>
+                        } 
+                    </>
                 :
                     <div  className="no-deal">
                         No active Interest Rate Swap Contract

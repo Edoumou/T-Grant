@@ -33,7 +33,7 @@ async function main() {
   const IRSCall = await hre.ethers.getContractFactory("IRSCall");
   const irsCall = await IRSCall.deploy();
   await irsCall.waitForDeployment();
-  console.log("IRSCall:", irsCall.target || "");
+  console.log("IRSCall-:", irsCall.target || "");
 
   //=== ToposBank Contract
   const ToposBank = await hre.ethers.getContractFactory("ToposBank");

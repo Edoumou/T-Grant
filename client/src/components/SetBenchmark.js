@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import _ from "lodash";
 import { Button, Card, CardContent, Grid, GridColumn, GridRow, Input, Modal } from "semantic-ui-react";
 import BankJSON from "../contracts/artifacts/contracts/Topos/Bank/ToposBank.sol/ToposBank.json";
 import { web3Connection } from "../utils/web3Connection";
@@ -18,11 +17,6 @@ function SetBenchmark() {
     });
 
     const dispatch = useDispatch();
-
-    const caseSensitiveSearch = (tokenOptions, query) => {
-        const re = new RegExp(_.escapeRegExp(query))
-        return tokenOptions.filter((opt) => re.test(opt.text))
-    }
 
     const [newBenchmark, setNewBenchmark] = useState('');
     const [loader, setLoader] = useState(true);
