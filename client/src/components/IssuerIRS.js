@@ -122,6 +122,10 @@ function IssuerIRS() {
         setShowReceipt(!showReceipt);
     }
 
+    const closeReceipt = async () => {
+        setShowReceipt(!showReceipt);
+    }
+
     const renderedReceipt = receipt.map((r, index) => {
         return (
             <TableRow key={index}>
@@ -257,6 +261,9 @@ function IssuerIRS() {
                                                     <div className="tab-scroll">
                                                         <Table padded selectable>
                                                             <TableHeader className="header-sticky">
+                                                                <Label ribbon as='a' color="pink" onClick={closeReceipt} >
+                                                                    <strong>Close</strong>
+                                                                </Label>
                                                                 <TableRow>
                                                                     <TableHeaderCell textAlign="left">From</TableHeaderCell>
                                                                     <TableHeaderCell textAlign="left">To</TableHeaderCell>
