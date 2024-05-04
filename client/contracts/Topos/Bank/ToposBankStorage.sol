@@ -2,6 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "../../BondData.sol";
+import "../IRS/IRSTypes.sol";
 import "../../Registry/IIdentityRegistry.sol";
 
 contract ToposBankStorage {
@@ -10,8 +11,9 @@ contract ToposBankStorage {
     mapping(address => mapping(address => address)) irsContracts;
     mapping(string => BondData.DealInvestment[]) public dealInvestment;
     mapping(string => uint256) public totalAmountInvestedForDeal;
-    mapping(address => mapping(string => BondData.Investment)) public amountInvested;
-    mapping(address => BondData.Deal[]) public issuerDeals;
+    mapping(address investorAccount => mapping(string => BondData.Investment)) public amountInvested;
+    mapping(address issuerAccount => BondData.Deal[]) public issuerDeals;
+    mapping(address issuerAccount => IRSTypes.IRS[]) public issuerIRS;
 
     address public toposManager;
     address public rolesContract;
@@ -21,11 +23,12 @@ contract ToposBankStorage {
     address public issuersFundContract;
 
     uint256 public dealFees;
-    uint256 public benchmark;
+    uint256 internal benchmark;
 
     BondData.Bond[] bonds;
     BondData.Deal[] listOfDeals;
     string[] bondsDealIDs;
+    IRSTypes.IRS[] irs;
 
     address bondFactoryContract;
 

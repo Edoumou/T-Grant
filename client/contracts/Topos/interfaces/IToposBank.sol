@@ -30,4 +30,6 @@ interface IToposBank {
         address bondCall,
         address issuerFund
     );
+
+    function getBenchmark() external view returns(uint256);
 }

@@ -16,6 +16,12 @@ async function main() {
     );
     await tx.wait();
 
+    let tx0 = await bank.setBenchmark(
+        "200",
+        { from: deployer }
+    );
+    await tx0.wait();
+
     let tx1 = await registry.setAuthenticationContract(
         Addresses.AuthenticationContract,
         { from: deployer }

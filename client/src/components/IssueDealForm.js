@@ -85,7 +85,7 @@ function IssueDealForm() {
         setLoadingMessage('');
         setLoader(true);
         dispatch(setLoading(true));
-
+    
         await bankContract.methods.issue(
             bonds.dealToIssue.dealID,
             bond,

@@ -2,6 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "../interfaces/IERC7586.sol";
+import "../interfaces/IToposBank.sol";
 import "../../tests/tokens/ERC20IRS.sol";
 import "./IRSTypes.sol";
 
@@ -23,11 +24,13 @@ contract ERC7586 is IERC7586, ERC20IRS {
         owner = msg.sender;
         toposBankContract = _toposBankContract;
 
+        uint256 balance = uint256(_numberOfSwaps) * 1 ether;
 
-        _balances[_irs.fixedInterestPayer] = uint256(_numberOfSwaps);
-        _balances[_irs.floatingInterestPayer] = uint256(_numberOfSwaps);
+        _balances[_irs.fixedInterestPayer] = balance;
+        _balances[_irs.floatingInterestPayer] = balance;
 
-        _totalSupply = 2 * uint256(_numberOfSwaps);
+        _totalSupply = 2 * balance;
+        irs.status = 1;
     }
 
     function fixedInterestPayer() external view returns(address) {
@@ -71,14 +74,7 @@ contract ERC7586 is IERC7586, ERC20IRS {
     }
 
     function benchmark() external view returns(uint256) {
-        return irs.benchmark;
-    }
-
-    function setBenchmark(uint256 _newBenchmark) external onlyToposBank mustBeActive {
-        uint256 _oldBenchmark = irs.benchmark;
-        irs.benchmark = _newBenchmark;
-
-        emit SetBenchmark(_oldBenchmark, _newBenchmark);
+        return IToposBank(toposBankContract).getBenchmark();
     }
 
     function irsInfo() external view returns(IRSTypes.IRS memory) {
@@ -105,13 +101,18 @@ contract ERC7586 is IERC7586, ERC20IRS {
         return isActive;
     }
 
+    function getIRSReceipt() external view returns(IRSTypes.IRSReceipt[] memory) {
+        return irsReceipts;
+    }
+
     /**
     * @notice this function should be executed automaticaly with protocols like chainlink automation
     *          Since Chainlink doesn't integrate Topos yet, manual execution is considered (by owner)
     */
     function swap() external onlyToposBank mustBeActive returns(bool) {
+        require(irs.status == 1, "Not Exist or Ended");
         uint256 fixedRate = irs.swapRate;
-        uint256 flotaingRate = irs.benchmark + irs.spread;
+        uint256 flotaingRate = IToposBank(toposBankContract).getBenchmark() + irs.spread;
         uint256 notional = irs.notionalAmount;
 
         uint256 fixedInterest = notional * fixedRate;
@@ -127,10 +128,28 @@ contract ERC7586 is IERC7586, ERC20IRS {
             interestToTransfer = fixedInterest - floatingInterest;
             _recipient = irs.floatingInterestPayer;
             _payer = irs.fixedInterestPayer;
+
+            irsReceipts.push(
+                IRSTypes.IRSReceipt({
+                    from: _payer,
+                    to: _recipient,
+                    currency: irs.assetContract,
+                    amount: interestToTransfer
+                })
+            );
         } else {
             interestToTransfer =  floatingInterest - fixedInterest;
             _recipient = irs.fixedInterestPayer;
             _payer = irs.floatingInterestPayer;
+
+            irsReceipts.push(
+                IRSTypes.IRSReceipt({
+                    from: _payer,
+                    to: _recipient,
+                    currency: irs.assetContract,
+                    amount: interestToTransfer
+                })
+            );
         }
 
         uint8 _swapCount = swapCount;
@@ -153,6 +172,7 @@ contract ERC7586 is IERC7586, ERC20IRS {
     */
     function terminateSwap() external onlyToposBank mustBeActive {
         isActive == 2;
+        irs.status = 2;
 
         emit TerminateSwap(irs.fixedInterestPayer, irs.floatingInterestPayer);
     }

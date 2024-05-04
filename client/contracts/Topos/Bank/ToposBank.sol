@@ -33,6 +33,10 @@ contract ToposBank is IToposBank, ToposBankStorage {
         benchmark = _benchmark;
     }
 
+    function getBenchmark() external view returns(uint256) {
+        return benchmark;
+    }
+
     /**
     * @notice Submits a deal. Can be called only by registered issuers
     * @param _dealID the deal ID
@@ -290,9 +294,14 @@ contract ToposBank is IToposBank, ToposBankStorage {
     function setIRSContractAddress(
         address _fixedPayerContract,
         address _floatingPayerContract,
-        address _irsContractAddress
+        address _irsContractAddress,
+        IRSTypes.IRS memory _irs
     ) external {
         irsContracts[_fixedPayerContract][_floatingPayerContract] = _irsContractAddress;
+        irs.push(_irs);
+
+        issuerIRS[_irs.fixedInterestPayer].push(_irs);
+        issuerIRS[_irs.floatingInterestPayer].push(_irs);
     }
 
     function setIssuerFundContract(
@@ -315,6 +324,13 @@ contract ToposBank is IToposBank, ToposBankStorage {
         return dealBondContracts[_dealID];
     }
 
+    function getIRSContract(
+        address _fixedPayerContract,
+        address _floatingPayerContract
+    ) external view returns(address) {
+        return irsContracts[_fixedPayerContract][_floatingPayerContract];
+    }
+
     function getListOfDeals() external view returns(BondData.Deal[] memory) {
         return listOfDeals;
     }
@@ -325,6 +341,14 @@ contract ToposBank is IToposBank, ToposBankStorage {
 
     function getListOfBondsDealIDs() external view returns(string[] memory) {
         return bondsDealIDs;
+    }
+
+    function getListOfIRS() external view returns(IRSTypes.IRS[] memory) {
+        return irs;
+    }
+
+    function getIssuerIRS(address _account) external view returns(IRSTypes.IRS[] memory) {
+        return issuerIRS[_account];
     }
 
     function getContracts() external view returns(

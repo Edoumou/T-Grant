@@ -80,6 +80,41 @@
     },
     {
       "inputs": [],
+      "name": "getIRSReceipt",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "from",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "to",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "currency",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct IRSTypes.IRSReceipt[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
       "name": "getNumberOfSwaps",
       "outputs": [
         {
@@ -130,6 +165,11 @@
           "components": [
             {
               "internalType": "address",
+              "name": "irsContract",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
               "name": "fixedInterestPayer",
               "type": "address"
             },
@@ -141,6 +181,11 @@
             {
               "internalType": "uint8",
               "name": "ratesDecimals",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "status",
               "type": "uint8"
             },
             {
@@ -179,9 +224,9 @@
               "type": "uint256"
             },
             {
-              "internalType": "uint256",
-              "name": "benchmark",
-              "type": "uint256"
+              "internalType": "uint8",
+              "name": "index",
+              "type": "uint8"
             }
           ],
           "internalType": "struct IRSTypes.IRS",

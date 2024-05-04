@@ -14,4 +14,5 @@ interface IIRSStorage {
     function getSwapCount() external view returns(uint8);
     function isContractActive() external view returns(uint8);
     function irsInfo() external view returns(IRSTypes.IRS memory);
+    function getIRSReceipt() external view returns(IRSTypes.IRSReceipt[] memory);
 }

@@ -72,17 +72,20 @@ import {
     setInvestorBondsIssuers
 } from "./slices/investorSlice";
 
+import { irsReducer, setBenchmark, setListOfIRS, setIssuerIRS } from "./slices/irsSlice";
+
 
 /**
 * Configure store
 */
 const store = configureStore({
     reducer: {
-        registry:  registryReducer,
+        registry: registryReducer,
         connection: connectionReducer,
         issuer: issuerReducer,
         investor: investorReducer,
-        bond: bondReducer
+        bond: bondReducer,
+        irs: irsReducer
     },
     middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
@@ -148,5 +151,8 @@ export {
     setListOfIssuers,
     setListOfInvestors,
     setInvestorBonds,
-    setInvestorBondsIssuers
+    setInvestorBondsIssuers,
+    setBenchmark,
+    setListOfIRS,
+    setIssuerIRS
 }

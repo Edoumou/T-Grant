@@ -33,7 +33,7 @@ async function main() {
   const IRSCall = await hre.ethers.getContractFactory("IRSCall");
   const irsCall = await IRSCall.deploy();
   await irsCall.waitForDeployment();
-  console.log("IRSCall:", irsCall.target || "");
+  console.log("IRSCall-:", irsCall.target || "");
 
   //=== ToposBank Contract
   const ToposBank = await hre.ethers.getContractFactory("ToposBank");
@@ -42,6 +42,7 @@ async function main() {
     roles.target,
     registery.target,
     bondCall.target,
+    irsCall.target,
     350
   );
   await bank.waitForDeployment();
@@ -76,6 +77,12 @@ async function main() {
   const bondFactory = await BondFactory.deploy(bank.target);
   await bondFactory.waitForDeployment();
   console.log("Factory-:", bondFactory.target || "");
+
+  //=== IRSFactory Contract
+  const IRSFactory = await hre.ethers.getContractFactory("IRSFactory");
+  const irsFactory = await IRSFactory.deploy(bank.target);
+  await irsFactory.waitForDeployment();
+  console.log("Factory-:", irsFactory.target || "");
 
   //=== USDC Contract
   const USDC = await hre.ethers.getContractFactory("USDC");
@@ -179,6 +186,7 @@ async function main() {
     "BondCallContract": bondCall.target,
     "IRSCallContract": irsCall.target,
     "BondFactoryContract": bondFactory.target,
+    "IRSFactoryContract": irsFactory.target,
     "USDCContract": usdc.target,
     "USDTContract": usdt.target,
     "EURCContract": eurc.target,
